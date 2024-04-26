@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.MainPage"
+             Background="White">
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
+
+            <Border Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
+                <Entry TextColor="Black" FontSize="18" Placeholder="Username" Margin="0" x:Name="usernameEntry" HeightRequest="50" WidthRequest="350" Background="White"/>
+                
+            </Border>
+
+            <Border Margin="0,30,0,0" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
+            <Entry IsPassword="True" TextColor="Black" FontSize="18" Placeholder="Password" Margin="0" HeightRequest="50" WidthRequest="350" Background="White"/>
+
+            </Border>
+
+            <Button Margin="0,70,0,30" Text="Log In" FontSize="25" FontAttributes="Bold" TextColor="White" Background="Black"  WidthRequest="370" CornerRadius="20" >
+                <Button.Shadow>
+                    <Shadow Offset="0,5"
+                            Opacity="1" />
+                </Button.Shadow>
+            </Button>
+
+            <Rectangle Background="Black" WidthRequest="500" HeightRequest="4" />
+
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label Margin="0,0,10,0" FontSize="17" TextColor="Black" Text="Don't have an account yet ?"/>
+                <Label FontSize="17" TextColor="Black" Text="Click here to Sign Up" FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                
+            </HorizontalStackLayout>
+            
+
+
+
+        </VerticalStackLayout>
+        
+        
+        
+    </ScrollView>
+
+</ContentPage>
