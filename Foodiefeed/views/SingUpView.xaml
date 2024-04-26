@@ -38,6 +38,7 @@
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                     </Label.GestureRecognizers>
+                    
                 </Label>
 
             </HorizontalStackLayout>

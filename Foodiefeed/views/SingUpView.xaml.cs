@@ -30,15 +30,19 @@ namespace Foodiefeed
 
             var json = JsonConvert.SerializeObject(dto);
 
-            var apiBaseUrl = "http://localhost:5000";
+            #if WINDOWS
+                var apiBaseUrl = "http://localhost:5000";
+            #endif
+            #if ANDROID
+                var apiBaseUrl = "http://10.0.2.2:5000";
+            #endif
+
             var endpoint = "api/user";
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiBaseUrl);
-                //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-                //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
-               // client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                
 
                 try
                 {

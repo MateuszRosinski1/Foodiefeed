@@ -4,7 +4,7 @@ using Android.Runtime;
 
 namespace Foodiefeed
 {
-    [Application]
+    [Application(UsesCleartextTraffic = true)]
     public class MainApplication : MauiApplication
     {
         public MainApplication(IntPtr handle, JniHandleOwnership ownership)
