@@ -2,9 +2,9 @@
 
 namespace Foodiefeed
 {
-    public partial class MainPage : ContentPage
+    public partial class LogInPage : ContentPage
     {
-        public MainPage()
+        public LogInPage()
         {
             InitializeComponent();
         }
@@ -12,6 +12,11 @@ namespace Foodiefeed
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
         {
             await Navigation.PushAsync(new SignUpView());
+        }
+
+        private async void LogInButtonClickAsync(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new BoardView());
         }
     }
 

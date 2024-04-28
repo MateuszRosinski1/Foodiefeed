@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.SignUpView"
              Title="SingUpPage"
-             Background="White">
+             Background="White"
+             MinimumHeightRequest="400" MinimumWidthRequest="500">
 
     <ScrollView>
         <VerticalStackLayout>
-            <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
+            <Image  Source="textlogo.png" HeightRequest="150" WidthRequest="225"/>
 
             <HorizontalStackLayout HorizontalOptions="Center">
                 <Border Margin="0,0,10,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="180">
@@ -17,6 +18,10 @@
                     <Entry  TextColor="Black" FontSize="18" Placeholder="Last Name" Margin="0" x:Name="LastNameEntry" HeightRequest="50" WidthRequest="175" Background="White"/>
                 </Border>
             </HorizontalStackLayout>
+
+            <Border Margin="0,0,0,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
+                <Entry TextColor="Black" FontSize="18" Placeholder="E-mail" Margin="0" x:Name="usernameEntry" HeightRequest="50" WidthRequest="350" Background="White"/>
+            </Border>
 
             <Border Margin="0,0,0,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
                 <Entry TextColor="Black" FontSize="18" Placeholder="E-mail" Margin="0" x:Name="emailEntry" HeightRequest="50" WidthRequest="350" Background="White"/>

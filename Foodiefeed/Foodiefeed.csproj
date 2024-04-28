@@ -83,6 +83,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="LogInPage.xaml.cs">
+	    <DependentUpon>LogInPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="views\SingUpView.xaml.cs">
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
