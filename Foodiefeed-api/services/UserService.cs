@@ -10,7 +10,7 @@ namespace Foodiefeed_api.services
     public interface IUserService
     {
         public Task CreateUser(CreateUserDto dto);
-        public Task LogIn(string username, string password);
+        public Task LogIn(UserLogInDto dto);
     }
     public class UserService : IUserService
     {
@@ -36,6 +36,7 @@ namespace Foodiefeed_api.services
             if (emailCheck is not null) { throw new BadRequestException("this email is taken"); }
 
             var user = _mapper.Map<User>(dto);
+            user.ProfilePicturePath = "default";
 
 
             user.PasswordHash = _hasher.HashPassword(user,user.PasswordHash);
@@ -46,13 +47,13 @@ namespace Foodiefeed_api.services
 
         }
 
-        public async Task LogIn(string username , string password)
+        public async Task LogIn(UserLogInDto dto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
 
             if (user is null) { throw new BadRequestException("User with that username do not exist"); }
 
-            var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             
             if(result == PasswordVerificationResult.Failed) { throw new BadRequestException("Wrong password"); }
         }
