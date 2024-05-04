@@ -1,4 +1,4 @@
-﻿namespace Foodiefeed_api.models.user
+﻿namespace Foodiefeed.models.dto
 {
     public class CreateUserDto
     {

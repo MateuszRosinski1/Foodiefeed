@@ -76,6 +76,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -83,21 +84,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="views\SingUpView.xaml.cs">
+	  <Compile Update="views\windows\SingUpView.xaml.cs">
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="views\BoardView.xaml.cs">
+	  <Compile Update="views\windows\BoardView.xaml.cs">
 	    <DependentUpon>BoardView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="views\SingUpView.xaml">
+	  <MauiXaml Update="views\windows\SingUpView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="views\BoardView.xaml">
+	  <MauiXaml Update="views\windows\BoardView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="views\android\" />
 	</ItemGroup>
 
 </Project>
