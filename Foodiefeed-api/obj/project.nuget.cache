@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dukaqMR4Mif9Qf7Bfq0wknu97kZtDhI5e8xEgrykcjbi2pqWAarOMlsSCzY04ix77vT4w4MC2CqLpuB2PkWOYQ==",
+  "dgSpecHash": "ReLUxKTea5F/cH8WPwRs0M7frjyXz+WTxCJD4sPrDPuyVSrUQm9TPGL9DyHCTNMusas59dhTOL0qw6/uPauNBw==",
   "success": true,
   "projectFilePath": "D:\\PracaInzynierska\\Foodiefeed-api\\Foodiefeed-api.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\mateu\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",

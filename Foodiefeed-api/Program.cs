@@ -1,5 +1,7 @@
+using Foodiefeed_api;
 using Foodiefeed_api.entities;
 using Foodiefeed_api.services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +14,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<dbContext>();
 builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
+app.UseMiddleware<ErrorHandlingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

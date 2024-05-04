@@ -320,3 +320,4 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.genruntimeconfig.cache
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\ref\Foodiefeed-api.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Newtonsoft.Json.dll
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.sourcelink.json

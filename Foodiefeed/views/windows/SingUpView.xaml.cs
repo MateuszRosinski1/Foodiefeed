@@ -1,4 +1,5 @@
-﻿using Foodiefeed_api.models.user;
+﻿using Foodiefeed.models.dto;
+using Foodiefeed.viewmodels;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -9,6 +10,7 @@ namespace Foodiefeed
         public SignUpView()
         {
             InitializeComponent();
+            this.BindingContext = new UserViewModel();
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
@@ -41,8 +43,8 @@ namespace Foodiefeed
 
             using (var client = new HttpClient())
             {
+
                 client.BaseAddress = new Uri(apiBaseUrl);
-                
 
                 try
                 {
