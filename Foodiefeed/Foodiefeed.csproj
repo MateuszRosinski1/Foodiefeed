@@ -72,6 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\logobutton.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
 	</ItemGroup>
 
