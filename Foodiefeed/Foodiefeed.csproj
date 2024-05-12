@@ -72,6 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\logobutton.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
 	</ItemGroup>
 
@@ -84,7 +85,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+<<<<<<< HEAD
 	  <Compile Update="views\windows\SingUpView.xaml.cs">
+=======
+	  <Compile Update="LogInPage.xaml.cs">
+	    <DependentUpon>LogInPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="views\SingUpView.xaml.cs">
+>>>>>>> features/ui
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="views\windows\BoardView.xaml.cs">

@@ -7,9 +7,9 @@
     Shell.FlyoutBehavior="Disabled"
     Title="Foodiefeed">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent       
+        ContentTemplate="{DataTemplate local:BoardView}"
+        Route="LogInPage"
+        />
 
 </Shell>
