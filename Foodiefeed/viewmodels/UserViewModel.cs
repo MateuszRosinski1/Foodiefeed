@@ -27,58 +27,59 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task LogIn()
         {
-            if (LoginCanProceed())
-            {
-                UserCredentials credentials = new UserCredentials();
-                {
-                    credentials.Username = Username;
-                    credentials.Password = Password;
-                };
+            //            if (LoginCanProceed())
+            //            {
+            //                UserCredentials credentials = new UserCredentials();
+            //                {
+            //                    credentials.Username = Username;
+            //                    credentials.Password = Password;
+            //                };
 
-                var json = JsonConvert.SerializeObject(credentials);
+            //                var json = JsonConvert.SerializeObject(credentials);
 
 
-#if WINDOWS
-                var apiBaseUrl = "http://localhost:5000";
-#endif
-#if ANDROID
-                           var apiBaseUrl = "http://10.0.2.2:5000";
-#endif
+            //#if WINDOWS
+            //                var apiBaseUrl = "http://localhost:5000";
+            //#endif
+            //#if ANDROID
+            //                           var apiBaseUrl = "http://10.0.2.2:5000";
+            //#endif
 
-                var endpoint = "api/user/login";
+            //                var endpoint = "api/user/login";
 
-                using (var client = new HttpClient())
-                {
+            //                using (var client = new HttpClient())
+            //                {
 
-                    client.BaseAddress = new Uri(apiBaseUrl);
+            //                    client.BaseAddress = new Uri(apiBaseUrl);
 
-                    try
-                    {
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //                    try
+            //                    {
+            //                        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        var response = client.PostAsync(endpoint, content);
+            //                        var response = client.PostAsync(endpoint, content);
 
-                        if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            await ToBoardPage();
-                        }
-                        else
-                        {
-                            //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
-                        }
+            //                        if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
+            //                        {
+            //                            await ToBoardPage();
+            //                        }
+            //                        else
+            //                        {
+            //                            //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
+            //                        }
 
-                    }
-                    catch (Exception ex)
-                    {
-                        //await DisplayAlert("Response", ex.Message, "OK");
-                    }
-                }
-            }
+            //                    }
+            //                    catch (Exception ex)
+            //                    {
+            //                        //await DisplayAlert("Response", ex.Message, "OK");
+            //                    }
+            //                }
+            //            }
+            await ToBoardPage();
         }
 
         private async Task ToBoardPage()
         {
-            App.Current.MainPage = new BoardPage();
+            App.Current.MainPage = new AppShell();
         }
 
         private bool LoginCanProceed()
@@ -142,7 +143,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task ToLogInPage()
         {
-            App.Current.MainPage = new MainPage();
+            App.Current.MainPage = new LogInPage();
         }
 
         

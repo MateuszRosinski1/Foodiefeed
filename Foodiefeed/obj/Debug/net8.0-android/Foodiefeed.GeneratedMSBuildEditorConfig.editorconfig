@@ -46,11 +46,11 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.Resources.Style
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
-[D:/PracaInzynierska/Foodiefeed/views/windows/BoardView.xaml]
+[D:/PracaInzynierska/Foodiefeed/views/windows/BoardPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.BoardView.xaml
-build_metadata.AdditionalFiles.TargetPath = views\windows\BoardView.xaml
-build_metadata.AdditionalFiles.RelativePath = views\windows\BoardView.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.BoardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\BoardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\BoardPage.xaml
 
 [D:/PracaInzynierska/Foodiefeed/views/windows/SingUpView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

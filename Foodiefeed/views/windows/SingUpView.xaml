@@ -10,11 +10,26 @@
 
     <ScrollView>
         <VerticalStackLayout>
-            <Image  Source="textlogo.png" HeightRequest="150" WidthRequest="225"/>
+            <Image  Source="textlogo.png" 
+                    HeightRequest="150" 
+                    WidthRequest="225"/>
 
             <HorizontalStackLayout HorizontalOptions="Center">
-                <Border Margin="0,0,10,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="180">
-                    <Entry  Text="{Binding Firstname,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="First Name" Margin="0" x:Name="FirstNameEntry" HeightRequest="50" WidthRequest="175" Background="White">
+                <Border Margin="0,0,10,20" 
+                        Stroke="Gray" 
+                        StrokeThickness="1.5" 
+                        StrokeShape="RoundRectangle 20,20,20,20" 
+                        HeightRequest="60" 
+                        WidthRequest="180">
+                    <Entry  Text="{Binding Firstname,Mode=TwoWay}" 
+                            TextColor="Black" 
+                            FontSize="18" 
+                            Placeholder="First Name" 
+                            Margin="0" 
+                            x:Name="FirstNameEntry" 
+                            HeightRequest="50" 
+                            WidthRequest="175" 
+                            Background="White">
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior
                                       EventName="TextChanged"
@@ -23,17 +38,38 @@
                     </Entry>
 
                     <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding ValidateFirstname}" Value="true">
-                            <Setter Property="Stroke" Value="Gray"/>
+                        <DataTrigger TargetType="Border" 
+                                     Binding="{Binding ValidateFirstname}" 
+                                     Value="true">
+                            <Setter Property="Stroke" 
+                                    Value="Gray"/>
                         </DataTrigger>
-                        <DataTrigger TargetType="Border" Binding="{Binding ValidateFirstname}" Value="false">
-                            <Setter Property="Stroke" Value="Red"/>
+                        <DataTrigger TargetType="Border" 
+                                     Binding="{Binding ValidateFirstname}" 
+                                     Value="false">
+                            <Setter Property="Stroke" 
+                                    Value="#e32441"/>
                         </DataTrigger>
                     </Border.Triggers>
                 </Border>
                 
-                <Border Margin="0,0,5,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="180">
-                    <Entry Text="{Binding Lastname,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="Last Name" Margin="0" x:Name="LastNameEntry" HeightRequest="50" WidthRequest="175" Background="White">
+                <Border Margin="0,0,5,20" 
+                        Stroke="Gray" 
+                        StrokeThickness="1.5" 
+                        StrokeShape="RoundRectangle 20,20,20,20" 
+                        HeightRequest="60" 
+                        WidthRequest="180">
+                    
+                    <Entry Text="{Binding Lastname,Mode=TwoWay}" 
+                           TextColor="Black" 
+                           FontSize="18" 
+                           Placeholder="Last Name" 
+                           Margin="0" 
+                           x:Name="LastNameEntry" 
+                           HeightRequest="50" 
+                           WidthRequest="175" 
+                           Background="White">
+                        
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior
                                       EventName="TextChanged"
@@ -42,19 +78,38 @@
                     </Entry>
 
                     <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding ValidateLastname}" Value="true">
-                            <Setter Property="Stroke" Value="Gray"/>
+                        <DataTrigger TargetType="Border" 
+                                     Binding="{Binding ValidateLastname}" 
+                                     Value="true">
+                            
+                            <Setter Property="Stroke" 
+                                    Value="Gray"/>
                         </DataTrigger>
-                        <DataTrigger TargetType="Border" Binding="{Binding ValidateLastname}" Value="false">
-                            <Setter Property="Stroke" Value="Red"/>
+                        <DataTrigger TargetType="Border" 
+                                     Binding="{Binding ValidateLastname}" 
+                                     Value="false">
+
+                            <Setter Property="Stroke" Value="#e32441"/>
                         </DataTrigger>
                     </Border.Triggers>
                 </Border>
                 
             </HorizontalStackLayout>
 
-            <Border Margin="0,0,0,20" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-                <Entry Text="{Binding Username,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="Username" Margin="0" x:Name="usernameEntry" HeightRequest="50" WidthRequest="350" Background="White">
+            <Border Margin="0,0,0,20" 
+                    StrokeThickness="1.5"
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" 
+                    WidthRequest="370">
+                <Entry Text="{Binding Username,Mode=TwoWay}" 
+                       TextColor="Black" 
+                       FontSize="18" 
+                       Placeholder="Username" 
+                       Margin="0" 
+                       x:Name="usernameEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="White">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                                   EventName="TextChanged"
@@ -63,18 +118,34 @@
                 </Entry>
 
                 <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateUsername}" Value="true">
+                        <Setter Property="Stroke" 
+                                Value="Gray"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateUsername}" 
+                                 Value="false">
+                        <Setter Property="Stroke" 
+                                Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
 
             </Border>
 
-            <Border Margin="0,0,0,20" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-                <Entry Text="{Binding Email,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="E-mail" Margin="0" x:Name="emailEntry" HeightRequest="50" WidthRequest="350" Background="White">
+            <Border Margin="0,0,0,20" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" WidthRequest="370">
+                <Entry Text="{Binding Email,Mode=TwoWay}" 
+                       TextColor="Black" 
+                       FontSize="18" 
+                       Placeholder="E-mail" 
+                       Margin="0" 
+                       x:Name="emailEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="White">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -83,18 +154,37 @@
                 </Entry>
 
                 <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateEmail}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateEmail}" Value="true">
+                        <Setter Property="Stroke" 
+                                Value="Gray"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateEmail}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateEmail}" Value="false">
+                        <Setter Property="Stroke" 
+                                Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
                 
             </Border>
 
-            <Border  Margin="0,0,0,20" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-                <Entry IsPassword="True" Text="{Binding Password,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="Password" Margin="0" x:Name="passwordEntry" HeightRequest="50" WidthRequest="350" Background="White">
+            <Border  Margin="0,0,0,20" 
+                     Stroke="Gray" 
+                     StrokeThickness="1.5" 
+                     StrokeShape="RoundRectangle 20,20,20,20" 
+                     HeightRequest="60" 
+                     WidthRequest="370">
+                <Entry IsPassword="True" 
+                       
+                       Text="{Binding Password,Mode=TwoWay}" 
+                       TextColor="Black" 
+                       FontSize="18" 
+                       Placeholder="Password" 
+                       Margin="0" 
+                       x:Name="passwordEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="White">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -103,18 +193,36 @@
                 </Entry>
 
                 <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidatePassword}" 
+                                 Value="true">
+                        <Setter Property="Stroke" 
+                                Value="Gray"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidatePassword}" 
+                                 Value="false">
+                        <Setter Property="Stroke" 
+                                Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
                 
             </Border>
 
-            <Border  Margin="0,0,0,40" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-                <Entry IsPassword="True" Text="{Binding PasswordRepeat,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="Password" Margin="0" x:Name="rePasswordEntry" HeightRequest="50" WidthRequest="350" Background="White">
+            <Border  Margin="0,0,0,40" 
+                     Stroke="Gray" 
+                     StrokeThickness="1.5" 
+                     StrokeShape="RoundRectangle 20,20,20,20" 
+                     HeightRequest="60" 
+                     WidthRequest="370">
+                <Entry IsPassword="True" 
+                       Text="{Binding PasswordRepeat,Mode=TwoWay}" 
+                       TextColor="Black" 
+                       FontSize="18" Placeholder="Password" 
+                       Margin="0" x:Name="rePasswordEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="White">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -123,20 +231,32 @@
                 </Entry>
 
                 <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePasswordRepeat}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidatePasswordRepeat}" Value="true">
+                        <Setter Property="Stroke" 
+                                Value="Gray"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePasswordRepeat}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidatePasswordRepeat}" Value="false">
+                        <Setter Property="Stroke" 
+                                Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
             </Border>
 
-            <Rectangle Background="Black" WidthRequest="500" HeightRequest="4" />
+            <Rectangle Background="Black" 
+                       WidthRequest="500" 
+                       HeightRequest="4" />
 
             <HorizontalStackLayout HorizontalOptions="Center">
-                <Label Margin="0,0,10,0" FontSize="17" TextColor="Black" Text="Already have an account ?"/>
-                <Label FontSize="17" TextColor="Black" Text="Log In" FontAttributes="Bold">
+                <Label Margin="0,0,10,0" 
+                       FontSize="17" 
+                       TextColor="Black" 
+                       Text="Already have an account ?"/>
+                <Label FontSize="17" 
+                       TextColor="Black" 
+                       Text="Log In" 
+                       FontAttributes="Bold">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToLogInPageCommand}"/>
                     </Label.GestureRecognizers>
@@ -145,10 +265,19 @@
 
             </HorizontalStackLayout>
 
-            <Button Command="{Binding RegisterCommand}" Margin="0,30,0,30" Text="Sign Up" FontSize="25" FontAttributes="Bold" TextColor="White" Background="Black"  WidthRequest="370" CornerRadius="20" >
+            <Button Clicked="ClickAnimation" 
+                    Command="{Binding RegisterCommand}" 
+                    Margin="0,30,0,30" 
+                    Text="Sign Up" 
+                    FontSize="25" 
+                    FontAttributes="Bold" 
+                    TextColor="White" 
+                    Background="Black"  
+                    WidthRequest="370" 
+                    CornerRadius="20" >
                 <Button.Shadow>
                     <Shadow Offset="0,5"
-                Opacity="1" />
+                            Opacity="1" />
                 </Button.Shadow>
             </Button>
 

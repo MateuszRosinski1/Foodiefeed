@@ -21,7 +21,7 @@
     <MauiXaml Update="views\windows\SingUpView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="views\windows\BoardView.xaml">
+    <MauiXaml Update="views\windows\BoardPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>

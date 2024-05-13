@@ -4,6 +4,12 @@
         <name>Foodiefeed</name>
     </assembly>
     <members>
+        <member name="T:Foodiefeed.viewmodels.BoardViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.Posts">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.posts"/>
+        </member>
         <member name="T:Foodiefeed.viewmodels.UserViewModel">
             <inheritdoc/>
             <inheritdoc/>
@@ -119,6 +125,9 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Posts" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
         </member>
@@ -160,6 +169,9 @@
             A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Posts">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Posts" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

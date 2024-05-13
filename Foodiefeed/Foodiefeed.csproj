@@ -73,7 +73,9 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\logobutton.png" />
+	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
+	  <None Remove="Resources\Images\threedotmenu.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -86,18 +88,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-<<<<<<< HEAD
-	  <Compile Update="views\windows\SingUpView.xaml.cs">
-=======
 	  <Compile Update="LogInPage.xaml.cs">
 	    <DependentUpon>LogInPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="views\SingUpView.xaml.cs">
->>>>>>> features/ui
+	  <Compile Update="views\windows\SingUpView.xaml.cs">
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="views\windows\BoardView.xaml.cs">
-	    <DependentUpon>BoardView.xaml</DependentUpon>
+	  <Compile Update="views\windows\BoardPage.xaml.cs">
+	    <DependentUpon>BoardPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -105,7 +103,7 @@
 	  <MauiXaml Update="views\windows\SingUpView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="views\windows\BoardView.xaml">
+	  <MauiXaml Update="views\windows\BoardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
