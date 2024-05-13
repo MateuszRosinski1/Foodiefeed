@@ -13,9 +13,14 @@ namespace Foodiefeed
         {
             if (value is bool isFollowed)
             {
-                return "Followed";
+                if (isFollowed)
+                {
+                    return "Followed";
+                }
+                return "Follow";
             }
-            return "Follow";
+            return null;
+            
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

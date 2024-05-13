@@ -72,9 +72,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\commenticon.png" />
+	  <None Remove="Resources\Images\doubleleft.png" />
+	  <None Remove="Resources\Images\doubleright.png" />
+	  <None Remove="Resources\Images\likeicon.png" />
 	  <None Remove="Resources\Images\logobutton.png" />
+	  <None Remove="Resources\Images\shareicon.png" />
 	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
+	  <None Remove="Resources\Images\threedotfivexfive.png" />
 	  <None Remove="Resources\Images\threedotmenu.png" />
 	</ItemGroup>
 

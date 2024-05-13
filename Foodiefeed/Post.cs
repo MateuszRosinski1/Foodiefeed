@@ -20,7 +20,7 @@ namespace Foodiefeed
 
     public class Comment
     {
-        public string PosterUsername { get; set; }
+        public string CommentPosterUsername { get; set; }
         public bool isFollowed { get; set; }
         public string CommentTextContent { get; set; }
         public int Likes { get; set; }

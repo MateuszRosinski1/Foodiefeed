@@ -11,6 +11,11 @@
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
         <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>
+        <x:Double x:Key="LeftBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="MidBarWidthAdjustValue">600</x:Double>
+        <x:Double x:Key="MidBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="RightBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="BorderWidthValueAdjustment">20</x:Double>
     </ContentPage.Resources>
 
     <Grid>
@@ -19,17 +24,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!--<BoxView Color="White" 
-                 WidthRequest="250" 
-                 HorizontalOptions="Start" 
-                 HeightRequest="{Binding Path=Height}">
-            <BoxView.Shadow>
-                <Shadow Offset="3,5"
-                        Opacity="0.8"/>
-            </BoxView.Shadow>   
-        </BoxView>-->
+      
 
-        <Grid Grid.Row="0">
+        <Grid ZIndex="10" Grid.Row="0">
                    <BoxView Color="White" 
                       WidthRequest="{Binding Source={x:Reference Page},Path=Width}" 
                       HeightRequest="100" 
@@ -64,85 +61,145 @@
                 Margin="20"/>
         </Grid>
 
-        <Grid Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
-
-            <ScrollView   Grid.Column="0"> <!--pages-->
-                <Grid BackgroundColor="Red"  WidthRequest="300" HorizontalOptions="Start">
+        <Grid Padding="0,0,0,0" Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <ScrollView HorizontalOptions="Start" 
+                        VerticalOptions="Start" 
+                        x:Name="testScroll" 
+                        VerticalScrollBarVisibility="Always" 
+                        WidthRequest="300"
+                        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
+                        Grid.Column="0"> <!--pages-->
+                <Grid HeightRequest="1000"  BackgroundColor="Red">
                     
                 </Grid>
             </ScrollView>
-            
-            <!--posts-->
-                <!--<VerticalStackLayout BackgroundColor="Green" 
-                      WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace}}"
-                      HorizontalOptions="Center"
-                      Padding="10">
-                        <local:BoardPost/>
-                        <local:BoardPost/>
-                        <local:BoardPost/>
-                        <local:BoardPost/>
-                        <local:BoardPost/>
-                        <local:BoardPost/>
-                    
-                    </VerticalStackLayout>-->
 
-            
-                <CollectionView Grid.Column="1" 
-                          HorizontalScrollBarVisibility="Always"
-                          BackgroundColor="Green"
-                          WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace}}"
-                          HorizontalOptions="Center"
-                          ItemsSource="{Binding Posts}"
-                          VerticalOptions="FillAndExpand">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="local:Post" >
-                            
-                            <!-- https://github.com/dotnet/maui/issues/11369 -->
-                                <Grid WidthRequest="600" BackgroundColor="White">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/> <!--0 username follow | 3 dots to go to profile-->
-                                        <RowDefinition/> <!--1 post text content-->
-                                        <RowDefinition/> <!--2 images-->
-                                        <RowDefinition/> <!--3 like comments share-->
-                                        <RowDefinition/> <!--4 comment section-->
-                                    </Grid.RowDefinitions>
-                                <Grid Padding="20" Grid.Row="0">
+
+            <Grid  WidthRequest="1000" Grid.Column="1">
+                <CollectionView   
+                              BackgroundColor="Green"
+                              x:Name="PostCollectionView"
+                              VerticalScrollBarVisibility="Always"
+                              WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}"
+                              HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarHeightAdjustValue}}"                 
+                              HorizontalOptions="Center"
+                              ItemsSource="{Binding Posts}"
+                              VerticalOptions="FillAndExpand"
+                              >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:Post" >
+
+                        <Border WidthRequest="{Binding Source={x:Reference PostCollectionView},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource BorderWidthValueAdjustment}}"
+                                Margin="30" 
+                                BackgroundColor="White" 
+                                StrokeThickness="10" 
+                                StrokeShape="RoundRectangle 20,20,20,20">
+                            <Grid Background="Aqua"  WidthRequest="800" BackgroundColor="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/> <!--0 username follow | 3 dots to go to profile-->
+                                    <RowDefinition/> <!--1 post text content-->
+                                    <RowDefinition/>  <!--2 images-->
+                                    <RowDefinition/><!--3 like comments share-->
+                                    <RowDefinition/> <!--4 comment section-->
+                                </Grid.RowDefinitions>
+                                <Grid  Padding="20" Grid.Row="0">
                                     <HorizontalStackLayout Spacing="10">
-                                    <VerticalStackLayout>
-                                        <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding PosterUsername}"/>
-                                        <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
-                                    </VerticalStackLayout>
+                                        <VerticalStackLayout>
+                                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding PosterUsername}"/>
+                                            <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
+                                        </VerticalStackLayout>
                                         <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
                                         <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding isFollowed, Converter={StaticResource FollowOrNotFollowConverter}}"/>
                                     </HorizontalStackLayout>
-                                    <ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotmenu.png" />
+                                    <ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />
                                 </Grid>
                                 <Grid Padding="20" Grid.Row="1" >
-                                     <Label TextColor="Black" Text="{Binding PostTextContent}" LineBreakMode="WordWrap"/>
+                                    <Label TextColor="Black" Text="{Binding PostTextContent}" LineBreakMode="WordWrap"/>
                                 </Grid>
-                                    
-                                <Grid Grid.Row="2">
-                                    <Image 
+
+                                <Grid Padding="30,0,30,15" Grid.Row="2">
+
+                                    <BoxView HeightRequest="300" WidthRequest="750" BackgroundColor="Orange"/>
+                                    <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
+                                    <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
+
                                 </Grid>
-                            
+
+                                <Grid Padding="0,0,0,10" Grid.Row="3">
+
+                                    <HorizontalStackLayout  Spacing="-170">
+                                        <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
+                                        <Image HeightRequest="40" Source="likeicon.png"/>
+                                    </HorizontalStackLayout>
+
+                                    <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="40,0,0,0" Text="Comment"/>
+                                    <Image Margin="0,0,140,0" HeightRequest="40" Source="commenticon.png" />
+
+
+                                    <Button  HorizontalOptions="End" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+                                    <Image  Margin="0,0,140,0" HorizontalOptions="End"  HeightRequest="40" Source="shareicon.png"/>
+                                </Grid>
+
+
+
+                                <CollectionView HeightRequest="100" Grid.Row="4" VerticalScrollBarVisibility="Always"  ItemsSource="{Binding CommentSection}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="local:Comment">
+                                            <Grid Padding="25" BackgroundColor="#e0e0e0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+
+                                                </Grid.RowDefinitions>
+                                                <Grid  Grid.Row="0">
+                                                    <Label TextColor="Black" Text="{Binding CommentPosterUsername}"/>
+                                                    <ImageButton HorizontalOptions="End" HeightRequest="5"  Source="threedotfivexfive.png" />
+                                                </Grid>
+                                                <Grid  Grid.Row="1">
+                                                    <Label TextColor="Black" Text="{Binding CommentTextContent}" LineBreakMode="WordWrap"/>
+                                                </Grid>
+
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
 
 
 
 
 
-                            <Grid Grid.Row="4"> <!--comment section grid -->
-                                        
-                                    </Grid>
-                              </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+
+                                <Grid Grid.Row="4"><!--comment section grid-->
+
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            </Grid>
 
 
 
-            <ScrollView Grid.Column="2"> <!--friends-->
-                <Grid HorizontalOptions="End" WidthRequest="300" BackgroundColor="Blue">
 
+
+
+
+            <ScrollView HorizontalOptions="End" 
+                        VerticalOptions="Start" 
+                        VerticalScrollBarVisibility="Always" 
+                        WidthRequest="300"
+                        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
+                        Grid.Column="2">
+                <!--friends-->
+                <Grid HeightRequest="1000"  BackgroundColor="Blue">
                 </Grid>
             </ScrollView>
 
