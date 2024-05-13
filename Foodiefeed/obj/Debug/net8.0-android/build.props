@@ -25,10 +25,14 @@ os=windows_nt
 androidincludedebugsymbols=true
 androidpackagenamingpolicy=lowercasecrc64
 <<<<<<< HEAD
+<<<<<<< HEAD
 _nugetassetstimestamp=638503946664017544
 =======
 _nugetassetstimestamp=638511292350467568
 >>>>>>> features/ui
+=======
+_nugetassetstimestamp=638504502589403782
+>>>>>>> features/login&signupLogic
 typemapkind=strings-asm
 androidsupportedabis=armeabi-v7a;arm64-v8a;x86;x86_64
 androidmanifestplaceholders=

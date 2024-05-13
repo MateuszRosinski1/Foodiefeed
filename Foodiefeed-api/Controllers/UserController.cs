@@ -15,7 +15,7 @@ namespace Foodiefeed_api.Controllers
             _service = service;
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto)
         {
             await _service.CreateUser(dto);
@@ -23,10 +23,10 @@ namespace Foodiefeed_api.Controllers
             return Ok("User Created Succesfully");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> userLogIn(string username,string password)
+        [HttpPost("login")]
+        public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto)
         {
-            await _service.LogIn(username,password);
+            await _service.LogIn(dto);
 
             return Ok("Log in Succesfully");
         }

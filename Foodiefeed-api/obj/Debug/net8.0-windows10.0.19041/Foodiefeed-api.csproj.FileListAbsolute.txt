@@ -114,9 +114,7 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Security.AccessControl.Projection.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.System.Power.Projection.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.System.Projection.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Widgets.Projection.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.WindowsAppRuntime.Bootstrap.Net.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.WindowsAppRuntime.Release.Net.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Mono.TextTemplating.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Swashbuckle.AspNetCore.Swagger.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -303,7 +301,6 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.AssemblyInfoInputs.cache
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.AssemblyInfo.cs
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.csproj.CoreCompileInputs.cache
-D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.MvcApplicationPartsAssemblyInfo.cs
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.MvcApplicationPartsAssemblyInfo.cache
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\staticwebassets.build.json
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\staticwebassets.development.json
@@ -321,3 +318,13 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\ref\Foodiefeed-api.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Newtonsoft.Json.dll
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.sourcelink.json
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Mvvm.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Maui.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Maui.Core.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Widgets.Providers.Projection.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\System.Speech.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-arm64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win\lib\net8.0\System.Speech.dll
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.MvcApplicationPartsAssemblyInfo.cs

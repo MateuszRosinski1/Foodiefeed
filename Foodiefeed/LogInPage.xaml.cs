@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Foodiefeed.viewmodels;
+using System.Windows.Input;
 
 namespace Foodiefeed
 {
@@ -7,11 +8,7 @@ namespace Foodiefeed
         public LogInPage()
         {
             InitializeComponent();
-        }
-
-        private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-        {
-            await Navigation.PushAsync(new SignUpView());
+            this.BindingContext = new UserViewModel();
         }
 
         private async void LogInButtonClickAsync(object sender, EventArgs e)
