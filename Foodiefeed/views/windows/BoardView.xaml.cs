@@ -1,8 +1,8 @@
 ﻿namespace Foodiefeed
 {
-    public partial class BoardPage : ContentPage
+    public partial class BoardView : ContentPage
     {
-        public BoardPage()
+        public BoardView()
         {
             InitializeComponent();
         } 
