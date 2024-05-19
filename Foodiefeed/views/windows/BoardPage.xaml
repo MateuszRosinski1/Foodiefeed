@@ -6,8 +6,10 @@
              x:Name="Page"
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
-             x:DataType="viewmodel:BoardViewModel">
+             x:DataType="viewmodel:BoardViewModel"
+             >
 
+    
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
         <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>

@@ -9,7 +9,38 @@
     <maui:MauiWinUIApplication.Resources>
         <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+        <!--<DataTemplate x:Key="MauiAppTitleBarContainerTemplate" >
+            <Grid Background="Red" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Background="Transparent" Height="30"></Button>
+
+                <ContentControl
+                    Grid.Column="0"
+                    IsTabStop="False"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    x:Name="AppTitleBarContentControl">
+                </ContentControl>
+            </Grid>
+        </DataTemplate>-->
+        <DataTemplate x:Key="MauiAppTitleBarTemplate">
+            <Grid >
+                <Border
+                  Canvas.ZIndex="1"  
+                  VerticalAlignment="Stretch"
+                  Background="Black"
+                  Margin="0,0,0,0">
+
+                </Border>
+            </Grid>
+        </DataTemplate>
     </maui:MauiWinUIApplication.Resources>
+
+
+
+
 
 </maui:MauiWinUIApplication>
 

@@ -4,9 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Foodiefeed"
-    Shell.FlyoutBehavior="Flyout"
     Shell.NavBarIsVisible="False"
-    FlyoutBackground="White" Shell.ForegroundColor="Black">
+    >
 
     
 
@@ -18,24 +17,6 @@
 
     
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems" Route="Pages">
-
-        <ShellContent       
-            ContentTemplate="{DataTemplate local:LogInPage}"
-            Title="Login"
-            Route="LogInPage"/>
-
-        <ShellContent       
-                ContentTemplate="{DataTemplate local:SignUpView}"
-                Title="Register"
-                Route="SignUpView"
-                />
-
-        <ShellContent       
-                ContentTemplate="{DataTemplate local:BoardPage}"
-                Title="Home"
-                Route="BoardPage"/>
-
-    </FlyoutItem>
+   
 
 </Shell>

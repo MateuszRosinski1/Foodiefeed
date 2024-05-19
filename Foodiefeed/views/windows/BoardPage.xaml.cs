@@ -7,7 +7,7 @@ namespace Foodiefeed
         public BoardPage()
         {
             InitializeComponent();
-            this.BindingContext = new BoardViewModel();
+            this.BindingContext = new BoardViewModel();            
         } 
     }
 }
