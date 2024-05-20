@@ -3080,9 +3080,10 @@ int drawable splash 0x7f0700c0
 int drawable test_level_drawable 0x7f0700c1
 int drawable textlogo 0x7f0700c2
 int drawable threedotfivexfive 0x7f0700c3
-int drawable threedotmenu 0x7f0700c4
-int drawable tooltip_frame_dark 0x7f0700c5
-int drawable tooltip_frame_light 0x7f0700c6
+int drawable threedotfivexfived 0x7f0700c4
+int drawable threedotmenu 0x7f0700c5
+int drawable tooltip_frame_dark 0x7f0700c6
+int drawable tooltip_frame_light 0x7f0700c7
 int id accelerate 0x7f080000
 int id accessibility_action_clickable_span 0x7f080001
 int id accessibility_custom_action_0 0x7f080002

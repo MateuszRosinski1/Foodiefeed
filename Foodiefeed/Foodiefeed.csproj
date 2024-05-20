@@ -81,6 +81,7 @@
 	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
 	  <None Remove="Resources\Images\threedotfivexfive.png" />
+	  <None Remove="Resources\Images\threedotfivexfived.png" />
 	  <None Remove="Resources\Images\threedotmenu.png" />
 	</ItemGroup>
 

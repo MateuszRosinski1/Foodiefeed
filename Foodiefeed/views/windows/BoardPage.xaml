@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              x:DataType="viewmodel:BoardViewModel"
-             >
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     
     <ContentPage.Resources>
@@ -19,7 +19,6 @@
         <x:Double x:Key="RightBarHeightAdjustValue">100</x:Double>
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
-
     </ContentPage.Resources>
 
     <Grid>
@@ -85,17 +84,25 @@
             </ScrollView>
 
 
-            <Grid  WidthRequest="1000" Grid.Column="1">
-                <CollectionView 
+            <Grid  x:Name="PostGrid" Grid.Column="1">
+                <CollectionView x:Name="PostCollection"
+                              ItemsUpdatingScrollMode="KeepScrollOffset"
                               BackgroundColor="Green"
                               VerticalScrollBarVisibility="Always"
                               WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}"
                               HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarHeightAdjustValue}}"                 
                               HorizontalOptions="Center"
                               ItemsSource="{Binding Posts}"
-                              VerticalOptions="FillAndExpand"
-                              >
-                <CollectionView.ItemTemplate>
+                              VerticalOptions="FillAndExpand">
+                    
+                    <CollectionView.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                            x:TypeArguments="ItemsViewScrolledEventArgs"
+                            EventName="Scrolled"
+                            Command="{Binding ScrolledCommand}"/>
+                    </CollectionView.Behaviors>
+                    
+                  <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="local:Post" >
 
                         <Border WidthRequest="{Binding Source={x:Reference Post},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource BorderWidthValueAdjustment}}"
@@ -151,11 +158,12 @@
 
 
 
-                                    <Grid HeightRequest="300" 
+                                    <Grid HeightRequest="200" 
+                                          VerticalOptions="FillAndExpand"
                                           Grid.Row="4">
                                         <CollectionView  VerticalScrollBarVisibility="Always"  
                                                          ItemsSource="{Binding CommentSection}"
-                                                         VerticalOptions="FillAndExpand">
+                                                         >
                                             <CollectionView.ItemTemplate>
                                                 <DataTemplate x:DataType="local:Comment">
                                                     <Grid Padding="25" BackgroundColor="#e0e0e0">
@@ -163,11 +171,11 @@
                                                             <RowDefinition/>
                                                             <RowDefinition/>
                                                             <RowDefinition/>
-
                                                         </Grid.RowDefinitions>
-                                                        <Grid  Grid.Row="0">
-                                                            <Label TextColor="Black" Text="{Binding CommentPosterUsername}"/>
-                                                            <ImageButton HorizontalOptions="End" HeightRequest="1"  Source="threedotfivexfive.png" />
+                                                        
+                                                        <Grid BackgroundColor="Red" Grid.Row="0">
+                                                            <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" Text="{Binding CommentPosterUsername}"/>
+                                                            <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
                                                         </Grid>
                                                         <Grid  Grid.Row="1">
                                                             <Label TextColor="Black" Text="{Binding CommentTextContent}" LineBreakMode="WordWrap"/>
