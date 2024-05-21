@@ -74,6 +74,7 @@ namespace Foodiefeed.viewmodels
             //                    }
             //                }
             //            }
+            await Task.Delay(2000);
             await ToBoardPage();
         }
 

@@ -85,7 +85,8 @@
                                  Margin="0,0,5,0"
                                  Grid.Column="1" 
                                  Source="showpasswordicon.png"
-                                 Scale="0.4"/>
+                                 Scale="0.4"
+                                 Clicked="ImageClickAnimation"/>
 
                 </Grid>
                 

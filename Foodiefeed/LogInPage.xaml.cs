@@ -16,11 +16,13 @@ namespace Foodiefeed
             Button btn = (Button)sender;
             await btn.ScaleTo(1.05, 150, Easing.Linear);
             await btn.ScaleTo(1, 150, Easing.Linear);
+        }
 
-            //await btn.ScaleTo(1.05, 150, Easing.BounceIn);
-            //await btn.ScaleTo(1, 150, Easing.BounceOut);
-
-
+        private async void ImageClickAnimation(object sender, EventArgs e)
+        {
+            ImageButton btn = (ImageButton)sender;
+            await btn.ScaleTo(0.5, 150, Easing.Linear);
+            await btn.ScaleTo(0.4, 150, Easing.Linear);
         }
     }
 
