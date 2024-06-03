@@ -1,7 +1,6 @@
 ﻿using Foodiefeed_api.entities;
 using Foodiefeed_api.models.comment;
 using Foodiefeed_api.models.PostTag;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foodiefeed_api.models.post
 {

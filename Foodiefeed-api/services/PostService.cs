@@ -2,24 +2,28 @@
 using Foodiefeed_api.entities;
 using Foodiefeed_api.models.post;
 using Microsoft.VisualBasic;
+using System.Linq;
 
 namespace Foodiefeed_api.services
 {
     public interface IPostService
     {      
         public IEnumerable<PostDto> getAllPostForUser(int userId);
+        public IEnumerable<PostDto> wallFill(int userId);
+        public IEnumerable<PostDto> wallInit(int userId);
     }
 
     public class PostService : IPostService
     {
+
         private readonly dbContext _dbContext;
         private readonly IMapper _mapper;
+
         public PostService(dbContext dbContext,IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
-
         
         public IEnumerable<PostDto> getAllPostForUser(int userId)
         {
@@ -34,6 +38,14 @@ namespace Foodiefeed_api.services
             return postsDto;
         }
 
-        
+        public IEnumerable<PostDto> IPostService.wallFill(int userId)
+        {
+            var postInit = _dbContext.Posts.Where().Take(10);
+        }
+
+        public IEnumerable<PostDto> IPostService.wallInit(int userId)
+        {
+            var postInit = _dbContext.Posts.Where().Take(3);
+        }
     }
 }
