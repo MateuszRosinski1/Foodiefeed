@@ -21,17 +21,17 @@ namespace Foodiefeed_api.Controllers
             return Ok(results);
         }
 
-        [HttpGet("/wall/{userId}")]
-        public void wallInit([FromRoute] int userId)
-        {
-            var results = _postService.wallInit(userId);
-        }
+        //[HttpGet("/wall/{userId}")]
+        //public void wallInit([FromRoute] int userId)
+        //{
+        //    var results = _postService.wallInit(userId);
+        //}
 
-        [HttpGet("/scrollFill/{userId}")]
-        public void wallFill([FromRoute] int userId)
-        {
-            var results = _postService.wallFill(userId);
-        }
+        //[HttpGet("/scrollFill/{userId}")]
+        //public void wallFill([FromRoute] int userId)
+        //{
+        //    var results = _postService.wallFill(userId);
+        //}
 
 
     }

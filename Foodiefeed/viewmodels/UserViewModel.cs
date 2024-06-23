@@ -78,7 +78,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task ToBoardPage()
         {
-            App.Current.MainPage = new BoardPage();
+            App.Current.MainPage = new BoardView();
         }
 
         private bool LoginCanProceed()
@@ -142,7 +142,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task ToLogInPage()
         {
-            App.Current.MainPage = new MainPage();
+            App.Current.MainPage = new LogInPage();
         }
 
         

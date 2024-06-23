@@ -9,8 +9,8 @@ namespace Foodiefeed_api.services
     public interface IPostService
     {      
         public IEnumerable<PostDto> getAllPostForUser(int userId);
-        public IEnumerable<PostDto> wallFill(int userId);
-        public IEnumerable<PostDto> wallInit(int userId);
+        //public IEnumerable<PostDto> wallFill(int userId);
+        //public IEnumerable<PostDto> wallInit(int userId);
     }
 
     public class PostService : IPostService
@@ -38,14 +38,14 @@ namespace Foodiefeed_api.services
             return postsDto;
         }
 
-        public IEnumerable<PostDto> IPostService.wallFill(int userId)
-        {
-            var postInit = _dbContext.Posts.Where().Take(10);
-        }
+        //public IEnumerable<PostDto> IPostService.wallFill(int userId)
+        //{
+        //    //var postInit = _dbContext.Posts.Where().Take(10);
+        //}
 
-        public IEnumerable<PostDto> IPostService.wallInit(int userId)
-        {
-            var postInit = _dbContext.Posts.Where().Take(3);
-        }
+        //public IEnumerable<PostDto> IPostService.wallInit(int userId)
+        //{
+        //    //var postInit = _dbContext.Posts.Where().Take(3);
+        //}
     }
 }
