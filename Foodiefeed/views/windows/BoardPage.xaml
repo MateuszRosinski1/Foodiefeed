@@ -26,8 +26,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
-      
+    
 
         <Grid ZIndex="10" Grid.Row="0">
                    <BoxView Color="White" 
@@ -65,6 +64,7 @@
         </Grid>
 
         <Grid Padding="0,0,0,0" Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
@@ -78,13 +78,24 @@
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="0"> <!--pages-->
-                <Grid HeightRequest="1000"  BackgroundColor="Red">
-                    
+                <Grid Padding="10,20,15,0"  BackgroundColor="White">
+                    <VerticalStackLayout>
+                        <Button Text="Main"     HeightRequest="50" Background="Transparent" Command="{Binding ToMainViewCommand}"/>
+                        <Button Text="Profile"  HeightRequest="50" Background="Transparent" Command="{Binding ToProfileViewCommand}"/>
+                        <Button Text="Recipes"  HeightRequest="50" Background="Transparent" Command="{Binding ToRecipesViewCommand}"/>
+                        <Button Text="Settings" HeightRequest="50" Background="Transparent" Command="{Binding ToSettingViewCommand}"/>
+
+                    </VerticalStackLayout>
                 </Grid>
             </ScrollView>
 
+            <!--PostGrid-->
+            <Grid x:Name="PostGrid" Grid.Column="1">
 
-            <Grid  x:Name="PostGrid" Grid.Column="1">
+                <Grid >
+                    
+                </Grid>
+                
                 <CollectionView x:Name="PostCollection"
                               ItemsUpdatingScrollMode="KeepScrollOffset"
                               BackgroundColor="Green"
@@ -109,8 +120,9 @@
                                 Margin="30" 
                                 BackgroundColor="White" 
                                 StrokeThickness="10" 
-                                StrokeShape="RoundRectangle 40,40,40,40">
-                                <Grid Background="Aqua" x:Name="Post" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="White">
+                                StrokeShape="RoundRectangle 40,40,40,40"
+                                >
+                                <Grid Background="White" x:Name="Post" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="White">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/> <!--0 username follow | 3 dots to go to profile-->
                                     <RowDefinition/> <!--1 post text content-->
@@ -118,6 +130,7 @@
                                     <RowDefinition/><!--3 like comments share-->
                                     <RowDefinition/> <!--4 comment section-->
                                 </Grid.RowDefinitions>
+
                                 <Grid  Padding="20" Grid.Row="0">
                                     <HorizontalStackLayout Spacing="10">
                                         <VerticalStackLayout>
@@ -129,20 +142,18 @@
                                     </HorizontalStackLayout>
                                     <ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />
                                 </Grid>
-                                <Grid Padding="20" Grid.Row="1" >
+                                    
+                                <Grid Padding="20,0,20,20" Grid.Row="1" >
                                     <Label TextColor="Black" Text="{Binding PostTextContent}" LineBreakMode="WordWrap"/>
                                 </Grid>
 
                                 <Grid Padding="30,0,30,15" Grid.Row="2">
-
-                                        <BoxView HeightRequest="300" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="Orange"/>
+                                    <BoxView HeightRequest="300" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="Orange"/>
                                     <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
                                     <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
-
                                 </Grid>
 
                                 <Grid Padding="0,0,0,10" Grid.Row="3">
-
                                     <HorizontalStackLayout  Spacing="-170">
                                         <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
                                         <Image HeightRequest="40" Source="likeicon.png"/>

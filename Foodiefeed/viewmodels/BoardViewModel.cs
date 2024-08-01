@@ -216,6 +216,29 @@ namespace Foodiefeed.viewmodels
 
         }
 
-        
+        [RelayCommand]
+        public void ToMainView()
+        {
+
+        }
+
+        [RelayCommand]
+        public void ToProfileView()
+        {
+            
+        }
+
+        [RelayCommand]
+        public void ToRecipesView()
+        {
+
+        }
+
+        [RelayCommand]
+        public void ToSettingView()
+        {
+
+        }
     }
+
 }
