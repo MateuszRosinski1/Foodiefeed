@@ -7,7 +7,8 @@
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              x:DataType="viewmodel:BoardViewModel"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:test="clr-namespace:Foodiefeed.views.windows.contentview">
 
     
     <ContentPage.Resources>
@@ -26,7 +27,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-    
+      
 
         <Grid ZIndex="10" Grid.Row="0">
                    <BoxView Color="White" 
@@ -63,12 +64,12 @@
                 Margin="20"/>
         </Grid>
 
-        <Grid Padding="0,0,0,0" Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
+        <Grid Padding="0,0,0,0"  Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
-                <ColumnDefinition/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             
             <ScrollView HorizontalOptions="Start" 
@@ -78,7 +79,7 @@
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="0"> <!--pages-->
-                <Grid Padding="10,20,15,0"  BackgroundColor="White">
+                <Grid BackgroundColor="Red" Padding="10,20,15,0">
                     <VerticalStackLayout>
                         <Button Text="Main"     HeightRequest="50" Background="Transparent" Command="{Binding ToMainViewCommand}"/>
                         <Button Text="Profile"  HeightRequest="50" Background="Transparent" Command="{Binding ToProfileViewCommand}"/>
@@ -90,11 +91,16 @@
             </ScrollView>
 
             <!--PostGrid-->
-            <Grid x:Name="PostGrid" Grid.Column="1">
+            <ScrollView 
+                        Grid.Column="1"
+                        BackgroundColor="Pink"
+                        WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
+                         
+            <StackLayout Orientation="Vertical" x:Name="PostGrid"  >
 
-                <Grid >
-                    
-                </Grid>
+                
+                
+                <!--
                 
                 <CollectionView x:Name="PostCollection"
                               ItemsUpdatingScrollMode="KeepScrollOffset"
@@ -124,11 +130,11 @@
                                 >
                                 <Grid Background="White" x:Name="Post" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="White">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/> <!--0 username follow | 3 dots to go to profile-->
-                                    <RowDefinition/> <!--1 post text content-->
-                                    <RowDefinition/>  <!--2 images-->
-                                    <RowDefinition/><!--3 like comments share-->
-                                    <RowDefinition/> <!--4 comment section-->
+                                    <RowDefinition/> --><!--0 username follow | 3 dots to go to profile--><!--
+                                    <RowDefinition/> --><!--1 post text content--><!--
+                                    <RowDefinition/>  --><!--2 images--><!--
+                                    <RowDefinition/>--><!--3 like comments share--><!--
+                                    <RowDefinition/> --><!--4 comment section--><!--
                                 </Grid.RowDefinitions>
 
                                 <Grid  Padding="20" Grid.Row="0">
@@ -201,9 +207,9 @@
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-            </CollectionView>
-            </Grid>
-
+            </CollectionView>-->
+            </StackLayout>
+            </ScrollView>
 
 
 
@@ -217,7 +223,7 @@
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="2">
                 <!--friends-->
-                <Grid HeightRequest="1000"  BackgroundColor="Blue">
+                <Grid HeightRequest="1000" Opacity="0.2" BackgroundColor="Blue">
                 </Grid>
             </ScrollView>
 

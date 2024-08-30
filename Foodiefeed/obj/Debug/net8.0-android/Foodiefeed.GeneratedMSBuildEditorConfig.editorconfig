@@ -52,6 +52,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.B
 build_metadata.AdditionalFiles.TargetPath = views\windows\BoardPage.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\BoardPage.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostView.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostView.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostView.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/SingUpView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.SingUpView.xaml

@@ -6,7 +6,8 @@
         {
             InitializeComponent();
 
-            MainPage = new LogInPage();
+            //MainPage = new LogInPage();
+            MainPage = new BoardPage(new viewmodels.BoardViewModel());
         }
     }
 }

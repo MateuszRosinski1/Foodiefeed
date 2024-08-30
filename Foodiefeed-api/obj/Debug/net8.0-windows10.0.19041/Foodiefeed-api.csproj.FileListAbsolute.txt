@@ -346,3 +346,5 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetize
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\likeicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\threedotfivexfive.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\threedotfivexfive.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\threedotfivexfived.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\threedotfivexfived.scale-100.png

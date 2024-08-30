@@ -98,6 +98,9 @@
 	  <Compile Update="LogInPage.xaml.cs">
 	    <DependentUpon>LogInPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="views\windows\contentview\PostView.xaml.cs">
+	    <DependentUpon>PostView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="views\windows\SingUpView.xaml.cs">
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
@@ -107,6 +110,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="views\windows\contentview\PostView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\SingUpView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.PostView">
+    <Grid>
+
+        <Grid>
+            <Border
+                Margin="30" 
+                BackgroundColor="White" 
+                StrokeThickness="10" 
+                StrokeShape="RoundRectangle 40,40,40,40"
+                >
+                <Grid Background="White" x:Name="Post"  BackgroundColor="White" ZIndex="1">
+            
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <!--0 username follow | 3 dots to go to profile-->
+
+                        <RowDefinition/>
+                        <!--1 post text content-->
+
+                        <RowDefinition/>
+                        <!--2 images-->
+
+                        <RowDefinition/>
+                        <!--3 like comments share-->
+
+                        <RowDefinition/>
+                        <!--4 comment section-->
+
+                    </Grid.RowDefinitions>
+
+                    <Grid  Padding="20" Grid.Row="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <VerticalStackLayout>
+                                <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Username"/>
+                                <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
+                            </VerticalStackLayout>
+                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
+                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Follow"/>
+                        </HorizontalStackLayout>
+                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
+                    </Grid>
+
+                    <Grid Padding="20,0,20,20" Grid.Row="1" >
+                        <Label TextColor="Black" Text="lorelipsum dit ame vi turenot" LineBreakMode="WordWrap"/>
+                    </Grid>
+
+                    <Grid Padding="30,0,30,15" Grid.Row="2">
+                        <BoxView HeightRequest="300"  BackgroundColor="Orange"/>
+                        <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
+                        <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
+                    </Grid>
+
+                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                        <HorizontalStackLayout  Spacing="-170">
+                            <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
+                            <Image HeightRequest="40" Source="likeicon.png"/>
+                        </HorizontalStackLayout>
+
+                        <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="40,0,0,0" Text="Comment"/>
+                        <Image Margin="0,0,140,0" HeightRequest="40" Source="commenticon.png" />
+
+
+                        <Button  HorizontalOptions="End" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+                        <Image  Margin="0,0,140,0" HorizontalOptions="End"  HeightRequest="40" Source="shareicon.png"/>
+                    </Grid>
+                </Grid>
+                    <Border.Shadow>
+                        <Shadow Opacity="0.15"
+                            Brush="Black"
+                            Offset="0,5"/>
+                    </Border.Shadow>    
+            </Border>
+        </Grid>
+        
+    </Grid>
+    
+
+</ContentView>
