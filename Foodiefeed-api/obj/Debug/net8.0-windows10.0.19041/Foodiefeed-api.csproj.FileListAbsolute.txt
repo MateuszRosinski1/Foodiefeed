@@ -327,7 +327,6 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\w
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win\lib\net8.0\System.Speech.dll
-D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.MvcApplicationPartsAssemblyInfo.cs
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logobutton.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logobutton.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\showpasswordicon.scale-100.png
