@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.views.windows.contentview.CommentView">
+             x:Class="Foodiefeed.views.windows.contentview.CommentView"
+             >
     
-    <Grid Padding="25" BackgroundColor="#e0e0e0">
+    <Grid Padding="25" BackgroundColor="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -18,6 +19,11 @@
         <Grid  Grid.Row="1">
             <Label TextColor="Black" Text="Comment Lore lipsum de vito an sele ku more wer morete" LineBreakMode="WordWrap"/>
         </Grid>
+
+        <HorizontalStackLayout  Grid.Row="2">
+            <Button BackgroundColor="Blue" Padding="-10,0,0,0" FontSize="15" WidthRequest="120" HeightRequest="15" Text="Like It !" ImageSource="likeicon.png"/>
+        </HorizontalStackLayout>
+
 
     </Grid>
 </ContentView>

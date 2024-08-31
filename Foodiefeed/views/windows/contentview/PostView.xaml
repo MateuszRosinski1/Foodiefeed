@@ -2,7 +2,10 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.views.windows.contentview.PostView"
-             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview">
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             x:Name="PostContentView"
+             MaximumWidthRequest="1000"
+             HeightRequest="{Binding Source={x:Reference PostContentView}}">
     
     <VerticalStackLayout>
 
