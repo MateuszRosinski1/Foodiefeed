@@ -147,46 +147,65 @@
 
                 <Grid>
                     <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="DarkMagenta" Padding="30">
+                        <VerticalStackLayout>
+                            <Border ZIndex="1" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="300" BackgroundColor="White" StrokeShape="RoundRectangle 40">
+                                <Grid  Padding="15"  BackgroundColor="White" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200" BackgroundColor="BlueViolet" Source="avatar.png"></ImageButton>
 
-                        <Border MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="300" BackgroundColor="White" StrokeShape="RoundRectangle 40">
-                            <Grid  Padding="15"  BackgroundColor="White" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200" BackgroundColor="BlueViolet" Source="avatar.png"></ImageButton>
-                                
-                                <VerticalStackLayout VerticalOptions="Center" BackgroundColor="PaleVioletRed" Grid.Column="1">
-                                    <Label Text="Username" TextColor="Black" FontSize="20" FontAttributes="Bold"/>
-                                    <Label Text="300 friends" TextColor="Black" FontSize="15"/>
-                                    <Label Text="20 followers" TextColor="Black" FontSize="15"/>
-                                </VerticalStackLayout>
-                                
-                                <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Padding="10" Grid.Column="2">
-                                    <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
-                                        <Button.Shadow>
-                                            <Shadow Opacity="0.4"
-                                                    Radius="10"/>
-                                        </Button.Shadow>
-                                        <Button.GestureRecognizers>
-                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
-                                        </Button.GestureRecognizers>
-                                    </Button>
+                                    <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="PaleVioletRed" Grid.Column="1">
+                                        <Label Text="Username" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
+                                        <Label Text="300 friends" TextColor="Black" FontSize="15"/>
+                                        <Label Text="20 followers" TextColor="Black" FontSize="15"/>
+                                    </VerticalStackLayout>
 
-                                    <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
-                                        <Button.Shadow>
-                                            <Shadow Opacity="0.4"
-                                                    Radius="10"/>
-                                        </Button.Shadow>
-                                        <Button.GestureRecognizers>
-                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
-                                        </Button.GestureRecognizers>
-                                    </Button>
+                                    <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Padding="10" Grid.Column="2">
+                                        <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                            Radius="10"/>
+                                            </Button.Shadow>
+                                            <Button.GestureRecognizers>
+                                                <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                            </Button.GestureRecognizers>
+                                        </Button>
 
-                                </HorizontalStackLayout>
-                            </Grid>
-                        </Border>
+                                        <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                            Radius="10"/>
+                                            </Button.Shadow>
+                                            <Button.GestureRecognizers>
+                                                <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                            </Button.GestureRecognizers>
+                                        </Button>
+
+                                    </HorizontalStackLayout>
+                                </Grid>
+                                <Border.Shadow>
+                                    <Shadow Opacity="0.5"
+                                            
+                                            Radius="10"/>
+                                </Border.Shadow>
+
+                            </Border>
+                            <Border Margin="0,-40,0,0" ZIndex="0" BackgroundColor="#e8e8e8" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="150"  StrokeShape="RoundRectangle 0,0,40,40">
+                                <Grid Padding="15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Button VerticalOptions="End" Grid.Column="0" Text="Post" HeightRequest="40"/>
+                                    <Button VerticalOptions="End" Grid.Column="1" Text="Friends" HeightRequest="40"/>
+                                    <Button VerticalOptions="End" Grid.Column="2" Text="Followers" HeightRequest="40"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
                     </Grid>
                     
                     <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" >
