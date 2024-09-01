@@ -15,8 +15,6 @@ namespace Foodiefeed
             PostGrid.Children.Add(new PostView());
             PostGrid.Children.Add(new PostView());
             PostGrid.Children.Add(new PostView());
-
-
         }
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
@@ -36,6 +34,20 @@ namespace Foodiefeed
             await AnimateShadow(sender, 0.5, 0, 50, 300);
         }
 
+        private async void CondenseButtonSizeAnimation(object sender, PointerEventArgs e)
+        {
+            await AnimateSize(sender,1);
+        }
+        private async void ScaleButtonSizeAnimation(object sender, PointerEventArgs e)
+        {
+            await AnimateSize(sender, 1.1);
+        }
+
+        private async Task AnimateSize(object sender,double scale)
+        {
+            Button button = (Button)sender;
+            await button.ScaleTo(scale,100,Easing.BounceOut);
+        }
 
         private async Task AnimateFont(object sender,int from,int to,uint rate,uint lenght)
         {
@@ -50,5 +62,6 @@ namespace Foodiefeed
             var animation = new Animation(v => button.Shadow.Opacity = (float)v, from, to);
             animation.Commit(this, button.Text+"_Shadow", rate, lenght, Easing.Linear);
         }
+
     }
 }

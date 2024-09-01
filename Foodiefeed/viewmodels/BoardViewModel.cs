@@ -13,8 +13,17 @@ namespace Foodiefeed.viewmodels
     {
         [ObservableProperty]
         ObservableCollection<PostView> posts = new ObservableCollection<PostView>();
+
+        [ObservableProperty]
+        bool profilePageVisible;
+
+        [ObservableProperty]
+        bool postPageVisible;
+
         public BoardViewModel()
         {
+            this.ProfilePageVisible = true; //on init false
+            this.postPageVisible = false; //on init true
             //Post post = new Post()
             //{
             //    PosterUsername = "Mateusz",
@@ -222,13 +231,16 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ToMainView()
         {
+            this.PostPageVisible = true;
+            this.ProfilePageVisible = false;
 
         }
 
         [RelayCommand]
         public void ToProfileView()
         {
-            
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = true;
         }
 
         [RelayCommand]
