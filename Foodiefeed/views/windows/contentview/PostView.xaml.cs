@@ -35,11 +35,10 @@ public partial class PostView : ContentView
 
     private async void ExpandCommentSection(object sender, EventArgs e)
     {
-       // CommentSectionScroll.MaximumHeightRequest = 600;
 
         await MainThread.InvokeOnMainThreadAsync(() => {
             var animation = new Animation(v => CommentSectionScroll.MaximumHeightRequest = v, 300, 600);
-            animation.Commit(this, "TrackListSideBarAnimation", 16, 500, Easing.CubicIn);
+            animation.Commit(this, "1", 16, 500, Easing.CubicIn);
         });
 
         Button b = (Button)sender;

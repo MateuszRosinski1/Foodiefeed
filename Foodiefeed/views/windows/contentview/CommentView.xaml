@@ -22,6 +22,8 @@
 
         <HorizontalStackLayout  Grid.Row="2">
             <Button BackgroundColor="Blue" Padding="-10,0,0,0" FontSize="15" WidthRequest="120" HeightRequest="15" Text="Like It !" ImageSource="likeicon.png"/>
+           
+            <Label Text="123" VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15"/>
         </HorizontalStackLayout>
 
 

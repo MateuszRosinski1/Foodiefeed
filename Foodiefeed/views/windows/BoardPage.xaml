@@ -80,14 +80,63 @@
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="0"> <!--pages-->
-                <Grid BackgroundColor="Red" Padding="10,20,15,0">
+                <Grid BackgroundColor="White" Padding="0,20,0,0">
                     <VerticalStackLayout>
-                        <Button Text="Main"     HeightRequest="50" Background="Transparent" Command="{Binding ToMainViewCommand}"/>
-                        <Button Text="Profile"  HeightRequest="50" Background="Transparent" Command="{Binding ToProfileViewCommand}"/>
-                        <Button Text="Recipes"  HeightRequest="50" Background="Transparent" Command="{Binding ToRecipesViewCommand}"/>
-                        <Button Text="Settings" HeightRequest="50" Background="Transparent" Command="{Binding ToSettingViewCommand}"/>
+                        
+                        <Button  CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToMainViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"/>
+                            </Button.Shadow>
+                        </Button>
 
+                        <Grid Padding="20,10,20,10">
+                            <BoxView BackgroundColor="Black" HeightRequest="1" Opacity="0.5" />
+                        </Grid>
+
+                        <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToProfileViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        <Grid Padding="20,10,20,10">
+                            <BoxView BackgroundColor="Black" HeightRequest="1" Opacity="0.5" />
+                        </Grid>
+
+                        <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToRecipesViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        <Grid Padding="20,10,20,10">
+                            <BoxView BackgroundColor="Black" HeightRequest="1" Opacity="0.5" />
+                        </Grid>
+
+                        <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToSettingViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        <Grid Padding="20,10,20,10">
+                            <BoxView BackgroundColor="Black" HeightRequest="1" Opacity="0.5" />
+                        </Grid>
+                        
                     </VerticalStackLayout>
+                    
                 </Grid>
             </ScrollView>
 

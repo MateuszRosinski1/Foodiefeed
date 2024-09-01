@@ -36,7 +36,7 @@
 
                     </Grid.RowDefinitions>
 
-                    <Grid  Padding="20" Grid.Row="0">
+                    <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
                             <VerticalStackLayout>
                                 <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Username"/>
@@ -48,7 +48,7 @@
                         <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
                     </Grid>
 
-                    <Grid Padding="20,0,20,20" Grid.Row="1" >
+                    <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <Label TextColor="Black" Text="lorelipsum dit ame vi turenot" LineBreakMode="WordWrap"/>
                     </Grid>
 
@@ -59,17 +59,17 @@
                     </Grid>
 
                     <Grid Padding="0,0,0,10" Grid.Row="3">
-                        <HorizontalStackLayout  Spacing="-170">
-                            <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
-                            <Image HeightRequest="40" Source="likeicon.png"/>
-                        </HorizontalStackLayout>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
 
-                        <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="40,0,0,0" Text="Comment"/>
-                        <Image Margin="0,0,140,0" HeightRequest="40" Source="commenticon.png" />
+                        <Button Grid.Column="1" ImageSource="commenticon.png" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Comment"/>
 
+                        <Button Grid.Column="2" ImageSource="shareicon.png" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
 
-                        <Button  HorizontalOptions="End" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
-                        <Image  Margin="0,0,140,0" HorizontalOptions="End"  HeightRequest="40" Source="shareicon.png"/>
                     </Grid>
                 </Grid>
                     <Border.Shadow>
