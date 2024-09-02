@@ -232,19 +232,10 @@
                             <VerticalStackLayout x:Name="ProfileSection">
                                 
                                 <Border Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="200">
-                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
-                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
-                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
-                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
-                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
-                                        <BoxView BackgroundColor="Red" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
-
+                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" >
+                                        <test:OnListFriendView/>
+                                        <test:OnListFriendView/>
+                                        <test:OnListFriendView/>
                                     </toolkit:UniformItemsLayout>
                                 </Border>                               
                             </VerticalStackLayout>

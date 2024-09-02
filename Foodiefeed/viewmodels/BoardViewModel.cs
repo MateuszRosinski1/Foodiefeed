@@ -14,6 +14,8 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         ObservableCollection<PostView> posts = new ObservableCollection<PostView>();
 
+        
+
         [ObservableProperty]
         bool profilePageVisible;
 
