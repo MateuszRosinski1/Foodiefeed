@@ -241,6 +241,7 @@ namespace Foodiefeed.viewmodels
         {
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
+            
         }
 
         [RelayCommand]

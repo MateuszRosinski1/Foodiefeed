@@ -80,6 +80,7 @@
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="0"> <!--pages-->
+                
                 <Grid BackgroundColor="White" Padding="0,20,0,0">
                     <VerticalStackLayout>
 
@@ -167,7 +168,7 @@
                                         <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
                                             <Button.Shadow>
                                                 <Shadow Opacity="0.4"
-                            Radius="10"/>
+                                                        Radius="10"/>
                                             </Button.Shadow>
                                             <Button.GestureRecognizers>
                                                 <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
@@ -177,7 +178,7 @@
                                         <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
                                             <Button.Shadow>
                                                 <Shadow Opacity="0.4"
-                            Radius="10"/>
+                                                        Radius="10"/>
                                             </Button.Shadow>
                                             <Button.GestureRecognizers>
                                                 <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
@@ -193,18 +194,61 @@
                                 </Border.Shadow>
 
                             </Border>
-                            <Border Margin="0,-40,0,0" ZIndex="0" BackgroundColor="#e8e8e8" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="150"  StrokeShape="RoundRectangle 0,0,40,40">
+                            <Border Margin="0,-40,0,0" ZIndex="0" BackgroundColor="#e8e8e8" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="125"  StrokeShape="RoundRectangle 0,0,40,40">
                                 <Grid Padding="15">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <Button VerticalOptions="End" Grid.Column="0" Text="Post" HeightRequest="40"/>
-                                    <Button VerticalOptions="End" Grid.Column="1" Text="Friends" HeightRequest="40"/>
-                                    <Button VerticalOptions="End" Grid.Column="2" Text="Followers" HeightRequest="40"/>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End"  Grid.Column="0">
+                                        <Button  Text="Post" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="White" x:Name="SelfPostButton" Clicked="SelfPostButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End" Grid.Column="1" >
+                                        <Button Text="Friends" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FriendsButton" Clicked="FriendsButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End" Grid.Column="2" >
+                                        <Button Text="Followers" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FollowersButton" Clicked="FollowersButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
                                 </Grid>
                             </Border>
+
+                            <VerticalStackLayout x:Name="ProfileSection">
+                                
+                                <Border Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
+                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="200">
+                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                        <BoxView BackgroundColor="Blue" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                        <BoxView BackgroundColor="Red" HeightRequest="25" WidthRequest="25" Margin="0,5"/>
+
+                                    </toolkit:UniformItemsLayout>
+                                </Border>                               
+                            </VerticalStackLayout>
+                            
                         </VerticalStackLayout>
                     </Grid>
                     

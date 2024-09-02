@@ -1085,3 +1085,5 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\l
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\shareicon.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\threedotfivexfive.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\threedotfivexfived.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\avatar.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\hearthicon.png

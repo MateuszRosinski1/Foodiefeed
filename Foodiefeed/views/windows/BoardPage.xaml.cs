@@ -2,6 +2,7 @@
 using Foodiefeed.views.windows.contentview;
 using Microsoft.Maui.Controls;
 using System.Windows.Input;
+using Foodiefeed.extension;
 
 namespace Foodiefeed
 {
@@ -15,6 +16,10 @@ namespace Foodiefeed
             PostGrid.Children.Add(new PostView());
             PostGrid.Children.Add(new PostView());
             PostGrid.Children.Add(new PostView());
+
+            //ProfileSection.Children.Add(new PostView());
+            //ProfileSection.Children.Add(new PostView());
+            //ProfileSection.Children.Add(new PostView());
         }
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
@@ -63,5 +68,36 @@ namespace Foodiefeed
             animation.Commit(this, button.Text+"_Shadow", rate, lenght, Easing.Linear);
         }
 
+        private async void FriendsButton_Clicked(object sender, EventArgs e)
+        {
+            await SetButtonColors(FriendsButton);
+        }
+
+        private async void FollowersButton_Clicked(object sender, EventArgs e)
+        {
+            await SetButtonColors(FollowersButton);
+        }
+
+        private async void SelfPostButton_Clicked(object sender, EventArgs e)
+        {
+            await SetButtonColors(SelfPostButton);
+        }
+
+        private async Task SetButtonColors(Button activeButton)
+        {
+            var buttons = new List<Button> { SelfPostButton, FriendsButton, FollowersButton };
+
+            foreach (var button in buttons)
+            {
+                if (button == activeButton)
+                {
+                    await button.ColorTo(Color.FromHex("#c9c9c9"), Colors.White, c => button.BackgroundColor = c, 100);
+                }
+                else
+                {
+                    await button.ColorTo(Color.FromHex("#c9c9c9"), Color.FromHex("#c9c9c9"), c => button.BackgroundColor = c, 100);
+                }
+            }
+        }
     }
 }
