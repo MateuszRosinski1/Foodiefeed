@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using Foodiefeed.viewmodels;
 
 namespace Foodiefeed
 {
@@ -14,8 +15,12 @@ namespace Foodiefeed
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");                  
                 });
+
+            builder.Services.AddSingleton<BoardViewModel>();
+            builder.Services.AddSingleton<BoardPage>();
+
 
 
 

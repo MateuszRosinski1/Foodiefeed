@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.MainPage"
+             x:Class="Foodiefeed.LogInPage"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
              x:DataType="viewmodel:UserViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              Background="White">
+
+    <ContentPage.Resources>
+        <local:BooleanConverter x:Key="BooleanConverter" />
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout>
             <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
 
-            <Border Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-                <Entry Text="{Binding Username,Mode=TwoWay}" TextColor="Black" FontSize="18" Placeholder="Username" Margin="0" x:Name="usernameEntry" HeightRequest="50" WidthRequest="350" Background="White">
+            <Border Stroke="Gray" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" WidthRequest="370">
+                <Entry Text="{Binding Username,Mode=TwoWay}" 
+                       TextColor="Black" 
+                       FontSize="18"
+                       Placeholder="Username" 
+                       Margin="0" 
+                       x:Name="usernameEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="White">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                                   EventName="TextChanged"
@@ -22,36 +39,79 @@
 
                 <Border.Triggers>
                     <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
+                        <Setter Property="Stroke" 
+                                Value="Gray"/>
                     </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                    <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateUsername}" 
+                                 Value="false">
+                        <Setter Property="Stroke" Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
             
 
             </Border>
 
-            <Border Margin="0,30,0,0" Stroke="Gray" StrokeThickness="1.5" StrokeShape="RoundRectangle 20,20,20,20" HeightRequest="60" WidthRequest="370">
-             <Entry Text="{Binding Password,Mode=TwoWay}"  IsPassword="True" TextColor="Black" FontSize="18" Placeholder="Password" Margin="0" HeightRequest="50" WidthRequest="350" Background="White">
-                    <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior
-                                      EventName="TextChanged"
-                                      Command="{Binding ValidatePasswordFunCommand}" />
-                    </Entry.Behaviors>
-                </Entry>
+            <Border Margin="0,30,0,0" 
+                    Stroke="Gray" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" 
+                    WidthRequest="370">
+
+                <Grid>
+                    <Entry  Text="{Binding Password,Mode=TwoWay}"  
+                            
+                            IsPassword="{Binding Source={x:Reference ShowPasswordButton},Path=IsPressed, Converter={StaticResource BooleanConverter}}"
+                            
+                            TextColor="Black" 
+                            FontSize="18" 
+                            Placeholder="Password" 
+                            HeightRequest="50" 
+                            WidthRequest="300" 
+                            HorizontalOptions="Start"
+                            Margin="10,0,0,0"
+                            Background="White">
+
+                        <Entry.Behaviors>
+                            <toolkit:EventToCommandBehavior
+                          EventName="TextChanged"
+                          Command="{Binding ValidatePasswordFunCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
+
+                    <ImageButton x:Name="ShowPasswordButton" 
+                                 HorizontalOptions="End" 
+                                 Margin="0,0,5,0"
+                                 Grid.Column="1" 
+                                 Source="showpasswordicon.png"
+                                 Scale="0.4"
+                                 Clicked="ImageClickAnimation"/>
+
+                </Grid>
+                
 
                 <Border.Triggers>
                     <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="true">
                         <Setter Property="Stroke" Value="Gray"/>
                     </DataTrigger>
                     <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="false">
-                        <Setter Property="Stroke" Value="Red"/>
+                        <Setter Property="Stroke" Value="#e32441"/>
                     </DataTrigger>
                 </Border.Triggers>
+
             </Border>
 
-            <Button Command="{Binding LogInCommand}" Margin="0,70,0,30" Text="Log In" FontSize="25" FontAttributes="Bold" TextColor="White" Background="Black"  WidthRequest="370" CornerRadius="20" >
+            <Button  Clicked="ClickAnimation" 
+                     Command="{Binding LogInCommand}" 
+                     Margin="0,70,0,30" 
+                     Text="Log In" 
+                     FontSize="25" 
+                     FontAttributes="Bold" 
+                     TextColor="White" 
+                     Background="Black"  
+                     WidthRequest="370" 
+                     CornerRadius="20" >
                 <Button.Shadow>
                     <Shadow Offset="0,5"
                             Opacity="1" />
@@ -61,8 +121,16 @@
             <Rectangle Background="Black" WidthRequest="500" HeightRequest="4" />
 
             <HorizontalStackLayout HorizontalOptions="Center">
-                <Label Margin="0,0,10,0" FontSize="17" TextColor="Black" Text="Don't have an account yet ?"/>
-                <Label FontSize="17" TextColor="Black" Text="Click here to Sign Up" FontAttributes="Bold">
+                <Label Margin="0,0,10,0" 
+                       FontSize="17" 
+                       TextColor="Black" 
+                       Text="Don't have an account yet ?"/>
+                
+                <Label FontSize="17" 
+                       TextColor="Black" 
+                       Text="Click here to Sign Up" 
+                       FontAttributes="Bold">
+                    
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToSignUpPageCommand}"/>
                     </Label.GestureRecognizers>

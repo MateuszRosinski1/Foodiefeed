@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.PostView"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             x:Name="PostContentView"
+             MaximumWidthRequest="1000"
+             HeightRequest="{Binding Source={x:Reference PostContentView}}">
+    
+    <VerticalStackLayout>
+
+        <Grid ZIndex="1">
+            <Border
+                Margin="30,30,30,0" 
+                BackgroundColor="White" 
+                StrokeThickness="10" 
+                StrokeShape="RoundRectangle 40,40,40,40">
+                
+                <Grid Background="White" x:Name="Post"  BackgroundColor="White" >
+            
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <!--0 username follow | 3 dots to go to profile-->
+
+                        <RowDefinition/>
+                        <!--1 post text content-->
+
+                        <RowDefinition/>
+                        <!--2 images-->
+
+                        <RowDefinition/>
+                        <!--3 like comments share-->
+
+                        <RowDefinition/>
+                        <!--4 comment section-->
+
+                    </Grid.RowDefinitions>
+
+                    <Grid  Padding="30" Grid.Row="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <VerticalStackLayout>
+                                <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Username"/>
+                                <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
+                            </VerticalStackLayout>
+                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
+                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Follow"/>
+                        </HorizontalStackLayout>
+                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
+                    </Grid>
+
+                    <Grid Padding="30,0,20,20" Grid.Row="1" >
+                        <Label TextColor="Black" Text="lorelipsum dit ame vi turenot" LineBreakMode="WordWrap"/>
+                    </Grid>
+
+                    <Grid Padding="30,0,30,15" Grid.Row="2">
+                        <BoxView HeightRequest="300"  BackgroundColor="Orange"/>
+                        <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
+                        <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
+                    </Grid>
+
+                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
+
+                        <Button Grid.Column="1" ImageSource="commenticon.png" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Comment"/>
+
+                        <Button Grid.Column="2" ImageSource="shareicon.png" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+
+                    </Grid>
+                </Grid>
+                    <Border.Shadow>
+                        <Shadow Opacity="0.15"
+                            Brush="Black"
+                            Offset="0,5"/>
+                    </Border.Shadow>    
+            </Border>
+        </Grid>
+        
+        <Grid ZIndex="0">
+            <Border BackgroundColor="#e0e0e0"
+                    StrokeShape="RoundRectangle 00,00,20,20"
+                    Margin="35,-40,35,0">
+
+                <ScrollView x:Name="CommentSectionScroll" MaximumHeightRequest="300" Margin="0,15,0,20" MinimumHeightRequest="100" >
+                    <VerticalStackLayout Padding="20" x:Name="CommentSection">
+                       
+                    </VerticalStackLayout>
+                </ScrollView>
+                
+            </Border>
+        </Grid>
+        
+        <Grid Margin="0,-20,0,0" ZIndex="1"  >
+            <Button WidthRequest="100" BackgroundColor="White" Clicked="ExpandCommentSection"></Button>
+        </Grid>
+    </VerticalStackLayout>
+    
+
+</ContentView>

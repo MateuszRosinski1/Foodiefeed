@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.BoardPage"
+             Background="White"
+             x:Name="Page"
+             xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             x:DataType="viewmodel:BoardViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:test="clr-namespace:Foodiefeed.views.windows.contentview"
+             MinimumHeightRequest="600">
+
+    
+    <ContentPage.Resources>
+        <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
+        <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>
+        <x:Double x:Key="LeftBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="MidBarWidthAdjustValue">600</x:Double>
+        <x:Double x:Key="MidBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="RightBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
+        <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+      
+
+        <Grid ZIndex="10" Grid.Row="0">
+                   <BoxView Color="White" 
+                      WidthRequest="{Binding Source={x:Reference Page},Path=Width}" 
+                      HeightRequest="100" 
+                      VerticalOptions="Start">
+                   <BoxView.Shadow>
+                        <Shadow Opacity="0.8"/>
+                   </BoxView.Shadow>
+              </BoxView>
+
+            <Border Margin="0,20,0,0" 
+                    VerticalOptions="Start" 
+                    Stroke="Gray" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="50" 
+                    WidthRequest="420">
+
+                <Entry TextColor="Black" 
+                       FontSize="18" 
+                       Placeholder="Search" 
+                       Margin="0" 
+                       HeightRequest="40" 
+                       WidthRequest="400" 
+                       Background="White"/>
+            </Border>
+
+            <ImageButton Source="logobutton.png" 
+                HeightRequest="50" 
+                WidthRequest="50" 
+                VerticalOptions="Start" 
+                HorizontalOptions="Start" 
+                Margin="20"/>
+        </Grid>
+
+        <Grid Padding="0,0,0,0"  Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <ScrollView HorizontalOptions="Start" 
+                        VerticalOptions="Start" 
+                        x:Name="testScroll" 
+                        VerticalScrollBarVisibility="Always" 
+                        WidthRequest="300"
+                        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
+                        Grid.Column="0"> <!--pages-->
+                
+                <Grid BackgroundColor="White" Padding="0,20,0,0">
+                    <VerticalStackLayout>
+
+                        <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToMainViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        
+
+                        <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToProfileViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+
+                        
+
+                        <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToRecipesViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+
+
+
+
+
+                        <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToSettingViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+                        <BoxView HeightRequest="50" BackgroundColor="White"/>
+
+
+
+                    </VerticalStackLayout>
+                    
+                </Grid>
+            </ScrollView>
+
+            <!--PostGrid-->
+            <ScrollView 
+                        Grid.Column="1"
+                        BackgroundColor="Pink"
+                        WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
+
+                <Grid>
+                    <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="DarkMagenta" Padding="30">
+                        <VerticalStackLayout>
+                            <Border ZIndex="1" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="300" BackgroundColor="White" StrokeShape="RoundRectangle 40">
+                                <Grid  Padding="15"  BackgroundColor="White" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200" BackgroundColor="BlueViolet" Source="avatar.png"></ImageButton>
+
+                                    <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="PaleVioletRed" Grid.Column="1">
+                                        <Label Text="Username" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
+                                        <Label Text="300 friends" TextColor="Black" FontSize="15"/>
+                                        <Label Text="20 followers" TextColor="Black" FontSize="15"/>
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Padding="10" Grid.Column="2">
+                                        <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                            <Button.GestureRecognizers>
+                                                <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                            </Button.GestureRecognizers>
+                                        </Button>
+
+                                        <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                            <Button.GestureRecognizers>
+                                                <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                            </Button.GestureRecognizers>
+                                        </Button>
+
+                                    </HorizontalStackLayout>
+                                </Grid>
+                                <Border.Shadow>
+                                    <Shadow Opacity="0.5"
+                                            
+                                            Radius="10"/>
+                                </Border.Shadow>
+
+                            </Border>
+                            <Border Margin="0,-40,0,0" ZIndex="0" BackgroundColor="#e8e8e8" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="125"  StrokeShape="RoundRectangle 0,0,40,40">
+                                <Grid Padding="15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End"  Grid.Column="0">
+                                        <Button  Text="Post" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="White" x:Name="SelfPostButton" Clicked="SelfPostButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End" Grid.Column="1" >
+                                        <Button Text="Friends" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FriendsButton" Clicked="FriendsButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
+                                    <Grid Padding="5" VerticalOptions="End" Grid.Column="2" >
+                                        <Button Text="Followers" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FollowersButton" Clicked="FollowersButton_Clicked">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4" Radius="5"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
+                                    
+                                </Grid>
+                            </Border>
+
+                            <VerticalStackLayout x:Name="ProfileSection">
+                                
+                                <Border Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
+                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" >
+                                        <test:OnListFriendView/>
+                                        <test:OnListFriendView/>
+                                        <test:OnListFriendView/>
+                                    </toolkit:UniformItemsLayout>
+                                </Border>                               
+                            </VerticalStackLayout>
+                            
+                        </VerticalStackLayout>
+                    </Grid>
+                    
+                    <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" >
+                        <!--
+     
+                         <CollectionView x:Name="PostCollection"
+                                       ItemsUpdatingScrollMode="KeepScrollOffset"
+                                       BackgroundColor="Green"
+                                       VerticalScrollBarVisibility="Always"
+                                       WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}"
+                                       HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarHeightAdjustValue}}"                 
+                                       HorizontalOptions="Center"
+                                       ItemsSource="{Binding Posts}"
+                                       VerticalOptions="FillAndExpand">
+         
+                             <CollectionView.Behaviors>
+                                 <toolkit:EventToCommandBehavior
+                                     x:TypeArguments="ItemsViewScrolledEventArgs"
+                                     EventName="Scrolled"
+                                     Command="{Binding ScrolledCommand}"/>
+                             </CollectionView.Behaviors>
+         
+                           <CollectionView.ItemTemplate>
+                             <DataTemplate x:DataType="local:Post" >
+
+                                 <Border WidthRequest="{Binding Source={x:Reference Post},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource BorderWidthValueAdjustment}}"
+                                         Margin="30" 
+                                         BackgroundColor="White" 
+                                         StrokeThickness="10" 
+                                         StrokeShape="RoundRectangle 40,40,40,40"
+                                         >
+                                         <Grid Background="White" x:Name="Post" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="White">
+                                         <Grid.RowDefinitions>
+                                             <RowDefinition/> -->
+                                            <!--0 username follow | 3 dots to go to profile-->
+                                            <!--
+                                             <RowDefinition/> -->
+                                            <!--1 post text content-->
+                                            <!--
+                                             <RowDefinition/>  -->
+                                            <!--2 images-->
+                                            <!--
+                                             <RowDefinition/>-->
+                                            <!--3 like comments share-->
+                                            <!--
+                                             <RowDefinition/> -->
+                                            <!--4 comment section-->
+                                            <!--
+                                         </Grid.RowDefinitions>
+
+                                         <Grid  Padding="20" Grid.Row="0">
+                                             <HorizontalStackLayout Spacing="10">
+                                                 <VerticalStackLayout>
+                                                     <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding PosterUsername}"/>
+                                                     <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
+                                                 </VerticalStackLayout>
+                                                 <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
+                                                 <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding isFollowed, Converter={StaticResource FollowOrNotFollowConverter}}"/>
+                                             </HorizontalStackLayout>
+                                             <ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />
+                                         </Grid>
+                         
+                                         <Grid Padding="20,0,20,20" Grid.Row="1" >
+                                             <Label TextColor="Black" Text="{Binding PostTextContent}" LineBreakMode="WordWrap"/>
+                                         </Grid>
+
+                                         <Grid Padding="30,0,30,15" Grid.Row="2">
+                                             <BoxView HeightRequest="300" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="Orange"/>
+                                             <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
+                                             <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
+                                         </Grid>
+
+                                         <Grid Padding="0,0,0,10" Grid.Row="3">
+                                             <HorizontalStackLayout  Spacing="-170">
+                                                 <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
+                                                 <Image HeightRequest="40" Source="likeicon.png"/>
+                                             </HorizontalStackLayout>
+
+                                             <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="40,0,0,0" Text="Comment"/>
+                                             <Image Margin="0,0,140,0" HeightRequest="40" Source="commenticon.png" />
+
+
+                                             <Button  HorizontalOptions="End" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+                                             <Image  Margin="0,0,140,0" HorizontalOptions="End"  HeightRequest="40" Source="shareicon.png"/>
+                                         </Grid>
+
+
+
+                                             <Grid HeightRequest="200" 
+                                                   VerticalOptions="FillAndExpand"
+                                                   Grid.Row="4">
+                                                 <CollectionView  VerticalScrollBarVisibility="Always"  
+                                                                  ItemsSource="{Binding CommentSection}"
+                                                                  >
+                                                     <CollectionView.ItemTemplate>
+                                                         <DataTemplate x:DataType="local:Comment">
+                                                             <Grid Padding="25" BackgroundColor="#e0e0e0">
+                                                                 <Grid.RowDefinitions>
+                                                                     <RowDefinition/>
+                                                                     <RowDefinition/>
+                                                                     <RowDefinition/>
+                                                                 </Grid.RowDefinitions>
+
+                                                                 <Grid BackgroundColor="Red" Grid.Row="0">
+                                                                     <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" Text="{Binding CommentPosterUsername}"/>
+                                                                     <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
+                                                                 </Grid>
+                                                                 <Grid  Grid.Row="1">
+                                                                     <Label TextColor="Black" Text="{Binding CommentTextContent}" LineBreakMode="WordWrap"/>
+                                                                 </Grid>
+
+                                                             </Grid>
+                                                         </DataTemplate>
+                                                     </CollectionView.ItemTemplate>
+                                                 </CollectionView>
+                                             </Grid>
+                                         </Grid>
+                                 </Border>
+                             </DataTemplate>
+                         </CollectionView.ItemTemplate>
+                     </CollectionView>-->
+                    </StackLayout>
+                </Grid>   
+           
+            </ScrollView>
+
+
+
+
+
+
+            <ScrollView HorizontalOptions="End" 
+                        VerticalOptions="Start" 
+                        VerticalScrollBarVisibility="Always" 
+                        WidthRequest="300"
+                        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
+                        Grid.Column="2">
+                <!--friends-->
+                <Grid HeightRequest="1000" Opacity="0.2" BackgroundColor="Blue">
+                </Grid>
+            </ScrollView>
+
+
+        </Grid>
+
+
+
+
+    </Grid>
+
+</ContentPage>
