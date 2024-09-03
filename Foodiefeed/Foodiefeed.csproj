@@ -121,6 +121,9 @@
 	  <MauiXaml Update="views\windows\contentview\PostView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\UserOptionPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\SingUpView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

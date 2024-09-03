@@ -22,11 +22,12 @@ public partial class OnListFriendView : ContentView
 
     private void ShowUserOptionPanel(object sender, TappedEventArgs e)
     {
-        OptionsPanel.IsVisible = true;
+        //OptionsPanel.IsVisible = true;
+        
     }
 
     private void HideOptionPanel(object sender, PointerEventArgs e)
     {
-        OptionsPanel.IsVisible = false;
+        //OptionsPanel.IsVisible = false;
     }
 }

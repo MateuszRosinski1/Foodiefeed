@@ -24,7 +24,7 @@ namespace Foodiefeed
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
         {
-            
+
         }
 
         private async void PointerGestureRecognizer_PointerEntered(object sender, PointerEventArgs e)
