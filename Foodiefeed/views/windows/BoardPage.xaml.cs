@@ -3,6 +3,8 @@ using Foodiefeed.views.windows.contentview;
 using Microsoft.Maui.Controls;
 using System.Windows.Input;
 using Foodiefeed.extension;
+using Microsoft.Maui.Controls.Shapes;
+
 
 namespace Foodiefeed
 {
@@ -98,6 +100,21 @@ namespace Foodiefeed
                     await button.ColorTo(Color.FromHex("#c9c9c9"), Color.FromHex("#c9c9c9"), c => button.BackgroundColor = c, 100);
                 }
             }
+        }
+
+        private async void NotificationBellAnimation(object sender, PointerEventArgs e)
+        {
+            var path = sender as Microsoft.Maui.Controls.Shapes.Path;
+
+            Thread t2 = new Thread
+            (async () => 
+            { 
+                await path.RotateTo(-10, 200, Easing.Linear); 
+                await path.RelRotateTo(10, 200, Easing.Linear); 
+            });
+
+            t2.Start();
+
         }
     }
 }

@@ -11,7 +11,6 @@
              xmlns:test="clr-namespace:Foodiefeed.views.windows.contentview"
              MinimumHeightRequest="600">
 
-    
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
         <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>
@@ -63,6 +62,14 @@
                 VerticalOptions="Start" 
                 HorizontalOptions="Start" 
                 Margin="20"/>
+
+            <Path VerticalOptions="Center" Scale="1.5" Margin="0,0,-30,0" HorizontalOptions="End" Fill="DarkGray" Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
+                <Path.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
+                </Path.GestureRecognizers>
+                
+            </Path>
+
         </Grid>
 
         <Grid Padding="0,0,0,0"  Grid.Row="1">   <!--left for some pages buttons or custom flyout | middle for posts | left for friends-->
@@ -363,6 +370,18 @@
                          </CollectionView.ItemTemplate>
                      </CollectionView>-->
                     </StackLayout>
+
+                    <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
+                            <Grid BackgroundColor="White">
+                                
+                            </Grid>
+                            <Border.Shadow>
+                                <Shadow Opacity="0.5"
+                                        Radius="5"/>
+                            </Border.Shadow>
+                        </Border>
+                    </Grid>
                 </Grid>   
            
             </ScrollView>

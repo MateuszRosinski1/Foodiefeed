@@ -22,6 +22,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool postPageVisible;
 
+        [ObservableProperty]
+        bool settingsPageVisible;
+
         public BoardViewModel()
         {
             this.ProfilePageVisible = true; //on init false
@@ -46,6 +49,7 @@ namespace Foodiefeed.viewmodels
         {
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
+            this.SettingsPageVisible = false;
 
         }
 
@@ -54,7 +58,8 @@ namespace Foodiefeed.viewmodels
         {
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
-            
+            this.SettingsPageVisible = false;
+
         }
 
         [RelayCommand]
@@ -66,7 +71,9 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ToSettingView()
         {
-
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = false;
+            this.SettingsPageVisible = true;
         }
 
         [RelayCommand]

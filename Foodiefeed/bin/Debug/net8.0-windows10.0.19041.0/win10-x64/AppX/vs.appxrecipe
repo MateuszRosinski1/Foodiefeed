@@ -30,13 +30,13 @@
     <AppXManifest Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-09-03T00:15:43.583</Modified>
+      <Modified>2024-09-04T00:27:19.900</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-09-03T00:14:08.385</Modified>
+      <Modified>2024-09-03T00:23:55.941</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.runtimeconfig.json">
       <PackagePath>Foodiefeed.runtimeconfig.json</PackagePath>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.dll">
       <PackagePath>Foodiefeed.dll</PackagePath>
-      <Modified>2024-09-03T00:15:43.232</Modified>
+      <Modified>2024-09-04T00:27:19.553</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Foodiefeed.exe</PackagePath>
-      <Modified>2024-09-03T00:15:43.235</Modified>
+      <Modified>2024-09-04T00:27:19.559</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -268,27 +268,27 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\avatar.scale-100.png">
       <PackagePath>avatar.scale-100.png</PackagePath>
-      <Modified>2024-04-08T15:51:31.677</Modified>
+      <Modified>2024-09-03T00:17:39.822</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\commenticon.scale-100.png">
       <PackagePath>commenticon.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.524</Modified>
+      <Modified>2024-09-03T00:17:39.826</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\doubleleft.scale-100.png">
       <PackagePath>doubleleft.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.524</Modified>
+      <Modified>2024-09-03T00:17:39.829</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\doubleright.scale-100.png">
       <PackagePath>doubleright.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.524</Modified>
+      <Modified>2024-09-03T00:17:39.831</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\hearthicon.scale-100.png">
       <PackagePath>hearthicon.scale-100.png</PackagePath>
-      <Modified>2024-04-09T09:44:04.545</Modified>
+      <Modified>2024-09-03T00:17:39.834</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\likeicon.scale-100.png">
       <PackagePath>likeicon.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.525</Modified>
+      <Modified>2024-09-03T00:17:39.838</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\logobutton.scale-100.png">
       <PackagePath>logobutton.scale-100.png</PackagePath>
@@ -296,11 +296,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\shareicon.scale-100.png">
       <PackagePath>shareicon.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.525</Modified>
+      <Modified>2024-09-03T00:17:39.841</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\showpasswordicon.scale-100.png">
       <PackagePath>showpasswordicon.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.526</Modified>
+      <Modified>2024-09-03T00:17:39.845</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\textlogo.scale-100.png">
       <PackagePath>textlogo.scale-100.png</PackagePath>
@@ -308,19 +308,19 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\threedotfivexfive.scale-100.png">
       <PackagePath>threedotfivexfive.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.526</Modified>
+      <Modified>2024-09-03T00:17:39.848</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\threedotfivexfived.scale-100.png">
       <PackagePath>threedotfivexfived.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.527</Modified>
+      <Modified>2024-09-03T00:17:39.850</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\threedotmenu.scale-100.png">
       <PackagePath>threedotmenu.scale-100.png</PackagePath>
-      <Modified>2024-06-23T17:58:33.527</Modified>
+      <Modified>2024-09-03T00:17:39.853</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.deps.json">
       <PackagePath>Foodiefeed.deps.json</PackagePath>
-      <Modified>2024-09-03T00:14:08.232</Modified>
+      <Modified>2024-09-03T00:23:55.862</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\mateu\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>
