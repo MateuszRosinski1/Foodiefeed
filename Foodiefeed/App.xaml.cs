@@ -15,9 +15,10 @@ namespace Foodiefeed
         {
             var window  = base.CreateWindow(activationState);
 
+#if WINDOWS
             window.MinimumHeight = 800;
             window.MinimumWidth = 1400;
-
+#endif
             return window;
         }
     }

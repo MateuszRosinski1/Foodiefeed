@@ -255,131 +255,96 @@
                     </Grid>
                     
                     <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" >
-                        <!--
-     
-                         <CollectionView x:Name="PostCollection"
-                                       ItemsUpdatingScrollMode="KeepScrollOffset"
-                                       BackgroundColor="Green"
-                                       VerticalScrollBarVisibility="Always"
-                                       WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}"
-                                       HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarHeightAdjustValue}}"                 
-                                       HorizontalOptions="Center"
-                                       ItemsSource="{Binding Posts}"
-                                       VerticalOptions="FillAndExpand">
-         
-                             <CollectionView.Behaviors>
-                                 <toolkit:EventToCommandBehavior
-                                     x:TypeArguments="ItemsViewScrolledEventArgs"
-                                     EventName="Scrolled"
-                                     Command="{Binding ScrolledCommand}"/>
-                             </CollectionView.Behaviors>
-         
-                           <CollectionView.ItemTemplate>
-                             <DataTemplate x:DataType="local:Post" >
-
-                                 <Border WidthRequest="{Binding Source={x:Reference Post},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource BorderWidthValueAdjustment}}"
-                                         Margin="30" 
-                                         BackgroundColor="White" 
-                                         StrokeThickness="10" 
-                                         StrokeShape="RoundRectangle 40,40,40,40"
-                                         >
-                                         <Grid Background="White" x:Name="Post" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="White">
-                                         <Grid.RowDefinitions>
-                                             <RowDefinition/> -->
-                                            <!--0 username follow | 3 dots to go to profile-->
-                                            <!--
-                                             <RowDefinition/> -->
-                                            <!--1 post text content-->
-                                            <!--
-                                             <RowDefinition/>  -->
-                                            <!--2 images-->
-                                            <!--
-                                             <RowDefinition/>-->
-                                            <!--3 like comments share-->
-                                            <!--
-                                             <RowDefinition/> -->
-                                            <!--4 comment section-->
-                                            <!--
-                                         </Grid.RowDefinitions>
-
-                                         <Grid  Padding="20" Grid.Row="0">
-                                             <HorizontalStackLayout Spacing="10">
-                                                 <VerticalStackLayout>
-                                                     <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding PosterUsername}"/>
-                                                     <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
-                                                 </VerticalStackLayout>
-                                                 <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
-                                                 <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="{Binding isFollowed, Converter={StaticResource FollowOrNotFollowConverter}}"/>
-                                             </HorizontalStackLayout>
-                                             <ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />
-                                         </Grid>
-                         
-                                         <Grid Padding="20,0,20,20" Grid.Row="1" >
-                                             <Label TextColor="Black" Text="{Binding PostTextContent}" LineBreakMode="WordWrap"/>
-                                         </Grid>
-
-                                         <Grid Padding="30,0,30,15" Grid.Row="2">
-                                             <BoxView HeightRequest="300" WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostWidthValueAdjustment}}" BackgroundColor="Orange"/>
-                                             <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
-                                             <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
-                                         </Grid>
-
-                                         <Grid Padding="0,0,0,10" Grid.Row="3">
-                                             <HorizontalStackLayout  Spacing="-170">
-                                                 <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="20,0,0,0" Text="Like It!"/>
-                                                 <Image HeightRequest="40" Source="likeicon.png"/>
-                                             </HorizontalStackLayout>
-
-                                             <Button BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="40,0,0,0" Text="Comment"/>
-                                             <Image Margin="0,0,140,0" HeightRequest="40" Source="commenticon.png" />
-
-
-                                             <Button  HorizontalOptions="End" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
-                                             <Image  Margin="0,0,140,0" HorizontalOptions="End"  HeightRequest="40" Source="shareicon.png"/>
-                                         </Grid>
-
-
-
-                                             <Grid HeightRequest="200" 
-                                                   VerticalOptions="FillAndExpand"
-                                                   Grid.Row="4">
-                                                 <CollectionView  VerticalScrollBarVisibility="Always"  
-                                                                  ItemsSource="{Binding CommentSection}"
-                                                                  >
-                                                     <CollectionView.ItemTemplate>
-                                                         <DataTemplate x:DataType="local:Comment">
-                                                             <Grid Padding="25" BackgroundColor="#e0e0e0">
-                                                                 <Grid.RowDefinitions>
-                                                                     <RowDefinition/>
-                                                                     <RowDefinition/>
-                                                                     <RowDefinition/>
-                                                                 </Grid.RowDefinitions>
-
-                                                                 <Grid BackgroundColor="Red" Grid.Row="0">
-                                                                     <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" Text="{Binding CommentPosterUsername}"/>
-                                                                     <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
-                                                                 </Grid>
-                                                                 <Grid  Grid.Row="1">
-                                                                     <Label TextColor="Black" Text="{Binding CommentTextContent}" LineBreakMode="WordWrap"/>
-                                                                 </Grid>
-
-                                                             </Grid>
-                                                         </DataTemplate>
-                                                     </CollectionView.ItemTemplate>
-                                                 </CollectionView>
-                                             </Grid>
-                                         </Grid>
-                                 </Border>
-                             </DataTemplate>
-                         </CollectionView.ItemTemplate>
-                     </CollectionView>-->
+                       
                     </StackLayout>
 
                     <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
                         <Border BackgroundColor="White" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
-                            <Grid BackgroundColor="White">
+                            
+                            <Grid BackgroundColor="White" Padding="20">
                                 
+                                <Grid x:Name="changePersonalDataGrid" IsVisible="False">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" BackgroundColor="Red">
+                                    
+                                    </Grid>
+                                    <Grid Grid.Column="1" BackgroundColor="White">
+                                        <VerticalStackLayout Spacing="10">
+                                        <Border Stroke="Gray" 
+                                                StrokeThickness="1.5" 
+                                                StrokeShape="RoundRectangle 20,20,20,20" 
+                                                HeightRequest="60" WidthRequest="370">
+                                            <Entry 
+                                                   TextColor="Black" 
+                                                   FontSize="18"
+                                                   Placeholder="Username" 
+                                                   Margin="0" 
+                                                   x:Name="usernameEntry" 
+                                                   HeightRequest="50" 
+                                                   WidthRequest="350" 
+                                                   Background="White">
+                                            </Entry>
+                                        </Border>
+
+                                        <Border Stroke="Gray" 
+                                                 StrokeThickness="1.5" 
+                                                 StrokeShape="RoundRectangle 20,20,20,20" 
+                                                 HeightRequest="60" WidthRequest="370">
+                                            <Entry 
+                                                TextColor="Black" 
+                                                FontSize="18"
+                                                Placeholder="E-mial" 
+                                                Margin="0" 
+                                                x:Name="emailEntry" 
+                                                HeightRequest="50" 
+                                                WidthRequest="350" 
+                                                Background="White">
+                                            </Entry>
+                                        </Border>
+
+                                        <Border Stroke="Gray" 
+                                                 StrokeThickness="1.5" 
+                                                 StrokeShape="RoundRectangle 20,20,20,20" 
+                                                 HeightRequest="60" WidthRequest="370">
+                                            <Entry TextColor="Black" 
+                                                    FontSize="18"
+                                                    Placeholder="First name" 
+                                                    Margin="0" 
+                                                    x:Name="firstNameEntry" 
+                                                    HeightRequest="50" 
+                                                    WidthRequest="350" 
+                                                    Background="White">
+                                            </Entry>
+                                        </Border>
+
+                                        <Border Stroke="Gray" 
+                                                 StrokeThickness="1.5" 
+                                                 StrokeShape="RoundRectangle 20,20,20,20" 
+                                                 HeightRequest="60" WidthRequest="370">
+                                            <Entry TextColor="Black" 
+                                                    FontSize="18"
+                                                    Placeholder="Last name" 
+                                                    Margin="0" 
+                                                    x:Name="lastNameEntry" 
+                                                    HeightRequest="50" 
+                                                    WidthRequest="350" 
+                                                    Background="White">
+                                            </Entry>
+                                        </Border>
+
+                                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                                                <Button Text="Save Changes"></Button>
+                                                <Button Text="Change Password"></Button>
+                                            </HorizontalStackLayout>
+                                        
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
                             </Grid>
+                            
                             <Border.Shadow>
                                 <Shadow Opacity="0.5"
                                         Radius="5"/>
