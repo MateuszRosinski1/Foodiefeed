@@ -102,19 +102,25 @@ namespace Foodiefeed
             }
         }
 
-        private async void NotificationBellAnimation(object sender, PointerEventArgs e)
+        private void NotificationBellAnimation(object sender, PointerEventArgs e)
         {
             var path = sender as Microsoft.Maui.Controls.Shapes.Path;
 
-            Thread t2 = new Thread
-            (async () => 
-            { 
-                await path.RotateTo(-10, 200, Easing.Linear); 
-                await path.RelRotateTo(10, 200, Easing.Linear); 
-            });
+            if (path is null) return;
 
-            t2.Start();
+            NotificationBellTransform.CenterX = path.Width / 2;
 
+            var bellRotationFirstCycle = new Animation(v => NotificationBellTransform.Angle = v, 0, 15, Easing.Linear);
+            var bellRotationSecondCycle = new Animation(v => NotificationBellTransform.Angle = v, 15, -15, Easing.Linear);
+            var bellRotationThirdCycle = new Animation(v => NotificationBellTransform.Angle = v, -15, 0, Easing.Linear);
+
+            var sequentialAnimation = new Animation();
+
+            sequentialAnimation.Add(0, 0.25, bellRotationFirstCycle); 
+            sequentialAnimation.Add(0.25, 0.75, bellRotationSecondCycle); 
+            sequentialAnimation.Add(0.75, 1, bellRotationThirdCycle); 
+
+            sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
         }
     }
 }
