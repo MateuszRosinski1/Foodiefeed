@@ -9,7 +9,7 @@
              x:DataType="viewmodel:BoardViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:test="clr-namespace:Foodiefeed.views.windows.contentview"
-             MinimumHeightRequest="600">
+             >
 
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
@@ -22,7 +22,7 @@
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition/>
@@ -400,8 +400,7 @@
                         VerticalScrollBarVisibility="Always" 
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
-                        Grid.Column="2"
-                        >
+                        Grid.Column="2">
                 <!--friends-->
                 <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" HeightRequest="1000" >
                 </VerticalStackLayout>
