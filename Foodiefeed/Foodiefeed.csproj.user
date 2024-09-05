@@ -21,6 +21,9 @@
     <MauiXaml Update="views\windows\contentview\CommentView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\OnlineFreidnListElementView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\OnListFriendView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

@@ -63,15 +63,12 @@
                 HorizontalOptions="Start" 
                 Margin="20"/>
             <HorizontalStackLayout HorizontalOptions="End">
-                <Path BackgroundColor="Transparent"  VerticalOptions="Center" Scale="1.5"  Fill="DarkGray" Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
+                <Path BackgroundColor="Transparent"  VerticalOptions="Center" Scale="1.5" WidthRequest="20" HeightRequest="20"  Fill="DarkGray" Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
                     <Path.GestureRecognizers>
                         <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
                     </Path.GestureRecognizers>
                     <Path.RenderTransform>
-                        <RotateTransform x:Name="NotificationBellTransform"
-                         CenterX="0.5"
-                         CenterY="0.5"
-                         Angle="0" />
+                        <RotateTransform x:Name="NotificationBellTransform"/>
                     </Path.RenderTransform>
                 </Path>
                 <BoxView WidthRequest="200" BackgroundColor="MediumPurple" HeightRequest="30" VerticalOptions="Center" Margin="100,0,0,0"></BoxView>
@@ -403,10 +400,11 @@
                         VerticalScrollBarVisibility="Always" 
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
-                        Grid.Column="2">
+                        Grid.Column="2"
+                        >
                 <!--friends-->
-                <Grid HeightRequest="1000" Opacity="0.2" BackgroundColor="Blue">
-                </Grid>
+                <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" HeightRequest="1000" >
+                </VerticalStackLayout>
             </ScrollView>
 
 
