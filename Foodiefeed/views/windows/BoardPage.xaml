@@ -263,7 +263,28 @@
                             
                             <Grid BackgroundColor="White" Padding="20">
                                 
-                                <Grid x:Name="changePersonalDataGrid" IsVisible="False">
+                                <Grid x:Name="settingsOptionsGrid" IsVisible="{Binding SettingsMainHubVisible}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <VerticalStackLayout Grid.Column="0" Spacing="10">
+                                        <Button Text="Change personal data" HorizontalOptions="Center" Command="{Binding OpenPersonalDataEditorCommand}"/>
+                                        <Label Text="Change Theme" TextColor="Black" HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                        <Label Text="Click to change your personal data" TextColor="Black" HorizontalOptions="Center"/>
+                                        <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                                            <Button BackgroundColor="White" Text="Bright" TextColor="Black"/>
+                                            <Button BackgroundColor="Black" Text="Dark" TextColor="White"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    
+                                </Grid>
+                                
+                                <Grid x:Name="changePersonalDataGrid" IsVisible="{Binding PersonalDataEditorVisible}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="200"/>
                                         <ColumnDefinition/>

@@ -25,10 +25,20 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool settingsPageVisible;
 
+        [ObservableProperty]
+        bool personalDataEditorVisible;
+
+        [ObservableProperty]
+        bool settingsMainHubVisible;
+
+
         public BoardViewModel()
         {
             this.ProfilePageVisible = true; //on init false
-            this.postPageVisible = false; //on init true
+            this.PostPageVisible = false; //on init true
+            this.SettingsPageVisible = false; //on init false
+            this.PersonalDataEditorVisible = false; // on init false
+            this.SettingsMainHubVisible = true; //on init true
             
         }
 
@@ -83,6 +93,20 @@ namespace Foodiefeed.viewmodels
             App.Current.MainPage.ShowPopup(popup);
         }
 
+
+        [RelayCommand]
+        public void OpenPersonalDataEditor()
+        {
+            this.PersonalDataEditorVisible = true;
+            this.SettingsMainHubVisible = false;
+        }
+
+        [RelayCommand]
+        public void BackToSettingHub()
+        {
+            this.PersonalDataEditorVisible = false;
+            this.SettingsMainHubVisible = true;
+        }
         
     }
 
