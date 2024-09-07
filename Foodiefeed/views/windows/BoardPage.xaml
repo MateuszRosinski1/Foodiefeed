@@ -289,11 +289,44 @@
                                         <ColumnDefinition Width="200"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Grid Grid.Column="0" BackgroundColor="Red">
+                                    <Border Grid.Column="0" StrokeShape="RoundRectangle 30" BackgroundColor="Gray" StrokeThickness="2">
+                                        <VerticalStackLayout Spacing="40"  BackgroundColor="White" Padding="20">
+                                            
+                                            <Button Text="Change Username" BackgroundColor="Transparent" FontAttributes="Bold">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+
+                                            <Button Text="Change Email" BackgroundColor="Transparent" FontAttributes="Bold">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+
+                                            <Button Text="Change Password" BackgroundColor="Transparent" FontAttributes="Bold">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+
+                                            <Button Text="Change Profile Picture"  BackgroundColor="Transparent" FontAttributes="Bold" LineBreakMode="WordWrap">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+
+
+
+                                        </VerticalStackLayout>
+                                    </Border>
                                     
-                                    </Grid>
                                     <Grid Grid.Column="1" BackgroundColor="White">
-                                        <VerticalStackLayout Spacing="10">
+                                        <VerticalStackLayout Spacing="10" Padding="20">
                                         <Border Stroke="Gray" 
                                                 StrokeThickness="1.5" 
                                                 StrokeShape="RoundRectangle 20,20,20,20" 
@@ -303,7 +336,7 @@
                                                    FontSize="18"
                                                    Placeholder="Username" 
                                                    Margin="0" 
-                                                   x:Name="usernameEntry" 
+                                                   x:Name="newUsernameEntry" 
                                                    HeightRequest="50" 
                                                    WidthRequest="350" 
                                                    Background="White">
@@ -319,7 +352,7 @@
                                                 FontSize="18"
                                                 Placeholder="E-mial" 
                                                 Margin="0" 
-                                                x:Name="emailEntry" 
+                                                x:Name="newEmailEntry" 
                                                 HeightRequest="50" 
                                                 WidthRequest="350" 
                                                 Background="White">
@@ -332,33 +365,31 @@
                                                  HeightRequest="60" WidthRequest="370">
                                             <Entry TextColor="Black" 
                                                     FontSize="18"
-                                                    Placeholder="First name" 
+                                                    Placeholder="Password" 
+                                                    IsPassword="True"
                                                     Margin="0" 
-                                                    x:Name="firstNameEntry" 
+                                                    x:Name="newPasswordEntry" 
                                                     HeightRequest="50" 
                                                     WidthRequest="350" 
                                                     Background="White">
                                             </Entry>
                                         </Border>
 
-                                        <Border Stroke="Gray" 
-                                                 StrokeThickness="1.5" 
-                                                 StrokeShape="RoundRectangle 20,20,20,20" 
-                                                 HeightRequest="60" WidthRequest="370">
-                                            <Entry TextColor="Black" 
-                                                    FontSize="18"
-                                                    Placeholder="Last name" 
-                                                    Margin="0" 
-                                                    x:Name="lastNameEntry" 
-                                                    HeightRequest="50" 
-                                                    WidthRequest="350" 
-                                                    Background="White">
-                                            </Entry>
-                                        </Border>
+
 
                                             <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                                                <Button Text="Save Changes"></Button>
-                                                <Button Text="Change Password"></Button>
+                                                <Button Text="Save Changes" BackgroundColor="#e0e0e0" FontAttributes="Bold">
+                                                    <Button.Shadow>
+                                                        <Shadow Opacity="0.4"
+                                                                Radius="10"/>
+                                                    </Button.Shadow>
+                                                </Button>
+                                                <Button Text="Change Password" BackgroundColor="#e0e0e0" FontAttributes="Bold">
+                                                    <Button.Shadow>
+                                                        <Shadow Opacity="0.4"
+                                                                Radius="10"/>
+                                                    </Button.Shadow>
+                                                </Button>
                                             </HorizontalStackLayout>
                                         
                                         </VerticalStackLayout>
