@@ -129,5 +129,20 @@ namespace Foodiefeed
 
             sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
         }
+
+        private async void OptionButtonScaleAnimation(object sender, PointerEventArgs e)
+        {
+            var button = sender as Button;
+            if (button is null) return;
+            await button.ScaleTo(1.1, 100, Easing.Linear);
+
+        }
+
+        private async void OptionButtonDescendAnimation(object sender, PointerEventArgs e)
+        {
+            var button = sender as Button;
+            if (button is null) return;
+            await button.ScaleTo(1, 100,Easing.Linear);
+        }
     }
 }

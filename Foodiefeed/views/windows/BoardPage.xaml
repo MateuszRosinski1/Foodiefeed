@@ -292,32 +292,58 @@
                                     <Border Grid.Column="0" StrokeShape="RoundRectangle 30" BackgroundColor="Gray" StrokeThickness="2">
                                         <VerticalStackLayout Spacing="40"  BackgroundColor="White" Padding="20">
                                             
-                                            <Button Text="Change Username" BackgroundColor="Transparent" FontAttributes="Bold">
+                                            <Button Text="Change Username" 
+                                                    BackgroundColor="Transparent" 
+                                                    FontAttributes="Bold"
+                                                    Command="{Binding ShowChangeUsernameEntryCommand}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
                                             </Button>
 
-                                            <Button Text="Change Email" BackgroundColor="Transparent" FontAttributes="Bold">
+                                            <Button Text="Change Email" 
+                                                    BackgroundColor="Transparent" 
+                                                    FontAttributes="Bold"
+                                                    Command="{Binding ShowChangeEmialEntryCommand}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
                                             </Button>
 
-                                            <Button Text="Change Password" BackgroundColor="Transparent" FontAttributes="Bold">
+                                            <Button Text="Change Password" 
+                                                    BackgroundColor="Transparent" 
+                                                    FontAttributes="Bold"
+                                                    Command="{Binding ShowChangePasswordEntryCommand}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
                                             </Button>
 
-                                            <Button Text="Change Profile Picture"  BackgroundColor="Transparent" FontAttributes="Bold" LineBreakMode="WordWrap">
+                                            <Button Text="Change Profile Picture"  
+                                                    BackgroundColor="Transparent" 
+                                                    HorizontalOptions="CenterAndExpand" 
+                                                    FontAttributes="Bold" 
+                                                    LineBreakMode="WordWrap"
+                                                    Command="{Binding ChangeProfilePictureCommand}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
                                             </Button>
 
 
@@ -327,10 +353,12 @@
                                     
                                     <Grid Grid.Column="1" BackgroundColor="White">
                                         <VerticalStackLayout Spacing="10" Padding="20">
+                                            
                                         <Border Stroke="Gray" 
                                                 StrokeThickness="1.5" 
                                                 StrokeShape="RoundRectangle 20,20,20,20" 
-                                                HeightRequest="60" WidthRequest="370">
+                                                HeightRequest="60" WidthRequest="370"
+                                                IsVisible="{Binding ChangeUsernameEntryVisible}">
                                             <Entry 
                                                    TextColor="Black" 
                                                    FontSize="18"
@@ -346,7 +374,8 @@
                                         <Border Stroke="Gray" 
                                                  StrokeThickness="1.5" 
                                                  StrokeShape="RoundRectangle 20,20,20,20" 
-                                                 HeightRequest="60" WidthRequest="370">
+                                                 HeightRequest="60" WidthRequest="370"
+                                                 IsVisible="{Binding ChangeEmailEntryVisible}">
                                             <Entry 
                                                 TextColor="Black" 
                                                 FontSize="18"
@@ -362,7 +391,8 @@
                                         <Border Stroke="Gray" 
                                                  StrokeThickness="1.5" 
                                                  StrokeShape="RoundRectangle 20,20,20,20" 
-                                                 HeightRequest="60" WidthRequest="370">
+                                                 HeightRequest="60" WidthRequest="370"
+                                                 IsVisible="{Binding ChangePasswordEntryVisible}">
                                             <Entry TextColor="Black" 
                                                     FontSize="18"
                                                     Placeholder="Password" 

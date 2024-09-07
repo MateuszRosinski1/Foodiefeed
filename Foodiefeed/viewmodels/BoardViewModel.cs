@@ -15,7 +15,9 @@ namespace Foodiefeed.viewmodels
     {
         [ObservableProperty]
         ObservableCollection<PostView> posts = new ObservableCollection<PostView>();
-   
+
+        #region VisibilityFlags
+
         [ObservableProperty]
         bool profilePageVisible;
 
@@ -31,6 +33,16 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool settingsMainHubVisible;
 
+        [ObservableProperty]
+        bool changeUsernameEntryVisible;
+
+        [ObservableProperty]
+        bool changeEmailEntryVisible;
+
+        [ObservableProperty]
+        bool changePasswordEntryVisible;
+
+        #endregion
 
         public BoardViewModel()
         {
@@ -39,7 +51,9 @@ namespace Foodiefeed.viewmodels
             this.SettingsPageVisible = false; //on init false
             this.PersonalDataEditorVisible = false; // on init false
             this.SettingsMainHubVisible = true; //on init true
-            
+            this.ChangeUsernameEntryVisible = false; //on init false
+            this.ChangeEmailEntryVisible = false; //on init false
+            this.ChangePasswordEntryVisible = false; //on init false
         }
 
         [RelayCommand]
@@ -50,7 +64,7 @@ namespace Foodiefeed.viewmodels
             //{
             //   
             //}
-            
+
 
         }
 
@@ -107,7 +121,23 @@ namespace Foodiefeed.viewmodels
             this.PersonalDataEditorVisible = false;
             this.SettingsMainHubVisible = true;
         }
-        
-    }
 
+        [RelayCommand]
+        public void ShowChangeUsernameEntry(){
+
+        }
+
+        [RelayCommand]
+        public void ShowChangeEmialEntry(){
+        }
+
+        [RelayCommand]
+        public void ShowChangePasswordEntry(){ 
+        }
+
+        [RelayCommand]
+        public void ChangeProfilePicture()
+        {
+        }
+    }
 }
