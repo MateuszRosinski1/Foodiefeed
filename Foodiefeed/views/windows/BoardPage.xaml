@@ -6,9 +6,8 @@
              x:Name="Page"
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
-             x:DataType="viewmodel:BoardViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:test="clr-namespace:Foodiefeed.views.windows.contentview"
+             xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview"
              >
 
     <ContentPage.Resources>
@@ -86,7 +85,7 @@
             
             <ScrollView HorizontalOptions="Start" 
                         VerticalOptions="Start" 
-                        x:Name="testScroll" 
+                        x:Name="hubScroll" 
                         VerticalScrollBarVisibility="Always" 
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
@@ -244,9 +243,9 @@
                                 
                                 <Border Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
                                     <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" >
-                                        <test:OnListFriendView/>
-                                        <test:OnListFriendView/>
-                                        <test:OnListFriendView/>
+                                        <views:OnListFriendView/>
+                                        <views:OnListFriendView/>
+                                        <views:OnListFriendView/>
                                     </toolkit:UniformItemsLayout>
                                 </Border>                               
                             </VerticalStackLayout>
@@ -254,8 +253,16 @@
                         </VerticalStackLayout>
                     </Grid>
                     
-                    <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" >
-                       
+                    <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" 
+                                 BindableLayout.ItemsSource="{Binding Posts}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <views:PostView Username="{Binding Username}"
+                                                TimeStamp="{Binding TimeStamp}"
+                                                PostTextContent="{Binding PostTextContent}"
+                                                PostLikeCount="{Binding PostLikeCount}"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
                     </StackLayout>
 
                     <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">

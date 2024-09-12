@@ -20,9 +20,6 @@
             <inheritdoc/>
             <inheritdoc/>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.Posts">
-            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.posts"/>
-        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfilePageVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profilePageVisible"/>
         </member>
@@ -240,9 +237,6 @@
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Posts">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Posts" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProfilePageVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProfilePageVisible" generated properties.</summary>
         </member>
@@ -308,9 +302,6 @@
             A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
             for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
             </summary>
-        </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Posts">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Posts" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProfilePageVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProfilePageVisible" generated properties.</summary>

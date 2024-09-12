@@ -5,7 +5,8 @@
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Name="PostContentView"
              MaximumWidthRequest="1000"
-             HeightRequest="{Binding Source={x:Reference PostContentView}}">
+             HeightRequest="{Binding Source={x:Reference PostContentView}}"
+             >
     
     <VerticalStackLayout>
 
@@ -38,10 +39,12 @@
 
                     <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
+                            
                             <VerticalStackLayout>
-                                <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Username"/>
-                                <Label TextColor="Black" FontSize="10" Text="10 hours ago"/>
+                                <Label TextColor="Black" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
+                                <Label TextColor="Black" FontSize="10" x:Name="PostTimeStampLabel"/>
                             </VerticalStackLayout>
+                            
                             <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
                             <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Follow"/>
                         </HorizontalStackLayout>
@@ -49,7 +52,17 @@
                     </Grid>
 
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
-                        <Label TextColor="Black" Text="lorelipsum dit ame vi turenot" LineBreakMode="WordWrap"/>
+                        <VerticalStackLayout>
+                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
+                                <Label TextColor="Black" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                            </ScrollView>
+                            <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ExpandPostContentText"/>
+                                    <PointerGestureRecognizer PointerEntered="UnderlineText" PointerExited="UnUnderLineText"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </VerticalStackLayout>
                     </Grid>
 
                     <Grid Padding="30,0,30,15" Grid.Row="2">
@@ -64,7 +77,10 @@
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
+                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                            <Button  ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="170" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
+                            <Label x:Name="PostLikeCountLabel" TextColor="Black" FontSize="20" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
 
                         <Button Grid.Column="1" ImageSource="commenticon.png" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Comment"/>
 
@@ -86,7 +102,7 @@
                     Margin="35,-40,35,0">
 
                 <ScrollView x:Name="CommentSectionScroll" MaximumHeightRequest="300" Margin="0,15,0,20" MinimumHeightRequest="100" >
-                    <VerticalStackLayout Padding="20" x:Name="CommentSection" >
+                    <VerticalStackLayout Padding="20" x:Name="CommentSection" BindableLayout.ItemsSource="{Binding Comments}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <local:CommentView Username="{Binding Username}" 
