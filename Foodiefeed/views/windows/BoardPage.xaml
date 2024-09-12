@@ -274,7 +274,7 @@
                                         <Button Text="Change personal data" HorizontalOptions="Center" Command="{Binding OpenPersonalDataEditorCommand}"/>
                                         <Label Text="Change Theme" TextColor="Black" HorizontalOptions="Center"/>
                                     </VerticalStackLayout>
-                                    <VerticalStackLayout Grid.Column="1" Spacing="10">
+                                    <VerticalStackLayout Grid.Column="1" Spacing="10" Margin="0,10,0,0">
                                         <Label Text="Click to change your personal data" TextColor="Black" HorizontalOptions="Center"/>
                                         <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
                                             <Button BackgroundColor="White" Text="Bright" TextColor="Black"/>
@@ -351,8 +351,8 @@
                                         </VerticalStackLayout>
                                     </Border>
                                     
-                                    <Grid Grid.Column="1" BackgroundColor="White">
-                                        <VerticalStackLayout Spacing="10" Padding="20">
+                                    <Grid Grid.Column="1" BackgroundColor="White" Padding="20">
+                                        <!--<VerticalStackLayout Spacing="10" Padding="20" VerticalOptions="Center"  BackgroundColor="Blue">-->
                                             
                                         <Border Stroke="Gray" 
                                                 StrokeThickness="1.5" 
@@ -387,7 +387,9 @@
                                                 Background="White">
                                             </Entry>
                                         </Border>
-
+                                        <VerticalStackLayout Spacing="10" VerticalOptions="Center">
+                                            
+                                        
                                         <Border Stroke="Gray" 
                                                  StrokeThickness="1.5" 
                                                  StrokeShape="RoundRectangle 20,20,20,20" 
@@ -405,16 +407,27 @@
                                             </Entry>
                                         </Border>
 
+                                            <Border Stroke="Gray" 
+                                                     StrokeThickness="1.5" 
+                                                     StrokeShape="RoundRectangle 20,20,20,20" 
+                                                     HeightRequest="60" WidthRequest="370"
+                                                     IsVisible="{Binding ChangePasswordEntryVisible}">
+                                                <Entry TextColor="Black" 
+                                                        FontSize="18"
+                                                        Placeholder="Retype Password" 
+                                                        IsPassword="True"
+                                                        Margin="0" 
+                                                        x:Name="newRePasswordEntry" 
+                                                        HeightRequest="50" 
+                                                        WidthRequest="350" 
+                                                        Background="White">
+                                                </Entry>
+                                            </Border>
+                                        </VerticalStackLayout>
 
 
-                                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                                                <Button Text="Save Changes" BackgroundColor="#e0e0e0" FontAttributes="Bold">
-                                                    <Button.Shadow>
-                                                        <Shadow Opacity="0.4"
-                                                                Radius="10"/>
-                                                    </Button.Shadow>
-                                                </Button>
-                                                <Button Text="Change Password" BackgroundColor="#e0e0e0" FontAttributes="Bold">
+                                        <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="End" Spacing="10">
+                                                <Button Text="Save Changes" BackgroundColor="#e0e0e0" FontAttributes="Bold" VerticalOptions="Center">
                                                     <Button.Shadow>
                                                         <Shadow Opacity="0.4"
                                                                 Radius="10"/>
@@ -422,7 +435,7 @@
                                                 </Button>
                                             </HorizontalStackLayout>
                                         
-                                        </VerticalStackLayout>
+                                        <!--</VerticalStackLayout>-->
                                     </Grid>
                                 </Grid>
                             </Grid>

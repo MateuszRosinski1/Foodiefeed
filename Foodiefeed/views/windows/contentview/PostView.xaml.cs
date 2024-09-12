@@ -11,17 +11,26 @@ public partial class PostView : ContentView
 
     public PostView()
 	{
-		Comments = new List<CommentView>();
-		Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
-        Comments.Add(new CommentView());
+		Comments =
+        [
+            new CommentView() 
+            {
+                Username = "martino" ,
+                CommentContent = "Bardo fajny przepis polecam ", 
+                CommentId = 2.ToString(), 
+                LikeCount = 234.ToString()
+            },
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+            new CommentView(),
+        ];
+
 
         InitializeComponent();	
 

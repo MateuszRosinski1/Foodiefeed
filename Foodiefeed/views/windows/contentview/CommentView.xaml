@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Class="Foodiefeed.views.windows.contentview.CommentView"
              >
     
@@ -12,18 +13,21 @@
         </Grid.RowDefinitions>
 
         <Grid BackgroundColor="Red" Grid.Row="0">
-            <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" Text="username"/>
+            <HorizontalStackLayout Spacing="5">
+                <Image Source="avatar.png" HeightRequest="40" WidthRequest="40"/>
+                <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" x:Name="UsernameLabel"/>
+            </HorizontalStackLayout>
             <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
         </Grid>
         
-        <Grid  Grid.Row="1">
-            <Label TextColor="Black" Text="Comment Lore lipsum de vito an sele ku more wer morete" LineBreakMode="WordWrap"/>
+        <Grid  Grid.Row="1" Margin="0,5">
+            <Label TextColor="Black" x:Name="CommentText" LineBreakMode="WordWrap"/>
         </Grid>
 
         <HorizontalStackLayout  Grid.Row="2">
-            <Button BackgroundColor="Blue" Padding="-10,0,0,0" FontSize="15" WidthRequest="120" HeightRequest="15" Text="Like It !" ImageSource="likeicon.png"/>
+            <Button BackgroundColor="Red"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" Command="{Binding LikePostCommand}" CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
            
-            <Label Text="123" VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15"/>
+            <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
         </HorizontalStackLayout>
 
 

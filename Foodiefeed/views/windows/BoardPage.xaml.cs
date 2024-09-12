@@ -121,11 +121,12 @@ namespace Foodiefeed
             var bellRotationSecondCycle = new Animation(v => NotificationBellTransform.Angle = v, 15, -15, Easing.Linear);
             var bellRotationThirdCycle = new Animation(v => NotificationBellTransform.Angle = v, -15, 0, Easing.Linear);
 
-            var sequentialAnimation = new Animation();
-
-            sequentialAnimation.Add(0, 0.25, bellRotationFirstCycle); 
-            sequentialAnimation.Add(0.25, 0.75, bellRotationSecondCycle); 
-            sequentialAnimation.Add(0.75, 1, bellRotationThirdCycle); 
+            var sequentialAnimation = new Animation
+            {
+                { 0, 0.25, bellRotationFirstCycle },
+                { 0.25, 0.75, bellRotationSecondCycle },
+                { 0.75, 1, bellRotationThirdCycle }
+            };
 
             sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
         }

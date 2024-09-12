@@ -124,20 +124,38 @@ namespace Foodiefeed.viewmodels
 
         [RelayCommand]
         public void ShowChangeUsernameEntry(){
-
+            this.ChangeUsernameEntryVisible = true; 
+            this.ChangeEmailEntryVisible = false; 
+            this.ChangePasswordEntryVisible = false;
         }
 
         [RelayCommand]
         public void ShowChangeEmialEntry(){
+            this.ChangeUsernameEntryVisible = false;
+            this.ChangeEmailEntryVisible =true; 
+            this.ChangePasswordEntryVisible = false;
         }
 
         [RelayCommand]
-        public void ShowChangePasswordEntry(){ 
+        public void ShowChangePasswordEntry(){
+            this.ChangeUsernameEntryVisible = false;
+            this.ChangeEmailEntryVisible = false;
+            this.ChangePasswordEntryVisible = true;
         }
 
         [RelayCommand]
         public void ChangeProfilePicture()
         {
+            this.ChangeUsernameEntryVisible = false;
+            this.ChangeEmailEntryVisible = false;
+            this.ChangePasswordEntryVisible = false;
+        }
+
+        [RelayCommand]
+        public void LikePost(string id)
+        {
+            int i = 1;
+            int j = 2;
         }
     }
 }
