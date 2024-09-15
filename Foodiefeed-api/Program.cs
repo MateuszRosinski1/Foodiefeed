@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<dbContext>();
 builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IFriendService, FriendService>();
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));

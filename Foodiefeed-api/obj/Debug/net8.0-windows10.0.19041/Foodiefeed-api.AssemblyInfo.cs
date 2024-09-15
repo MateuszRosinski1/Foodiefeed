@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6b41a8786207cf85ea2659bf1211f612e36a598")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

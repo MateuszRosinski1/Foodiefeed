@@ -10,10 +10,15 @@ namespace Foodiefeed_api
             {
                 await next.Invoke(context);
             }
-            catch(BadRequestException ex)
+            catch(BadRequestException bre)
             {
                 context.Response.StatusCode = 400;
-                await context.Response.WriteAsync(ex.Message);
+                await context.Response.WriteAsync(bre.Message);
+            }
+            catch(NotFoundException nfe)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(nfe.Message);
             }
             catch (Exception ex)
             {
