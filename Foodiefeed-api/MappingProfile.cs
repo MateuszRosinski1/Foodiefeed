@@ -10,7 +10,7 @@ namespace Foodiefeed_api
         public MappingProfile()
         {
             CreateMap<CreateUserDto, entities.User>();
-            CreateMap<User, OnlineFriendDto>();
+            CreateMap<User, ListedFriendDto>();
         }
     }
 }

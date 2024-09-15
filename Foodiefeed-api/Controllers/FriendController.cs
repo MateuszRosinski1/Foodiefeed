@@ -16,7 +16,7 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("online/{userId}")]
-        public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends(int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends([FromRoute] int userId)
         {
             var onlineFriends = await _friendService.GetOnlineFriends(userId);
 
@@ -24,10 +24,18 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("offline/{userId}")]
-        public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends(int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends([FromRoute] int userId)
         {
             var offlineFriends = await _friendService.GetOfflineFriends(userId);
             return Ok(offlineFriends);
+        }
+
+        [HttpPost("add/{senderId}/{receiverId}")]
+        public async Task<IActionResult> SendFriendRequest([FromRoute]int senderId, [FromRoute] int receiverId)
+        {
+            await _friendService.SendFriendRequest(senderId, receiverId);
+
+            return Ok("Friend added succesfuly");
         }
     }
 }

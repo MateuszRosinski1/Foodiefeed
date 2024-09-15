@@ -16,6 +16,7 @@ namespace Foodiefeed_api.entities
         public DbSet<PostProduct> PostProducts { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +66,21 @@ namespace Foodiefeed_api.entities
                 .HasOne(pcm => pcm.Post)
                 .WithMany(p => p.PostCommentMembers)
                 .HasForeignKey(pcm => pcm.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasKey(fr => new { fr.SenderId, fr.ReceiverId });
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Sender)
+                .WithMany(u => u.SentFriendRequests)
+                .HasForeignKey(fr => fr.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Receiver)
+                .WithMany(u => u.ReceivedFriendRequests)
+                .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

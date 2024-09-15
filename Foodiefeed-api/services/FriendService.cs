@@ -3,6 +3,8 @@ using Foodiefeed_api.entities;
 using Foodiefeed_api.models.friends;
 using Foodiefeed_api.exceptions;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace Foodiefeed_api.services
 {
@@ -10,6 +12,8 @@ namespace Foodiefeed_api.services
     {
         public Task<List<ListedFriendDto>> GetOnlineFriends(int id);
         public Task<List<ListedFriendDto>> GetOfflineFriends(int id);
+
+        public Task SendFriendRequest(int senderId, int reciverId);
     }
 
     public class FriendService : IFriendService
@@ -47,12 +51,19 @@ namespace Foodiefeed_api.services
 
             if (user is null) { throw new NotFoundException(message); }// custom error here
 
-            var friends = user.Friends;
+            var friends = await _dbContext.Friends.Where(f => f.UserId == user.Id || f.FriendUserId == user.Id).ToListAsync();
+
             List<ListedFriendDto> friendsList = new List<ListedFriendDto>();
 
             foreach (var friend in friends)
             {
-                var extractedFriendFromId = _userRepository.FindById(friend.FriendUserId);
+                User? extractedFriendFromId;
+                if (friend.UserId != id) 
+                {
+                    extractedFriendFromId = _userRepository.FindById(friend.UserId);  //  1 2
+                }
+                extractedFriendFromId = _userRepository.FindById(friend.FriendUserId); // 3 1
+
 
                 if (extractedFriendFromId is null) { break; } // smth do to with this
 
@@ -63,6 +74,30 @@ namespace Foodiefeed_api.services
             }
 
             return friendsList;
+        }
+
+        public async Task SendFriendRequest(int senderId, int receiverId)
+        {
+            var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+
+            if(friendRequest is not null) { throw new Exception("Request already sent"); }
+
+            _dbContext.FriendRequests.Add(new FriendRequest() { ReceiverId = receiverId,SenderId = senderId});
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task AcceptFriendRequest(int senderId, int receiverId)
+        {
+            var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+
+            if(friendRequest is  null) { throw new NotFoundException("There is no such request"); }
+
+            _dbContext.FriendRequests.Remove(friendRequest);
+            _dbContext.Friends.Add(new Friend() { UserId = senderId, FriendUserId = receiverId });
+
+            await _dbContext.SaveChangesAsync();
+
         }
     }
 }
