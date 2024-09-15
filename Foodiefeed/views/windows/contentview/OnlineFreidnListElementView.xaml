@@ -5,9 +5,12 @@
 
 
     <Grid>
-        <HorizontalStackLayout>
-            <Image VerticalOptions="Center" Source="avatar.png" WidthRequest="50" HeightRequest="50"/>
-            <Label VerticalOptions="Center" Text="Username" TextColor="Black" FontAttributes="Bold"/>
+        <HorizontalStackLayout Spacing="5">
+            <Grid>
+                <Image VerticalOptions="Center" Source="avatar.png" WidthRequest="50" HeightRequest="50"/>
+                <Ellipse VerticalOptions="End" HorizontalOptions="End" Fill="LawnGreen"  WidthRequest="15" HeightRequest="15"/>
+            </Grid>
+            <Label VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold"/>
         </HorizontalStackLayout>
     </Grid>
     

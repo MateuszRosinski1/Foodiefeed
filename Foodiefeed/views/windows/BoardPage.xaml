@@ -86,39 +86,16 @@
             <ScrollView HorizontalOptions="Start" 
                         VerticalOptions="Start" 
                         x:Name="hubScroll" 
+                        BackgroundColor="#f0f0f0"
                         VerticalScrollBarVisibility="Always" 
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="0"> <!--pages-->
-                
-                <Grid BackgroundColor="White" Padding="0,20,0,0">
+
+                <Grid BackgroundColor="#f0f0f0" Padding="0,20,0,0">
                     <VerticalStackLayout>
 
-                        <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToMainViewCommand}">
-                            <Button.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                            </Button.GestureRecognizers>
-                            <Button.Shadow>
-                                <Shadow Opacity="0"
-                                        Radius="50"/>
-                            </Button.Shadow>
-                        </Button>
-
-                        
-
-                        <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToProfileViewCommand}">
-                            <Button.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                            </Button.GestureRecognizers>
-                            <Button.Shadow>
-                                <Shadow Opacity="0"
-                                        Radius="50"/>
-                            </Button.Shadow>
-                        </Button>
-
-                        
-
-                        <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToRecipesViewCommand}">
+                        <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
                             <Button.GestureRecognizers>
                                 <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                             </Button.GestureRecognizers>
@@ -130,9 +107,7 @@
 
 
 
-
-
-                        <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="White" Command="{Binding ToSettingViewCommand}">
+                        <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
                             <Button.GestureRecognizers>
                                 <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                             </Button.GestureRecognizers>
@@ -141,7 +116,33 @@
                                         Radius="50"/>
                             </Button.Shadow>
                         </Button>
-                        <BoxView HeightRequest="50" BackgroundColor="White"/>
+
+
+
+                        <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+
+
+
+
+
+                        <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            </Button.GestureRecognizers>
+                            <Button.Shadow>
+                                <Shadow Opacity="0"
+                                        Radius="50"/>
+                            </Button.Shadow>
+                        </Button>
+                        <BoxView HeightRequest="80" BackgroundColor="#f0f0f0"/>
 
 
 
@@ -153,11 +154,11 @@
             <!--PostGrid-->
             <ScrollView 
                         Grid.Column="1"
-                        BackgroundColor="Pink"
+                        BackgroundColor="White"
                         WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 
                 <Grid>
-                    <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="DarkMagenta" Padding="30">
+                    <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="White" Padding="30">
                         <VerticalStackLayout>
                             <Border ZIndex="1" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="300" BackgroundColor="White" StrokeShape="RoundRectangle 40">
                                 <Grid  Padding="15"  BackgroundColor="White" >
@@ -168,7 +169,7 @@
                                     </Grid.ColumnDefinitions>
                                     <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200" BackgroundColor="BlueViolet" Source="avatar.png"></ImageButton>
 
-                                    <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="PaleVioletRed" Grid.Column="1">
+                                    <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="Transparent" Grid.Column="1">
                                         <Label Text="Username" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
                                         <Label Text="300 friends" TextColor="Black" FontSize="15"/>
                                         <Label Text="20 followers" TextColor="Black" FontSize="15"/>
@@ -242,10 +243,12 @@
                             <VerticalStackLayout x:Name="ProfileSection">
                                 
                                 <Border Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" >
-                                        <views:OnListFriendView/>
-                                        <views:OnListFriendView/>
-                                        <views:OnListFriendView/>
+                                    <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfilePageFriends}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:OnListFriendView Username="{Binding Username}"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
                                     </toolkit:UniformItemsLayout>
                                 </Border>                               
                             </VerticalStackLayout>
@@ -462,14 +465,20 @@
 
 
 
-            <ScrollView HorizontalOptions="End" 
+            <ScrollView BackgroundColor="#f0f0f0" HorizontalOptions="End" 
                         VerticalOptions="Start" 
                         VerticalScrollBarVisibility="Always" 
                         WidthRequest="300"
                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                         Grid.Column="2">
                 <!--friends-->
-                <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" HeightRequest="1000" >
+                <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" 
+                                     BindableLayout.ItemsSource="{Binding OnlineFriends}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <views:OnlineFreidnListElementView Username="{Binding Username}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
             </ScrollView>
 

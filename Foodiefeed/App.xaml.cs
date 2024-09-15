@@ -9,6 +9,8 @@ namespace Foodiefeed
 
             //MainPage = new LogInPage();
             MainPage = new BoardPage(new viewmodels.BoardViewModel());
+
+            //AppDomain.CurrentDomain.UnhandledException
         }
 
         protected override Window CreateWindow(IActivationState? activationState)

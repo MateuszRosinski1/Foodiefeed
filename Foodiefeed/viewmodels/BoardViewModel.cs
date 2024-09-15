@@ -14,7 +14,28 @@ namespace Foodiefeed.viewmodels
     public partial class BoardViewModel : ObservableObject
     {
         public ObservableCollection<PostView> Posts { get { return posts;} }
-        ObservableCollection<PostView> posts = new ObservableCollection<PostView>();
+
+        private ObservableCollection<PostView> posts 
+            = new ObservableCollection<PostView>();
+
+        public ObservableCollection<OnlineFreidnListElementView> OnlineFriends { get { return onlineFriends; } }
+
+        private ObservableCollection<OnlineFreidnListElementView> onlineFriends 
+            = new ObservableCollection<OnlineFreidnListElementView> { };
+
+        public ObservableCollection<OnListFriendView> ProfilePageFriends { get { return profilePageFriends; } }
+
+        private ObservableCollection<OnListFriendView> profilePageFriends = 
+            new ObservableCollection<OnListFriendView>();
+
+        public struct CurrentProfilePageMember
+        {
+            public int Id;
+            public string Name;
+            public string LastName;
+            public string Username;
+            public int followers;
+        }
 
         #region VisibilityFlags
 
@@ -69,6 +90,12 @@ namespace Foodiefeed.viewmodels
                     new CommentView(),
                 ]
                 });
+
+            onlineFriends.Add(new OnlineFreidnListElementView() { Username = "mati123" });
+            profilePageFriends.Add(new OnListFriendView() { Username = "mati" });
+            profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
+            profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
+
 
             this.ProfilePageVisible = true; //on init false
             this.PostPageVisible = false; //on init true
