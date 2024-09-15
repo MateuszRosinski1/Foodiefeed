@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Foodiefeed_api.services;
+using Foodiefeed_api.models.friends;
 
 namespace Foodiefeed_api.Controllers
 {
@@ -15,15 +16,16 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("online/{userId}")]
-        public IActionResult GetOnlineFriends(int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends(int userId)
         {
-            var onlineFriends = _friendService.GetOnlineFriends(userId);
+            var onlineFriends = await _friendService.GetOnlineFriends(userId);
 
             return Ok(onlineFriends);
         }
         [HttpGet("offline/{userId}")]
-        public IActionResult GetOfflineFriends(int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends(int userId)
         {
+            var offlineFriends = await _friendService.GetOfflineFriends(userId);
             return Ok();
         }
     }

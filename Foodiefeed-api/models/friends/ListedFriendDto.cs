@@ -1,6 +1,6 @@
 ﻿namespace Foodiefeed_api.models.friends
 {
-    public class OnlineFriendDto
+    public class ListedFriendDto
     {
         public int Id { get; set; }
 
