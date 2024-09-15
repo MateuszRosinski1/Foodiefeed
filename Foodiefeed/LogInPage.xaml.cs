@@ -5,10 +5,10 @@ namespace Foodiefeed
 {
     public partial class LogInPage : ContentPage
     {
-        public LogInPage()
+        public LogInPage(UserViewModel vm)
         {
             InitializeComponent();
-            this.BindingContext = new UserViewModel();
+            this.BindingContext = vm;
         }
 
         private async void ClickAnimation(object sender, EventArgs e)

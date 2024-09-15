@@ -4,25 +4,32 @@ using Foodiefeed_api.exceptions;
 using Foodiefeed_api.models.user;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace Foodiefeed_api.services
 {
     public interface IUserService
     {
         public Task CreateUser(CreateUserDto dto);
-        public Task LogIn(UserLogInDto dto);
+        public Task<int> LogIn(UserLogInDto dto);
+        public Task SetOnlineStatus(int id);
+        public Task SetOfflineStatus(int id);
+
     }
+
     public class UserService : IUserService
     {
         private readonly dbContext _context;
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _hasher;
+        private readonly IEntityRepository<User> _entityRepository;
 
-        public UserService(dbContext context,IMapper mapper, IPasswordHasher<User> hasher)
+        public UserService(dbContext context,IMapper mapper, IPasswordHasher<User> hasher,IEntityRepository<User> entityRepository)
         {
             _context = context;
             _mapper = mapper;
             _hasher = hasher;
+            _entityRepository = entityRepository;
         }
 
         public async Task CreateUser(CreateUserDto dto)
@@ -47,7 +54,7 @@ namespace Foodiefeed_api.services
 
         }
 
-        public async Task LogIn(UserLogInDto dto)
+        public async Task<int> LogIn(UserLogInDto dto)
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
 
@@ -56,7 +63,28 @@ namespace Foodiefeed_api.services
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             
             if(result == PasswordVerificationResult.Failed) { throw new BadRequestException("Wrong password"); }
+
+            return user.Id;           
+        }     
+
+        public async Task SetOnlineStatus(int id)
+        {
+            var user = _entityRepository.FindById(id);
+
+            if (user is null) { return; }  //notfound here custom exepction.
+
+            user.IsOnline = true;
+            await _context.SaveChangesAsync();
         }
 
+        public async Task SetOfflineStatus(int id)
+        {
+            var user = _entityRepository.FindById(id);
+
+            if (user is null) { return; }  //notfound here custom exepction.
+
+            user.IsOnline = false;
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -9,6 +9,7 @@
         public string Email { get; set; }
         public string PasswordHash { get; set; }
         public string ProfilePicturePath { get; set; }
+        public bool IsOnline { get; set; } = false;
 
         public virtual ICollection<Friend> Friends { get; set; }
         public virtual ICollection<Post> Posts { get; set; }

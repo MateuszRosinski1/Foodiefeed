@@ -7,10 +7,10 @@ namespace Foodiefeed
 {
     public partial class SignUpView : ContentPage
     {
-        public SignUpView()
+        public SignUpView(UserViewModel vm)
         {
             InitializeComponent();
-            this.BindingContext = new UserViewModel();
+            this.BindingContext = vm;
         }
 
         private async void ClickAnimation(object sender, EventArgs e)

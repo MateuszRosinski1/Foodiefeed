@@ -18,6 +18,13 @@ namespace Foodiefeed
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");                  
                 });
 
+            builder.Services.AddSingleton<UserSession>();
+
+            builder.Services.AddSingleton<UserViewModel>();
+            builder.Services.AddSingleton<LogInPage>();
+            builder.Services.AddSingleton<SignUpView>();
+
+
             builder.Services.AddSingleton<BoardViewModel>();
             builder.Services.AddSingleton<BoardPage>();
 
