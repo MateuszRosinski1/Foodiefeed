@@ -22,11 +22,12 @@ namespace Foodiefeed_api.Controllers
 
             return Ok(onlineFriends);
         }
+
         [HttpGet("offline/{userId}")]
         public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends(int userId)
         {
             var offlineFriends = await _friendService.GetOfflineFriends(userId);
-            return Ok();
+            return Ok(offlineFriends);
         }
     }
 }
