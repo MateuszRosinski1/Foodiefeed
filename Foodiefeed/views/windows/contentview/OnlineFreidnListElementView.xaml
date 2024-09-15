@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.OnlineFreidnListElementView">
+
+
+    <Grid>
+        <HorizontalStackLayout Spacing="5">
+            <Grid>
+                <Image VerticalOptions="Center" Source="avatar.png" WidthRequest="50" HeightRequest="50"/>
+                <Ellipse VerticalOptions="End" HorizontalOptions="End" Fill="LawnGreen"  WidthRequest="15" HeightRequest="15"/>
+            </Grid>
+            <Label VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold"/>
+        </HorizontalStackLayout>
+    </Grid>
+    
+    
+</ContentView>

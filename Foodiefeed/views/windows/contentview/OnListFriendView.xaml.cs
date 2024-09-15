@@ -4,7 +4,16 @@ namespace Foodiefeed.views.windows.contentview;
 
 public partial class OnListFriendView : ContentView
 {
-	public OnListFriendView()
+    public static readonly BindableProperty UsernameProperty =
+        BindableProperty.Create(nameof(Username), typeof(string), typeof(OnListFriendView), default(string), propertyChanged: OnUsernameChanged);
+
+    public string Username
+    {
+        get => (string)GetValue(UsernameProperty);
+        set => SetValue(UsernameProperty, value);
+    }
+
+    public OnListFriendView()
 	{
 		InitializeComponent();
 	}
@@ -18,6 +27,12 @@ public partial class OnListFriendView : ContentView
         await ThirdCircle.ScaleTo(1.3, 100, Easing.BounceIn);
         await ThirdCircle.ScaleTo(1, 100, Easing.BounceOut);
 
+    }
+
+    private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (OnListFriendView )bindable;
+        view.UsernameLabel.Text = newValue as string;
     }
 
     private void ShowUserOptionPanel(object sender, TappedEventArgs e)

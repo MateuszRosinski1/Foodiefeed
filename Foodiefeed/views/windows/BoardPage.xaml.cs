@@ -3,6 +3,8 @@ using Foodiefeed.views.windows.contentview;
 using Microsoft.Maui.Controls;
 using System.Windows.Input;
 using Foodiefeed.extension;
+using Microsoft.Maui.Controls.Shapes;
+
 
 namespace Foodiefeed
 {
@@ -12,14 +14,21 @@ namespace Foodiefeed
         {
             InitializeComponent();
             this.BindingContext = vm;
-            PostGrid.Children.Add(new PostView());
-            PostGrid.Children.Add(new PostView());
-            PostGrid.Children.Add(new PostView());
-            PostGrid.Children.Add(new PostView());
+            //PostGrid.Children.Add(new PostView());
+            //PostGrid.Children.Add(new PostView());
+            //PostGrid.Children.Add(new PostView());
+            //PostGrid.Children.Add(new PostView());
 
-            //ProfileSection.Children.Add(new PostView());
-            //ProfileSection.Children.Add(new PostView());
-            //ProfileSection.Children.Add(new PostView());
+            ////ProfileSection.Children.Add(new PostView());
+            ////ProfileSection.Children.Add(new PostView());
+            ////ProfileSection.Children.Add(new PostView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
         }
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
@@ -98,6 +107,43 @@ namespace Foodiefeed
                     await button.ColorTo(Color.FromHex("#c9c9c9"), Color.FromHex("#c9c9c9"), c => button.BackgroundColor = c, 100);
                 }
             }
+        }
+
+        private void NotificationBellAnimation(object sender, PointerEventArgs e)
+        {
+            var path = sender as Microsoft.Maui.Controls.Shapes.Path;
+
+            if (path is null) return;
+
+            NotificationBellTransform.CenterX = path.Width / 2;
+
+            var bellRotationFirstCycle = new Animation(v => NotificationBellTransform.Angle = v, 0, 15, Easing.Linear);
+            var bellRotationSecondCycle = new Animation(v => NotificationBellTransform.Angle = v, 15, -15, Easing.Linear);
+            var bellRotationThirdCycle = new Animation(v => NotificationBellTransform.Angle = v, -15, 0, Easing.Linear);
+
+            var sequentialAnimation = new Animation
+            {
+                { 0, 0.25, bellRotationFirstCycle },
+                { 0.25, 0.75, bellRotationSecondCycle },
+                { 0.75, 1, bellRotationThirdCycle }
+            };
+
+            sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
+        }
+
+        private async void OptionButtonScaleAnimation(object sender, PointerEventArgs e)
+        {
+            var button = sender as Button;
+            if (button is null) return;
+            await button.ScaleTo(1.1, 100, Easing.Linear);
+
+        }
+
+        private async void OptionButtonDescendAnimation(object sender, PointerEventArgs e)
+        {
+            var button = sender as Button;
+            if (button is null) return;
+            await button.ScaleTo(1, 100,Easing.Linear);
         }
     }
 }
