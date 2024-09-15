@@ -14,6 +14,7 @@ namespace Foodiefeed_api.services
         public Task<List<ListedFriendDto>> GetOfflineFriends(int id);
 
         public Task SendFriendRequest(int senderId, int reciverId);
+        public Task AcceptFriendRequest(int senderId, int receiverId);
     }
 
     public class FriendService : IFriendService
@@ -97,7 +98,6 @@ namespace Foodiefeed_api.services
             _dbContext.Friends.Add(new Friend() { UserId = senderId, FriendUserId = receiverId });
 
             await _dbContext.SaveChangesAsync();
-
         }
     }
 }

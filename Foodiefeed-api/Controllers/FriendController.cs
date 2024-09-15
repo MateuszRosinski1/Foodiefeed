@@ -37,5 +37,13 @@ namespace Foodiefeed_api.Controllers
 
             return Ok("Friend added succesfuly");
         }
+
+        [HttpPost("accept/{senderId}/{receiverId}")]
+        public async Task<IActionResult> AcceptFriendRequest([FromRoute] int senderId, [FromRoute] int receiverId)
+        {
+            await _friendService.AcceptFriendRequest(senderId, receiverId);
+
+            return Ok($"User {receiverId} accepted friend request from {senderId}");
+        }
     }
 }
