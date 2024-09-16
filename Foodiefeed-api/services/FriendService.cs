@@ -92,6 +92,17 @@ namespace Foodiefeed_api.services
             await Commit();
         }
 
+        public async Task CancelFriendRequest(int senderId,int receiverId)
+        {
+            var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+            
+            if (friendRequest is null) { throw new NotFoundException("Such a friend request do not exist"); }
+
+            _dbContext.FriendRequests.Remove(friendRequest);
+
+            await Commit();
+        }
+
         public async Task AcceptFriendRequest(int senderId, int receiverId)
         {
             var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
@@ -114,5 +125,6 @@ namespace Foodiefeed_api.services
 
             await Commit();
         }
+
     }
 }

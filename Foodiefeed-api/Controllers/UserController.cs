@@ -15,6 +15,14 @@ namespace Foodiefeed_api.Controllers
             _service = service;
         }
 
+        [HttpGet("search-users")]
+        public async Task<IActionResult> SearchUsers(string query)
+        {
+            var response = await _service.SearchUsers(query);
+
+            return Ok(response);
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto)
         {
@@ -47,5 +55,7 @@ namespace Foodiefeed_api.Controllers
             return Ok("Status set to offline");
         }
       
+
+
     }
 }

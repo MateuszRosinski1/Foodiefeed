@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MzZNZ7U+h1HTx4tPv7D8CNjOo89p4V0ULTZb/3TsY2dB7zeYlTg4a6elt2TLeZEIvu9C0Mc2HT6cWNogY1mN1Q==",
+  "dgSpecHash": "2pH2tXD6IWzMTlrVQpH701DvNDvv4XqzQ4AeX1j4D/Eu0+tSt1HckroQE+fhsQY2BxzHAILgpCbJ4Ism596Lqw==",
   "success": true,
   "projectFilePath": "D:\\PracaInzynierska\\Foodiefeed-api\\Foodiefeed-api.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,7 @@
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.maui\\9.0.0\\communitytoolkit.maui.9.0.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.maui.core\\9.0.0\\communitytoolkit.maui.core.9.0.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",
+    "C:\\Users\\mateu\\.nuget\\packages\\fuzzysharp\\2.0.2\\fuzzysharp.2.0.2.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
