@@ -1,11 +1,59 @@
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class UserSearchResultView : ContentView
 {
-	public UserSearchResultView()
+    public static readonly BindableProperty UsernameProperty =
+        BindableProperty.Create(nameof(Username),typeof(string),typeof(UserSearchResultView),default(string),propertyChanged: OnUsernameChanged);
+
+    public static readonly BindableProperty FollowsProperty =
+        BindableProperty.Create(nameof(Follows), typeof(string), typeof(UserSearchResultView), default(string), propertyChanged: OnFollowsChanged);
+
+    public static readonly BindableProperty FriendsProperty =
+        BindableProperty.Create(nameof(Friends), typeof(string), typeof(UserSearchResultView), default(string), propertyChanged: OnFriendsChanged);
+
+    public UserSearchResultView()
 	{
 		InitializeComponent();
 	}
+
+    public string Username
+    {
+        get => (string)GetValue(UsernameProperty);
+        set => SetValue(UsernameProperty, value);
+    }
+
+    public string Follows
+    {
+        get =>(string)GetValue(FollowsProperty);
+        set => SetValue(FollowsProperty, value);
+    }
+
+    public string Friends
+    {
+        get => (string)GetValue(FriendsProperty);
+        set => SetValue(FriendsProperty, value);
+    }
+
+    private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserSearchResultView)bindable;
+        view.UsernameLabel.Text = newValue as string;
+    }
+
+    private static void OnFollowsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserSearchResultView)bindable;
+        view.FollowsLabel.Text = newValue as string +" Follows";
+    }
+
+    private static void OnFriendsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserSearchResultView)bindable;
+        view.FriendsLabel.Text = newValue as string+" Friends";
+    }
+
+    #region buttonAnimation
 
     private async void PointerGestureRecognizer_PointerEntered(object sender, PointerEventArgs e)
     {
@@ -47,4 +95,5 @@ public partial class UserSearchResultView : ContentView
         var animation = new Animation(v => button.Shadow.Opacity = (float)v, from, to);
         animation.Commit(this, button.Text + "_Shadow", rate, lenght, Easing.Linear);
     }
+    #endregion
 }

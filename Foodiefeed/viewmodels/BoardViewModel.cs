@@ -31,6 +31,11 @@ namespace Foodiefeed.viewmodels
         private ObservableCollection<OnListFriendView> profilePageFriends = 
             new ObservableCollection<OnListFriendView>();
 
+        public ObservableCollection<UserSearchResultView> SearchResults {  get { return searchResults; } }
+
+        private ObservableCollection<UserSearchResultView > searchResults = 
+            new ObservableCollection<UserSearchResultView> { };
+
         public struct CurrentProfilePageMember
         {
             public int Id;
@@ -103,6 +108,26 @@ namespace Foodiefeed.viewmodels
             profilePageFriends.Add(new OnListFriendView() { Username = "mati" });
             profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
             profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
+
+
+
+            var usernames = new List<string>
+            {
+                "Mieki Adrian5", "Sztywny Seba0", "Kasia Zielona", "Mare kKowal", "AniaNowak",
+                "JanekWojcik", "EwaSierżant", "PiotrMucha", "OlaWolska", "MarcinLis",
+                "MagdaSienkiewicz", "RafałKrawczyk", "NataliaSkrzypczak", "KrzysztofBiel", "AgnieszkaWójcik",
+                "TomekPawlak", "KamilaKaczmarek", "GrzegorzStasiak", "JoannaJankowska", "WojtekZalewski"
+            };
+
+            for (int i = 0; i < usernames.Count; i++)
+            {
+                searchResults.Add(new UserSearchResultView()
+                {
+                    Username = usernames[i],
+                    Follows = (i * 10 % 50).ToString(), 
+                    Friends = (i % 10).ToString()        
+                });
+            }
 
 
             this.ProfilePageVisible = true; //on init false
@@ -235,7 +260,6 @@ namespace Foodiefeed.viewmodels
         {
             while (true)
             {
-
                 Thread.Sleep(60000);
             }
         }

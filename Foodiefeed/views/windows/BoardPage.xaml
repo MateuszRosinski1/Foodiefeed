@@ -508,18 +508,14 @@
             </Grid>
             <Grid>
                 <ScrollView HeightRequest="450" WidthRequest="780" BackgroundColor="Transparent" Margin="0,20,0,0">
-                    <VerticalStackLayout Spacing="20" Padding="30">
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
-                        <views:UserSearchResultView/>
+                    <VerticalStackLayout Spacing="20" Padding="30" BindableLayout.ItemsSource="{Binding SearchResults}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <views:UserSearchResultView Username="{Binding Username}"
+                                                            Follows="{Binding Follows}"
+                                                            Friends="{Binding Friends}"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
 
 
                     </VerticalStackLayout>
