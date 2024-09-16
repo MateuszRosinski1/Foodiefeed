@@ -15,7 +15,7 @@ namespace Foodiefeed_api.services
 
         public Task SendFriendRequest(int senderId, int reciverId);
         public Task AcceptFriendRequest(int senderId, int receiverId);
-        public Task DeclineFriendRequest(int senderId, int receiverId)
+        public Task DeclineFriendRequest(int senderId, int receiverId);
     }
 
     public class FriendService : IFriendService
