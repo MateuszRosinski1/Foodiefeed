@@ -10,7 +10,7 @@
 
         <HorizontalStackLayout VerticalOptions="Center">
             <Image VerticalOptions="Center" Source="avatar.png" HeightRequest="50" WidthRequest="50"/>
-            <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
+            <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
             <Grid>
 
 

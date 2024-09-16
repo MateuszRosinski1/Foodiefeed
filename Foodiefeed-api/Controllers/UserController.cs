@@ -15,6 +15,14 @@ namespace Foodiefeed_api.Controllers
             _service = service;
         }
 
+        [HttpGet("search-users")]
+        public async Task<IActionResult> SearchUsers(string query)
+        {
+            var response = await _service.SearchUsers(query);
+
+            return Ok(response);
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto)
         {
@@ -26,10 +34,27 @@ namespace Foodiefeed_api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto)
         {
-            await _service.LogIn(dto);
+            var userId = await _service.LogIn(dto);
 
-            return Ok("Log in Succesfully");
+            return Ok(userId);
         }
+
+        [HttpPut("SetOnline/{id}")]
+        public async Task<IActionResult> SetOnline([FromRoute]int id)
+        {
+            await _service.SetOnlineStatus(id);
+
+            return Ok("Status set to online");
+        }
+
+        [HttpPut("SetOffline/{id}")]
+        public async Task<IActionResult> SetOffline([FromRoute] int id)
+        {
+            await _service.SetOfflineStatus(id);
+
+            return Ok("Status set to offline");
+        }
+      
 
 
     }

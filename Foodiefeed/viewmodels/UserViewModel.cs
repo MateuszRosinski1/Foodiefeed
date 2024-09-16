@@ -16,6 +16,19 @@ namespace Foodiefeed.viewmodels
 {
     public partial class UserViewModel : ObservableObject
     {
+        private readonly UserSession _userSession;
+
+        public UserViewModel(UserSession userSession)
+        {
+            ValidateFirstname = true;
+            ValidateLastname = true;
+            ValidateUsername = true;
+            ValidateEmail = true;
+            ValidatePasswordRepeat = true;
+            ValidatePassword = true;
+            _userSession = userSession;
+        }
+
         #region Login Logic
 
         private class UserCredentials
@@ -56,10 +69,14 @@ namespace Foodiefeed.viewmodels
                     {
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        var response = client.PostAsync(endpoint, content);
+                        var response = await client.PostAsync(endpoint, content);
 
-                        if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
+                            var StringId = await response.Content.ReadAsStringAsync();
+                            var id = Convert.ToInt32(StringId);
+                            _userSession.InitializeSession(id);
+                            _userSession.SetOnline();
                             await ToBoardPage();
                         }
                         else
@@ -74,7 +91,8 @@ namespace Foodiefeed.viewmodels
                     }
                 }
             }
-            await Task.Delay(2000);
+            await Task.Delay(2000);  
+            //remove on release
             await ToBoardPage();
         }
 
@@ -97,7 +115,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task ToSignUpPage()
         {
-            App.Current.MainPage = new SignUpView();
+            App.Current.MainPage = new SignUpView(this);
         }
 
         #endregion
@@ -132,21 +150,12 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool _ValidatePasswordRepeat;
 
-        #endregion
-        public UserViewModel()
-        {
-            ValidateFirstname = true;
-            ValidateLastname = true;
-            ValidateUsername = true;
-            ValidateEmail = true;
-            ValidatePasswordRepeat = true;
-            ValidatePassword = true;
-        }
+        #endregion      
 
         [RelayCommand]
         public async Task ToLogInPage()
         {
-            App.Current.MainPage = new LogInPage();
+            App.Current.MainPage = new LogInPage(this);
         }
 
         
@@ -170,7 +179,7 @@ namespace Foodiefeed.viewmodels
                 var json = JsonConvert.SerializeObject(dto);
 
 #if WINDOWS
-                var apiBaseUrl = "http://localhost:5000";
+                var apiBaseUrl = "http://localhost:5073";
 #endif
 #if ANDROID
                            var apiBaseUrl = "http://10.0.2.2:5000";

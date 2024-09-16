@@ -7,8 +7,8 @@
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview"
-             >
+             xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview">
+
 
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
@@ -62,9 +62,11 @@
                 HorizontalOptions="Start" 
                 Margin="20"/>
             <HorizontalStackLayout HorizontalOptions="End">
-                <Path BackgroundColor="Transparent"  VerticalOptions="Center" Scale="1.5" WidthRequest="20" HeightRequest="20"  Fill="DarkGray" Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
+                <Path BackgroundColor="Transparent" ZIndex="100" VerticalOptions="Center" Scale="1" WidthRequest="40" HeightRequest="35"  Fill="DarkGray" 
+                      Data="M 27 6 C 31.995 13.5353 26.805 20.97 32.916 28.491 C 28.5345 28.518 12.0105 28.44 6.0315 28.4055 C 11.9775 21 8.235 13.5 12 6 C 13.425 3.555 16.485 2.235 19.512 2.247 C 23.13 2.385 25.275 3.4575 26.985 5.985">
                     <Path.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
+                    <!--Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"-->
+                    <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
                     </Path.GestureRecognizers>
                     <Path.RenderTransform>
                         <RotateTransform x:Name="NotificationBellTransform"/>

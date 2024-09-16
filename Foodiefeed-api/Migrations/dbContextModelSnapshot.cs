@@ -61,6 +61,21 @@ namespace Foodiefeed_api.Migrations
                     b.ToTable("Friends");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.FriendRequest", b =>
+                {
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SenderId", "ReceiverId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.ToTable("FriendRequests");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -187,6 +202,9 @@ namespace Foodiefeed_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -261,6 +279,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("FriendUser");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Foodiefeed_api.entities.FriendRequest", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.User", "Receiver")
+                        .WithMany("ReceivedFriendRequests")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "Sender")
+                        .WithMany("SentFriendRequests")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
@@ -353,6 +390,10 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Friends");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("ReceivedFriendRequests");
+
+                    b.Navigation("SentFriendRequests");
 
                     b.Navigation("UserTags");
                 });

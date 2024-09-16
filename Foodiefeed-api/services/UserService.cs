@@ -4,25 +4,54 @@ using Foodiefeed_api.exceptions;
 using Foodiefeed_api.models.user;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+using FuzzySharp;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Foodiefeed_api.services
 {
     public interface IUserService
     {
         public Task CreateUser(CreateUserDto dto);
-        public Task LogIn(UserLogInDto dto);
+        public Task<int> LogIn(UserLogInDto dto);
+        public Task SetOnlineStatus(int id);
+        public Task SetOfflineStatus(int id);
+        public Task<List<UserDto>> SearchUsers(string usernameQuery);
     }
+
     public class UserService : IUserService
     {
         private readonly dbContext _context;
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _hasher;
+        private readonly IEntityRepository<User> _entityRepository;
+        private readonly IFriendService _friendService;
 
-        public UserService(dbContext context,IMapper mapper, IPasswordHasher<User> hasher)
+        public UserService(dbContext context,IMapper mapper, IPasswordHasher<User> hasher,IEntityRepository<User> entityRepository,IFriendService friendService)
         {
             _context = context;
             _mapper = mapper;
             _hasher = hasher;
+            _entityRepository = entityRepository;
+            _friendService = friendService;
+        }
+
+        public async Task<List<UserDto>> SearchUsers(string usernameQuery)
+        {
+            var users = await _context.Users.ToListAsync();
+
+            var searchedUsers = users.Where(u => Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85);
+
+            var usersDto = _mapper.Map<List<UserDto>>(searchedUsers);
+            
+            foreach (var userDto in usersDto)
+            {
+                userDto.FriendsCount = await GetUserFriendsCount(userDto.Id);
+                userDto.FollowersCount = await GetUserFollowersCount(userDto.Id);
+            }
+
+
+            return usersDto;
         }
 
         public async Task CreateUser(CreateUserDto dto)
@@ -47,7 +76,7 @@ namespace Foodiefeed_api.services
 
         }
 
-        public async Task LogIn(UserLogInDto dto)
+        public async Task<int> LogIn(UserLogInDto dto)
         {
             var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
 
@@ -56,7 +85,42 @@ namespace Foodiefeed_api.services
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             
             if(result == PasswordVerificationResult.Failed) { throw new BadRequestException("Wrong password"); }
+
+            return user.Id;           
+        }     
+
+        public async Task SetOnlineStatus(int id)
+        {
+            var user = _entityRepository.FindById(id);
+
+            if (user is null) { return; }  //notfound here custom exepction.
+
+            user.IsOnline = true;
+            await _context.SaveChangesAsync();
         }
 
+        public async Task SetOfflineStatus(int id)
+        {
+            var user = _entityRepository.FindById(id);
+
+            if (user is null) { return; }  //notfound here custom exepction.
+
+            user.IsOnline = false;
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<int> GetUserFollowersCount(int id)
+        {
+
+            return 0;
+        }
+
+        private async Task<int> GetUserFriendsCount(int id)
+        {
+            var onlineFriends = await _friendService.GetOnlineFriends(id);
+            var offlineFriends = await _friendService.GetOfflineFriends(id);
+
+            return onlineFriends.Count() + offlineFriends.Count();
+        }
     }
 }
