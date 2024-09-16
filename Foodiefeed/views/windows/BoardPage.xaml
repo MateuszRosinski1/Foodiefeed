@@ -62,9 +62,11 @@
                 HorizontalOptions="Start" 
                 Margin="20"/>
             <HorizontalStackLayout HorizontalOptions="End">
-                <Path BackgroundColor="Transparent"  VerticalOptions="Center" Scale="1.5" WidthRequest="20" HeightRequest="20"  Fill="DarkGray" Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901">
+                <Path BackgroundColor="Transparent" ZIndex="100" VerticalOptions="Center" Scale="1.5" WidthRequest="40" HeightRequest="30"  Fill="DarkGray" 
+                      Data="M 26 8 C 29.33 13.0235 25.87 17.98 33.5 23 C 25.0365 22.9885 16.5735 22.9765 8.5 23 C 15.985 18 13.49 13 16 8 C 16.95 6.37 18.99 5.49 21.008 5.498 C 23.42 5.59 24.85 6.305 25.99 7.99">
                     <Path.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
+                    <!--Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"-->
+                    <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
                     </Path.GestureRecognizers>
                     <Path.RenderTransform>
                         <RotateTransform x:Name="NotificationBellTransform"/>
