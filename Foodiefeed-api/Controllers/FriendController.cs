@@ -38,12 +38,20 @@ namespace Foodiefeed_api.Controllers
             return Ok("Friend added succesfuly");
         }
 
-        [HttpPost("accept/{senderId}/{receiverId}")]
+        [HttpPost("request/accept/{senderId}/{receiverId}")]
         public async Task<IActionResult> AcceptFriendRequest([FromRoute] int senderId, [FromRoute] int receiverId)
         {
             await _friendService.AcceptFriendRequest(senderId, receiverId);
 
             return Ok($"User {receiverId} accepted friend request from {senderId}");
         }
+
+        [HttpDelete("request/delete/{senderId}/{receiverId}")]
+        public async Task<IActionResult> DeclineFriendRequest([FromRoute] int senderId, [FromRoute] int receiverId)
+        {
+            await _friendService.DeclineFriendRequest(senderId, receiverId);
+            return Ok($"User {receiverId} declined friend reqest from {senderId}");
+        }
+
     }
 }

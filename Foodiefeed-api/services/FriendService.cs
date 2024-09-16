@@ -15,6 +15,7 @@ namespace Foodiefeed_api.services
 
         public Task SendFriendRequest(int senderId, int reciverId);
         public Task AcceptFriendRequest(int senderId, int receiverId);
+        public Task DeclineFriendRequest(int senderId, int receiverId)
     }
 
     public class FriendService : IFriendService
@@ -28,6 +29,8 @@ namespace Foodiefeed_api.services
             public const bool Online = true;
             public const bool Offline = false;
         }
+
+        private async Task Commit() => await _dbContext.SaveChangesAsync();
 
         public FriendService(dbContext dbContext,IEntityRepository<User> entityRepository,IMapper mapper)
         {
@@ -80,12 +83,13 @@ namespace Foodiefeed_api.services
         public async Task SendFriendRequest(int senderId, int receiverId)
         {
             var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+            var reflectedFriendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == receiverId && fr.ReceiverId == senderId);
 
-            if(friendRequest is not null) { throw new Exception("Request already sent"); }
+            if (friendRequest is not null && reflectedFriendRequest is not null) { throw new Exception("Request already sent"); }
 
             _dbContext.FriendRequests.Add(new FriendRequest() { ReceiverId = receiverId,SenderId = senderId});
 
-            await _dbContext.SaveChangesAsync();
+            await Commit();
         }
 
         public async Task AcceptFriendRequest(int senderId, int receiverId)
@@ -97,7 +101,18 @@ namespace Foodiefeed_api.services
             _dbContext.FriendRequests.Remove(friendRequest);
             _dbContext.Friends.Add(new Friend() { UserId = senderId, FriendUserId = receiverId });
 
-            await _dbContext.SaveChangesAsync();
+            await Commit();
+        }
+
+        public async Task DeclineFriendRequest(int senderId, int receiverId)
+        {
+            var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+
+            if(friendRequest is null) { throw new NotFoundException("No request to decline. This friend request do not exist in current context."); }
+
+            _dbContext.FriendRequests.Remove(friendRequest);
+
+            await Commit();
         }
     }
 }
