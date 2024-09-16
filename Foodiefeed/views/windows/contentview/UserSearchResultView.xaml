@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.UserSearchResultView">
+    
+    <Border StrokeShape="RoundRectangle 20" BackgroundColor="White">
+        <Grid BackgroundColor="White" WidthRequest="650" HeightRequest="90">
+            <HorizontalStackLayout Spacing="10">
+                <Image Source="avatar.png" WidthRequest="80" HeightRequest="90"/>
+                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                    <Label Text="Username" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <HorizontalStackLayout Spacing="4">
+                        <Label Text="300 follows" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+                        <Label Text="20 friends" FontSize="17" FontAttributes="Bold" TextColor="Black"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="End" Spacing="5" VerticalOptions="Center" Padding="10" Grid.Column="2">
+                    <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
+                        <Button.Shadow>
+                            <Shadow Opacity="0.4"
+                                    Radius="10"/>
+                        </Button.Shadow>
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                        </Button.GestureRecognizers>
+                    </Button>
+
+                    <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
+                        <Button.Shadow>
+                            <Shadow Opacity="0.4"
+                                    Radius="10"/>
+                        </Button.Shadow>
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                        </Button.GestureRecognizers>
+                    </Button>
+
+                    <Button FontAttributes="Bold" Text="Profile" BackgroundColor="Black" TextColor="White" Margin="0,0,10,0">
+                        <Button.Shadow>
+                            <Shadow Opacity="0.4"
+                                    Radius="10"/>
+                        </Button.Shadow>
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                        </Button.GestureRecognizers>
+                    </Button>
+                </HorizontalStackLayout>
+            </HorizontalStackLayout>
+        </Grid>
+        
+        <Border.Shadow>
+            <Shadow Opacity="0.4" 
+                    Brush="Black"/>
+        </Border.Shadow>
+    </Border>
+</ContentView>

@@ -509,27 +509,17 @@
             <Grid>
                 <ScrollView HeightRequest="450" WidthRequest="780" BackgroundColor="Transparent" Margin="0,20,0,0">
                     <VerticalStackLayout Spacing="20" Padding="30">
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="Start"/>
-                        <BoxView HeightRequest="50" WidthRequest="500" BackgroundColor="Green" HorizontalOptions="StartAndExpand"/>
-
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
+                        <views:UserSearchResultView/>
 
 
                     </VerticalStackLayout>

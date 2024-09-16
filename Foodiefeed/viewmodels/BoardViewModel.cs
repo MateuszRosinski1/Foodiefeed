@@ -218,8 +218,9 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void HideSearchPanel()
+        public async Task HideSearchPanel()
         {
+            Task.Delay(200).Wait();
             this.SearchPanelVisible = false;
         }
 
