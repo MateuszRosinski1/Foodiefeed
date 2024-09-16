@@ -43,6 +43,9 @@ namespace Foodiefeed.viewmodels
         #region VisibilityFlags
 
         [ObservableProperty]
+        bool searchPanelVisible;
+
+        [ObservableProperty]
         bool profilePageVisible;
 
         [ObservableProperty]
@@ -206,6 +209,18 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible = false;
             this.ChangePasswordEntryVisible = false;
+        }
+
+        [RelayCommand]
+        public void ShowSearchPanel()
+        {
+            this.SearchPanelVisible = true;
+        }
+
+        [RelayCommand]
+        public void HideSearchPanel()
+        {
+            this.SearchPanelVisible = false;
         }
 
         [RelayCommand]
