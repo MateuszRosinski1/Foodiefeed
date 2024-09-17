@@ -15,8 +15,15 @@ namespace Foodiefeed_api.Controllers
             _service = service;
         }
 
-        [HttpGet("search-users")]
-        public async Task<IActionResult> SearchUsers(string query)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetById([FromRoute]string userId) {
+            var response = await _service.GetById(userId);
+
+            return Ok(response);
+        }
+
+        [HttpGet("search-users/{query}")]
+        public async Task<IActionResult> SearchUsers([FromRoute]string query)
         {
             var response = await _service.SearchUsers(query);
 
