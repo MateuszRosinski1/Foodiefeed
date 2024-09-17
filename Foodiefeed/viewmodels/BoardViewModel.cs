@@ -41,14 +41,20 @@ namespace Foodiefeed.viewmodels
         private ObservableCollection<UserSearchResultView > searchResults = 
             new ObservableCollection<UserSearchResultView> { };
 
-        public struct CurrentProfilePageMember
-        {
-            public int Id;
-            public string Name;
-            public string LastName;
-            public string Username;
-            public int followers;
-        }
+        #region profilePageMemebers
+        [ObservableProperty]
+        private int profileId;
+        [ObservableProperty]
+        private string profileName;
+        [ObservableProperty]
+        private string profileLastName;
+        [ObservableProperty]
+        private string profileUsername;
+        [ObservableProperty]
+        private string profileFollowers;
+        [ObservableProperty]
+        private string profileFriends;
+        #endregion
 
         private const string apiBaseUrl = "http://localhost:5000";
 
@@ -88,6 +94,7 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            DisplaySearchResultHistory();
             UpdateOnlineFriendListThread = new Thread(UpdateOnlineFriendList);
             UpdateOnlineFriendListThread.Start();
             _userSession = userSession;
@@ -262,7 +269,8 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void ShowUserProfile(string id)
         {
-            CreateSearchResultHistory(id);
+            if(id != _userSession.Id.ToString()) { CreateSearchResultHistory(id); }
+            await OpenUserProfile(id);
         }
 
         [RelayCommand]
@@ -368,23 +376,8 @@ namespace Foodiefeed.viewmodels
                 File.Create(SearchHistoryJsonPath);
             }
 
-            UserSearchResult usr = null;
-
-            using (var httpclient = new HttpClient())
-            {
-                httpclient.BaseAddress = new Uri(apiBaseUrl);
-                var endpoint = $"api/user/{userId}";
-
-                var response = await httpclient.GetAsync(endpoint);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var results = await response.Content.ReadAsStringAsync();
-
-                    usr = JsonConvert.DeserializeObject<UserSearchResult>(results);
-                }
-
-            }
+            UserSearchResult usr = await GetUserSearchResult(userId);
+         
 
             var json = File.ReadAllText(SearchHistoryJsonPath);
 
@@ -404,12 +397,86 @@ namespace Foodiefeed.viewmodels
             await File.WriteAllTextAsync(SearchHistoryJsonPath, saveJson);
         }
 
+        private async Task<UserSearchResult> GetUserSearchResult(string id){
+
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                var endpoint = $"api/user/{id}";
+
+                try
+                {
+                    var response = await httpclient.GetAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var results = await response.Content.ReadAsStringAsync();
+                        if(results is null) { return null; }
+                        return JsonConvert.DeserializeObject<UserSearchResult>(results);
+                    }
+                }catch(Exception ex)
+                {
+                    //block of code handling execption
+                }
+                return null;
+            }
+        }
+
         private void UpdateOnlineFriendList()
         {
             while (true)
             {
                 Thread.Sleep(60000);
             }
+        }
+
+        private async Task OpenUserProfile(string id)
+        {
+            ToProfileView();
+            GetUserProfileModel(id);        
+        }
+
+        private async void GetUserProfileModel(string id)
+        {
+            var endpoint = $"api/user/user-profile/{id}";
+
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpclient.GetAsync(endpoint);
+
+                    if(response is null) { throw new Exception(); }
+
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var profile = await JsonToUserProfileModel(json);
+
+                    if(profile is null) { throw new Exception(); }
+
+                    ProfileId = profile.Id;
+                    ProfileFriends = profile.FriendsCount + " friends";
+                    ProfileFollowers = profile.FollowsCount +" follows";
+                    ProfileLastName = profile.LastName;
+                    ProfileName = profile.FirstName;
+                    ProfileUsername = profile.Username;
+                    
+
+                }
+                catch(Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private async Task<UserProfileModel> JsonToUserProfileModel(string json)
+        {
+            UserProfileModel model = JsonConvert.DeserializeObject<UserProfileModel>(json);
+
+            return model;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Foodiefeed_api.services
         public Task SetOfflineStatus(int id);
         public Task<List<UserDto>> SearchUsers(string usernameQuery);
         public Task<UserDto> GetById(string id);
+        public Task<UserProfileModel> GetUserProfileModelAsync(string id);
     }
 
     public class UserService : IUserService
@@ -114,9 +115,26 @@ namespace Foodiefeed_api.services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<UserProfileModel> GetUserProfileModelAsync(string id)
+        {
+            var user = _entityRepository.FindById(Convert.ToInt32(id));
+
+            if (user is null) { throw new NotFoundException("User with id {id} not found"); }
+
+            var userProfileModel =  _mapper.Map<UserProfileModel>(user);
+
+            var friendsCount = await GetUserFriendsCount(userProfileModel.Id);
+            var followersCount = await GetUserFollowersCount(userProfileModel.Id);
+
+            userProfileModel.FriendsCount = friendsCount.ToString();
+            userProfileModel.FollowsCount = followersCount.ToString();
+            //code to conver user.PfpPath to Base64
+
+            return userProfileModel;
+        }
+
         private async Task<int> GetUserFollowersCount(int id)
         {
-
             return 0;
         }
 

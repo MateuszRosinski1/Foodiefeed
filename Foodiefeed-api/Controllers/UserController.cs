@@ -22,6 +22,14 @@ namespace Foodiefeed_api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("user-profile/{id}")]
+        public async Task<IActionResult> GetUserProfileModel([FromRoute]string id)
+        {
+            var response = await _service.GetUserProfileModelAsync(id);
+
+            return Ok(response);
+        }
+
         [HttpGet("search-users/{query}")]
         public async Task<IActionResult> SearchUsers([FromRoute]string query)
         {
@@ -62,6 +70,7 @@ namespace Foodiefeed_api.Controllers
             return Ok("Status set to offline");
         }
       
+
 
 
     }

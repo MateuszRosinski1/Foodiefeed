@@ -183,9 +183,9 @@
                                         <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200" BackgroundColor="BlueViolet" Source="avatar.png"></ImageButton>
 
                                         <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="Transparent" Grid.Column="1">
-                                            <Label Text="Username" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
-                                            <Label Text="300 friends" TextColor="Black" FontSize="15"/>
-                                            <Label Text="20 followers" TextColor="Black" FontSize="15"/>
+                                            <Label Text="{Binding ProfileUsername}" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
+                                            <Label Text="{Binding ProfileFriends}" TextColor="Black" FontSize="15"/>
+                                            <Label Text="{Binding ProfileFollowers}" TextColor="Black" FontSize="15"/>
                                         </VerticalStackLayout>
 
                                         <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Padding="10" Grid.Column="2">
