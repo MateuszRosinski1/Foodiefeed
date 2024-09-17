@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.views.windows.contentview.UserSearchResultView">
+             x:Class="Foodiefeed.views.windows.contentview.UserSearchResultView"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
     
     <Border StrokeShape="RoundRectangle 20" BackgroundColor="White">
         <Grid BackgroundColor="White" WidthRequest="650" HeightRequest="90">
@@ -18,7 +20,9 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="End"  Spacing="5" VerticalOptions="Center" Padding="10">
-                    <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0" VerticalOptions="Center">
+                    <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0" VerticalOptions="Center" 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfileCommand}"
+                            CommandParameter="{Binding UserId}">
                         <Button.Shadow>
                             <Shadow Opacity="0.4"
                                     Radius="10"/>

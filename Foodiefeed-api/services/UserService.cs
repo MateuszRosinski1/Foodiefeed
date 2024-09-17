@@ -17,6 +17,7 @@ namespace Foodiefeed_api.services
         public Task SetOnlineStatus(int id);
         public Task SetOfflineStatus(int id);
         public Task<List<UserDto>> SearchUsers(string usernameQuery);
+        public Task<UserDto> GetById(string id);
     }
 
     public class UserService : IUserService
@@ -38,9 +39,13 @@ namespace Foodiefeed_api.services
 
         public async Task<List<UserDto>> SearchUsers(string usernameQuery)
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+                .Where(u => u.Username.Contains(usernameQuery.Substring(0, 1)))
+                .ToListAsync();
 
-            var searchedUsers = users.Where(u => Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85);
+            var searchedUsers = users.Where(u =>
+                u.Username.StartsWith(usernameQuery, StringComparison.OrdinalIgnoreCase) 
+                || Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85);
 
             var usersDto = _mapper.Map<List<UserDto>>(searchedUsers);
             
@@ -121,6 +126,18 @@ namespace Foodiefeed_api.services
             var offlineFriends = await _friendService.GetOfflineFriends(id);
 
             return onlineFriends.Count() + offlineFriends.Count();
+        }
+
+        public async Task<UserDto> GetById(string id)
+        {
+            var user =  _entityRepository.FindById(Convert.ToInt32(id));
+
+            if(user is null) { throw new NotFoundException("user not found"); }
+
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return userDto;
+
         }
     }
 }

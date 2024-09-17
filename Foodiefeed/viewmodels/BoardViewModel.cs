@@ -7,6 +7,11 @@ using CommunityToolkit.Mvvm.Input;
 using Foodiefeed.views.windows.contentview;
 using Foodiefeed.views.windows.popups;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using Foodiefeed.models.dto;
+using System.Diagnostics;
+using System.Data;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace Foodiefeed.viewmodels
@@ -31,7 +36,7 @@ namespace Foodiefeed.viewmodels
         private ObservableCollection<OnListFriendView> profilePageFriends = 
             new ObservableCollection<OnListFriendView>();
 
-        public ObservableCollection<UserSearchResultView> SearchResults {  get { return searchResults; } }
+        public ObservableCollection<UserSearchResultView> SearchResults { get { return searchResults; } }
 
         private ObservableCollection<UserSearchResultView > searchResults = 
             new ObservableCollection<UserSearchResultView> { };
@@ -44,6 +49,11 @@ namespace Foodiefeed.viewmodels
             public string Username;
             public int followers;
         }
+
+        private const string apiBaseUrl = "http://localhost:5000";
+
+        [ObservableProperty]
+        private string searchParam;
 
         #region VisibilityFlags
 
@@ -111,23 +121,23 @@ namespace Foodiefeed.viewmodels
 
 
 
-            var usernames = new List<string>
-            {
-                "Mieki Adrian5", "Sztywny Seba0", "Kasia Zielona", "Mare kKowal", "AniaNowak",
-                "JanekWojcik", "EwaSierżant", "PiotrMucha", "OlaWolska", "MarcinLis",
-                "MagdaSienkiewicz", "RafałKrawczyk", "NataliaSkrzypczak", "KrzysztofBiel", "AgnieszkaWójcik",
-                "TomekPawlak", "KamilaKaczmarek", "GrzegorzStasiak", "JoannaJankowska", "WojtekZalewski"
-            };
+            //var usernames = new List<string>
+            //{
+            //    "Mieki Adrian5", "Sztywny Seba0", "Kasia Zielona", "Mare kKowal", "AniaNowak",
+            //    "JanekWojcik", "EwaSierżant", "PiotrMucha", "OlaWolska", "MarcinLis",
+            //    "MagdaSienkiewicz", "RafałKrawczyk", "NataliaSkrzypczak", "KrzysztofBiel", "AgnieszkaWójcik",
+            //    "TomekPawlak", "KamilaKaczmarek", "GrzegorzStasiak", "JoannaJankowska", "WojtekZalewski"
+            //};
 
-            for (int i = 0; i < usernames.Count; i++)
-            {
-                searchResults.Add(new UserSearchResultView()
-                {
-                    Username = usernames[i],
-                    Follows = (i * 10 % 50).ToString(), 
-                    Friends = (i % 10).ToString()        
-                });
-            }
+            //for (int i = 0; i < usernames.Count; i++)
+            //{
+            //    searchResults.Add(new UserSearchResultView()
+            //    {
+            //        Username = usernames[i],
+            //        Follows = (i * 10 % 50).ToString(), 
+            //        Friends = (i % 10).ToString()        
+            //    });
+            //}
 
 
             this.ProfilePageVisible = true; //on init false
@@ -250,10 +260,148 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async void ShowUserProfile(string id)
+        {
+            CreateSearchResultHistory(id);
+        }
+
+        [RelayCommand]
         public void LikePost(string id)
         {
             int i = 1;
             int j = 2;
+        }
+
+        [RelayCommand]
+        public async void Search()
+        {
+            if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
+
+            var endpoint = "api/user/search-users/" + SearchParam;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await client.GetAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStringAsync();
+                        DisplaySearchResults(JsonToSearchResults(json));
+
+                    }
+                }
+                catch(Exception ex)
+                {
+                    //code to show Something went wrong on search panel.
+                }
+            }
+
+        }
+
+        private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
+        {
+            SearchResults.Clear();
+
+            foreach (UserSearchResult user in users)
+            {
+                SearchResults.Add(new UserSearchResultView()
+                {
+                    UserId = user.Id.ToString(),
+                    Username = user.Username,
+                    Follows = user.FollowersCount.ToString(),
+                    Friends = user.FollowersCount.ToString()
+                });
+            }
+        }
+
+        private ObservableCollection<UserSearchResult> JsonToSearchResults(string json)
+        {
+            var users = JsonConvert.DeserializeObject<ObservableCollection<UserSearchResult>>(json);
+
+            if (users is null) return new();
+
+            return users;
+        }
+
+        private void DisplaySearchResultHistory()
+        {
+
+            string ApplicationDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Foodiefeed");
+            string SearchHistoryJsonPath = Path.Combine(ApplicationDirectory, "searchHistory.json");
+
+            if (!Directory.Exists(ApplicationDirectory))
+            {
+                Directory.CreateDirectory(ApplicationDirectory);
+            }
+
+            if (!File.Exists(SearchHistoryJsonPath))
+            {
+                File.Create(SearchHistoryJsonPath);
+            }
+
+            var json = File.ReadAllText(SearchHistoryJsonPath);
+
+            DisplaySearchResults(JsonToSearchResults(json)); 
+            //add a block of code that displays that there are not search results.
+
+        }
+
+        private async void CreateSearchResultHistory(string userId)
+        {
+            const int MAX_HISTORY_SIZE = 6;
+
+            string ApplicationDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Foodiefeed");
+            string SearchHistoryJsonPath = Path.Combine(ApplicationDirectory, "searchHistory.json");
+
+            if (!Directory.Exists(ApplicationDirectory))
+            {
+
+                Directory.CreateDirectory(ApplicationDirectory);
+            }
+
+            if (!File.Exists(SearchHistoryJsonPath))
+            {
+                File.Create(SearchHistoryJsonPath);
+            }
+
+            UserSearchResult usr = null;
+
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                var endpoint = $"api/user/{userId}";
+
+                var response = await httpclient.GetAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var results = await response.Content.ReadAsStringAsync();
+
+                    usr = JsonConvert.DeserializeObject<UserSearchResult>(results);
+                }
+
+            }
+
+            var json = File.ReadAllText(SearchHistoryJsonPath);
+
+            var SearchHistory = JsonToSearchResults(json);
+
+            if(SearchHistory.Count >= MAX_HISTORY_SIZE)
+            {
+                SearchHistory.RemoveAt(SearchHistory.Count - 1);
+            }
+
+            if (usr is null) return;
+
+            SearchHistory.Insert(0, usr);
+
+            var saveJson = JsonConvert.SerializeObject(SearchHistory);
+
+            await File.WriteAllTextAsync(SearchHistoryJsonPath, saveJson);
         }
 
         private void UpdateOnlineFriendList()

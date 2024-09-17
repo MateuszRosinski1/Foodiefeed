@@ -54,10 +54,12 @@
                            HeightRequest="40" 
                            WidthRequest="400" 
                            Background="White"
-                           >
+                           Text="{Binding SearchParam,Mode=TwoWay}">
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
                             <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
+                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
+
                         </Entry.Behaviors>
                     </Entry>
                 </Border>

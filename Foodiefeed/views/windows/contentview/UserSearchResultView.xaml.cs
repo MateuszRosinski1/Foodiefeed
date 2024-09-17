@@ -3,6 +3,8 @@ namespace Foodiefeed.views.windows.contentview;
 
 public partial class UserSearchResultView : ContentView
 {
+    public string UserId { get; set; }
+
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username),typeof(string),typeof(UserSearchResultView),default(string),propertyChanged: OnUsernameChanged);
 
