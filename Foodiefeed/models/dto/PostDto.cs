@@ -17,5 +17,6 @@ namespace Foodiefeed.models.dto
 
         public required List<string> PostImagesBase64 { get; set; }
         public required List<string> ProductsName { get; set; }
+        public required List<CommentDto> Comments { get; set; }
     }
 }

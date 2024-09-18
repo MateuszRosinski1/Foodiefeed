@@ -279,7 +279,8 @@
                                                 <views:PostView Username="{Binding Username}"
                                                                 TimeStamp="{Binding TimeStamp}"
                                                                 PostTextContent="{Binding PostTextContent}"
-                                                                PostLikeCount="{Binding PostLikeCount}"/>
+                                                                PostLikeCount="{Binding PostLikeCount}"
+                                                                ImageSource="{Binding ImageSource}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>

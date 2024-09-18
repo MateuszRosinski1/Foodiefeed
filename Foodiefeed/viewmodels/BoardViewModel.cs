@@ -553,7 +553,7 @@ namespace Foodiefeed.viewmodels
 
         private void DisplayProfilePosts(List<PostDto> posts)
         {
-            if (posts.Count == 0)
+            if (posts == null || posts.Count == 0)
             {
                 NoPostOnProfile = true;
                 ProfilePostsVisible = false;
@@ -563,12 +563,27 @@ namespace Foodiefeed.viewmodels
 
             foreach(var post in posts)
             {
+                var commentList = new List<CommentView>();
+                foreach (var comment in post.Comments)
+                {
+                    commentList.Add(new CommentView()
+                    {
+                        Username = comment.Username,
+                        CommentContent = comment.CommentContent,
+                        CommentId = comment.CommentId.ToString(),
+                        LikeCount = comment.Likes.ToString(),
+                        UserId = comment.UserId.ToString()
+                    }); ;
+                }
                 ProfilePosts.Add(new PostView()
                 {
                     Username = post.Username,
                     TimeStamp = post.TimeStamp,
                     PostLikeCount = post.Likes.ToString(),
-                    PostTextContent = post.Description
+                    PostTextContent = post.Description,
+                    ImageSource = post.PostImagesBase64[0],
+                    Comments = commentList,
+                    ImagesBase64 = post.PostImagesBase64                   
                 });
             }
             

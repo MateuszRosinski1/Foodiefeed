@@ -8,6 +8,7 @@ public partial class CommentView : ContentView
     //public static readonly BindableProperty ImageBase64;
 
     public string CommentId { get; set; }
+	public string UserId { get; set; }
 
     public static readonly BindableProperty UsernameProperty =
 		BindableProperty.Create(nameof(Username), typeof(string), typeof(CommentView), default(string), propertyChanged: OnUsernameTextChanged);

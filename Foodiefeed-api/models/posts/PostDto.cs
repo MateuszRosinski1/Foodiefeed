@@ -1,4 +1,6 @@
-﻿namespace Foodiefeed_api.models.posts
+﻿using Foodiefeed_api.models.comment;
+
+namespace Foodiefeed_api.models.posts
 {
     public class PostDto
     {
@@ -10,5 +12,7 @@
 
         public required List<string> PostImagesBase64 { get; set; }
         public required List<string> ProductsName {  get; set; }
+
+        public required List<CommentDto> Comments { get; set; }
     }
 }
