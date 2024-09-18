@@ -575,7 +575,14 @@ namespace Foodiefeed.viewmodels
                         UserId = comment.UserId.ToString()
                     }); ;
                 }
-                ProfilePosts.Add(new PostView()
+
+                var imageBase64list = new List<string>();
+                foreach (var image in post.PostImagesBase64)
+                {
+                    imageBase64list.Add(image);
+                }
+
+                var postview = new PostView()
                 {
                     Username = post.Username,
                     TimeStamp = post.TimeStamp,
@@ -583,12 +590,16 @@ namespace Foodiefeed.viewmodels
                     PostTextContent = post.Description,
                     ImageSource = post.PostImagesBase64[0],
                     Comments = commentList,
-                    ImagesBase64 = post.PostImagesBase64                   
-                });
+                    ImagesBase64 = imageBase64list
+                };
+
+      
+                ProfilePosts.Add(postview);
+              
             }
             
         }
-
+        private List<string> testlist = new List<string>() { "123", "123" };
 
         private async void GetUserProfileFollowers(string id)
         {

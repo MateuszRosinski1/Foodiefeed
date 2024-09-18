@@ -40,7 +40,36 @@ public partial class PostView : ContentView
 
     #region Properties
 
-    public List<string> ImagesBase64 { get; set; }
+    public static readonly BindableProperty ImagesBase64Property =
+    BindableProperty.Create(
+        nameof(ImagesBase64),    
+        typeof(List<string>),    
+        typeof(PostView),        
+        new List<string>(),     
+        propertyChanged: OnImagesBase64Changed 
+    );
+
+    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (PostView)bindable;
+        var newImagesList = newValue as List<string>;
+
+        if (newImagesList != null)
+        {
+            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
+
+            if (newImagesList.Count > 0)
+            {
+                control.ImageSource = newImagesList[0]; 
+            }
+        }
+    }
+
+    public List<string> ImagesBase64
+    {
+        get => (List<string>)GetValue(ImagesBase64Property);
+        set => SetValue(ImagesBase64Property, value);
+    }
 
     public string ImageSource
     {
@@ -119,12 +148,12 @@ public partial class PostView : ContentView
 	public List<CommentView> Comments { get; set; }
 
     public PostView()
-	{
+    {
         InitializeComponent();
-        PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;       
+        PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
-	}
+    }
 
     #region animations
 
@@ -202,13 +231,14 @@ public partial class PostView : ContentView
 
     private void SwipeLeft(object sender, EventArgs e)
     {
-        var index = Clamp(currentImageIndex-1, 0, ImagesBase64.Count);
+        var index = Clamp(currentImageIndex-1, 0, ImagesBase64.Count-1);
         currentImageIndex = index;
         if (currentImageIndex >= 0)
         {
             swipeLeftButton.IsVisible = false;
         }
-        else if (currentImageIndex < ImagesBase64.Count)
+
+        if (currentImageIndex < ImagesBase64.Count-1)
         {
             swipeRightButton.IsVisible = true;
         }
@@ -217,13 +247,14 @@ public partial class PostView : ContentView
 
     private void SwipeRight(object sender, EventArgs e)
     {
-        var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count);
+        var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count-1);
         currentImageIndex = index;
-        if(currentImageIndex >= ImagesBase64.Count)
+        if(currentImageIndex >= ImagesBase64.Count-1)
         {
             swipeRightButton.IsVisible = false;
         }
-        else if(currentImageIndex > 0)
+
+        if(currentImageIndex > 0)
         {
             swipeLeftButton.IsVisible = true;
         }

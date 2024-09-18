@@ -280,7 +280,8 @@
                                                                 TimeStamp="{Binding TimeStamp}"
                                                                 PostTextContent="{Binding PostTextContent}"
                                                                 PostLikeCount="{Binding PostLikeCount}"
-                                                                ImageSource="{Binding ImageSource}"/>
+                                                                ImageSource="{Binding ImageSource}"
+                                                                ImagesBase64="{Binding ImagesBase64}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
