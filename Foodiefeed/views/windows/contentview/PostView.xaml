@@ -66,7 +66,7 @@
                     </Grid>
 
                     <Grid Padding="30,0,30,15" Grid.Row="2">
-                        <Image HeightRequest="300"  BackgroundColor="Black" Source="likeicon.png" Aspect="Center"/>
+                        <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="image" Aspect="Center"/>
                         <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
                         <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>

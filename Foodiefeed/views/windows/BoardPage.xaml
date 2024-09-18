@@ -272,7 +272,7 @@
                                     </Border>
 
                                     <StackLayout Orientation="Vertical" x:Name="ProfilePostGrid" IsVisible="{Binding ProfilePostsVisible}" 
-                                                 BindableLayout.ItemsSource="{Binding Posts}"> 
+                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}"> 
                                         <!--after implementing a functionallty to display posts on profile page-->
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
@@ -298,7 +298,7 @@
                                     </Border>
 
                                     <Grid>
-                                        <Label Text="This user has not posts yet." FontSize="30" TextColor="Black"/>
+                                        <Label Text="This user has not posts yet." FontSize="30" TextColor="Black" IsVisible="{Binding NoPostOnProfile}"/>
                                     </Grid>
 
                                 </VerticalStackLayout>

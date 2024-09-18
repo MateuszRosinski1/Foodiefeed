@@ -20,6 +20,7 @@ builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
 
+
 var app = builder.Build();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -28,6 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //DatabaseSeeder.SeedData(new dbContext());
 }
 
 app.UseHttpsRedirection();

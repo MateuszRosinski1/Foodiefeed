@@ -501,7 +501,7 @@ namespace Foodiefeed.viewmodels
             GetUserProfileFriends(id);
 
             var json = await GetUserProfilePosts(id);
-            var posts = JsonToPostViews(json);
+            var posts = JsonToPostDto(json);
             DisplayProfilePosts(posts);
             
 
@@ -529,7 +529,7 @@ namespace Foodiefeed.viewmodels
                 {
                     var response = await httpClient.GetAsync(endpoint);
 
-                    if (response.IsSuccessStatusCode!)
+                    if (!response.IsSuccessStatusCode)
                     {
                         throw new Exception();
                     }
@@ -544,14 +544,14 @@ namespace Foodiefeed.viewmodels
             return string.Empty;
         }
 
-        private ObservableCollection<PostView> JsonToPostViews(string json)
+        private List<PostDto> JsonToPostDto(string json)
         {
-            var posts = JsonConvert.DeserializeObject<ObservableCollection<PostView>>(json);
+            var posts = JsonConvert.DeserializeObject<List<PostDto>>(json);
 
             return posts;
         }
 
-        private void DisplayProfilePosts(ObservableCollection<PostView> posts)
+        private void DisplayProfilePosts(List<PostDto> posts)
         {
             if (posts.Count == 0)
             {
@@ -559,8 +559,19 @@ namespace Foodiefeed.viewmodels
                 ProfilePostsVisible = false;
                 return;
             }
+            ProfilePosts.Clear();
 
-            ProfilePosts = posts;
+            foreach(var post in posts)
+            {
+                ProfilePosts.Add(new PostView()
+                {
+                    Username = post.Username,
+                    TimeStamp = post.TimeStamp,
+                    PostLikeCount = post.Likes.ToString(),
+                    PostTextContent = post.Description
+                });
+            }
+            
         }
 
 

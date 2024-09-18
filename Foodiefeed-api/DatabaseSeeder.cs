@@ -7,148 +7,214 @@ namespace Foodiefeed_api
     {
         public static void SeedData(dbContext context)
         {
-            public static void SeedData(AppDbContext context)
+            var userMati = context.Users.FirstOrDefault(u => u.Username == "mati");
+            var userMariuszek = context.Users.FirstOrDefault(u => u.Username == "Mariuszek29");
+
+            if (userMati == null || userMariuszek == null)
             {
-                // Pobierz użytkowników z bazy danych
-                var userMati = context.Users.FirstOrDefault(u => u.Username == "mati");
-                var userMariuszek = context.Users.FirstOrDefault(u => u.Username == "Mariuszek29");
+                throw new Exception("Użytkownicy 'mati' i 'Mariuszek29' muszą istnieć w bazie danych przed uruchomieniem seeder'a.");
+            }
 
-                if (userMati == null || userMariuszek == null)
-                {
-                    throw new Exception("Użytkownicy 'mati' i 'Mariuszek29' muszą istnieć w bazie danych przed uruchomieniem seeder'a.");
-                }
-
-                // Dodaj posty dla istniejących użytkowników
-                if (!context.Posts.Any())
-                {
-                    var posts = new List<Post>
+            if (!context.Posts.Any())
+            {
+                var posts = new List<Post>
             {
                 new Post
                 {
                     UserId = userMati.Id,
-                    Description = "Właśnie wróciłem z wakacji!",
+                    Description = "Przepis na pyszne spaghetti bolognese!",
+                    Likes = 45
+                },
+                new Post
+                {
+                    UserId = userMariuszek.Id,
+                    Description = "Szybkie śniadanie: Omlet z warzywami.",
+                    Likes = 32
+                },
+                new Post
+                {
+                    UserId = userMati.Id,
+                    Description = "Deser idealny: Tiramisu bez jajek.",
+                    Likes = 60
+                },
+                new Post
+                {
+                    UserId = userMariuszek.Id,
+                    Description = "Kurczak w sosie curry, prosto z Azji.",
+                    Likes = 55
+                }
+            };
+                context.Posts.AddRange(posts);
+                context.SaveChanges();
+            }
+
+            if (!context.Comments.Any())
+            {
+                var comments = new List<Comment>
+            {
+                new Comment
+                {
+                    UserId = userMariuszek.Id,
+                    CommentContent = "Spaghetti wyszło pyszne! Polecam!",
+                    Likes = 12
+                },
+                new Comment
+                {
+                    UserId = userMati.Id,
+                    CommentContent = "Omlet z warzywami to idealny pomysł na śniadanie.",
+                    Likes = 8
+                },
+                new Comment
+                {
+                    UserId = userMariuszek.Id,
+                    CommentContent = "Tiramisu bez jajek? Brzmi świetnie, muszę spróbować!",
+                    Likes = 20
+                },
+                new Comment
+                {
+                    UserId = userMati.Id,
+                    CommentContent = "Kurczak w sosie curry to klasyka. Super przepis!",
                     Likes = 25
-                },
-                new Post
-                {
-                    UserId = userMariuszek.Id,
-                    Description = "Dziś miałem świetny dzień na treningu.",
-                    Likes = 42
                 }
             };
-                    context.Posts.AddRange(posts);
-                    context.SaveChanges();
-                }
+                context.Comments.AddRange(comments);
+                context.SaveChanges();
+            }
 
-                // Dodaj komentarze dla postów
-                if (!context.Comments.Any())
-                {
-                    var comments = new List<Comment>
+            if (!context.PostCommentMembers.Any())
             {
-                new Comment
-                {
-                    UserId = userMariuszek.Id,
-                    CommentContent = "Wygląda na to, że świetnie się bawiłeś!",
-                    Likes = 10
-                },
-                new Comment
-                {
-                    UserId = userMati.Id,
-                    CommentContent = "Trening to podstawa!",
-                    Likes = 15
-                }
-            };
-                    context.Comments.AddRange(comments);
-                    context.SaveChanges();
-                }
-
-                // Dodaj relacje PostCommentMember
-                if (!context.PostCommentMembers.Any())
-                {
-                    var postCommentMembers = new List<PostCommentMember>
+                var postCommentMembers = new List<PostCommentMember>
             {
                 new PostCommentMember
                 {
-                    PostId = context.Posts.First().PostId,
-                    CommentId = context.Comments.First().CommentId
+                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
+                    CommentId = context.Comments.First(c => c.CommentContent.Contains("Spaghetti wyszło")).CommentId
+                },
+                new PostCommentMember
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
+                    CommentId = context.Comments.First(c => c.CommentContent.Contains("Omlet z warzywami")).CommentId
                 }
             };
-                    context.PostCommentMembers.AddRange(postCommentMembers);
-                    context.SaveChanges();
-                }
+                context.PostCommentMembers.AddRange(postCommentMembers);
+                context.SaveChanges();
+            }
 
-                // Dodaj obrazy do postów
-                if (!context.PostImages.Any())
-                {
-                    var postImages = new List<PostImage>
+            if (!context.PostImages.Any())
+            {
+                var postImages = new List<PostImage>
             {
                 new PostImage
                 {
-                    PostId = context.Posts.First().PostId,
-                    ImagePath = "/images/vacation.png"
+                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
+                    ImagePath = "/images/spaghetti.jpg"
+                },
+                new PostImage
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
+                    ImagePath = "/images/omlet.jpg"
+                },
+                new PostImage
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Tiramisu")).PostId,
+                    ImagePath = "/images/tiramisu.jpg"
+                },
+                new PostImage
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("curry")).PostId,
+                    ImagePath = "/images/curry.jpg"
                 }
             };
-                    context.PostImages.AddRange(postImages);
-                    context.SaveChanges();
-                }
+                context.PostImages.AddRange(postImages);
+                context.SaveChanges();
+            }
 
-                // Dodaj produkty do postów
-                if (!context.PostProducts.Any())
-                {
-                    var postProducts = new List<PostProduct>
+            if (!context.PostProducts.Any())
+            {
+                var postProducts = new List<PostProduct>
             {
                 new PostProduct
                 {
-                    PostId = context.Posts.First().PostId,
-                    Product = "Sportowy zegarek"
+                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
+                    Product = "Makaron spaghetti"
+                },
+                new PostProduct
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
+                    Product = "Mięso mielone"
+                },
+                new PostProduct
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
+                    Product = "Jajka"
+                },
+                new PostProduct
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
+                    Product = "Papryka"
                 }
             };
-                    context.PostProducts.AddRange(postProducts);
-                    context.SaveChanges();
-                }
+                context.PostProducts.AddRange(postProducts);
+                context.SaveChanges();
+            }
 
-                // Dodaj tagi do postów
-                if (!context.PostTags.Any())
-                {
-                    var postTags = new List<PostTag>
+            if (!context.PostTags.Any())
+            {
+                var postTags = new List<PostTag>
             {
                 new PostTag
                 {
-                    PostId = context.Posts.First().PostId,
-                    TagName = "fitness",
-                    Description = "Posty o fitnessie"
+                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
+                    TagName = "makaron",
+                    Description = "Przepisy na makarony"
+                },
+                new PostTag
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
+                    TagName = "śniadanie",
+                    Description = "Pomysły na zdrowe śniadania"
+                },
+                new PostTag
+                {
+                    PostId = context.Posts.First(p => p.Description.Contains("Tiramisu")).PostId,
+                    TagName = "deser",
+                    Description = "Słodkie desery"
                 }
             };
-                    context.PostTags.AddRange(postTags);
-                    context.SaveChanges();
-                }
+                context.PostTags.AddRange(postTags);
+                context.SaveChanges();
+            }
 
-                // Dodaj tagi użytkownika (UserTags)
-                if (!context.UserTags.Any())
-                {
-                    var userTags = new List<UserTag>
+            if (!context.UserTags.Any())
+            {
+                var userTags = new List<UserTag>
             {
                 new UserTag
                 {
                     UserId = userMati.Id,
-                    TagName = "podróże",
-                    Count = 100
+                    TagName = "desery",
+                    Count = 120
                 },
                 new UserTag
                 {
                     UserId = userMariuszek.Id,
-                    TagName = "fitness",
+                    TagName = "zdrowe jedzenie",
+                    Count = 80
+                },
+                new UserTag
+                {
+                    UserId = userMati.Id,
+                    TagName = "kuchnia włoska",
                     Count = 150
                 }
             };
-                    context.UserTags.AddRange(userTags);
-                    context.SaveChanges();
-                }
+                context.UserTags.AddRange(userTags);
+                context.SaveChanges();
+            }
 
-                // Dodaj znajomych
-                if (!context.Friends.Any())
-                {
-                    var friends = new List<Friend>
+            if (!context.Friends.Any())
+            {
+                var friends = new List<Friend>
             {
                 new Friend
                 {
@@ -156,24 +222,8 @@ namespace Foodiefeed_api
                     FriendUserId = userMariuszek.Id
                 }
             };
-                    context.Friends.AddRange(friends);
-                    context.SaveChanges();
-                }
-
-                // Dodaj zaproszenia do znajomych
-                if (!context.FriendRequests.Any())
-                {
-                    var friendRequests = new List<FriendRequest>
-            {
-                new FriendRequest
-                {
-                    SenderId = userMariuszek.Id,
-                    ReceiverId = userMati.Id
-                }
-            };
-                    context.FriendRequests.AddRange(friendRequests);
-                    context.SaveChanges();
-                }
+                context.Friends.AddRange(friends);
+                context.SaveChanges();
             }
         }
     }
