@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Foodiefeed_api.entities;
 using Foodiefeed_api.models.friends;
+using Foodiefeed_api.models.posts;
 using Foodiefeed_api.models.user;
 
 namespace Foodiefeed_api
@@ -13,6 +14,7 @@ namespace Foodiefeed_api
             CreateMap<User, ListedFriendDto>();
             CreateMap<User,UserDto>();
             CreateMap<User, UserProfileModel>();
+            CreateMap<Post, PostDto>();
         }
     }
 }

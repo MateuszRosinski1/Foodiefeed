@@ -35,10 +35,10 @@ namespace Foodiefeed.viewmodels
         private ObservableCollection<OnlineFreidnListElementView> onlineFriends 
             = new ObservableCollection<OnlineFreidnListElementView> { };
 
-        public ObservableCollection<OnListFriendView> ProfilePageFriends { get { return profilePageFriends; } }
+        //public ObservableCollection<OnListFriendView> ProfilePageFriends { get { return profilePageFriends; } }
 
-        private ObservableCollection<OnListFriendView> profilePageFriends = 
-            new ObservableCollection<OnListFriendView>();
+        //private ObservableCollection<OnListFriendView> profilePageFriends = 
+        //    new ObservableCollection<OnListFriendView>();
 
         public ObservableCollection<UserSearchResultView> SearchResults { get { return searchResults; } }
 
@@ -103,6 +103,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool profilePostsVisible;
 
+        [ObservableProperty]
+        bool noPostOnProfile;
+
         #endregion
 
         public BoardViewModel(UserSession userSession)
@@ -136,9 +139,9 @@ namespace Foodiefeed.viewmodels
                 });
 
             onlineFriends.Add(new OnlineFreidnListElementView() { Username = "mati123" });
-            profilePageFriends.Add(new OnListFriendView() { Username = "mati" });
-            profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
-            profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
+            //profilePageFriends.Add(new OnListFriendView() { Username = "mati" });
+            //profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
+            //profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
 
 
 
@@ -161,17 +164,18 @@ namespace Foodiefeed.viewmodels
             //}
 
 
-            this.ProfilePageVisible = true; //on init false
-            this.PostPageVisible = false; //on init true
+            this.ProfilePageVisible = false; //on init false
+            this.PostPageVisible = true; //on init true
             this.SettingsPageVisible = false; //on init false
             this.PersonalDataEditorVisible = false; // on init false
             this.SettingsMainHubVisible = true; //on init true
             this.ChangeUsernameEntryVisible = false; //on init false
             this.ChangeEmailEntryVisible = false; //on init false
             this.ChangePasswordEntryVisible = false; //on init false
-            this.ProfileFollowersVisible = false;
-            this.ProfilePostsVisible = true;
-            this.ProfileFriendsVisible = false;
+            this.ProfileFollowersVisible = false; //on init false
+            this.ProfilePostsVisible = true; //on init true;
+            this.ProfileFriendsVisible = false; //on init false
+            this.NoPostOnProfile = false; // on init false
         }
 
         [RelayCommand]
@@ -489,9 +493,18 @@ namespace Foodiefeed.viewmodels
 
         private async Task OpenUserProfile(string id)
         {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
+
             GetUserProfileModel(id);
             GetUserProfileFriends(id);
-            GetUserProfilePosts(id);
+
+            var json = await GetUserProfilePosts(id);
+            var posts = JsonToPostViews(json);
+            DisplayProfilePosts(posts);
+            
+
             GetUserProfileFollowers(id);
         }
 
@@ -504,10 +517,52 @@ namespace Foodiefeed.viewmodels
         public ObservableCollection<PostView> ProfilePosts { get { return profilePosts; } set { profilePosts = value; } }
         private ObservableCollection<PostView> profilePosts = new ObservableCollection<PostView>();
 
-        private async void GetUserProfilePosts(string id)
+        private async Task<string> GetUserProfilePosts(string id)
         {
+            var endpoint = $"api/posts/profile-posts/{id}";
 
+            using(var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode!)
+                    {
+                        throw new Exception();
+                    }
+
+                    return await response.Content.ReadAsStringAsync();                   
+                }
+                catch
+                {
+                    //code block to handle exeption 
+                }
+            }
+            return string.Empty;
         }
+
+        private ObservableCollection<PostView> JsonToPostViews(string json)
+        {
+            var posts = JsonConvert.DeserializeObject<ObservableCollection<PostView>>(json);
+
+            return posts;
+        }
+
+        private void DisplayProfilePosts(ObservableCollection<PostView> posts)
+        {
+            if (posts.Count == 0)
+            {
+                NoPostOnProfile = true;
+                ProfilePostsVisible = false;
+                return;
+            }
+
+            ProfilePosts = posts;
+        }
+
 
         private async void GetUserProfileFollowers(string id)
         {

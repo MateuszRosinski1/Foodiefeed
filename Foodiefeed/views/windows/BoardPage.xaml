@@ -259,7 +259,7 @@
                                 <VerticalStackLayout x:Name="ProfileSection">
                                     
                                     <Border IsVisible="{Binding ProfileFriendsVisible}" Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfilePageFriends}">
+                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfileFriendsList}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"/>
@@ -272,7 +272,8 @@
                                     </Border>
 
                                     <StackLayout Orientation="Vertical" x:Name="ProfilePostGrid" IsVisible="{Binding ProfilePostsVisible}" 
-                                                 BindableLayout.ItemsSource="{Binding Posts}">
+                                                 BindableLayout.ItemsSource="{Binding Posts}"> 
+                                        <!--after implementing a functionallty to display posts on profile page-->
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <views:PostView Username="{Binding Username}"
@@ -284,7 +285,7 @@
                                     </StackLayout>
 
                                     <Border IsVisible="{Binding ProfileFollowersVisible}" Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfilePageFriends}">
+                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"/>
@@ -295,6 +296,10 @@
                                             <Shadow Opacity="0.4" Brush="Black"/>
                                         </Border.Shadow>
                                     </Border>
+
+                                    <Grid>
+                                        <Label Text="This user has not posts yet." FontSize="30" TextColor="Black"/>
+                                    </Grid>
 
                                 </VerticalStackLayout>
                                 
