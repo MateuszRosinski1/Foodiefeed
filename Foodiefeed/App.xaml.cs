@@ -25,18 +25,21 @@ namespace Foodiefeed
 
 #if WINDOWS
             window.MinimumHeight = 800;
-            window.MinimumWidth = 1400;
+            window.MinimumWidth = 1500;
 #endif
             return window;
         }
 
         private void Window_Destroying(object sender, EventArgs e)
         {
+
             if (_userSession.IsLoggedIn)
             {
                 _userSession.SetOffline();
                 _userSession.UnbindId();
             }
+
+            Application.Current.Quit();
         }
 
 

@@ -7,6 +7,8 @@ public partial class OnListFriendView : ContentView
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(OnListFriendView), default(string), propertyChanged: OnUsernameChanged);
 
+    public string UserId { get; set; }
+
     public string Username
     {
         get => (string)GetValue(UsernameProperty);
