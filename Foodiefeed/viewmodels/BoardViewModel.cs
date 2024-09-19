@@ -236,7 +236,10 @@ namespace Foodiefeed.viewmodels
             {
                 UserId = user.Id.ToString(), 
                 Username = user.Username, 
-                AvatarImageSource = user.ProfilePictureBase64
+                AvatarImageSource = user.ProfilePictureBase64,
+                IsFollowed = user.IsFollowed,
+                IsFriend = user.IsFriend
+                
             };
 
             App.Current.MainPage.ShowPopup(popup);
@@ -319,7 +322,26 @@ namespace Foodiefeed.viewmodels
             {
                 Console.Write(ex.ToString());
             }
+        }
 
+        [RelayCommand]
+        public async void ShowUserProfilePopup(string id)
+        {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
+            this.ProfileFollowersVisible = false;
+            this.ProfilePostsVisible = true;
+            this.ProfileFriendsVisible = false;
+            await SetButtonColors(Buttons.PostButton);
+            try
+            {
+                await OpenUserProfile(id);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
         }
 
         [ObservableProperty]
@@ -556,7 +578,7 @@ namespace Foodiefeed.viewmodels
 
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
-            ProfileFriendsList.Clear();
+            //ProfileFriendsList.Clear();
 
             var profileJson = await GetUserProfileModel(id);
             var profile = await JsonToObject<UserProfileModel>(profileJson);
@@ -769,7 +791,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task<string> GetUserProfileModel(string id)
         {
-            var endpoint = $"api/user/user-profile/{id}";
+            var endpoint = $"api/user/user-profile/{id}/{_userSession.Id}";
 
             using (var httpclient = new HttpClient())
             {
@@ -803,6 +825,7 @@ namespace Foodiefeed.viewmodels
             ProfileName = FirstName;
             ProfileUsername = Username;
             AvatarBase64 = imageBase64;
+            
         }
     }
 }

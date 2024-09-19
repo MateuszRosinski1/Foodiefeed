@@ -19,6 +19,39 @@ public partial class UserOptionPopup : Popup
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(UserOptionPopup), default(string), propertyChanged: OnUsernameChanged);
 
+    public static readonly BindableProperty IsFollowedProperty = 
+        BindableProperty.Create(nameof(IsFollowed),typeof(bool),typeof(UserOptionPopup),default(bool),propertyChanged: OnFollowChanged);
+
+    public static readonly BindableProperty IsFriendProperty =
+        BindableProperty.Create(nameof(IsFriend), typeof(bool), typeof(UserOptionPopup), default(bool), propertyChanged: OnFriendChanged);
+
+    private static void OnFriendChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserOptionPopup)bindable;
+        if (view.IsFriend == true)
+        {
+            view.UnfriendBtn.IsVisible = true;
+            view.AddToFriendBtn.IsVisible = false;
+        }
+        else
+        {
+            view.UnfriendBtn.IsVisible = false;
+            view.AddToFriendBtn.IsVisible = true;
+        }
+    }
+
+    public bool IsFriend
+    {
+        get => (bool)GetValue(IsFriendProperty);
+        set => SetValue(IsFriendProperty, value);
+    }
+
+    public bool IsFollowed
+    {
+        get => (bool)GetValue(IsFollowedProperty);
+        set => SetValue(IsFollowedProperty, value);
+    }
+
     public string UserId
     {
         get => (string)GetValue(UserIdProperty);
@@ -59,5 +92,25 @@ public partial class UserOptionPopup : Popup
             stream.Position = 0;
             return stream;
         });
+    }
+
+    private static void OnFollowChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserOptionPopup)bindable;
+        if (view.IsFollowed == true)
+        {
+            view.UnfollowBtn.IsVisible = true;
+            view.FollowBtn.IsVisible = false;
+        }
+        else
+        {
+            view.UnfollowBtn.IsVisible = false;
+            view.FollowBtn.IsVisible = true;
+        }
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        this.Close();
     }
 }

@@ -26,7 +26,9 @@
             </Grid>
 
             <HorizontalStackLayout  Grid.Row="2">
-                <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" Command="{Binding LikePostCommand}" CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
+                <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" 
+                        Command="{Binding LikePostCommand}" 
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
 
                 <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
             </HorizontalStackLayout>
