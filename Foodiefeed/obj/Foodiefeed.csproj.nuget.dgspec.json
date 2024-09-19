@@ -80,6 +80,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "Sharpnado.MaterialFrame.Maui": {
+              "target": "Package",
+              "version": "[2.0.0, )"
             }
           },
           "imports": [
@@ -129,6 +133,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "Sharpnado.MaterialFrame.Maui": {
+              "target": "Package",
+              "version": "[2.0.0, )"
             }
           },
           "imports": [

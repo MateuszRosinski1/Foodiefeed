@@ -10,6 +10,7 @@ namespace Foodiefeed
         public App(UserViewModel vm,UserSession us)
         {
             InitializeComponent();
+            Sharpnado.MaterialFrame.Initializer.Initialize(loggerEnable: false,debugLogEnable: false);
             _userSession = us;
             //MainPage = new LogInPage(vm);
             MainPage = new BoardPage(new BoardViewModel(us));

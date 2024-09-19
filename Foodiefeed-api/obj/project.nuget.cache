@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2pH2tXD6IWzMTlrVQpH701DvNDvv4XqzQ4AeX1j4D/Eu0+tSt1HckroQE+fhsQY2BxzHAILgpCbJ4Ism596Lqw==",
+  "dgSpecHash": "KouSR6J7lP8ghQck/cCwJNv/2HY/HqxgHnVownx/+RNue+iSzQOZdV1HBIl0uN9LOw7IflXOmPU20acZ3WTylQ==",
   "success": true,
   "projectFilePath": "D:\\PracaInzynierska\\Foodiefeed-api\\Foodiefeed-api.csproj",
   "expectedPackageFiles": [
@@ -72,6 +72,8 @@
     "C:\\Users\\mateu\\.nuget\\packages\\microsoft.windowsappsdk\\1.4.240211001\\microsoft.windowsappsdk.1.4.240211001.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\mateu\\.nuget\\packages\\sharpnado.materialframe.maui\\2.0.0\\sharpnado.materialframe.maui.2.0.0.nupkg.sha512",
+    "C:\\Users\\mateu\\.nuget\\packages\\sharpnado.taskmonitor\\1.0.2\\sharpnado.taskmonitor.1.0.2.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",

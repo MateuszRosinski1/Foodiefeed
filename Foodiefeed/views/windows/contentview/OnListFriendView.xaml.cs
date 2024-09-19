@@ -1,4 +1,8 @@
-using Microsoft.Maui.Layouts;
+#if WINDOWS
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.Maui.Platform;
+#endif
 
 namespace Foodiefeed.views.windows.contentview;
 
@@ -7,7 +11,25 @@ public partial class OnListFriendView : ContentView
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(OnListFriendView), default(string), propertyChanged: OnUsernameChanged);
 
-    public string UserId { get; set; }
+
+    public static readonly BindableProperty AvatarImageSourceProperty =
+        BindableProperty.Create(nameof(AvatarImageSource), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageSourceChanged);
+
+    public static readonly BindableProperty UserIdProperty =
+    BindableProperty.Create(nameof(UserId), typeof(string), typeof(PostView), default(string));
+
+
+    public string UserId 
+    {
+        get => (string)GetValue(UserIdProperty);
+        set => SetValue(UserIdProperty, value);
+    }
+
+    public string AvatarImageSource
+    {
+        get => (string)GetValue(AvatarImageSourceProperty);
+        set => SetValue(AvatarImageSourceProperty, value);
+    }
 
     public string Username
     {
@@ -18,7 +40,7 @@ public partial class OnListFriendView : ContentView
     public OnListFriendView()
 	{
 		InitializeComponent();
-	}
+    }
 
     private async void AnimateOptionDots(object sender, PointerEventArgs e)
     {
@@ -46,5 +68,23 @@ public partial class OnListFriendView : ContentView
     private void HideOptionPanel(object sender, PointerEventArgs e)
     {
         //OptionsPanel.IsVisible = false;
+    }
+
+    private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (OnListFriendView)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
     }
 }

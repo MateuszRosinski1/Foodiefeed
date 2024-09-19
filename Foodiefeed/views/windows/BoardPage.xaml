@@ -227,7 +227,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Grid Padding="5" VerticalOptions="End"  Grid.Column="0">
-                                            <Button Command="{Binding ShowProfilePostsCommand}" Text="Post" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="White" x:Name="SelfPostButton" Clicked="SelfPostButton_Clicked">
+                                            <Button Command="{Binding ShowProfilePostsCommand}" Text="Post" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding SelfPostButtonColor}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4" Radius="5"/>
                                                 </Button.Shadow>
@@ -235,7 +235,7 @@
                                         </Grid>
 
                                         <Grid Padding="5" VerticalOptions="End" Grid.Column="1" >
-                                            <Button Command="{Binding ShowProfileFriendsCommand}" Text="Friends" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FriendsButton" Clicked="FriendsButton_Clicked">
+                                            <Button Command="{Binding ShowProfileFriendsCommand}" Text="Friends" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding FriendsButtonColor}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4" Radius="5"/>
                                                 </Button.Shadow>
@@ -243,7 +243,7 @@
                                         </Grid>
 
                                         <Grid Padding="5" VerticalOptions="End" Grid.Column="2" >
-                                            <Button Command="{Binding ShowProfileFollowersCommand}" Text="Followers" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="#c9c9c9" x:Name="FollowersButton" Clicked="FollowersButton_Clicked">
+                                            <Button Command="{Binding ShowProfileFollowersCommand}" Text="Followers" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding FollowersButtonColor}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4" Radius="5"/>
                                                 </Button.Shadow>
@@ -259,10 +259,16 @@
                                 <VerticalStackLayout x:Name="ProfileSection">
                                     
                                     <Border IsVisible="{Binding ProfileFriendsVisible}" Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfileFriendsList}">
+                                        <toolkit:UniformItemsLayout  
+                                                                    BackgroundColor="#e0e0e0" 
+                                                                    HeightRequest="1000" 
+                                                                    Padding="20" 
+                                                                    BindableLayout.ItemsSource="{Binding ProfileFriendsList}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <views:OnListFriendView Username="{Binding Username}"/>
+                                                    <views:OnListFriendView Username="{Binding Username}"
+                                                                            AvatarImageSource="{Binding AvatarImageSource}"
+                                                                            UserId="{Binding UserId}"/>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </toolkit:UniformItemsLayout>
@@ -290,7 +296,8 @@
                                         <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <views:OnListFriendView Username="{Binding Username}"/>
+                                                    <views:OnListFriendView Username="{Binding Username}"
+                                                                            AvatarImageSource="{Binding AvatarImageSource}"/>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </toolkit:UniformItemsLayout>

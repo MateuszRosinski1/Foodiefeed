@@ -45,6 +45,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileFriends">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileFriends"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.AvatarBase64">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.avatarBase64"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchParam">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.searchParam"/>
         </member>
@@ -121,7 +124,7 @@
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowPopupCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ShowPopupCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ShowPopup"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ShowPopup(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.openPersonalDataEditorCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.OpenPersonalDataEditorCommand"/>.</summary>
@@ -340,6 +343,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProfileFriends">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProfileFriends" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AvatarBase64">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AvatarBase64" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchParam" generated properties.</summary>
         </member>
@@ -441,6 +447,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProfileFriends">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProfileFriends" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AvatarBase64">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AvatarBase64" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchParam" generated properties.</summary>
