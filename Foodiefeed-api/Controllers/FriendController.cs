@@ -15,6 +15,14 @@ namespace Foodiefeed_api.Controllers
             _friendService = friendService;
         }
 
+        [HttpGet("profile-friends/{userId}")]
+        public async Task<IActionResult> GetProfileFriends([FromRoute]int userId)
+        {
+            var response = await _friendService.GetUserFriends(userId);
+
+            return Ok(response);
+        }
+
         [HttpGet("online/{userId}")]
         public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends([FromRoute] int userId)
         {

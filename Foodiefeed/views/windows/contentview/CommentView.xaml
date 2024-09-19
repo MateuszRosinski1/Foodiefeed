@@ -4,32 +4,37 @@
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Class="Foodiefeed.views.windows.contentview.CommentView"
              >
-    
-    <Grid Padding="25" BackgroundColor="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
-        <Grid BackgroundColor="Transparent" Grid.Row="0">
-            <HorizontalStackLayout Spacing="5">
-                <Image Source="avatar.png" HeightRequest="40" WidthRequest="40"/>
-                <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" x:Name="UsernameLabel"/>
+    <Border Stroke="WhiteSmoke" StrokeShape="RoundRectangle 40,10,10,40" >
+        <Grid Padding="25" BackgroundColor="WhiteSmoke">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid BackgroundColor="Transparent" Grid.Row="0">
+                <HorizontalStackLayout Spacing="5">
+                    <Image Source="avatar.png" HeightRequest="40" WidthRequest="40"/>
+                    <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" x:Name="UsernameLabel"/>
+                </HorizontalStackLayout>
+                <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
+            </Grid>
+
+            <Grid  Grid.Row="1" Margin="0,5">
+                <Label TextColor="Black" x:Name="CommentText" LineBreakMode="WordWrap"/>
+            </Grid>
+
+            <HorizontalStackLayout  Grid.Row="2">
+                <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" Command="{Binding LikePostCommand}" CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
+
+                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
             </HorizontalStackLayout>
-            <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
+
+
         </Grid>
-        
-        <Grid  Grid.Row="1" Margin="0,5">
-            <Label TextColor="Black" x:Name="CommentText" LineBreakMode="WordWrap"/>
-        </Grid>
-
-        <HorizontalStackLayout  Grid.Row="2">
-            <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" Command="{Binding LikePostCommand}" CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
-           
-            <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
-        </HorizontalStackLayout>
-
-
-    </Grid>
+        <Border.Shadow>
+            <Shadow Opacity="0.4" Brush="Black"/>
+        </Border.Shadow>
+    </Border>
 </ContentView>

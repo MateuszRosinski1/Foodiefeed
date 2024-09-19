@@ -10,8 +10,8 @@
     <Frame BackgroundColor="White">
         
         <VerticalStackLayout BackgroundColor="White" WidthRequest="300" Padding="25">
-                <Image Source="avatar.png" HeightRequest="200" WidthRequest="200" Margin="10"/>
-
+                <Image x:Name="avatarImage" HeightRequest="200" WidthRequest="200" Margin="10"/>
+                <Label x:Name="UsernameLabel" HorizontalOptions="Center" FontSize="25" FontAttributes="Bold" TextColor="Black"/>
                 <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" HeightRequest="40" FontSize="20" Margin="10">
                 <Button.Shadow>
                     <Shadow Opacity="0.4"

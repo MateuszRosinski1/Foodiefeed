@@ -17,6 +17,7 @@ namespace Foodiefeed_api.entities
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
+        public virtual DbSet<Follower> Followers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -73,7 +74,7 @@ namespace Foodiefeed_api.entities
 
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fr => fr.Sender)
-                .WithMany(u => u.SentFriendRequests)
+                .WithMany(u => u.SendFriendRequests)
                 .HasForeignKey(fr => fr.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -81,6 +82,21 @@ namespace Foodiefeed_api.entities
                 .HasOne(fr => fr.Receiver)
                 .WithMany(u => u.ReceivedFriendRequests)
                 .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Follower>()
+                .HasKey(f => new { f.UserId, f.FollowedUserId });
+
+            modelBuilder.Entity<Follower>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.Followers) 
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Follower>()
+                .HasOne(f => f.FollowedUser)
+                .WithMany() 
+                .HasForeignKey(f => f.FollowedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

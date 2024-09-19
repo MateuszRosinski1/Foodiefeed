@@ -21,8 +21,7 @@
 
             <HorizontalStackLayout HorizontalOptions="End"  Spacing="5" VerticalOptions="Center" Padding="10">
                     <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0" VerticalOptions="Center" 
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfileCommand}"
-                            CommandParameter="{Binding UserId}">
+                            >
                         <Button.Shadow>
                             <Shadow Opacity="0.4"
                                     Radius="10"/>
@@ -42,7 +41,9 @@
                         </Button.GestureRecognizers>
                     </Button>
 
-                <Button FontAttributes="Bold" Text="Profile" BackgroundColor="Black" TextColor="White" Margin="0,0,10,0" VerticalOptions="Center">
+                <Button FontAttributes="Bold" Text="Profile" BackgroundColor="Black" TextColor="White" Margin="0,0,10,0" VerticalOptions="Center"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfileCommand}"
+                        CommandParameter="{Binding UserId}">
                         <Button.Shadow>
                             <Shadow Opacity="0.4"
                                     Radius="10"/>

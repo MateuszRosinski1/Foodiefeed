@@ -4,42 +4,47 @@
              x:Class="Foodiefeed.views.windows.contentview.OnListFriendView"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="Transparent"
-             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
-    <Grid>
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels" MaximumWidthRequest="300">
+    <Border StrokeShape="RoundRectangle 4,15,15,4" Stroke="DarkGray" >
+        <Grid x:Name="mainGrid" BackgroundColor="White" >
+            <HorizontalStackLayout VerticalOptions="Center">
+                <Border StrokeShape="RoundRectangle 100">
+                    <Image VerticalOptions="Center" x:Name="avatarImage" HeightRequest="75" WidthRequest="75" Aspect="AspectFit"/>
+                </Border>
+                <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
+                <Grid>
 
 
-        <HorizontalStackLayout VerticalOptions="Center">
-            <Image VerticalOptions="Center" Source="avatar.png" HeightRequest="50" WidthRequest="50"/>
-            <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
-            <Grid>
+                    <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30">
+                        <Ellipse Fill="Gray"
+                 StrokeThickness="0"
+                 WidthRequest="7.5"
+                 HeightRequest="7.5"
+                 Margin="0,1.5"
+                 x:Name="FirstCircle"/>
+                        <Ellipse Fill="Gray"
+                 StrokeThickness="0"
+                 WidthRequest="7.5"
+                 HeightRequest="7.5"
+                 Margin="0,1.5"
+                 x:Name="SecondCircle"/>
+                        <Ellipse Fill="Gray"
+                 StrokeThickness="0"
+                 WidthRequest="7.5"
+                 HeightRequest="7.5"
+                 Margin="0,1.5"
+                 x:Name="ThirdCircle"/>
 
-
-                <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30">
-                    <Ellipse Fill="Gray"
-                     StrokeThickness="0"
-                     WidthRequest="7.5"
-                     HeightRequest="7.5"
-                     Margin="0,1.5"
-                     x:Name="FirstCircle"/>
-                    <Ellipse Fill="Gray"
-                     StrokeThickness="0"
-                     WidthRequest="7.5"
-                     HeightRequest="7.5"
-                     Margin="0,1.5"
-                     x:Name="SecondCircle"/>
-                    <Ellipse Fill="Gray"
-                     StrokeThickness="0"
-                     WidthRequest="7.5"
-                     HeightRequest="7.5"
-                     Margin="0,1.5"
-                     x:Name="ThirdCircle"/>
-
-                    <VerticalStackLayout.GestureRecognizers>
-                        <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"/>
-                    </VerticalStackLayout.GestureRecognizers>
-                </VerticalStackLayout>
-            </Grid>
-        </HorizontalStackLayout>
-    </Grid>
+                        <VerticalStackLayout.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
+                                                  CommandParameter="{Binding UserId}"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                    </VerticalStackLayout>
+                </Grid>
+            </HorizontalStackLayout>
+            
+        </Grid>
+    </Border>
+    
 </ContentView>

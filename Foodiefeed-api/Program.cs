@@ -15,9 +15,12 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<dbContext>();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IFriendService, FriendService>();
+builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+
 
 var app = builder.Build();
 
@@ -27,6 +30,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    //DatabaseSeeder.SeedData(new dbContext());
 }
 
 app.UseHttpsRedirection();

@@ -66,9 +66,9 @@
                     </Grid>
 
                     <Grid Padding="30,0,30,15" Grid.Row="2">
-                        <Image HeightRequest="300"  BackgroundColor="Black" Source="likeicon.png" Aspect="Center"/>
-                        <ImageButton HorizontalOptions="Start" Margin="0,0,0,0" HeightRequest="40" Source="doubleleft.png"/>
-                        <ImageButton HorizontalOptions="End" HeightRequest="40" Source="doubleright.png"/>
+                        <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
+                        <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
+                        <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
                     <Grid Padding="0,0,0,10" Grid.Row="3">
@@ -98,26 +98,37 @@
         
         <Grid ZIndex="0">
             <Border BackgroundColor="#e0e0e0"
-                    StrokeShape="RoundRectangle 00,00,20,20"
-                    Margin="35,-40,35,0">
-
-                <ScrollView x:Name="CommentSectionScroll" MaximumHeightRequest="300" Margin="0,15,0,20" MinimumHeightRequest="100" >
-                    <VerticalStackLayout Padding="20" x:Name="CommentSection" BindableLayout.ItemsSource="{Binding Comments}">
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate>
-                                <local:CommentView Username="{Binding Username}" 
-                                                   CommentContent="{Binding CommentContent}"
-                                                   LikeCount="{Binding LikeCount}"/>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </VerticalStackLayout>
-                </ScrollView>
+                    StrokeShape="RoundRectangle 0,0,20,20"
+                    Margin="35,-40,35,0"
+                    >
+                <Grid>
+                    <Border>
+                        <ScrollView x:Name="CommentSectionScroll" MaximumHeightRequest="300" Margin="0,15,0,0" MinimumHeightRequest="200">
+                            <VerticalStackLayout Padding="20" Spacing="10" x:Name="CommentSection" BindableLayout.ItemsSource="{Binding Comments}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <local:CommentView Username="{Binding Username}" 
+                                           CommentContent="{Binding CommentContent}"
+                                           LikeCount="{Binding LikeCount}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </Border>
+                    
+                </Grid>
+              
                 
             </Border>
+            
         </Grid>
         
         <Grid Margin="0,-20,0,0" ZIndex="1"  >
-            <Button WidthRequest="100" BackgroundColor="White" Clicked="ExpandCommentSection"></Button>
+                <Button WidthRequest="100" BackgroundColor="White" Clicked="ExpandCommentSection">
+                    <Button.Shadow>
+                        <Shadow Opacity="0.3" Brush="Black"/>
+                    </Button.Shadow>
+                </Button>
         </Grid>
     </VerticalStackLayout>
     

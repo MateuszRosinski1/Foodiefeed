@@ -1,4 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+#if WINDOWS
+using Windows.Graphics.Imaging;
+using Microsoft.UI.Xaml.Media;
+#endif
+
 
 namespace Foodiefeed.views.windows.contentview;
 
@@ -23,9 +31,51 @@ public partial class PostView : ContentView
     public static readonly BindableProperty PostLikeCountProperty =
         BindableProperty.Create(nameof(PostLikeCount), typeof(string), typeof(PostView), default(string), propertyChanged: OnPostLikeCountChanged);
 
+    public static readonly BindableProperty ImageSourceProperty =
+        BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageSourceChanged);
+
     #endregion
 
+    int currentImageIndex;
+
     #region Properties
+
+    public static readonly BindableProperty ImagesBase64Property =
+    BindableProperty.Create(
+        nameof(ImagesBase64),    
+        typeof(List<string>),    
+        typeof(PostView),        
+        new List<string>(),     
+        propertyChanged: OnImagesBase64Changed 
+    );
+
+    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (PostView)bindable;
+        var newImagesList = newValue as List<string>;
+
+        if (newImagesList != null)
+        {
+            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
+
+            if (newImagesList.Count > 0)
+            {
+                control.ImageSource = newImagesList[0]; 
+            }
+        }
+    }
+
+    public List<string> ImagesBase64
+    {
+        get => (List<string>)GetValue(ImagesBase64Property);
+        set => SetValue(ImagesBase64Property, value);
+    }
+
+    public string ImageSource
+    {
+        get => (string)GetValue(ImageSourceProperty);
+        set => SetValue(ImageSourceProperty, value);
+    }
 
     public string PostLikeCount
     {
@@ -77,16 +127,33 @@ public partial class PostView : ContentView
         view.PostLikeCountLabel.Text = newValue as string;
     }
 
-    [MaxLength(10)]
-    public byte[]? Images { get; set; }
+    private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+
+        if(newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0; 
+            return stream;
+        });
+    }
 
 	public List<CommentView> Comments { get; set; }
 
     public PostView()
-	{
+    {
         InitializeComponent();
-        PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;     
-	}
+        PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;
+        currentImageIndex = 0;
+        swipeLeftButton.IsVisible = false;
+    }
 
     #region animations
 
@@ -155,5 +222,42 @@ public partial class PostView : ContentView
         {
             ExpandOrCollapseLabel.IsVisible = false;
         }
+    }
+
+    private int Clamp(int value, int min, int max)
+    {
+        return (value < min) ? min : (value > max) ? max : value;
+    }
+
+    private void SwipeLeft(object sender, EventArgs e)
+    {
+        var index = Clamp(currentImageIndex-1, 0, ImagesBase64.Count-1);
+        currentImageIndex = index;
+        if (currentImageIndex >= 0)
+        {
+            swipeLeftButton.IsVisible = false;
+        }
+
+        if (currentImageIndex < ImagesBase64.Count-1)
+        {
+            swipeRightButton.IsVisible = true;
+        }
+        ImageSource = ImagesBase64[currentImageIndex];
+    }
+
+    private void SwipeRight(object sender, EventArgs e)
+    {
+        var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count-1);
+        currentImageIndex = index;
+        if(currentImageIndex >= ImagesBase64.Count-1)
+        {
+            swipeRightButton.IsVisible = false;
+        }
+
+        if(currentImageIndex > 0)
+        {
+            swipeLeftButton.IsVisible = true;
+        }
+        ImageSource = ImagesBase64[currentImageIndex];
     }
 }
