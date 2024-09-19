@@ -232,12 +232,12 @@ namespace Foodiefeed.viewmodels
             var profileJson = await GetUserProfileModel(id);
             var user = await JsonToObject<UserProfileModel>(profileJson);
 
-            var popup = new UserOptionPopup();
-            //{ 
-            //    UserId = user.Id.ToString(), 
-            //    Username = user.Username, 
-            //    AvatarImageSource = user.ProfilePictureBase64 
-            //};
+            var popup = new UserOptionPopup()
+            {
+                UserId = user.Id.ToString(), 
+                Username = user.Username, 
+                AvatarImageSource = user.ProfilePictureBase64
+            };
 
             App.Current.MainPage.ShowPopup(popup);
         }
@@ -344,8 +344,8 @@ namespace Foodiefeed.viewmodels
             switch (button)
             {
                 case Buttons.PostButton:
-                    SelfPostButtonColor = Color.FromHex("#ffffff"); // Zmieniamy kolor aktywnego przycisku
-                    FriendsButtonColor = Color.FromHex("#c9c9c9"); // Reszta wraca do domyślnego koloru
+                    SelfPostButtonColor = Color.FromHex("#ffffff");
+                    FriendsButtonColor = Color.FromHex("#c9c9c9"); 
                     FollowersButtonColor = Color.FromHex("#c9c9c9");
                     break;
 
@@ -445,15 +445,6 @@ namespace Foodiefeed.viewmodels
                 });
             }
         }
-
-        //private ObservableCollection<UserSearchResult> JsonToSearchResults(string json)
-        //{
-        //    var users = JsonConvert.DeserializeObject<ObservableCollection<UserSearchResult>>(json);
-
-        //    if (users is null) return new();
-
-        //    return users;
-        //}
 
         private void DisplaySearchResultHistory()
         {
@@ -589,28 +580,33 @@ namespace Foodiefeed.viewmodels
             DisplayProfileFriends(friends);
             
             
-
-            GetUserProfileFollowers(id);
+            var json3 = await GetUserProfileFollowers(id);
+            var followers = await JsonToObject<List<ListedFriendDto>>(json3); //followers can be displayed using the same Dto and OnListFriewView
+            DisplayProfileFollowers(followers);
+ 
         }
 
-        private async void DisplayProfileFriends(List<ListedFriendDto> friends)
+        private async void DisplayProfileFollowers(List<ListedFriendDto> followers)
+        {
+            ProfileFollowersList.Clear();
+
+            foreach (var follower in followers)
+            {
+                ProfileFollowersList.Add(new OnListFriendView()
+                {
+                    Username = follower.Username,
+                    UserId = follower.Id.ToString(),
+                    AvatarImageSource = follower.ProfilePictureBase64
+                });
+            }
+        }
+
+        private async void DisplayProfileFriends(List<ListedFriendDto> friends) 
         {
             ProfileFriendsList.Clear();
 
             foreach (var friend in friends)
             {
-                ProfileFriendsList.Add(new OnListFriendView()
-                {
-                    Username = friend.Username,
-                    UserId = friend.Id.ToString(),
-                    AvatarImageSource = friend.ProfilePictureBase64
-                });
-                ProfileFriendsList.Add(new OnListFriendView()
-                {
-                    Username = friend.Username,
-                    UserId = friend.Id.ToString(),
-                    AvatarImageSource = friend.ProfilePictureBase64
-                });
                 ProfileFriendsList.Add(new OnListFriendView()
                 {
                     Username = friend.Username,
@@ -663,13 +659,6 @@ namespace Foodiefeed.viewmodels
             return string.Empty;
         }
 
-        //private List<PostDto> JsonToPostDto(string json)
-        //{
-        //    var posts = JsonConvert.DeserializeObject<List<PostDto>>(json);
-
-        //    return posts;
-        //}
-
         private void DisplayProfilePosts(List<PostDto> posts)
         {
             if (posts == null || posts.Count == 0)
@@ -721,6 +710,28 @@ namespace Foodiefeed.viewmodels
 
         private async Task<string> GetUserProfileFollowers(string id)
         {
+            var endpoint = $"api/followers/get-user-followers/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception();
+                    }
+
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch
+                {
+                    //code block to handle exeption 
+                }
+            }
             return string.Empty;
         }
 
@@ -782,13 +793,6 @@ namespace Foodiefeed.viewmodels
             }
             return string.Empty;
         }
-
-        //private async Task<UserProfileModel> JsonToUserProfileModel(string json)
-        //{
-        //    UserProfileModel model = JsonConvert.DeserializeObject<UserProfileModel>(json);
-
-        //    return model;
-        //}
 
         private void SetUserProfileModel(int Id,string FriendsCount,string FollowsCount,string LastName,string FirstName,string Username,string imageBase64)
         {

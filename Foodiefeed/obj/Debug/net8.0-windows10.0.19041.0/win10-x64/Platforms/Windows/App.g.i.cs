@@ -72,7 +72,6 @@ namespace Foodiefeed.WinUI
             UnhandledException += (sender, e) =>
             {
                 if (global::System.Diagnostics.Debugger.IsAttached) global::System.Diagnostics.Debugger.Break();
-                System.Diagnostics.Debug.WriteLine(e.Exception.ToString());
             };
 #endif
         }

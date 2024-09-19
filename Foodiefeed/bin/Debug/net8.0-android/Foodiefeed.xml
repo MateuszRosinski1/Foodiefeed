@@ -90,6 +90,15 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.NoPostOnProfile">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.noPostOnProfile"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SelfPostButtonColor">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._selfPostButtonColor"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FriendsButtonColor">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._friendsButtonColor"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FollowersButtonColor">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._followersButtonColor"/>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.scrolledCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledCommand"/>.</summary>
         </member>
@@ -388,6 +397,15 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NoPostOnProfile">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NoPostOnProfile" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelfPostButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FriendsButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FriendsButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FollowersButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
         </member>
@@ -492,6 +510,15 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NoPostOnProfile">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NoPostOnProfile" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelfPostButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FriendsButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FriendsButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FollowersButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

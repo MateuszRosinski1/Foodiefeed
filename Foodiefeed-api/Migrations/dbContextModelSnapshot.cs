@@ -46,6 +46,21 @@ namespace Foodiefeed_api.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Follower", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowedUserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FollowedUserId");
+
+                    b.HasIndex("FollowedUserId");
+
+                    b.ToTable("Followers");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Friend", b =>
                 {
                     b.Property<int>("UserId")
@@ -262,6 +277,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Follower", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.User", "FollowedUser")
+                        .WithMany()
+                        .HasForeignKey("FollowedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "User")
+                        .WithMany("Followers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FollowedUser");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Friend", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.User", "FriendUser")
@@ -290,7 +324,7 @@ namespace Foodiefeed_api.Migrations
                         .IsRequired();
 
                     b.HasOne("Foodiefeed_api.entities.User", "Sender")
-                        .WithMany("SentFriendRequests")
+                        .WithMany("SendFriendRequests")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -387,13 +421,15 @@ namespace Foodiefeed_api.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Followers");
+
                     b.Navigation("Friends");
 
                     b.Navigation("Posts");
 
                     b.Navigation("ReceivedFriendRequests");
 
-                    b.Navigation("SentFriendRequests");
+                    b.Navigation("SendFriendRequests");
 
                     b.Navigation("UserTags");
                 });

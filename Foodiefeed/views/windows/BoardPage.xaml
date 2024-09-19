@@ -259,7 +259,7 @@
                                 <VerticalStackLayout x:Name="ProfileSection">
                                     
                                     <Border IsVisible="{Binding ProfileFriendsVisible}" Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                        <toolkit:UniformItemsLayout  
+                                        <toolkit:UniformItemsLayout 
                                                                     BackgroundColor="#e0e0e0" 
                                                                     HeightRequest="1000" 
                                                                     Padding="20" 
@@ -268,7 +268,8 @@
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"
                                                                             AvatarImageSource="{Binding AvatarImageSource}"
-                                                                            UserId="{Binding UserId}"/>
+                                                                            UserId="{Binding UserId}"
+                                                                            Margin="0,5"/>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </toolkit:UniformItemsLayout>
@@ -297,7 +298,9 @@
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"
-                                                                            AvatarImageSource="{Binding AvatarImageSource}"/>
+                                                                            AvatarImageSource="{Binding AvatarImageSource}"
+                                                                            UserId="{Binding UserId}"
+                                                                            Margin="0,5"/>
                                                 </DataTemplate>
                                             </BindableLayout.ItemTemplate>
                                         </toolkit:UniformItemsLayout>

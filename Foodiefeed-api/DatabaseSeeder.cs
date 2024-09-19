@@ -225,6 +225,24 @@ namespace Foodiefeed_api
                 context.Friends.AddRange(friends);
                 context.SaveChanges();
             }
+
+            if(!context.Followers.Any()) {
+                var followers = new List<Follower>
+                {
+                    new Follower
+                    {
+                        UserId = userMariuszek.Id,
+                        FollowedUserId = userMati.Id
+                    },
+                    new Follower
+                    {
+                        UserId = userMati.Id,
+                        FollowedUserId = userMariuszek.Id
+                    }
+                };
+                context.Followers.AddRange(followers);
+                context.SaveChanges();
+            }
         }
     }
 }
