@@ -114,7 +114,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\CommentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\FriendRequestNotification.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\OnlineFreidnListElementView.xaml">

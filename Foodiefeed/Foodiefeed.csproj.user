@@ -18,7 +18,13 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\CommentView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\FriendRequestNotification.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="views\windows\contentview\OnlineFreidnListElementView.xaml">

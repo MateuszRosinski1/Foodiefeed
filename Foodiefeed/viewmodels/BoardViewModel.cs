@@ -114,6 +114,11 @@ namespace Foodiefeed.viewmodels
 
         #endregion
 
+
+        public ObservableCollection<INotification> MSGS { get { return msgs; } }
+        private ObservableCollection<INotification> msgs = new ObservableCollection<INotification>();
+
+
         public BoardViewModel(UserSession userSession)
         {
             DisplaySearchResultHistory();
@@ -149,6 +154,10 @@ namespace Foodiefeed.viewmodels
             //profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
             //profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
 
+            FriendRequestNotification fr = new();
+            BasicNotofication bn = new();
+            msgs.Add(fr);
+            msgs.Add(bn);
 
 
             //var usernames = new List<string>

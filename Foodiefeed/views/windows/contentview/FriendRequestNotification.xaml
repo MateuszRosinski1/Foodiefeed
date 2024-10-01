@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification">
+    <Border Stroke="White" StrokeShape="RoundRectangle 10" WidthRequest="285">
+        <HorizontalStackLayout BackgroundColor="White">
+            <Image Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70"/>
+            <VerticalStackLayout>
+                <Label Text="Mariuszek 29 sended you a friend request" TextColor="Black" HeightRequest="50" WidthRequest="200" HorizontalTextAlignment="Center" LineBreakMode="WordWrap" Margin="0,5,0,0"/>
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,0,0,5">
+                    <Border BackgroundColor="#e32441" StrokeShape="RoundRectangle 5">
+                        <Label Text="Accept" TextColor="White" BackgroundColor="#e32441" HeightRequest="25" WidthRequest="60" HorizontalTextAlignment="Center"></Label>
+                    </Border>
+                    <Border  BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 5">
+                        <Label Text="Decline" TextColor="Black" BackgroundColor="#e0e0e0" HeightRequest="25" WidthRequest="60" HorizontalTextAlignment="Center"></Label>
+                    </Border>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+        <Border.Shadow>
+            <Shadow Opacity="0.5" Brush="Gray"/>
+        </Border.Shadow>
+    </Border>
+</ContentView>

@@ -73,7 +73,7 @@
                     Margin="20"/>
                 <Border HorizontalOptions="Start" Margin="100,0,0,0" StrokeShape="RoundRectangle 40" BackgroundColor="#80808080" WidthRequest="42" HeightRequest="42">
                     <Grid BackgroundColor="White" WidthRequest="41" HeightRequest="41">
-                        <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                        <VerticalStackLayout Spacing="4" VerticalOptions="Center">
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
@@ -122,57 +122,14 @@
                             Grid.Column="0">
                     <!--pages-->
 
-                    <Grid BackgroundColor="#f0f0f0" Padding="0,20,0,0">
-                        <VerticalStackLayout>
-
-                            <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
-                                <Button.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                                </Button.GestureRecognizers>
-                                <Button.Shadow>
-                                    <Shadow Opacity="0"
-                                            Radius="50"/>
-                                </Button.Shadow>
-                            </Button>
-
-
-
-                            <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
-                                <Button.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                                </Button.GestureRecognizers>
-                                <Button.Shadow>
-                                    <Shadow Opacity="0"
-                                            Radius="50"/>
-                                </Button.Shadow>
-                            </Button>
-
-
-
-                            <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
-                                <Button.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                                </Button.GestureRecognizers>
-                                <Button.Shadow>
-                                    <Shadow Opacity="0"
-                                            Radius="50"/>
-                                </Button.Shadow>
-                            </Button>
-
-
-
-
-
-                            <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
-                                <Button.GestureRecognizers>
-                                    <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
-                                </Button.GestureRecognizers>
-                                <Button.Shadow>
-                                    <Shadow Opacity="0"
-                                            Radius="50"/>
-                                </Button.Shadow>
-                            </Button>
-                            <BoxView HeightRequest="80" BackgroundColor="#f0f0f0"/>
+                    <Grid BackgroundColor="#f0f0f0" Padding="0,10,0,0">
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding MSGS}" Spacing="15">
+                            <Label Text="Notfications" TextColor="#111214" FontAttributes="Bold" FontSize="30" />
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentView Content="{Binding .}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
 
 
 
@@ -612,7 +569,57 @@
             <Grid BackgroundColor="Transparent" 
                   Margin="0,25,0,0" 
                   WidthRequest="145" 
-                  HeightRequest="250"></Grid>
+                  HeightRequest="250">
+                <VerticalStackLayout>
+                    <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                        </Button.GestureRecognizers>
+                        <Button.Shadow>
+                            <Shadow Opacity="0"
+                Radius="50"/>
+                        </Button.Shadow>
+                    </Button>
+
+
+
+                    <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                        </Button.GestureRecognizers>
+                        <Button.Shadow>
+                            <Shadow Opacity="0"
+                Radius="50"/>
+                        </Button.Shadow>
+                    </Button>
+
+
+
+                    <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                        </Button.GestureRecognizers>
+                        <Button.Shadow>
+                            <Shadow Opacity="0"
+                Radius="50"/>
+                        </Button.Shadow>
+                    </Button>
+
+
+
+
+
+                    <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                        </Button.GestureRecognizers>
+                        <Button.Shadow>
+                            <Shadow Opacity="0"
+                                    Radius="50"/>
+                        </Button.Shadow>
+                    </Button>
+                </VerticalStackLayout>
+            </Grid>
             <Grid.Shadow>
                 <Shadow Opacity="0.6 "
                         Brush="Black"/>
@@ -621,5 +628,8 @@
                 <PointerGestureRecognizer PointerExitedCommand="{Binding HideHubPanelCommand}"/>
             </Grid.GestureRecognizers>
         </Grid>
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
+        </Grid.GestureRecognizers>
     </Grid>
 </ContentPage>
