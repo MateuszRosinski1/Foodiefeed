@@ -79,6 +79,7 @@
 	  <None Remove="Resources\Images\hearthIcon.png" />
 	  <None Remove="Resources\Images\likeicon.png" />
 	  <None Remove="Resources\Images\logobutton.png" />
+	  <None Remove="Resources\Images\pfpreal.jpg" />
 	  <None Remove="Resources\Images\shareicon.png" />
 	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />

@@ -109,6 +109,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool noPostOnProfile;
 
+        [ObservableProperty]
+        bool hubPanelVisible;
+
         #endregion
 
         public BoardViewModel(UserSession userSession)
@@ -179,6 +182,7 @@ namespace Foodiefeed.viewmodels
             this.ProfilePostsVisible = true; //on init true;
             this.ProfileFriendsVisible = false; //on init false
             this.NoPostOnProfile = false; // on init false
+            this.HubPanelVisible = false;
         }
 
         [RelayCommand]
@@ -301,6 +305,18 @@ namespace Foodiefeed.viewmodels
         {
             Task.Delay(200).Wait();
             this.SearchPanelVisible = false;
+        }
+
+        [RelayCommand]
+        public void ShowHubPanel()
+        {
+            this.HubPanelVisible = true;
+        }
+
+        [RelayCommand]
+        public void HideHubPanel()
+        {
+            this.HubPanelVisible = false;
         }
 
         [RelayCommand]
