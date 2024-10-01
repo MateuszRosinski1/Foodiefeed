@@ -659,15 +659,11 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc643384774
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\ControlsAccessibilityDelegate.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\DragAndDropGestureHandler.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\DragAndDropGestureHandler_CustomLocalStateData.java
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\FormattedStringExtensions_FontSpan.java
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\FormattedStringExtensions_LetterSpacingSpan.java
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\FormattedStringExtensions_LineHeightSpan.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\FragmentContainer.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\GenericAnimatorListener.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\GenericGlobalLayoutListener.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\GenericMenuClickListener.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\GradientStrokeDrawable.java
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\GradientStrokeDrawable_GradientShaderFactory.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\InnerGestureListener.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\InnerScaleListener.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc64338477404e88479c\MauiViewPager.java
@@ -1095,3 +1091,5 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ConvertResourcesC
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GenerateJavaStubs.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GeneratePackageManagerJava.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\mauiimage.outputs
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc6452ffdc5b34af3a0f\MauiMaterialButton_MauiResizableDrawable.java

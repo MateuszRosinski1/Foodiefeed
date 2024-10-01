@@ -22,7 +22,7 @@ namespace Foodiefeed.viewmodels
     {
 
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
-
+        //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
         private readonly UserSession _userSession;
         private Thread UpdateOnlineFriendListThread;
 
@@ -304,8 +304,11 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowUserProfile(string id)
+        public void ShowUserProfile(string id)
         {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
@@ -317,7 +320,7 @@ namespace Foodiefeed.viewmodels
                     ToProfileView();
                 }
 
-                await OpenUserProfile(id);
+                OpenUserProfile(id);
             }catch (Exception ex)
             {
                 Console.Write(ex.ToString());
@@ -325,7 +328,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowUserProfilePopup(string id)
+        public void ShowUserProfilePopup(string id)
         {
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
@@ -333,10 +336,10 @@ namespace Foodiefeed.viewmodels
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
-            await SetButtonColors(Buttons.PostButton);
+            SetButtonColors(Buttons.PostButton);
             try
             {
-                await OpenUserProfile(id);
+                OpenUserProfile(id);
             }
             catch (Exception ex)
             {
@@ -451,6 +454,32 @@ namespace Foodiefeed.viewmodels
             }
 
         }
+
+        [RelayCommand]
+        public async void AddToFriends(string id)
+        {
+            var endpoint = $"api/friend-request/send/{id}/{_userSession.Id}";
+
+        }
+
+        [RelayCommand]
+        public async void UnfriendUser(string id)
+        {
+            var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
+        }
+
+        [RelayCommand]
+        public async void FollowUser(string id)
+        {
+            var endpoint = $"api/followers/follow//{id}/{_userSession.Id}";
+        }
+
+        [RelayCommand]
+        public async void UnfollowUser(string id)
+        {
+            var endpoint = $"api/followers/unfollow//{id}/{_userSession.Id}";
+        }
+
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {
@@ -576,8 +605,8 @@ namespace Foodiefeed.viewmodels
         private async Task OpenUserProfile(string id)
         {
 
-            ProfilePosts.Clear();
-            ProfileFollowersList.Clear();
+            //ProfilePosts.Clear();
+            //ProfileFollowersList.Clear();
             //ProfileFriendsList.Clear();
 
             var profileJson = await GetUserProfileModel(id);
@@ -610,8 +639,7 @@ namespace Foodiefeed.viewmodels
 
         private async void DisplayProfileFollowers(List<ListedFriendDto> followers)
         {
-            ProfileFollowersList.Clear();
-
+            //ProfileFollowersList.Clear();
             foreach (var follower in followers)
             {
                 ProfileFollowersList.Add(new OnListFriendView()
@@ -625,8 +653,7 @@ namespace Foodiefeed.viewmodels
 
         private async void DisplayProfileFriends(List<ListedFriendDto> friends) 
         {
-            ProfileFriendsList.Clear();
-
+            //ProfileFriendsList.Clear();
             foreach (var friend in friends)
             {
                 ProfileFriendsList.Add(new OnListFriendView()
@@ -689,8 +716,7 @@ namespace Foodiefeed.viewmodels
                 ProfilePostsVisible = false;
                 return;
             }
-            ProfilePosts.Clear();
-
+            //ProfilePosts.Clear();
             foreach(var post in posts)
             {
                 var commentList = new List<CommentView>();
@@ -827,5 +853,6 @@ namespace Foodiefeed.viewmodels
             AvatarBase64 = imageBase64;
             
         }
+
     }
 }

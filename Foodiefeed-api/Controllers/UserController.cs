@@ -69,9 +69,5 @@ namespace Foodiefeed_api.Controllers
 
             return Ok("Status set to offline");
         }
-      
-
-
-
     }
 }

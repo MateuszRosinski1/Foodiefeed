@@ -219,9 +219,6 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\w
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win10-arm64\native\Microsoft.Graphics.Canvas.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win10-x64\native\Microsoft.Graphics.Canvas.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win10-x86\native\Microsoft.Graphics.Canvas.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-arm64\native\msalruntime_arm64.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\msalruntime.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\msalruntime_x86.dll
@@ -321,7 +318,6 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Mvvm.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Maui.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\CommunityToolkit.Maui.Core.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Widgets.Providers.Projection.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\System.Speech.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-arm64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
@@ -357,3 +353,9 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\testback.s
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Maui.MaterialFrame.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Sharpnado.TaskMonitor.dll
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\testback.scale-100.jpg
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Management.Deployment.Projection.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Windows.Widgets.Projection.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-arm64\native\Microsoft.Graphics.Canvas.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.Graphics.Canvas.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\Microsoft.Graphics.Canvas.dll
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\mauiimage.outputs
