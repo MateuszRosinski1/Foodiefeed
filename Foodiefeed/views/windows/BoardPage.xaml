@@ -47,22 +47,24 @@
                         StrokeShape="RoundRectangle 20,20,20,20" 
                         HeightRequest="50" 
                         WidthRequest="420">
+                    <Grid>
+                        <Entry TextColor="Black" 
+                               FontSize="18" 
+                               Placeholder="Search" 
+                               Margin="0" 
+                               HeightRequest="40" 
+                               WidthRequest="400" 
+                               Background="White"
+                               Text="{Binding SearchParam,Mode=TwoWay}">
+                            <Entry.Behaviors>
+                                <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
+                                <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
+                                <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
 
-                    <Entry TextColor="Black" 
-                           FontSize="18" 
-                           Placeholder="Search" 
-                           Margin="0" 
-                           HeightRequest="40" 
-                           WidthRequest="400" 
-                           Background="White"
-                           Text="{Binding SearchParam,Mode=TwoWay}">
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
-                            <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
-                            <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
-
-                        </Entry.Behaviors>
-                    </Entry>
+                            </Entry.Behaviors>
+                        </Entry>
+                        <ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}"/>
+                    </Grid>
                 </Border>
 
                 <ImageButton Source="logobutton.png" 
@@ -112,31 +114,46 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <ScrollView HorizontalOptions="Start" 
-                            VerticalOptions="Start" 
-                            x:Name="hubScroll" 
-                            BackgroundColor="#f0f0f0"
-                            VerticalScrollBarVisibility="Always" 
-                            WidthRequest="300"
-                            HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
-                            Grid.Column="0">
-                    <!--pages-->
+                <Grid Grid.Column="0">
+                    <VerticalStackLayout>
+                            <HorizontalStackLayout Background="#f0f0f0" Spacing="5" Padding="15">
+                                <Label Text="Notfications" TextColor="#111214" FontAttributes="Bold" FontSize="30" />
+                            <Button Text="Clear" Background="White" TextColor="Black" Scale="0.7" WidthRequest="100" FontSize="15">
+                                <Button.Shadow>
+                                    <Shadow Opacity="0.3" Brush="Black"/>
+                                </Button.Shadow>
+                            </Button>
 
-                    <Grid BackgroundColor="#f0f0f0" Padding="0,10,0,0">
-                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding MSGS}" Spacing="15">
-                            <Label Text="Notfications" TextColor="#111214" FontAttributes="Bold" FontSize="30" />
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <ContentView Content="{Binding .}" />
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                        <ScrollView HorizontalOptions="Start" 
+                                     VerticalOptions="Start" 
+                                     x:Name="hubScroll" 
+                                     BackgroundColor="#f0f0f0"
+                                     VerticalScrollBarVisibility="Always" 
+                                     WidthRequest="300"
+                                     HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
+                                     >
+                            <!--pages-->
+
+                            <Grid BackgroundColor="#f0f0f0" Padding="0,10,0,0">
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding MSGS}" Spacing="15">
+
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <ContentView Content="{Binding .}" />
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
 
 
 
-                        </VerticalStackLayout>
+                                </VerticalStackLayout>
 
-                    </Grid>
-                </ScrollView>
+                            </Grid>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                  
+                </Grid>
+                
 
                 <!--PostGrid-->
                 <ScrollView 

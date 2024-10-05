@@ -1,6 +1,9 @@
 ﻿#if ANDROID
 using Android.App;
 #endif
+#if WINDOWS
+using Windows.Media.SpeechRecognition;
+#endif
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,7 +23,7 @@ namespace Foodiefeed.viewmodels
 {
     public partial class BoardViewModel : ObservableObject
     {
-
+        //https://icons8.com/icons/set/microphone icons
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
         //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
         private readonly UserSession _userSession;
@@ -154,10 +157,19 @@ namespace Foodiefeed.viewmodels
             //profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
             //profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
 
-            FriendRequestNotification fr = new();
-            BasicNotofication bn = new();
-            msgs.Add(fr);
-            msgs.Add(bn);
+
+            msgs.Add(new BasicNotofication());
+            msgs.Add(new FriendRequestNotification());
+            msgs.Add(new BasicNotofication());
+            msgs.Add(new BasicNotofication());
+            msgs.Add(new BasicNotofication());
+            msgs.Add(new FriendRequestNotification());
+            msgs.Add(new FriendRequestNotification());
+            msgs.Add(new FriendRequestNotification());
+            msgs.Add(new BasicNotofication());
+            msgs.Add(new FriendRequestNotification());
+
+
 
 
             //var usernames = new List<string>
@@ -505,6 +517,11 @@ namespace Foodiefeed.viewmodels
             var endpoint = $"api/followers/unfollow//{id}/{_userSession.Id}";
         }
 
+        [RelayCommand]
+        public async void SearchByVoice()
+        {
+            
+        }
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {

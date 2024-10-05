@@ -4,7 +4,7 @@
              x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification">
     <Border Stroke="White" StrokeShape="RoundRectangle 10" WidthRequest="285">
         <HorizontalStackLayout BackgroundColor="White">
-            <Image Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70"/>
+            <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout>
                 <Label Text="Mariuszek 29 sended you a friend request" TextColor="Black" HeightRequest="50" WidthRequest="200" HorizontalTextAlignment="Center" LineBreakMode="WordWrap" Margin="0,5,0,0"/>
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,0,0,5">

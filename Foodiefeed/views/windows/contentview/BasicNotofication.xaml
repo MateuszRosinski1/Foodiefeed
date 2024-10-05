@@ -4,9 +4,9 @@
              x:Class="Foodiefeed.views.windows.contentview.BasicNotofication">
     <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" WidthRequest="285">
         <HorizontalStackLayout BackgroundColor="White" Spacing="5" WidthRequest="280">
-            <Image Source="pfpreal.jpg" HeightRequest="80" WidthRequest="80" />
+            <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout Spacing="5">
-                <Label Text="Mariuszek 29 liked your comment" 
+                <Label Text="Mariuszek29 liked your comment" 
                        TextColor="Black" 
                        FontSize="15" 
                        HeightRequest="50" 
@@ -23,8 +23,9 @@
                             <Shadow Opacity="0.5" Brush="Black"/>
                         </Border.Shadow>-->
                     </Border>
-                    <Label BackgroundColor="Black" Text="A" HeightRequest="20" HorizontalTextAlignment="Center" WidthRequest="20"/>
-                    <Label BackgroundColor="#e32441" Text="F" HeightRequest="20" HorizontalTextAlignment="Center" WidthRequest="20"/>
+                    <Border BackgroundColor="Black" WidthRequest="81" StrokeShape="RoundRectangle 40">
+                        <Label BackgroundColor="Black" FontSize="12" Text="Show post" HeightRequest="20" HorizontalTextAlignment="Center" WidthRequest="80"/>
+                    </Border>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
