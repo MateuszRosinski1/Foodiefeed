@@ -1093,3 +1093,7 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GeneratePackageMa
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\mauiimage.outputs
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\crc6452ffdc5b34af3a0f\MauiMaterialButton_MauiResizableDrawable.java
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\microphone.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\notificationicon.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\pfpreal.jpg
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\profileicon.png

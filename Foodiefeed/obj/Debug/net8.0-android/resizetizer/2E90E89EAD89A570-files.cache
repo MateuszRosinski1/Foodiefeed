@@ -5,7 +5,10 @@ obj\Debug\net8.0-android\resizetizer\r\drawable\doubleright.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\hearthicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\likeicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\logobutton.png
+obj\Debug\net8.0-android\resizetizer\r\drawable\microphone.png
+obj\Debug\net8.0-android\resizetizer\r\drawable\notificationicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\pfpreal.jpg
+obj\Debug\net8.0-android\resizetizer\r\drawable\profileicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\shareicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\showpasswordicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\testback.jpg

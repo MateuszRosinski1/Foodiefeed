@@ -80,7 +80,9 @@
 	  <None Remove="Resources\Images\likeicon.png" />
 	  <None Remove="Resources\Images\logobutton.png" />
 	  <None Remove="Resources\Images\microphone.png" />
+	  <None Remove="Resources\Images\notificationicon.png" />
 	  <None Remove="Resources\Images\pfpreal.jpg" />
+	  <None Remove="Resources\Images\profileicon.png" />
 	  <None Remove="Resources\Images\shareicon.png" />
 	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />

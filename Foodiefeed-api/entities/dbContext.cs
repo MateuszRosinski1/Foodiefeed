@@ -18,6 +18,7 @@ namespace Foodiefeed_api.entities
         public DbSet<UserTag> UserTags { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public virtual DbSet<Follower> Followers { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -98,6 +99,19 @@ namespace Foodiefeed_api.entities
                 .WithMany() 
                 .HasForeignKey(f => f.FollowedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+               .HasOne(n => n.Sender)
+               .WithMany()
+               .HasForeignKey(n => n.SenderId)
+               .OnDelete(DeleteBehavior.NoAction);  
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.Receiver)
+                .WithMany()
+                .HasForeignKey(n => n.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -8,5 +8,6 @@ namespace Foodiefeed.views.windows.contentview
 {
     public interface INotification
     {
+        public Task HideAnimation(int distance, uint duration);
     }
 }
