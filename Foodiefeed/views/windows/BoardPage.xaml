@@ -203,13 +203,17 @@
                                                 </Button.GestureRecognizers>
                                             </Button>
 
-                                            <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0">
+                                            <Button FontAttributes="Bold" 
+                                                    Text="Follow" 
+                                                    BackgroundColor="#e32441" 
+                                                    Margin="0,0,10,0">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
                                                 <Button.GestureRecognizers>
-                                                    <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                                    <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                              PointerExited="CondenseButtonSizeAnimation"/>
                                                 </Button.GestureRecognizers>
                                             </Button>
 
@@ -217,12 +221,17 @@
                                     </Grid>
                                     <Border.Shadow>
                                         <Shadow Opacity="0.5"
-                                            
                                                 Radius="10"/>
                                     </Border.Shadow>
 
                                 </Border>
-                                <Border Margin="0,-40,0,0" ZIndex="0" BackgroundColor="#e8e8e8" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="125"  StrokeShape="RoundRectangle 0,0,40,40">
+                                <Border Margin="0,-40,0,0" 
+                                        ZIndex="0" 
+                                        BackgroundColor="#e8e8e8" 
+                                        MaximumWidthRequest="1000" 
+                                        VerticalOptions="Start" 
+                                        HeightRequest="125"  
+                                        StrokeShape="RoundRectangle 0,0,40,40">
                                     <Grid Padding="15">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
@@ -230,24 +239,45 @@
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
 
-                                        <Grid Padding="5" VerticalOptions="End"  Grid.Column="0">
-                                            <Button Command="{Binding ShowProfilePostsCommand}" Text="Post" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding SelfPostButtonColor}">
+                                        <Grid Padding="5" 
+                                              VerticalOptions="End"  
+                                              Grid.Column="0">
+                                            <Button Command="{Binding ShowProfilePostsCommand}" 
+                                                    Text="Post" 
+                                                    HeightRequest="40" 
+                                                    FontAttributes="Bold" 
+                                                    FontSize="20" 
+                                                    BackgroundColor="{Binding SelfPostButtonColor}">
                                                 <Button.Shadow>
-                                                    <Shadow Opacity="0.4" Radius="5"/>
+                                                    <Shadow Opacity="0.4" 
+                                                            Radius="5"/>
                                                 </Button.Shadow>
                                             </Button>
                                         </Grid>
 
-                                        <Grid Padding="5" VerticalOptions="End" Grid.Column="1" >
-                                            <Button Command="{Binding ShowProfileFriendsCommand}" Text="Friends" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding FriendsButtonColor}">
+                                        <Grid Padding="5" 
+                                              VerticalOptions="End" 
+                                              Grid.Column="1" >
+                                            <Button Command="{Binding ShowProfileFriendsCommand}" 
+                                                    Text="Friends" 
+                                                    HeightRequest="40" 
+                                                    FontAttributes="Bold" 
+                                                    FontSize="20" 
+                                                    BackgroundColor="{Binding FriendsButtonColor}">
                                                 <Button.Shadow>
-                                                    <Shadow Opacity="0.4" Radius="5"/>
+                                                    <Shadow Opacity="0.4" 
+                                                            Radius="5"/>
                                                 </Button.Shadow>
                                             </Button>
                                         </Grid>
 
                                         <Grid Padding="5" VerticalOptions="End" Grid.Column="2" >
-                                            <Button Command="{Binding ShowProfileFollowersCommand}" Text="Followers" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="{Binding FollowersButtonColor}">
+                                            <Button Command="{Binding ShowProfileFollowersCommand}" 
+                                                    Text="Followers" 
+                                                    HeightRequest="40" 
+                                                    FontAttributes="Bold" 
+                                                    FontSize="20" 
+                                                    BackgroundColor="{Binding FollowersButtonColor}">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4" Radius="5"/>
                                                 </Button.Shadow>
@@ -261,15 +291,19 @@
                                 </Border>
 
                                 <VerticalStackLayout x:Name="ProfileSection">
-                                    
+
                                     <Border IsVisible="{Binding ProfileFriendsVisible}" 
                                             x:Name="FriendsUniformGridBorder"
-                                            Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
+                                            Margin="0,50,0,0" 
+                                            BackgroundColor="#e0e0e0" 
+                                            StrokeShape="RoundRectangle 40,40,40,40" 
+                                            MaximumWidthRequest="1200">
                                         <toolkit:UniformItemsLayout MaxColumns="3"
                                                                     BackgroundColor="#e0e0e0" 
                                                                     HeightRequest="1000" 
                                                                     Padding="20" 
-                                                                    BindableLayout.ItemsSource="{Binding ProfileFriendsList}" x:Name="FriendsUniformGrid">
+                                                                    BindableLayout.ItemsSource="{Binding ProfileFriendsList}" 
+                                                                    x:Name="FriendsUniformGrid">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"
@@ -284,8 +318,10 @@
                                         </Border.Shadow>
                                     </Border>
 
-                                    <StackLayout Orientation="Vertical" x:Name="ProfilePostGrid" IsVisible="{Binding ProfilePostsVisible}" 
-                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}"> 
+                                    <StackLayout Orientation="Vertical" 
+                                                 x:Name="ProfilePostGrid" 
+                                                 IsVisible="{Binding ProfilePostsVisible}" 
+                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}">
                                         <!--after implementing a functionallty to display posts on profile page-->
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
@@ -299,8 +335,16 @@
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
 
-                                    <Border IsVisible="{Binding ProfileFollowersVisible}" Margin="0,50,0,0" BackgroundColor="#e0e0e0" StrokeShape="RoundRectangle 40,40,40,40" MaximumWidthRequest="1200">
-                                        <toolkit:UniformItemsLayout MaxColumns="3" BackgroundColor="#e0e0e0" HeightRequest="1000" Padding="20" BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
+                                    <Border IsVisible="{Binding ProfileFollowersVisible}" 
+                                            Margin="0,50,0,0" 
+                                            BackgroundColor="#e0e0e0" 
+                                            StrokeShape="RoundRectangle 40,40,40,40" 
+                                            MaximumWidthRequest="1200">
+                                        <toolkit:UniformItemsLayout MaxColumns="3" 
+                                                                    BackgroundColor="#e0e0e0" 
+                                                                    HeightRequest="1000"
+                                                                    Padding="20" 
+                                                                    BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate>
                                                     <views:OnListFriendView Username="{Binding Username}"
@@ -318,10 +362,7 @@
                                     <Grid>
                                         <Label Text="This user has not posts yet." FontSize="30" TextColor="Black" IsVisible="{Binding NoPostOnProfile}"/>
                                     </Grid>
-
                                 </VerticalStackLayout>
-                                
-
                             </VerticalStackLayout>
                         </Grid>
 

@@ -19,6 +19,7 @@ namespace Foodiefeed_api.entities
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public virtual DbSet<Follower> Followers { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -112,11 +113,38 @@ namespace Foodiefeed_api.entities
                 .HasForeignKey(n => n.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<PostTag>()
+                .HasKey(pt => new { pt.PostId, pt.TagId });
+
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Post) 
+                .WithMany(p => p.PostTags)
+                .HasForeignKey(pt => pt.PostId); 
+
+            modelBuilder.Entity<PostTag>()
+                .HasOne(pt => pt.Tag) 
+                .WithMany()
+                .HasForeignKey(pt => pt.TagId);
+
+            modelBuilder.Entity<UserTag>()
+                .HasKey(ut => new { ut.UserId, ut.TagId });
+
+            modelBuilder.Entity<UserTag>()
+                .HasOne(ut => ut.User) 
+                .WithMany(u => u.UserTags)
+                .HasForeignKey(ut => ut.UserId);
+
+            modelBuilder.Entity<UserTag>()
+                .HasOne(ut => ut.Tag) 
+                .WithMany()
+                .HasForeignKey(ut => ut.TagId);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_connectionString);
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }

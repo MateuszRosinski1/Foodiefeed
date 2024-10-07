@@ -14,6 +14,5 @@ namespace Foodiefeed_api.entities
         public virtual User User { get; set; }
         [ForeignKey("FriendUserId")]
         public virtual User FriendUser { get; set; }
-
     }
 }

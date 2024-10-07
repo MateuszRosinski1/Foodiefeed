@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GJnT4sOhkZSaSnRYslVDMJcX0N/FoBYXi9tIO8PBWOmEKV/uiwcB7Do9t54PLlYl6+Kssr9v+PdizuTb1IZqow==",
+  "dgSpecHash": "Ph9VCv19GnxbKirUlx1oC4vPt8U9A3Oi8gI8RHy+SU9F11aQY0/rOnOjFhVdeRwVOBIi2xXuxEqbsIhqNzzavQ==",
   "success": true,
   "projectFilePath": "D:\\PracaInzynierska\\Foodiefeed-api\\Foodiefeed-api.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\mateu\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
+    "C:\\Users\\mateu\\.nuget\\packages\\bogus\\35.6.1\\bogus.35.6.1.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.maui\\9.1.0\\communitytoolkit.maui.9.1.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.maui.core\\9.1.0\\communitytoolkit.maui.core.9.1.0.nupkg.sha512",
     "C:\\Users\\mateu\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",

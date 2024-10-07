@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //DatabaseSeeder.SeedData(new dbContext());
+    DatabaseSeeder.SeedData(new dbContext());
 }
 
 app.UseHttpsRedirection();

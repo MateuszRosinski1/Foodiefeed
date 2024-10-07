@@ -22,7 +22,7 @@ namespace Foodiefeed
         {
             var window  = base.CreateWindow(activationState);
 
-            window.Destroying += Window_Destroying;
+            //window.Destroying += Window_Destroying;
 
 #if WINDOWS
             window.MinimumHeight = 800;

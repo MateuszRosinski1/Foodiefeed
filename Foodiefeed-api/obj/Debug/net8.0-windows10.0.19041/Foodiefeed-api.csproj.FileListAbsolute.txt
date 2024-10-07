@@ -367,3 +367,4 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetize
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\microphone.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\profileicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\profileicon.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Bogus.dll
