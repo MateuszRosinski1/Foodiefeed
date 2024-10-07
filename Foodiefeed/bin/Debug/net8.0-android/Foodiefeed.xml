@@ -105,6 +105,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.NoNotificationNotifierVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.noNotificationNotifierVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.LoadingLabelVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.loadingLabelVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SelfPostButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._selfPostButtonColor"/>
         </member>
@@ -472,6 +475,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NoNotificationNotifierVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NoNotificationNotifierVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LoadingLabelVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
         </member>
@@ -591,6 +597,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NoNotificationNotifierVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NoNotificationNotifierVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LoadingLabelVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>

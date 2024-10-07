@@ -120,6 +120,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool noNotificationNotifierVisible;
 
+        [ObservableProperty]
+        bool loadingLabelVisible;
+
         #endregion
 
 
@@ -704,7 +707,7 @@ namespace Foodiefeed.viewmodels
         {
             try
             {
-                //LoadingLabel.Visibility = Visibility.Visible; // Pokazuje wskaźnik ładowania
+                LoadingLabelVisible = true;
 
                 var profileJson = await GetUserProfileModel(id);
                 var profile = await JsonToObject<UserProfileModel>(profileJson);
@@ -741,7 +744,7 @@ namespace Foodiefeed.viewmodels
             }
             finally
             {
-                //LoadingLabel.Visibility = Visibility.Collapsed; // Ukrywa wskaźnik ładowania po zakończeniu
+                LoadingLabelVisible = false;
             }
         }
 

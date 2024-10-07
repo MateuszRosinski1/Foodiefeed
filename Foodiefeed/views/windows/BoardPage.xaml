@@ -177,29 +177,62 @@
                     <Grid>
                         <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="White" Padding="30">
                             <VerticalStackLayout>
-                                <Border ZIndex="1" MaximumWidthRequest="1000" VerticalOptions="Start" HeightRequest="300" BackgroundColor="White" StrokeShape="RoundRectangle 40">
-                                    <Grid  Padding="15"  BackgroundColor="White" >
+                                <Border ZIndex="1" 
+                                        MaximumWidthRequest="1000" 
+                                        VerticalOptions="Start" 
+                                        HeightRequest="300" 
+                                        BackgroundColor="White"
+                                        StrokeShape="RoundRectangle 40">
+                                    <Grid  Padding="15"  
+                                           BackgroundColor="White" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <ImageButton Grid.Column="0" CornerRadius="100" HeightRequest="200" WidthRequest="200"  Source="pfpreal.jpg" Aspect="AspectFill"></ImageButton>
+                                        <ImageButton Grid.Column="0" 
+                                                     CornerRadius="100"
+                                                     HeightRequest="200" 
+                                                     WidthRequest="200"  
+                                                     Source="pfpreal.jpg" 
+                                                     Aspect="AspectFill"/>
 
-                                        <VerticalStackLayout Padding="5" VerticalOptions="Center" BackgroundColor="Transparent" Grid.Column="1">
-                                            <Label Text="{Binding ProfileUsername}" TextColor="Black" FontSize="30" FontAttributes="Bold"/>
-                                            <Label Text="{Binding ProfileFriends}" TextColor="Black" FontSize="15" Margin="4,0,0,0"/>
-                                            <Label Text="{Binding ProfileFollowers}" TextColor="Black" FontSize="15" Margin="4,0,0,0"/>
+                                        <VerticalStackLayout Padding="5" 
+                                                             VerticalOptions="Center" 
+                                                             BackgroundColor="Transparent" 
+                                                             Grid.Column="1">
+                                            
+                                            <Label Text="{Binding ProfileUsername}" 
+                                                   TextColor="Black" 
+                                                   FontSize="30" 
+                                                   FontAttributes="Bold"/>
+                                            
+                                            <Label Text="{Binding ProfileFriends}" 
+                                                   TextColor="Black" 
+                                                   FontSize="15" 
+                                                   Margin="4,0,0,0"/>
+                                            
+                                            <Label Text="{Binding ProfileFollowers}" 
+                                                   TextColor="Black" 
+                                                   FontSize="15" 
+                                                   Margin="4,0,0,0"/>
                                         </VerticalStackLayout>
 
-                                        <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Center" Padding="10" Grid.Column="2">
-                                            <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0">
+                                        <HorizontalStackLayout HorizontalOptions="End" 
+                                                               VerticalOptions="Center"
+                                                               Padding="10" 
+                                                               Grid.Column="2">
+                                            <Button FontAttributes="Bold" 
+                                                    Text="Send friend request" 
+                                                    BackgroundColor="#e0e0e0" 
+                                                    Margin="0,0,10,0">
                                                 <Button.Shadow>
                                                     <Shadow Opacity="0.4"
                                                             Radius="10"/>
                                                 </Button.Shadow>
                                                 <Button.GestureRecognizers>
-                                                    <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                                                    <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                              PointerExited="CondenseButtonSizeAnimation"/>
                                                 </Button.GestureRecognizers>
                                             </Button>
 
@@ -225,6 +258,7 @@
                                     </Border.Shadow>
 
                                 </Border>
+                                
                                 <Border Margin="0,-40,0,0" 
                                         ZIndex="0" 
                                         BackgroundColor="#e8e8e8" 
@@ -291,13 +325,13 @@
                                 </Border>
 
                                 <VerticalStackLayout x:Name="ProfileSection">
-
                                     <Border IsVisible="{Binding ProfileFriendsVisible}" 
                                             x:Name="FriendsUniformGridBorder"
                                             Margin="0,50,0,0" 
                                             BackgroundColor="#e0e0e0" 
                                             StrokeShape="RoundRectangle 40,40,40,40" 
                                             MaximumWidthRequest="1200">
+                                        
                                         <toolkit:UniformItemsLayout MaxColumns="3"
                                                                     BackgroundColor="#e0e0e0" 
                                                                     HeightRequest="1000" 
@@ -322,7 +356,6 @@
                                                  x:Name="ProfilePostGrid" 
                                                  IsVisible="{Binding ProfilePostsVisible}" 
                                                  BindableLayout.ItemsSource="{Binding ProfilePosts}">
-                                        <!--after implementing a functionallty to display posts on profile page-->
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <views:PostView Username="{Binding Username}"
@@ -360,7 +393,14 @@
                                     </Border>
 
                                     <Grid>
-                                        <Label Text="This user has not posts yet." FontSize="30" TextColor="Black" IsVisible="{Binding NoPostOnProfile}"/>
+                                        <Label Text="This user has not posts yet." 
+                                               FontSize="30" 
+                                               TextColor="Black" 
+                                               IsVisible="{Binding NoPostOnProfile}"/>
+                                        
+                                        <Label TextColor="Black" 
+                                               Text="Loading..." 
+                                               IsVisible="{Binding LoadingLabelVisible}"/>
                                     </Grid>
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
