@@ -3,14 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.views.windows.contentview.OnlineFreidnListElementView"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
-             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels" 
-
-             >
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels" >
     <Grid>
         <HorizontalStackLayout Spacing="5">
             <Grid>
-                <Image VerticalOptions="Center" Source="avatar.png"  WidthRequest="50" HeightRequest="50" x:Name="avatarImage"/>
-                <Ellipse VerticalOptions="End" HorizontalOptions="End" Fill="LawnGreen"  WidthRequest="15" HeightRequest="15"/>
+                <ImageButton CornerRadius="100" VerticalOptions="Center" Source="avatar.png"  WidthRequest="50" HeightRequest="50" x:Name="avatarImage"/>
+                <Ellipse VerticalOptions="End" 
+                         HorizontalOptions="End" 
+                         Fill="LawnGreen"  
+                         WidthRequest="15" 
+                         HeightRequest="15" 
+                         IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:OnlineFreidnListElementView}}, Path=IsOnline}"/>
             </Grid>
             <Label VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold"/>
         </HorizontalStackLayout>

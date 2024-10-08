@@ -355,7 +355,8 @@
                                     <StackLayout Orientation="Vertical" 
                                                  x:Name="ProfilePostGrid" 
                                                  IsVisible="{Binding ProfilePostsVisible}" 
-                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}">
+                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}"
+                                                 >
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <views:PostView Username="{Binding Username}"
@@ -628,7 +629,8 @@
                             <DataTemplate>
                                 <views:OnlineFreidnListElementView Username="{Binding Username}"
                                                                    UserId="{Binding UserId}"
-                                                                   AvatarImageSource="{Binding AvatarImageSource}"/>
+                                                                   AvatarImageSource="{Binding AvatarImageSource}"
+                                                                   IsOnline="{Binding IsOnline}"/>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>

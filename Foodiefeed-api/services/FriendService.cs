@@ -68,15 +68,20 @@ namespace Foodiefeed_api.services
                 {
                     extractedFriendFromId = _userRepository.FindById(friend.UserId);  //  1 2
                 }
-                extractedFriendFromId = _userRepository.FindById(friend.FriendUserId); // 3 1
+                else
+                {
+                    extractedFriendFromId = _userRepository.FindById(friend.FriendUserId); // 3 1
+                }
 
 
                 if (extractedFriendFromId is null) { break; } // smth do to with this
 
-                if (extractedFriendFromId.IsOnline != desiredStatus) { break; }
+                if (extractedFriendFromId.IsOnline == desiredStatus) {
+                    var onlinefriend = _mapper.Map<ListedFriendDto>(extractedFriendFromId);
+                    friendsList.Add(onlinefriend);
+                }
 
-                var onlinefriend = _mapper.Map<ListedFriendDto>(extractedFriendFromId);
-                friendsList.Add(onlinefriend);
+                
             }
 
             return friendsList;
@@ -135,7 +140,7 @@ namespace Foodiefeed_api.services
             if(user is null) { throw new NotFoundException("user do not exist in current context."); }
 
             var friends = user.Friends.ToList();
-
+            friends.AddRange(_dbContext.Friends.Where(f => f.FriendUserId == userId).ToList());
             List<int> FriendsId = new List<int>();
 
             foreach(var friend in friends)

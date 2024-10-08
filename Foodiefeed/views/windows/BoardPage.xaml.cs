@@ -16,6 +16,12 @@ namespace Foodiefeed
             this.BindingContext = vm;
         }
 
+        protected override async void OnAppearing()
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.UpdateFriendList();
+        }
+
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
         {
 

@@ -13,6 +13,10 @@ public partial class OnlineFreidnListElementView : ContentView
     public static readonly BindableProperty AvatarImageSourceProperty =
        BindableProperty.Create(nameof(AvatarImageSource), typeof(string), typeof(OnlineFreidnListElementView), default(string), propertyChanged: OnImageSourceChanged);
 
+    public static readonly BindableProperty IsOnlineProperty =
+               BindableProperty.Create(nameof(IsOnline), typeof(bool), typeof(OnlineFreidnListElementView), default(bool));
+
+
     public string Username
 	{
 		get => (string)GetValue(UsernameProperty);
@@ -31,10 +35,16 @@ public partial class OnlineFreidnListElementView : ContentView
 		set => SetValue(UserIdProperty, value);
 	}
 
-	public OnlineFreidnListElementView()
-	{
-		InitializeComponent();
-	}
+    public bool IsOnline 
+    { 
+        get => (bool)GetValue(IsOnlineProperty);
+        set => SetValue(IsOnlineProperty, value);
+    }
+
+    public OnlineFreidnListElementView()
+    {
+        InitializeComponent();
+    }
 
     private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -58,5 +68,11 @@ public partial class OnlineFreidnListElementView : ContentView
             stream.Position = 0;
             return stream;
         });
+    }
+
+    public enum Status
+    {
+        Offline,
+        Online,
     }
 }

@@ -133,8 +133,9 @@ namespace Foodiefeed_api.services
 
                 if (asker is null) { throw new NotFoundException(""); }
 
-                var friend = await _context.Friends.FirstOrDefaultAsync(x => x.FriendUserId == Convert.ToInt32(askerId) 
-                                                                          || x.UserId == Convert.ToInt32(askerId));
+                var friend = await _context.Friends.FirstOrDefaultAsync
+                    (x => x.FriendUserId == Convert.ToInt32(askerId) && x.UserId == Convert.ToInt32(id) ||
+                    (x.FriendUserId == Convert.ToInt32(id) && x.UserId == Convert.ToInt32(askerId)));
 
                 var follower = asker.Followers.FirstOrDefault(f => f.FollowedUserId == Convert.ToInt32(id));
 

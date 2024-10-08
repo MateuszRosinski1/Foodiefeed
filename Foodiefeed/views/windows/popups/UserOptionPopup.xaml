@@ -18,6 +18,7 @@
                        HeightRequest="200" 
                        WidthRequest="200" 
                        Margin="10"/>
+            
                 <Label x:Name="UsernameLabel" 
                        HorizontalOptions="Center" 
                        FontSize="25" 
