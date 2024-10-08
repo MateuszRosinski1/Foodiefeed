@@ -28,6 +28,8 @@ namespace Foodiefeed.viewmodels
         //https://icons8.com/icons/set/microphone icons
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
         //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
+        //Search problems need to be fixed.
+
 
         private readonly UserSession _userSession;
         private Thread UpdateOnlineFriendListThread;

@@ -30,7 +30,7 @@
     <AppXManifest Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-10-08T01:50:40.992</Modified>
+      <Modified>2024-10-08T01:54:34.476</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -44,11 +44,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.dll">
       <PackagePath>Foodiefeed.dll</PackagePath>
-      <Modified>2024-10-08T01:50:40.446</Modified>
+      <Modified>2024-10-08T01:52:39.298</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Foodiefeed.exe</PackagePath>
-      <Modified>2024-10-08T01:50:40.453</Modified>
+      <Modified>2024-10-08T01:52:39.303</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
