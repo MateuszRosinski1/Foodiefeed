@@ -138,7 +138,7 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 1;
+            _userSession.Id = 15;
 
             notifications.Add(new BasicNotofication());
             notifications.Add(new FriendRequestNotification());
@@ -452,7 +452,7 @@ namespace Foodiefeed.viewmodels
         {
             if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
 
-            var endpoint = "api/user/search-users/" + SearchParam;
+            var endpoint = $"api/user/search-users/{SearchParam}/{_userSession.Id}";
 
             using (var client = new HttpClient())
             {

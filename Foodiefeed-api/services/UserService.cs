@@ -16,7 +16,7 @@ namespace Foodiefeed_api.services
         public Task<int> LogIn(UserLogInDto dto);
         public Task SetOnlineStatus(int id);
         public Task SetOfflineStatus(int id);
-        public Task<List<UserDto>> SearchUsers(string usernameQuery);
+        public Task<List<UserDto>> SearchUsers(string usernameQuery, string userId);
         public Task<UserDto> GetById(string id);
         public Task<UserProfileModel> GetUserProfileModelAsync(string id, string askerId);
     }
@@ -38,10 +38,10 @@ namespace Foodiefeed_api.services
             _friendService = friendService;
         }
 
-        public async Task<List<UserDto>> SearchUsers(string usernameQuery)
+        public async Task<List<UserDto>> SearchUsers(string usernameQuery,string userId)
         {
             var users = await _context.Users
-                .Where(u => u.Username.Contains(usernameQuery.Substring(0, 1)))
+                .Where(u => u.Username.Contains(usernameQuery.Substring(0, 1)) && u.Id != Convert.ToInt32(userId))
                 .ToListAsync();
 
             var searchedUsers = users.Where(u =>

@@ -508,31 +508,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "Xamarin.Android.Glide/4.15.1.2": {
         "type": "package",
         "dependencies": {
@@ -2801,31 +2776,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "Xamarin.Android.Glide/4.15.1.2": {
@@ -5098,31 +5048,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "Xamarin.Android.Glide/4.15.1.2": {
         "type": "package",
         "dependencies": {
@@ -7391,31 +7316,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "Xamarin.Android.Glide/4.15.1.2": {
@@ -9688,31 +9588,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "Xamarin.Android.Glide/4.15.1.2": {
         "type": "package",
         "dependencies": {
@@ -11981,31 +11856,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net7.0-android33.0/Maui.MaterialFrame.dll": {
-            "related": ".aar;.xml"
-          }
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "Xamarin.Android.Glide/4.15.1.2": {
@@ -14410,27 +14260,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "System.Speech/8.0.0": {
         "type": "package",
         "compile": {
@@ -15049,27 +14878,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "System.Speech/8.0.0": {
         "type": "package",
         "compile": {
@@ -15680,27 +15488,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "System.Speech/8.0.0": {
@@ -16315,27 +16102,6 @@
           }
         }
       },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        }
-      },
       "System.Speech/8.0.0": {
         "type": "package",
         "compile": {
@@ -16946,27 +16712,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "System.Speech/8.0.0": {
@@ -17585,27 +17330,6 @@
           "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Sharpnado.MaterialFrame.Maui/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Sharpnado.TaskMonitor": "1.0.2"
-        },
-        "compile": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        },
-        "runtime": {
-          "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll": {}
-        }
-      },
-      "Sharpnado.TaskMonitor/1.0.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Sharpnado.TaskMonitor.dll": {}
         }
       },
       "System.Speech/8.0.0": {
@@ -19863,39 +19587,6 @@
         "packageIcon.png"
       ]
     },
-    "Sharpnado.MaterialFrame.Maui/2.0.0": {
-      "sha512": "CgswPAf/NRahYyYDycpwzXynNyqM2FuiD5uG3smdJNpgb0DfKzOBW7PNSGOBnNhDs9P00CsQIog99/NQWrlosw==",
-      "type": "package",
-      "path": "sharpnado.materialframe.maui/2.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "docs/ReadMe.md",
-        "images/material_frame_maui.png",
-        "lib/net7.0-android33.0/Maui.MaterialFrame.aar",
-        "lib/net7.0-android33.0/Maui.MaterialFrame.dll",
-        "lib/net7.0-android33.0/Maui.MaterialFrame.xml",
-        "lib/net7.0-ios16.1/Maui.MaterialFrame.dll",
-        "lib/net7.0-maccatalyst16.1/Maui.MaterialFrame.dll",
-        "lib/net7.0-windows10.0.19041/Maui.MaterialFrame.dll",
-        "lib/net7.0/Maui.MaterialFrame.dll",
-        "sharpnado.materialframe.maui.2.0.0.nupkg.sha512",
-        "sharpnado.materialframe.maui.nuspec"
-      ]
-    },
-    "Sharpnado.TaskMonitor/1.0.2": {
-      "sha512": "2BRJrhgpnFocTM8lKuKX13c3dv3CoUavFO/+N97DdiSCH69sZ8IPRB1DwdOGI0mOJzmQqoIoSDn23mNi7Ay8QA==",
-      "type": "package",
-      "path": "sharpnado.taskmonitor/1.0.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.0/Sharpnado.TaskMonitor.dll",
-        "sharpnado.taskmonitor.1.0.2.nupkg.sha512",
-        "sharpnado.taskmonitor.nuspec",
-        "task-monitor.png"
-      ]
-    },
     "System.Speech/8.0.0": {
       "sha512": "CNuiA6vb95Oe5PRjClZEBiaju31vwB8OIeCgeSBXyZL6+MS4RVVB2X/C11z0xCkooHE3Vy91nM2z76emIzR+sg==",
       "type": "package",
@@ -21968,8 +21659,7 @@
       "Microsoft.Maui.Controls >= 8.0.71",
       "Microsoft.Maui.Controls.Compatibility >= 8.0.14",
       "Microsoft.NET.ILLink.Tasks >= 8.0.0",
-      "Newtonsoft.Json >= 13.0.3",
-      "Sharpnado.MaterialFrame.Maui >= 2.0.0"
+      "Newtonsoft.Json >= 13.0.3"
     ],
     "net8.0-windows10.0.19041": [
       "CommunityToolkit.Maui >= 9.1.0",
@@ -21977,8 +21667,7 @@
       "Microsoft.Extensions.Logging.Debug >= 8.0.0",
       "Microsoft.Maui.Controls >= 8.0.71",
       "Microsoft.Maui.Controls.Compatibility >= 8.0.14",
-      "Newtonsoft.Json >= 13.0.3",
-      "Sharpnado.MaterialFrame.Maui >= 2.0.0"
+      "Newtonsoft.Json >= 13.0.3"
     ]
   },
   "packageFolders": {
@@ -22061,10 +21750,6 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
-          },
-          "Sharpnado.MaterialFrame.Maui": {
-            "target": "Package",
-            "version": "[2.0.0, )"
           }
         },
         "imports": [
@@ -22114,10 +21799,6 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
-          },
-          "Sharpnado.MaterialFrame.Maui": {
-            "target": "Package",
-            "version": "[2.0.0, )"
           }
         },
         "imports": [

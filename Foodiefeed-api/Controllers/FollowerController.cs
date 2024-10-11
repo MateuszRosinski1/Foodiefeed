@@ -18,7 +18,7 @@ namespace Foodiefeed_api.Controllers
         [HttpGet("get-user-followers/{id}")]
         public async Task<IActionResult> GetUserFollowers([FromRoute]int id)
         {
-            var response = await _followerService.GetFollowerListAsync(Convert.ToInt32("15"));
+            var response = await _followerService.GetFollowerListAsync(Convert.ToInt32(id));
 
             return Ok(response);
         }

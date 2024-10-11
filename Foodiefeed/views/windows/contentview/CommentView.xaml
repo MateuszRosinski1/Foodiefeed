@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Class="Foodiefeed.views.windows.contentview.CommentView"
-             xmlns:converter="clr-namespace:Foodiefeed">
+             xmlns:converter="clr-namespace:Foodiefeed"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
 
     <Grid Padding="25" BackgroundColor="WhiteSmoke" x:Name="CommentContainer">
         <Grid.RowDefinitions>
@@ -26,7 +27,7 @@
 
         <HorizontalStackLayout  Grid.Row="2">
             <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" 
-                            Command="{Binding LikePostCommand}" 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=LikePostCommand}"
                             CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
 
             <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
