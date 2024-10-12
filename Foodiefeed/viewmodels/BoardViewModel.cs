@@ -258,10 +258,18 @@ namespace Foodiefeed.viewmodels
 
 
         [RelayCommand]
-        public void OpenPersonalDataEditor()
+        public async void OpenPersonalDataEditor()
         {
+            await Task.Delay(100);
             this.PersonalDataEditorVisible = true;
             this.SettingsMainHubVisible = false;
+        }
+
+        [RelayCommand]
+        public void OpenSettingsLandingPage()
+        {
+            this.PersonalDataEditorVisible = false;
+            this.SettingsMainHubVisible = true;
         }
 
         [RelayCommand]
@@ -300,11 +308,15 @@ namespace Foodiefeed.viewmodels
             this.ChangePasswordEntryVisible = false;
         }
 
+        public bool CanShowSearchPanel { get; set; }
         [RelayCommand]
         public void ShowSearchPanel()
         {
-            this.SearchPanelVisible = true;
-            DisplaySearchResultHistory();
+            if (CanShowSearchPanel)
+            {
+                this.SearchPanelVisible = true;
+                DisplaySearchResultHistory();
+            }
         }
 
         [RelayCommand]
@@ -453,6 +465,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void Search()
         {
+
             if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
 
             var endpoint = $"api/user/search-users/{SearchParam}/{_userSession.Id}";
