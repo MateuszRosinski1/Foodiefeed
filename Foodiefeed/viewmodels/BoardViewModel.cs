@@ -1,4 +1,4 @@
-﻿#if ANDROID
+#if ANDROID
 using Android.App;
 #endif
 #if WINDOWS
