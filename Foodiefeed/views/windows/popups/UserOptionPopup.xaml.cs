@@ -21,30 +21,41 @@ public partial class UserOptionPopup : Popup
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(UserOptionPopup), default(string), propertyChanged: OnUsernameChanged);
 
-    public static readonly BindableProperty IsFollowedProperty = 
-        BindableProperty.Create(nameof(IsFollowed),typeof(bool),typeof(UserOptionPopup),default(bool));
+    //public static readonly BindableProperty IsFollowedProperty = 
+    //    BindableProperty.Create(nameof(IsFollowed),typeof(bool),typeof(UserOptionPopup),default(bool));
 
-    public static readonly BindableProperty IsFriendProperty =
-        BindableProperty.Create(nameof(IsFriend), typeof(bool), typeof(UserOptionPopup), default(bool));
+    //public static readonly BindableProperty IsFriendProperty =
+    //    BindableProperty.Create(nameof(IsFriend), typeof(bool), typeof(UserOptionPopup), default(bool));
 
 
-    public UserOptionPopup(bool isFollowed,bool isFriend)
+    public UserOptionPopup(bool isFollowed,bool isFriend,bool HasPendingFriendRequest)
     {
         InitializeComponent();
-        IsFollowed = isFollowed;
-        IsFriend = isFriend;
-        if (IsFriend == true)
+
+        if(HasPendingFriendRequest)
         {
-            UnfriendBtn.IsVisible = true;
+            UnfriendBtn.IsVisible = false;
             AddToFriendBtn.IsVisible = false;
+            CancelFriendRequestBtn.IsVisible = true;
         }
         else
         {
-            UnfriendBtn.IsVisible = false;
-            AddToFriendBtn.IsVisible = true;
+            if (isFriend)
+            {
+                UnfriendBtn.IsVisible = true;
+                AddToFriendBtn.IsVisible = false;
+                CancelFriendRequestBtn.IsVisible = false;
+            }
+            else
+            {
+                UnfriendBtn.IsVisible = false;
+                AddToFriendBtn.IsVisible = true;
+                CancelFriendRequestBtn.IsVisible = false;
+
+            }
         }
 
-        if (IsFollowed == true)
+        if (isFollowed)
         {
             UnfollowBtn.IsVisible = true;
             FollowBtn.IsVisible = false;
@@ -85,17 +96,17 @@ public partial class UserOptionPopup : Popup
     //    }
     //}
 
-    public bool IsFriend
-    {
-        get => (bool)GetValue(IsFriendProperty);
-        set => SetValue(IsFriendProperty, value);
-    }
+    //public bool IsFriend
+    //{
+    //    get => (bool)GetValue(IsFriendProperty);
+    //    set => SetValue(IsFriendProperty, value);
+    //}
 
-    public bool IsFollowed
-    {
-        get => (bool)GetValue(IsFollowedProperty);
-        set => SetValue(IsFollowedProperty, value);
-    }
+    //public bool IsFollowed
+    //{
+    //    get => (bool)GetValue(IsFollowedProperty);
+    //    set => SetValue(IsFollowedProperty, value);
+    //}
 
     public string UserId
     {

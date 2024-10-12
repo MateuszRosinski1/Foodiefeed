@@ -243,7 +243,7 @@ namespace Foodiefeed.viewmodels
             var profileJson = await GetUserProfileModel(id);
             var user = await JsonToObject<UserProfileModel>(profileJson);
 
-            var popup = new UserOptionPopup(user.IsFollowed,user.IsFriend)
+            var popup = new UserOptionPopup(user.IsFollowed,user.IsFriend,user.HasPendingFriendRequest)
             {
                 UserId = user.Id.ToString(), 
                 Username = user.Username, 
@@ -480,14 +480,41 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void AddToFriends(string id)
         {
-            var endpoint = $"api/friend-request/send/{id}/{_userSession.Id}";
+            var endpoint = $"api/friends/add/{id}/{_userSession.Id}";
 
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.PostAsync(endpoint, null);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful friend request.
+                }
+            }
         }
 
         [RelayCommand]
         public async void UnfriendUser(string id)
         {
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful unfriend action.
+                }
+            }
         }
 
         [RelayCommand]
@@ -499,7 +526,27 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void UnfollowUser(string id)
         {
-            var endpoint = $"api/followers/unfollow//{id}/{_userSession.Id}";
+            var endpoint = $"api/followers/unfollow/{id}/{_userSession.Id}";
+        }
+
+        [RelayCommand]
+        public async void CancelFriendRequest(string id)
+        {
+            var endpoint = $"api/friends/request/cancel/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful request cancel.
+                }
+            }
         }
 
         [RelayCommand]

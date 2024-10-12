@@ -139,8 +139,12 @@ namespace Foodiefeed_api.services
 
                 var follower = asker.Followers.FirstOrDefault(f => f.FollowedUserId == Convert.ToInt32(id));
 
+                var friendRequest = await _context.FriendRequests
+                .FirstOrDefaultAsync(fr => (fr.SenderId == Convert.ToInt32(askerId) && fr.ReceiverId == Convert.ToInt32(id)));
+
                 userProfileModel.IsFriend = friend is null ? false : true;
                 userProfileModel.IsFollowed = follower is null ? false : true;
+                userProfileModel.HasPendingFriendRequest = friendRequest is null ? false : true;
            }
 
             userProfileModel.FriendsCount = friendsCount.ToString();
