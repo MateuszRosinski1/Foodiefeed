@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using CommunityToolkit.Maui.Media;
+using Microsoft.UI.Xaml;
 using static Microsoft.Maui.ApplicationModel.Permissions;
 using uiMedia = Microsoft.UI.Xaml.Media;
 
@@ -22,6 +23,14 @@ namespace Foodiefeed.WinUI
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            base.OnLaunched(args);
+
+            // Rejestracja implementacji dla Windows
+            Microsoft.Maui.Controls.DependencyService.Register<ISpeechToText, SpeechToTextImplementation>();
+        }
     }
 
 }

@@ -131,7 +131,7 @@ public partial class PostView : ContentView
     {
         var view = (PostView)bindable;
 
-        if(newValue is null) return;
+        if (newValue is null) return;
 
         var newValueString = newValue as string;
 
@@ -140,7 +140,7 @@ public partial class PostView : ContentView
         view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
         {
             var stream = new MemoryStream(imageBytes);
-            stream.Position = 0; 
+            stream.Position = 0;
             return stream;
         });
     }
@@ -159,8 +159,8 @@ public partial class PostView : ContentView
 
     private async void ExpandCommentSection(object sender, EventArgs e)
     {
-
-        await MainThread.InvokeOnMainThreadAsync(() => {
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
             var animation = new Animation(v => CommentSectionScroll.MaximumHeightRequest = v, 300, 600);
             animation.Commit(this, "1", 16, 500, Easing.CubicIn);
         });
@@ -172,7 +172,8 @@ public partial class PostView : ContentView
 
     private async void CondenseCommentSection(object sender, EventArgs e)
     {
-        await MainThread.InvokeOnMainThreadAsync(() => {
+        await MainThread.InvokeOnMainThreadAsync(() =>
+        {
             var animation = new Animation(v => CommentSectionScroll.MaximumHeightRequest = v, 600, 300);
             animation.Commit(this, "TrackListSideBarAnimation", 16, 500, Easing.CubicIn);
         });

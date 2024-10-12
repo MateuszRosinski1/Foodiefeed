@@ -79,6 +79,10 @@
 	  <None Remove="Resources\Images\hearthIcon.png" />
 	  <None Remove="Resources\Images\likeicon.png" />
 	  <None Remove="Resources\Images\logobutton.png" />
+	  <None Remove="Resources\Images\microphone.png" />
+	  <None Remove="Resources\Images\notificationicon.png" />
+	  <None Remove="Resources\Images\pfpreal.jpg" />
+	  <None Remove="Resources\Images\profileicon.png" />
 	  <None Remove="Resources\Images\shareicon.png" />
 	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
@@ -88,13 +92,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.14" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.71" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.14" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Sharpnado.MaterialFrame.Maui" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -113,7 +116,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\CommentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\FriendRequestNotification.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\OnlineFreidnListElementView.xaml">

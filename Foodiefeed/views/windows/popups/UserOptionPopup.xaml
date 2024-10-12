@@ -3,30 +3,113 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.views.windows.popups.UserOptionPopup"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Color="Transparent">
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.popups"
+             Color="Transparent"
+             >
     <Border BackgroundColor="White" StrokeShape="RoundRectangle 30">
         
     
     <Frame BackgroundColor="White">
         
-        <VerticalStackLayout BackgroundColor="White" WidthRequest="300" Padding="25">
-                <Image x:Name="avatarImage" HeightRequest="200" WidthRequest="200" Margin="10"/>
-                <Label x:Name="UsernameLabel" HorizontalOptions="Center" FontSize="25" FontAttributes="Bold" TextColor="Black"/>
-                <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" HeightRequest="40" FontSize="20" Margin="10">
+        <VerticalStackLayout BackgroundColor="White" 
+                             WidthRequest="300" 
+                             Padding="25">
+                <Image x:Name="avatarImage" 
+                       HeightRequest="200" 
+                       WidthRequest="200" 
+                       Margin="10"/>
+            
+                <Label x:Name="UsernameLabel" 
+                       HorizontalOptions="Center" 
+                       FontSize="25" 
+                       FontAttributes="Bold" 
+                       TextColor="Black"/>
+
+                <Button FontAttributes="Bold" 
+                        x:Name="AddToFriendBtn" 
+                        Text="Send friend request" 
+                        BackgroundColor="#e0e0e0" 
+                        HeightRequest="40" 
+                        FontSize="20" 
+                        Margin="10"
+                        Command="{Binding AddToFriendsCommand}"
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    <Button.Shadow>
+                        <Shadow Opacity="0.4"
+                            Radius="10"/>
+                    </Button.Shadow>
+                </Button>
+
+                <Button FontAttributes="Bold" 
+                        x:Name="CancelFriendRequestBtn" 
+                        Text="Cancel friend request" 
+                        BackgroundColor="#e0e0e0" 
+                        HeightRequest="40" 
+                        FontSize="20" 
+                        Margin="10"
+                        Command="{Binding CancelFriendRequestCommand}"
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    <Button.Shadow>
+                        <Shadow Opacity="0.4"
+                                Radius="10"/>
+                    </Button.Shadow>
+                </Button>
+
+                <Button FontAttributes="Bold" 
+                        x:Name="UnfriendBtn" 
+                        Text="Unfriend" 
+                        BackgroundColor="#e0e0e0" 
+                        HeightRequest="40" 
+                        FontSize="20" 
+                        Margin="10"
+                        Command="{Binding UnfriendUserCommand}"
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    <Button.Shadow>
+                        <Shadow Opacity="0.4"
+                                Radius="10"/>
+                    </Button.Shadow>
+            </Button>
+
+                <Button FontAttributes="Bold" 
+                        x:Name="FollowBtn" 
+                        Text="Follow" 
+                        BackgroundColor="#e32441" 
+                        HeightRequest="40" 
+                        FontSize="20" 
+                        Margin="10"
+                        Command="{Binding FollowUserCommand}"
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">                
                 <Button.Shadow>
                     <Shadow Opacity="0.4"
                             Radius="10"/>
                 </Button.Shadow>
             </Button>
-
-                <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" HeightRequest="40" FontSize="20" Margin="10">
-                <Button.Shadow>
-                    <Shadow Opacity="0.4"
-                            Radius="10"/>
-                </Button.Shadow>
+            
+            <Button FontAttributes="Bold" 
+                    x:Name="UnfollowBtn" 
+                    Text="Unfollow" 
+                    BackgroundColor="#e32441" 
+                    HeightRequest="40" 
+                    FontSize="20" 
+                    Margin="10"
+                    Command="{Binding UnfollowUserCommand}"
+                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    <Button.Shadow>
+                        <Shadow Opacity="0.4"
+                                Radius="10"/>
+                    </Button.Shadow>
             </Button>
 
-                <Button  Text="Show Profile" HeightRequest="40" FontAttributes="Bold" FontSize="20" BackgroundColor="White" Margin="10">
+                <Button Clicked="Button_Clicked" 
+                        Text="Show Profile" 
+                        HeightRequest="40" 
+                        FontAttributes="Bold" 
+                        FontSize="20" 
+                        BackgroundColor="White" 
+                        Margin="10"
+                        Command="{Binding ShowUserProfilePopupCommand}"
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    
                 <Button.Shadow>
                     <Shadow Opacity="0.4" Radius="5"/>
                 </Button.Shadow>

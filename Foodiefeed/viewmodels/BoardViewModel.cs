@@ -1,5 +1,8 @@
-﻿#if ANDROID
+#if ANDROID
 using Android.App;
+#endif
+#if WINDOWS
+using Windows.Media.SpeechRecognition;
 #endif
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,14 +17,19 @@ using System.Data;
 using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Foodiefeed.extension;
+using System.Collections.Specialized;
+using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
 
 
 namespace Foodiefeed.viewmodels
 {
     public partial class BoardViewModel : ObservableObject
     {
-
+        //https://icons8.com/icons/set/microphone icons
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
+        //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
+        //Search problems need to be fixed.
+
 
         private readonly UserSession _userSession;
         private Thread UpdateOnlineFriendListThread;
@@ -109,63 +117,42 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool noPostOnProfile;
 
+        [ObservableProperty]
+        bool hubPanelVisible;
+
+        [ObservableProperty]
+        bool noNotificationNotifierVisible;
+
+        [ObservableProperty]
+        bool loadingLabelVisible;
+
         #endregion
+
+
+        public ObservableCollection<INotification> Notifications { get { return notifications; } }
+        private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
+
 
         public BoardViewModel(UserSession userSession)
         {
+            notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
-            UpdateOnlineFriendListThread = new Thread(UpdateOnlineFriendList);
-            UpdateOnlineFriendListThread.Start();
             _userSession = userSession;
             _userSession.Id = 15;
-            posts.Add(new PostView() { Username = "kiwigamer5" ,TimeStamp = "10 hours",PostLikeCount = 102.ToString() ,
-                PostTextContent = "Smak jesieni 🐌☕️\U0001f90e\r\nPuszyste, miękkie i wilgotne cynamonki 🍂\r\n•\r\n•\r\nSkładniki:\r\n\U0001f90eCiasto\r\n•380ml mleka\r\n•100g cukru\r\n•100g masła\r\n•30g świeżych drożdży\r\n•2 jajka\r\n•720g mąki pszennej\r\n•szczypta soli\r\n\U0001f90eNadzienie\r\n•100g masła\r\n•150g cukru (najlepiej trzcinowego)\r\n•4 łyżeczki cynamonu\r\n\U0001f90ePolewa\r\n•100g serka typu philadelphia\r\n•60g śmietanki 36% (dodatkowo 80g śmietanki do wlania między bułeczki)\r\n•160g cukru pudru\r\n\U0001f90eWykonanie\r\n•\r\n•\r\nDo garnka przekładamy mleko, masło i cukier. Podgrzewamy na małym ogniu do momentu całkowitego rozpuszczenia (nie doprowadzamy do wrzenia).\r\nPrzelewamy całość do dużej miski i sprawdzamy temperaturę. Jeśli mleko jest ciepłe (ale nie gorące!) dodajemy drożdże, mieszamy, nakrywamy ściereczką i odstawiamy na 15/20 minut.\r\n•\r\n•\r\nKiedy rozczyn podrośnie dodajemy do niego jajka i mieszamy do połączenia.\r\nDo masy dodajemy mąkę wymieszaną ze szczyptą soli, cały czas wyrabiając ciasto. Gdy będzie gładkie, lekko lepikie nakrywamy ściereczką do wyrośnięcia na ok. 1h.\r\n•\r\n•\r\nW tym czasie przygotowujemy nadzienie. Miękkie masło łączymy z cukrem trzcinowym i cynamonem.\r\n•\r\n•\r\nWyrośnięte ciasto przekładamy na blat i delikatnie zagniatamy.\r\nGładkie, zagniecione ciasto musimy rozwałkować na kształt prostokąta (u mnie ok. 40x50 cm). Smarujemy nadzieniem, następnie zwijamy ciasto, tak aby powstała rolada.\r\nKroimy (żyłką, nitką lub nożem) i układamy na blaszce wyłożonej papierem do pieczenia. Układamy je tak żeby po drugim wyrośnięciu się stykały (tak jak na nagraniu). Blaszkę przykrywamy ściereczką i odstawiamy na 20/30 minut.\r\n•\r\n•\r\nW międzyczasie rozgrzewamy piekarnik do 180° i przygotowujemy polewę mieszając serek, śmietankę oraz cukier puder.\r\n•\r\n•\r\nPo ponownym wyrośnięciu, wlewamy 80g śmietanki pomiędzy bułeczki.\r\n•\r\n•\r\nPieczemy 20 minut, do momentu aż się zarumienią. Po wyjęciu z piekarnika lukrować póki ciepłe, dzięki temu będą bardziej miękkie.\r\n•\r\n•\r\nGotowe!🐌\U0001f90e\r\n•\r\n•",
-                Comments =
-                [
-                    new CommentView()
-                    {
-                        Username = "martino",
-                        CommentContent = "Bardo fajny przepis polecam ",
-                        CommentId = 2.ToString(),
-                        LikeCount = 234.ToString()
-                    },
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                    new CommentView(),
-                ]
-                });
 
-            onlineFriends.Add(new OnlineFreidnListElementView() { Username = "mati123" });
-            //profilePageFriends.Add(new OnListFriendView() { Username = "mati" });
-            //profilePageFriends.Add(new OnListFriendView() { Username = "Adrian Lozycki" });
-            //profilePageFriends.Add(new OnListFriendView() { Username = "Kornelio1239045asdasdassd" });
+            notifications.Add(new BasicNotofication());
+            notifications.Add(new FriendRequestNotification());
+            notifications.Add(new BasicNotofication());
+            notifications.Add(new BasicNotofication());
+            notifications.Add(new BasicNotofication());
+            notifications.Add(new FriendRequestNotification());
+            notifications.Add(new FriendRequestNotification());
+            notifications.Add(new FriendRequestNotification());
+            notifications.Add(new BasicNotofication());
+            notifications.Add(new FriendRequestNotification());
+            notifications.Add(new FriendRequestNotification());
 
-
-
-            //var usernames = new List<string>
-            //{
-            //    "Mieki Adrian5", "Sztywny Seba0", "Kasia Zielona", "Mare kKowal", "AniaNowak",
-            //    "JanekWojcik", "EwaSierżant", "PiotrMucha", "OlaWolska", "MarcinLis",
-            //    "MagdaSienkiewicz", "RafałKrawczyk", "NataliaSkrzypczak", "KrzysztofBiel", "AgnieszkaWójcik",
-            //    "TomekPawlak", "KamilaKaczmarek", "GrzegorzStasiak", "JoannaJankowska", "WojtekZalewski"
-            //};
-
-            //for (int i = 0; i < usernames.Count; i++)
-            //{
-            //    searchResults.Add(new UserSearchResultView()
-            //    {
-            //        Username = usernames[i],
-            //        Follows = (i * 10 % 50).ToString(), 
-            //        Friends = (i % 10).ToString()        
-            //    });
-            //}
-
+            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
@@ -179,6 +166,32 @@ namespace Foodiefeed.viewmodels
             this.ProfilePostsVisible = true; //on init true;
             this.ProfileFriendsVisible = false; //on init false
             this.NoPostOnProfile = false; // on init false
+            this.HubPanelVisible = false;
+
+            //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
+            //UpdateOnlineFriendListThread.Start();
+            //Task.Run(UpdateFriendList);
+        }
+
+        [RelayCommand]
+        private async void ClearNotifications()
+        {
+            for (int i = 0; i <= Notifications.Count - 1; i++)
+            {
+                var notification = Notifications[i];
+                if(notification is not FriendRequestNotification)
+                {
+                    await notification.HideAnimation(300, 150);
+                    Notifications.Remove(notification);
+                    i = i - 1;
+                }
+            }
+            //code to clear notification in database
+        }
+
+        private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
         }
 
         [RelayCommand]
@@ -189,8 +202,6 @@ namespace Foodiefeed.viewmodels
             //{
             //   
             //}
-
-
         }
 
 
@@ -204,11 +215,14 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ToProfileView()
+        public async void ToProfileView()
         {
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
             this.SettingsPageVisible = false;
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
             ShowUserProfile(_userSession.Id.ToString());
         }
 
@@ -232,11 +246,11 @@ namespace Foodiefeed.viewmodels
             var profileJson = await GetUserProfileModel(id);
             var user = await JsonToObject<UserProfileModel>(profileJson);
 
-            var popup = new UserOptionPopup()
+            var popup = new UserOptionPopup(user.IsFollowed,user.IsFriend,user.HasPendingFriendRequest)
             {
                 UserId = user.Id.ToString(), 
                 Username = user.Username, 
-                AvatarImageSource = user.ProfilePictureBase64
+                AvatarImageSource = user.ProfilePictureBase64,
             };
 
             App.Current.MainPage.ShowPopup(popup);
@@ -301,6 +315,18 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public void ShowHubPanel()
+        {
+            this.HubPanelVisible = true;
+        }
+
+        [RelayCommand]
+        public void HideHubPanel()
+        {
+            this.HubPanelVisible = false;
+        }
+
+        [RelayCommand]
         public async void ShowUserProfile(string id)
         {
             this.ProfileFollowersVisible = false;
@@ -314,12 +340,36 @@ namespace Foodiefeed.viewmodels
                     ToProfileView();
                 }
 
-                await OpenUserProfile(id);
+                OpenUserProfile(id);
             }catch (Exception ex)
             {
                 Console.Write(ex.ToString());
             }
+        }
 
+        [RelayCommand]
+        public void ShowUserProfilePopup(string id)
+        {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
+
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = true;
+            this.SettingsPageVisible = false;
+
+            this.ProfileFollowersVisible = false;
+            this.ProfilePostsVisible = true;
+            this.ProfileFriendsVisible = false;
+            SetButtonColors(Buttons.PostButton);
+            try
+            {
+                OpenUserProfile(id);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
         }
 
         [ObservableProperty]
@@ -405,7 +455,7 @@ namespace Foodiefeed.viewmodels
         {
             if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
 
-            var endpoint = "api/user/search-users/" + SearchParam;
+            var endpoint = $"api/user/search-users/{SearchParam}/{_userSession.Id}";
 
             using (var client = new HttpClient())
             {
@@ -428,6 +478,114 @@ namespace Foodiefeed.viewmodels
                 }
             }
 
+        }
+
+        [RelayCommand]
+        public async void AddToFriends(string id)
+        {
+            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.PostAsync(endpoint, null);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful friend request.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void UnfriendUser(string id)
+        {
+            var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful unfriend action.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void FollowUser(string id)
+        {
+            var endpoint = $"api/followers/follow/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    await httpClient.PostAsync(endpoint,null);
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+        [RelayCommand]
+        public async void UnfollowUser(string id)
+        {
+            var endpoint = $"api/followers/unfollow/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    await httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+        [RelayCommand]
+        public async void CancelFriendRequest(string id)
+        {
+            var endpoint = $"api/friends/request/cancel/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+                    // code to handle unsuccsesful request cancel.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void SearchByVoice()
+        {
+            
         }
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
@@ -543,53 +701,148 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private void UpdateOnlineFriendList()
+        public async Task UpdateFriendList()
         {
+
             while (true)
             {
-                Thread.Sleep(60000);
+                OnlineFriends.Clear();
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                    try
+                    {
+                        var endpoint = $"api/friends/online/{_userSession.Id}";
+
+                        var response = httpClient.GetAsync(endpoint).Result;
+                        Console.WriteLine("2");
+                        var json = response.Content.ReadAsStringAsync().Result;
+
+                        var onlineFriends = JsonToObject<List<ListedFriendDto>>(json).Result;
+
+                        foreach(var friend in onlineFriends)
+                        {
+                            OnlineFriends.Add(new OnlineFreidnListElementView()
+                            {
+                                UserId = friend.Id.ToString(),
+                                Username = friend.Username,
+                                AvatarImageSource = friend.ProfilePictureBase64,
+                                IsOnline = true
+                            });
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+
+                    }
+
+                    try
+                    {
+                        var endpoint = $"api/friends/offline/{_userSession.Id}";
+
+                        var response = httpClient.GetAsync(endpoint).Result;
+
+                        var json = response.Content.ReadAsStringAsync().Result;
+                        var offlineFriends = JsonToObject<List<ListedFriendDto>>(json).Result;
+
+                        foreach (var friend in offlineFriends)
+                        {
+                            OnlineFriends.Add(new OnlineFreidnListElementView()
+                            {
+                                UserId = friend.Id.ToString(),
+                                Username = friend.Username,
+                                AvatarImageSource = friend.ProfilePictureBase64,
+                                IsOnline = false
+                            });
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                await Task.Delay(60000);
             }
         }
 
+        //private async Task OpenUserProfile(string id)
+        //{
+        //    var profileJson = await GetUserProfileModel(id);
+        //    var profile = await JsonToObject<UserProfileModel>(profileJson);
+
+        //    if (profile is null) { throw new Exception(); }
+
+        //    SetUserProfileModel(profile.Id,
+        //                        profile.FriendsCount + " friends",
+        //                        profile.FollowsCount + " follows",
+        //                        profile.LastName,
+        //                        profile.FirstName,
+        //                        profile.Username,
+        //                        profile.ProfilePictureBase64);          
+
+        //    var json = await GetUserProfilePosts(id);
+        //    var posts = await JsonToObject<List<PostDto>>(json);
+        //    DisplayProfilePosts(posts);
+
+        //    var json2 = await GetUserProfileFriends(id);
+        //    var friends = await JsonToObject<List<ListedFriendDto>>(json2);
+        //    DisplayProfileFriends(friends);
+
+
+        //    var json3 = await GetUserProfileFollowers(id);
+        //    var followers = await JsonToObject<List<ListedFriendDto>>(json3); //followers can be displayed using the same Dto and OnListFriewView
+        //    DisplayProfileFollowers(followers);
+        //}
+
         private async Task OpenUserProfile(string id)
         {
+            try
+            {
+                LoadingLabelVisible = true;
 
-            ProfilePosts.Clear();
-            ProfileFollowersList.Clear();
-            ProfileFriendsList.Clear();
+                var profileJson = await GetUserProfileModel(id);
+                var profile = await JsonToObject<UserProfileModel>(profileJson);
 
-            var profileJson = await GetUserProfileModel(id);
-            var profile = await JsonToObject<UserProfileModel>(profileJson);
+                if (profile is null) { throw new Exception("Profile not found."); }
 
-            if (profile is null) { throw new Exception(); }
+                SetUserProfileModel(profile.Id,
+                                    profile.FriendsCount + " friends",
+                                    profile.FollowsCount + " follows",
+                                    profile.LastName,
+                                    profile.FirstName,
+                                    profile.Username,
+                                    profile.ProfilePictureBase64);
 
-            SetUserProfileModel(profile.Id,
-                                profile.FriendsCount + " friends",
-                                profile.FollowsCount + " follows",
-                                profile.LastName,
-                                profile.FirstName,
-                                profile.Username,
-                                profile.ProfilePictureBase64);
+                // Równoległe pobieranie danych
+                var postsTask = GetUserProfilePosts(id);
+                var friendsTask = GetUserProfileFriends(id);
+                var followersTask = GetUserProfileFollowers(id);
 
-            var json = await GetUserProfilePosts(id);
-            var posts = await JsonToObject<List<PostDto>>(json);
-            DisplayProfilePosts(posts);
+                await Task.WhenAll(postsTask, friendsTask, followersTask);
 
-            var json2 = await GetUserProfileFriends(id);
-            var friends = await JsonToObject<List<ListedFriendDto>>(json2);
-            DisplayProfileFriends(friends);
-            
-            
-            var json3 = await GetUserProfileFollowers(id);
-            var followers = await JsonToObject<List<ListedFriendDto>>(json3); //followers can be displayed using the same Dto and OnListFriewView
-            DisplayProfileFollowers(followers);
- 
+                var posts = await JsonToObject<List<PostDto>>(await postsTask);
+                DisplayProfilePosts(posts);
+
+                var friends = await JsonToObject<List<ListedFriendDto>>(await friendsTask);
+                DisplayProfileFriends(friends);
+
+                var followers = await JsonToObject<List<ListedFriendDto>>(await followersTask);
+                DisplayProfileFollowers(followers);
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                LoadingLabelVisible = false;
+            }
         }
 
         private async void DisplayProfileFollowers(List<ListedFriendDto> followers)
         {
-            ProfileFollowersList.Clear();
-
+            //ProfileFollowersList.Clear();
             foreach (var follower in followers)
             {
                 ProfileFollowersList.Add(new OnListFriendView()
@@ -603,8 +856,6 @@ namespace Foodiefeed.viewmodels
 
         private async void DisplayProfileFriends(List<ListedFriendDto> friends) 
         {
-            ProfileFriendsList.Clear();
-
             foreach (var friend in friends)
             {
                 ProfileFriendsList.Add(new OnListFriendView()
@@ -659,7 +910,7 @@ namespace Foodiefeed.viewmodels
             return string.Empty;
         }
 
-        private void DisplayProfilePosts(List<PostDto> posts)
+        private async Task DisplayProfilePosts(List<PostDto> posts)
         {
             if (posts == null || posts.Count == 0)
             {
@@ -668,7 +919,6 @@ namespace Foodiefeed.viewmodels
                 return;
             }
             ProfilePosts.Clear();
-
             foreach(var post in posts)
             {
                 var commentList = new List<CommentView>();
@@ -703,9 +953,8 @@ namespace Foodiefeed.viewmodels
 
       
                 ProfilePosts.Add(postview);
-              
-            }
-            
+                await Task.Delay(100);
+            }           
         }
 
         private async Task<string> GetUserProfileFollowers(string id)
@@ -769,7 +1018,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task<string> GetUserProfileModel(string id)
         {
-            var endpoint = $"api/user/user-profile/{id}";
+            var endpoint = $"api/user/user-profile/{id}/{_userSession.Id}";
 
             using (var httpclient = new HttpClient())
             {
@@ -803,6 +1052,8 @@ namespace Foodiefeed.viewmodels
             ProfileName = FirstName;
             ProfileUsername = Username;
             AvatarBase64 = imageBase64;
+            
         }
+
     }
 }

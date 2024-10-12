@@ -1,4 +1,6 @@
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 
 namespace Foodiefeed.views.windows.popups;
 
@@ -18,6 +20,93 @@ public partial class UserOptionPopup : Popup
 
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(UserOptionPopup), default(string), propertyChanged: OnUsernameChanged);
+
+    //public static readonly BindableProperty IsFollowedProperty = 
+    //    BindableProperty.Create(nameof(IsFollowed),typeof(bool),typeof(UserOptionPopup),default(bool));
+
+    //public static readonly BindableProperty IsFriendProperty =
+    //    BindableProperty.Create(nameof(IsFriend), typeof(bool), typeof(UserOptionPopup), default(bool));
+
+
+    public UserOptionPopup(bool isFollowed,bool isFriend,bool HasPendingFriendRequest)
+    {
+        InitializeComponent();
+
+        if(HasPendingFriendRequest)
+        {
+            UnfriendBtn.IsVisible = false;
+            AddToFriendBtn.IsVisible = false;
+            CancelFriendRequestBtn.IsVisible = true;
+        }
+        else
+        {
+            if (isFriend)
+            {
+                UnfriendBtn.IsVisible = true;
+                AddToFriendBtn.IsVisible = false;
+                CancelFriendRequestBtn.IsVisible = false;
+            }
+            else
+            {
+                UnfriendBtn.IsVisible = false;
+                AddToFriendBtn.IsVisible = true;
+                CancelFriendRequestBtn.IsVisible = false;
+
+            }
+        }
+
+        if (isFollowed)
+        {
+            UnfollowBtn.IsVisible = true;
+            FollowBtn.IsVisible = false;
+        }
+        else
+        {
+            UnfollowBtn.IsVisible = false;
+            FollowBtn.IsVisible = true;
+        }
+    }
+    //private static void OnFriendChanged(BindableObject bindable, object oldValue, object newValue)
+    //{
+    //    var view = (UserOptionPopup)bindable;
+    //    if (view.IsFriend == true)
+    //    {
+    //        view.UnfriendBtn.IsVisible = true;
+    //        view.AddToFriendBtn.IsVisible = false;
+    //    }
+    //    else
+    //    {
+    //        view.UnfriendBtn.IsVisible = false;
+    //        view.AddToFriendBtn.IsVisible = true;
+    //    }
+    //}
+
+    //private static void OnFollowChanged(BindableObject bindable, object oldValue, object newValue)
+    //{
+    //    var view = (UserOptionPopup)bindable;
+    //    if (view.IsFollowed == true)
+    //    {
+    //        view.UnfollowBtn.IsVisible = true;
+    //        view.FollowBtn.IsVisible = false;
+    //    }
+    //    else
+    //    {
+    //        view.UnfollowBtn.IsVisible = false;
+    //        view.FollowBtn.IsVisible = true;
+    //    }
+    //}
+
+    //public bool IsFriend
+    //{
+    //    get => (bool)GetValue(IsFriendProperty);
+    //    set => SetValue(IsFriendProperty, value);
+    //}
+
+    //public bool IsFollowed
+    //{
+    //    get => (bool)GetValue(IsFollowedProperty);
+    //    set => SetValue(IsFollowedProperty, value);
+    //}
 
     public string UserId
     {
@@ -59,5 +148,10 @@ public partial class UserOptionPopup : Popup
             stream.Position = 0;
             return stream;
         });
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        this.Close();
     }
 }

@@ -18,9 +18,24 @@ namespace Foodiefeed_api.Controllers
         [HttpGet("get-user-followers/{id}")]
         public async Task<IActionResult> GetUserFollowers([FromRoute]int id)
         {
-            var response = await _followerService.GetFollowerListAsync(Convert.ToInt32("15"));
+            var response = await _followerService.GetFollowerListAsync(Convert.ToInt32(id));
 
             return Ok(response);
+        }
+
+        [HttpPost("follow/{userId}/{followedUserId}")]
+        public async Task<IActionResult> FollowUser([FromRoute]int userId, [FromRoute]int followedUserId)
+        {
+            await _followerService.Follow(userId,followedUserId);
+            return NoContent();
+        }   
+
+        [HttpDelete("unfollow/{userId}/{unfollowedUserId}")]
+        public async Task<IActionResult> UnfollowUser([FromRoute] int userId, [FromRoute] int unfollowedUserId)
+        {
+            await _followerService.Unfollow(userId,unfollowedUserId);
+
+            return NoContent();
         }
     }
 }

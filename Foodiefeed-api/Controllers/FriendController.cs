@@ -61,5 +61,20 @@ namespace Foodiefeed_api.Controllers
             return Ok($"User {receiverId} declined friend reqest from {senderId}");
         }
 
+        [HttpDelete("request/cancel/{senderId}/{receiverId}")]
+        public async Task<IActionResult> CancelFriendRequest([FromRoute] int senderId, [FromRoute] int receiverId)
+        {
+            await _friendService.CancelFriendRequest(senderId, receiverId);
+
+            return Ok("Request deleted succesfuly");
+        }
+
+        [HttpDelete("/unfriend{userId}/{friendId}")]
+        public async Task<IActionResult> Unfriend([FromRoute]int userId, [FromRoute]int friendId)
+        {
+            await _friendService.Unfriend(userId, friendId);
+
+            return Ok("");
+        }
     }
 }

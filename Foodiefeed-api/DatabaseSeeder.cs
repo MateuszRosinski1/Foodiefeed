@@ -1,4 +1,6 @@
-﻿using Foodiefeed_api.entities;
+﻿using Bogus;
+using Bogus.DataSets;
+using Foodiefeed_api.entities;
 using System;
 
 namespace Foodiefeed_api
@@ -7,242 +9,376 @@ namespace Foodiefeed_api
     {
         public static void SeedData(dbContext context)
         {
-            var userMati = context.Users.FirstOrDefault(u => u.Username == "mati");
-            var userMariuszek = context.Users.FirstOrDefault(u => u.Username == "Mariuszek29");
-
-            if (userMati == null || userMariuszek == null)
+            if (!context.Users.Any())
             {
-                throw new Exception("Użytkownicy 'mati' i 'Mariuszek29' muszą istnieć w bazie danych przed uruchomieniem seeder'a.");
+                var userFaker = new Faker<User>()
+                    .RuleFor(u => u.FirstName, f => f.Name.FirstName())
+                    .RuleFor(u => u.LastName, f => f.Name.LastName())
+                    .RuleFor(u => u.Username, (f, u) => $"{u.FirstName}.{u.LastName}".ToLower())
+                    .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
+                    .RuleFor(u => u.PasswordHash, f => f.Internet.Password())
+                    .RuleFor(u => u.ProfilePicturePath, (f, u) => $"images/profilePicture/{u.Id}/default.png")
+                    .RuleFor(u => u.IsOnline, f => f.Random.Bool());
+
+                var users = userFaker.Generate(100);
+
+                context.Users.AddRange(users);
+
+                context.SaveChanges();
             }
 
             if (!context.Posts.Any())
             {
-                var posts = new List<Post>
-            {
-                new Post
-                {
-                    UserId = userMati.Id,
-                    Description = "Przepis na pyszne spaghetti bolognese!",
-                    Likes = 45
-                },
-                new Post
-                {
-                    UserId = userMariuszek.Id,
-                    Description = "Szybkie śniadanie: Omlet z warzywami.",
-                    Likes = 32
-                },
-                new Post
-                {
-                    UserId = userMati.Id,
-                    Description = "Deser idealny: Tiramisu bez jajek.",
-                    Likes = 60
-                },
-                new Post
-                {
-                    UserId = userMariuszek.Id,
-                    Description = "Kurczak w sosie curry, prosto z Azji.",
-                    Likes = 55
-                }
-            };
+                var postFaker = new Faker<Post>()
+                    .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 20)))
+                    .RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
+
+                var posts = postFaker.Generate(2000);
+
                 context.Posts.AddRange(posts);
                 context.SaveChanges();
             }
 
             if (!context.Comments.Any())
             {
-                var comments = new List<Comment>
-            {
-                new Comment
-                {
-                    UserId = userMariuszek.Id,
-                    CommentContent = "Spaghetti wyszło pyszne! Polecam!",
-                    Likes = 12
-                },
-                new Comment
-                {
-                    UserId = userMati.Id,
-                    CommentContent = "Omlet z warzywami to idealny pomysł na śniadanie.",
-                    Likes = 8
-                },
-                new Comment
-                {
-                    UserId = userMariuszek.Id,
-                    CommentContent = "Tiramisu bez jajek? Brzmi świetnie, muszę spróbować!",
-                    Likes = 20
-                },
-                new Comment
-                {
-                    UserId = userMati.Id,
-                    CommentContent = "Kurczak w sosie curry to klasyka. Super przepis!",
-                    Likes = 25
-                }
-            };
+                var commentFaker = new Faker<Comment>()
+                    .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 20)))
+                    .RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
+
+                var comments = commentFaker.Generate(20000);
+
                 context.Comments.AddRange(comments);
                 context.SaveChanges();
             }
 
             if (!context.PostCommentMembers.Any())
             {
-                var postCommentMembers = new List<PostCommentMember>
-            {
-                new PostCommentMember
+                var comments = context.Comments.ToList();
+                var posts = context.Posts.ToList();
+
+                if (comments.Count > 0 && posts.Count > 0)
                 {
-                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
-                    CommentId = context.Comments.First(c => c.CommentContent.Contains("Spaghetti wyszło")).CommentId
-                },
-                new PostCommentMember
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
-                    CommentId = context.Comments.First(c => c.CommentContent.Contains("Omlet z warzywami")).CommentId
+                    var postCommentMembers = new List<PostCommentMember>();
+                    var faker = new Faker(); 
+
+                    foreach (var comment in comments)
+                    {
+                        var randomPostId = posts[faker.Random.Int(0, posts.Count - 1)].PostId;
+
+                        var postCommentMember = new PostCommentMember
+                        {
+                            PostId = randomPostId,
+                            CommentId = comment.CommentId
+                        };
+
+                        postCommentMembers.Add(postCommentMember);
+                    }
+
+                    context.PostCommentMembers.AddRange(postCommentMembers);
+                    context.SaveChanges();
                 }
-            };
-                context.PostCommentMembers.AddRange(postCommentMembers);
-                context.SaveChanges();
             }
 
             if (!context.PostImages.Any())
             {
-                var postImages = new List<PostImage>
-            {
-                new PostImage
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
-                    ImagePath = "/images/spaghetti.jpg"
-                },
-                new PostImage
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
-                    ImagePath = "/images/omlet.jpg"
-                },
-                new PostImage
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Tiramisu")).PostId,
-                    ImagePath = "/images/tiramisu.jpg"
-                },
-                new PostImage
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("curry")).PostId,
-                    ImagePath = "/images/curry.jpg"
-                }
-            };
+                var postImageFaker = new Faker<PostImage>()
+                    .RuleFor(pi => pi.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                    .RuleFor(pi => pi.ImagePath, f => $"images/posts/{f.Random.Int(1, 1000)}.jpg");
+
+                var postImages = postImageFaker.Generate(8000);
                 context.PostImages.AddRange(postImages);
                 context.SaveChanges();
             }
 
             if (!context.PostProducts.Any())
             {
-                var postProducts = new List<PostProduct>
-            {
-                new PostProduct
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
-                    Product = "Makaron spaghetti"
-                },
-                new PostProduct
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
-                    Product = "Mięso mielone"
-                },
-                new PostProduct
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
-                    Product = "Jajka"
-                },
-                new PostProduct
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
-                    Product = "Papryka"
-                }
-            };
+                var postProductFaker = new Faker<PostProduct>()
+                    .RuleFor(pp => pp.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                    .RuleFor(pp => pp.Product, f => f.Commerce.ProductName());
+
+                var postProducts = postProductFaker.Generate(20000);
                 context.PostProducts.AddRange(postProducts);
+                context.SaveChanges();
+
+            }
+
+            if (!context.Tags.Any())
+            {
+                List<Tag> tags = new List<Tag>();
+                foreach (var tag in Tags.names)
+                {
+                    tags.Add(new Tag() { Name = tag });
+                }
+
+                context.Tags.AddRange(tags);
                 context.SaveChanges();
             }
 
+            //if (!context.PostTags.Any())
+            //{
+            //    var postTagsFaker = new Faker<PostTag>()
+            //        .RuleFor(pt => pt.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+            //        .RuleFor(pt => pt.TagId, f => f.PickRandom(context.Tags.ToList()).Id);
+
+            //    var postTags = postTagsFaker.Generate(10000); // Generuj 200 posttagów
+
+            //    context.PostTags.AddRange(postTags);
+            //    context.SaveChanges();
+            //}
+
             if (!context.PostTags.Any())
             {
-                var postTags = new List<PostTag>
-            {
-                new PostTag
+                var postTagsFaker = new Faker<PostTag>()
+                    .RuleFor(pt => pt.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                    .RuleFor(pt => pt.TagId, f => f.PickRandom(context.Tags.ToList()).Id)
+                    .RuleFor(pt => pt.Description, f => "");
+
+                var postTagsSet = new HashSet<(int PostId, int TagId)>();
+                var postTags = new List<PostTag>();
+
+                while (postTags.Count < 10000)
                 {
-                    PostId = context.Posts.First(p => p.Description.Contains("spaghetti")).PostId,
-                    TagName = "makaron",
-                    Description = "Przepisy na makarony"
-                },
-                new PostTag
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Omlet")).PostId,
-                    TagName = "śniadanie",
-                    Description = "Pomysły na zdrowe śniadania"
-                },
-                new PostTag
-                {
-                    PostId = context.Posts.First(p => p.Description.Contains("Tiramisu")).PostId,
-                    TagName = "deser",
-                    Description = "Słodkie desery"
+                    var newPostTag = postTagsFaker.Generate();
+
+                    //postTagsSet.Add returns true if the method is able to add an element, otherwise false
+                    //hashset was uset cause of efficiency reasons
+                    if (postTagsSet.Add((newPostTag.PostId, newPostTag.TagId)))
+                    {
+                        postTags.Add(newPostTag);
+                    }
                 }
-            };
+
                 context.PostTags.AddRange(postTags);
                 context.SaveChanges();
             }
 
+            //if (!context.UserTags.Any())
+            //{
+            //    var userTagsFaker = new Faker<UserTag>()
+            //        .RuleFor(ut => ut.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
+            //        .RuleFor(ut => ut.TagId, f => f.PickRandom(context.Tags.ToList()).Id) 
+            //        .RuleFor(ut => ut.Score, f => f.Random.Int(1, 100));
+
+            //    var userTags = userTagsFaker.Generate(1000); 
+
+            //    context.UserTags.AddRange(userTags);
+            //    context.SaveChanges();
+            //}
+
             if (!context.UserTags.Any())
             {
-                var userTags = new List<UserTag>
-            {
-                new UserTag
+                var faker = new Faker();
+                var userIds = context.Users.Select(u => u.Id).ToList();
+                var tagIds = context.Tags.Select(t => t.Id).ToList();
+                var userTags = new List<UserTag>(); 
+
+                while (userTags.Count < 1000) 
                 {
-                    UserId = userMati.Id,
-                    TagName = "desery",
-                    Count = 120
-                },
-                new UserTag
-                {
-                    UserId = userMariuszek.Id,
-                    TagName = "zdrowe jedzenie",
-                    Count = 80
-                },
-                new UserTag
-                {
-                    UserId = userMati.Id,
-                    TagName = "kuchnia włoska",
-                    Count = 150
+                    var userId = userIds[faker.Random.Int(0, userIds.Count - 1)];
+                    var tagId = tagIds[faker.Random.Int(0, tagIds.Count - 1)];
+                    var score = faker.Random.Int(1, 100);
+
+                    // Sprawdzamy, czy rekord już istnieje
+                    if (!userTags.Any(ut => ut.UserId == userId && ut.TagId == tagId) &&
+                        !context.UserTags.Any(ut => ut.UserId == userId && ut.TagId == tagId)) 
+                    {
+                        userTags.Add(new UserTag { UserId = userId, TagId = tagId, Score = score });
+                    }
                 }
-            };
-                context.UserTags.AddRange(userTags);
+
+                context.UserTags.AddRange(userTags); 
                 context.SaveChanges();
             }
 
+            //if (!context.Friends.Any())
+            //{            
+            //    var faker = new Faker<Friend>()
+            //        .RuleFor(f => f.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
+            //        .RuleFor(f => f.FriendUserId, (f, friend) =>
+            //        {
+            //            int friendUserId;
+            //            do
+            //            {
+            //                friendUserId = f.PickRandom(context.Users.ToList()).Id;
+            //            }
+            //            while (friendUserId == friend.UserId); 
+
+            //            return friendUserId;
+            //        });
+
+            //    int friendsCount = 350;
+            //    var friends = new List<Friend>();
+            //    while (friends.Count < friendsCount)
+            //    {
+            //        var newFriend = faker.Generate();
+
+            //        var exists = context.Friends.Any(f =>
+            //            (f.UserId == newFriend.UserId && f.FriendUserId == newFriend.FriendUserId) ||
+            //            (f.UserId == newFriend.FriendUserId && f.FriendUserId == newFriend.UserId));
+
+            //        if (!exists)
+            //        {
+            //            friends.Add(newFriend);
+            //        }
+            //    }
+            //    context.Friends.AddRange(friends);
+            //    context.SaveChanges();
+            //}
+
             if (!context.Friends.Any())
             {
-                var friends = new List<Friend>
-            {
-                new Friend
+                var faker = new Faker<Friend>()
+                    .RuleFor(f => f.UserId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(f => f.FriendUserId, (f, friend) =>
+                    {
+                        int friendUserId;
+                        do
+                        {
+                            friendUserId = f.PickRandom(context.Users.ToList()).Id;
+                        }
+                        while (friendUserId == friend.UserId); 
+
+                        return friendUserId;
+                    });
+
+                int friendsCount = 350;
+                var friends = new List<Friend>();
+                HashSet<string> uniqueFriendships = new HashSet<string>(); 
+
+                while (friends.Count < friendsCount)
                 {
-                    UserId = userMati.Id,
-                    FriendUserId = userMariuszek.Id
+                    var newFriend = faker.Generate();
+                    string key = $"{Math.Min(newFriend.UserId, newFriend.FriendUserId)}|{Math.Max(newFriend.UserId, newFriend.FriendUserId)}";
+
+                    if (!uniqueFriendships.Contains(key))
+                    {
+                        var exists = context.Friends.Any(f =>
+                            (f.UserId == newFriend.UserId && f.FriendUserId == newFriend.FriendUserId) ||
+                            (f.UserId == newFriend.FriendUserId && f.FriendUserId == newFriend.UserId));
+
+                        if (!exists)
+                        {
+                            friends.Add(newFriend);
+                            uniqueFriendships.Add(key); 
+                        }
+                    }
                 }
-            };
+
                 context.Friends.AddRange(friends);
                 context.SaveChanges();
             }
 
-            if(!context.Followers.Any()) {
-                var followers = new List<Follower>
+            if (!context.FriendRequests.Any())
+            {
+                var faker = new Faker<FriendRequest>()
+                    .RuleFor(fr => fr.SenderId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(fr => fr.ReceiverId, (f, fr) =>
+                    {
+                        int receiverId;
+                        do
+                        {
+                            receiverId = f.PickRandom(context.Users.ToList()).Id;
+                        }
+                        while (receiverId == fr.SenderId);
+
+                        return receiverId;
+                    });
+
+                int requestCount = 400;
+                var friendRequests = new List<FriendRequest>();
+                HashSet<string> uniqueRequests = new HashSet<string>();
+
+                while (friendRequests.Count < requestCount)
                 {
-                    new Follower
+                    var newRequest = faker.Generate();
+
+                    string requestKey = $"{Math.Min(newRequest.SenderId, newRequest.ReceiverId)}|{Math.Max(newRequest.SenderId, newRequest.ReceiverId)}"; 
+
+                    if (!uniqueRequests.Contains(requestKey))
                     {
-                        UserId = userMariuszek.Id,
-                        FollowedUserId = userMati.Id
-                    },
-                    new Follower
-                    {
-                        UserId = userMati.Id,
-                        FollowedUserId = userMariuszek.Id
+                        var requestExists = context.FriendRequests.Any(fr =>
+                            (fr.SenderId == newRequest.SenderId && fr.ReceiverId == newRequest.ReceiverId));
+
+                        var friendshipExists = context.Friends.Any(f =>
+                            (f.UserId == newRequest.SenderId && f.FriendUserId == newRequest.ReceiverId) ||
+                            (f.UserId == newRequest.ReceiverId && f.FriendUserId == newRequest.SenderId));
+
+                        if (!requestExists && !friendshipExists)
+                        {
+                            friendRequests.Add(newRequest);
+                            uniqueRequests.Add(requestKey);
+                        }
                     }
-                };
+                }
+
+                context.FriendRequests.AddRange(friendRequests);
+                context.SaveChanges();
+            }
+
+            if (!context.Followers.Any())
+            {
+                var faker = new Faker<Follower>()
+                    .RuleFor(f => f.UserId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(f => f.FollowedUserId, (f, follower) =>
+                    {
+                        int followedUserId;
+                        do
+                        {
+                            followedUserId = f.PickRandom(context.Users.ToList()).Id;
+                        }
+                        while (followedUserId == follower.UserId);
+
+                        return followedUserId;
+                    });
+
+                int followersCount = 1000;
+                var followers = new List<Follower>();
+                HashSet<string> uniqueFollowers = new HashSet<string>();
+
+                while (followers.Count < followersCount)
+                {
+                    var newFollower = faker.Generate();
+
+                    string followerKey = $"{Math.Min(newFollower.UserId, newFollower.FollowedUserId)}|{Math.Max(newFollower.UserId, newFollower.FollowedUserId)}";
+
+                    if (!uniqueFollowers.Contains(followerKey))
+                    {
+                        var exists = context.Followers.Any(f =>
+                            f.UserId == newFollower.UserId && f.FollowedUserId == newFollower.FollowedUserId);
+
+                        if (!exists)
+                        {
+                            followers.Add(newFollower);
+                            uniqueFollowers.Add(followerKey); 
+                        }
+                    }
+                }
+
                 context.Followers.AddRange(followers);
                 context.SaveChanges();
             }
+
+            if (!context.Notifications.Any()) {
+                
+                List<Notification> notifications = new List<Notification>();
+                foreach(var request in context.FriendRequests.ToList())
+                {
+                    notifications.Add(new Notification(NotificationType.FriendRequest) { SenderId = request.SenderId, ReceiverId = request.ReceiverId });
+                }
+
+                foreach(var friend in context.Friends.ToList())
+                {
+                    notifications.Add(new Notification(NotificationType.AcceptedFriendRequest) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                }
+
+                context.Notifications.AddRange(notifications);
+                context.SaveChanges();
+            }
+
+
+            
         }
     }
 }

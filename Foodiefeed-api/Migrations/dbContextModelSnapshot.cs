@@ -91,6 +91,36 @@ namespace Foodiefeed_api.Migrations
                     b.ToTable("FriendRequests");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -177,28 +207,38 @@ namespace Foodiefeed_api.Migrations
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostTag", b =>
                 {
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PostId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTags");
+                });
+
+            modelBuilder.Entity("Foodiefeed_api.entities.Tag", b =>
+                {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TagName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostTags");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.User", b =>
@@ -243,25 +283,18 @@ namespace Foodiefeed_api.Migrations
 
             modelBuilder.Entity("Foodiefeed_api.entities.UserTag", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TagName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("UserId");
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "TagId");
+
+                    b.HasIndex("TagId");
 
                     b.ToTable("UserTags");
                 });
@@ -334,6 +367,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Notification", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.User", "User")
@@ -392,16 +444,32 @@ namespace Foodiefeed_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Foodiefeed_api.entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Post");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.UserTag", b =>
                 {
+                    b.HasOne("Foodiefeed_api.entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Foodiefeed_api.entities.User", "User")
                         .WithMany("UserTags")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tag");
 
                     b.Navigation("User");
                 });

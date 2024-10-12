@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using Foodiefeed.viewmodels;
-using Sharpnado.MaterialFrame;
 
 namespace Foodiefeed
 {

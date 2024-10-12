@@ -14,21 +14,12 @@ namespace Foodiefeed
         {
             InitializeComponent();
             this.BindingContext = vm;
-            //PostGrid.Children.Add(new PostView());
-            //PostGrid.Children.Add(new PostView());
-            //PostGrid.Children.Add(new PostView());
-            //PostGrid.Children.Add(new PostView());
+        }
 
-            ////ProfileSection.Children.Add(new PostView());
-            ////ProfileSection.Children.Add(new PostView());
-            ////ProfileSection.Children.Add(new PostView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
-            //OnlineFriendList.Children.Add(new OnlineFreidnListElementView());
+        protected override async void OnAppearing()
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.UpdateFriendList();
         }
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)

@@ -53,7 +53,7 @@
           "dependencies": {
             "CommunityToolkit.Maui": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[9.1.0, )"
             },
             "CommunityToolkit.Mvvm": {
               "target": "Package",
@@ -65,7 +65,7 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.14, )"
+              "version": "[8.0.71, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
@@ -80,10 +80,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "Sharpnado.MaterialFrame.Maui": {
-              "target": "Package",
-              "version": "[2.0.0, )"
             }
           },
           "imports": [
@@ -112,7 +108,7 @@
           "dependencies": {
             "CommunityToolkit.Maui": {
               "target": "Package",
-              "version": "[9.0.0, )"
+              "version": "[9.1.0, )"
             },
             "CommunityToolkit.Mvvm": {
               "target": "Package",
@@ -124,7 +120,7 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.14, )"
+              "version": "[8.0.71, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
@@ -133,10 +129,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "Sharpnado.MaterialFrame.Maui": {
-              "target": "Package",
-              "version": "[2.0.0, )"
             }
           },
           "imports": [

@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aeb3d1a66451d9a76f1512543eb46a7a97f6363a")]
+<<<<<<< HEAD
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6af31c6497c003fe91a5b9c915a21de5be2b676d")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bcc7bb4c8c7bf9ca961285e5ae0ed159bddc9563")]
+>>>>>>> origin/features/popup-functionality
 [assembly: System.Reflection.AssemblyProductAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Foodiefeed-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

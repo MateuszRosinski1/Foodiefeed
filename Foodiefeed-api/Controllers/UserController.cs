@@ -22,18 +22,18 @@ namespace Foodiefeed_api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("user-profile/{id}")]
-        public async Task<IActionResult> GetUserProfileModel([FromRoute]string id)
+        [HttpGet("user-profile/{id}/{askerId}")]
+        public async Task<IActionResult> GetUserProfileModel([FromRoute]string id, [FromRoute]string askerId)
         {
-            var response = await _service.GetUserProfileModelAsync(id);
+            var response = await _service.GetUserProfileModelAsync(id,askerId);
 
             return Ok(response);
         }
 
-        [HttpGet("search-users/{query}")]
-        public async Task<IActionResult> SearchUsers([FromRoute]string query)
+        [HttpGet("search-users/{query}/{userId}")]
+        public async Task<IActionResult> SearchUsers([FromRoute]string query,[FromRoute] string userId)
         {
-            var response = await _service.SearchUsers(query);
+            var response = await _service.SearchUsers(query,userId);
 
             return Ok(response);
         }
@@ -69,9 +69,5 @@ namespace Foodiefeed_api.Controllers
 
             return Ok("Status set to offline");
         }
-      
-
-
-
     }
 }

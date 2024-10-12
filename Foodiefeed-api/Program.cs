@@ -17,6 +17,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IFriendService, FriendService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
@@ -30,7 +32,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //DatabaseSeeder.SeedData(new dbContext());
+    DatabaseSeeder.SeedData(new dbContext());
 }
 
 app.UseHttpsRedirection();

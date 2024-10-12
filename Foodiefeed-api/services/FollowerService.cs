@@ -2,12 +2,15 @@
 using Foodiefeed_api.models.friends;
 using Foodiefeed_api.entities;
 using Microsoft.EntityFrameworkCore;
+using Foodiefeed_api.exceptions;
 
 namespace Foodiefeed_api.services
 {
     public interface IFollowerService
     {
         public Task<List<ListedFriendDto>> GetFollowerListAsync(int id);
+        public Task Follow(int userId, int followedUserId);
+        public Task Unfollow(int userId, int unfollowedUserId);
     }
 
     public class FollowerService : IFollowerService
@@ -18,10 +21,34 @@ namespace Foodiefeed_api.services
         public FollowerService(dbContext dbContext,IMapper mapper)
         {
             _dbContext = dbContext;
-            _mapper = mapper;
-            
+            _mapper = mapper;         
         }
 
+        private async Task Commit()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Follow(int userId, int followedUserId)
+        {
+            var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.UserId == userId && f.FollowedUserId == followedUserId);
+
+            if(follower is not null) { throw new BadRequestException("user is already followed."); }
+          
+            _dbContext.Followers.Add(new Follower() { UserId = userId, FollowedUserId = followedUserId });
+            await Commit();
+        }
+
+
+        public async Task Unfollow(int userId, int unfollowedUserId)
+        {
+            var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.UserId == userId && f.FollowedUserId == unfollowedUserId);
+
+            if (follower is null) { throw new BadRequestException("user is not follwed"); }
+
+            _dbContext.Followers.Remove(follower);
+            await Commit();
+        }
 
         public async Task<List<ListedFriendDto>> GetFollowerListAsync(int id)
         {
