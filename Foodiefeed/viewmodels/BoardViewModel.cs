@@ -179,9 +179,12 @@ namespace Foodiefeed.viewmodels
             for (int i = 0; i <= Notifications.Count - 1; i++)
             {
                 var notification = Notifications[i];
-                await notification.HideAnimation(300, 150);
-                Notifications.Remove(notification);
-                i = i - 1;
+                if(notification is not FriendRequestNotification)
+                {
+                    await notification.HideAnimation(300, 150);
+                    Notifications.Remove(notification);
+                    i = i - 1;
+                }
             }
             //code to clear notification in database
         }
@@ -480,7 +483,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void AddToFriends(string id)
         {
-            var endpoint = $"api/friends/add/{id}/{_userSession.Id}";
+            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
 
             using (var httpClient = new HttpClient())
             {
@@ -520,13 +523,43 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void FollowUser(string id)
         {
-            var endpoint = $"api/followers/follow//{id}/{_userSession.Id}";
+            var endpoint = $"api/followers/follow/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    await httpClient.PostAsync(endpoint,null);
+                }
+                catch
+                {
+
+                }
+
+            }
         }
 
         [RelayCommand]
         public async void UnfollowUser(string id)
         {
-            var endpoint = $"api/followers/unfollow/{id}/{_userSession.Id}";
+            var endpoint = $"api/followers/unfollow/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    await httpClient.DeleteAsync(endpoint);
+                }
+                catch
+                {
+
+                }
+
+            }
         }
 
         [RelayCommand]
