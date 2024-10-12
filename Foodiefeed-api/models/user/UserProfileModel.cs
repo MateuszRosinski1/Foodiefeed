@@ -11,5 +11,6 @@
         public string FollowsCount { get; set; }
         public bool IsFollowed { get; set; }
         public bool IsFriend { get; set; }
+        public bool HasPendingFriendRequest { get; set; }
     }
 }

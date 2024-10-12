@@ -18,6 +18,9 @@ namespace Foodiefeed_api.services
         public Task DeclineFriendRequest(int senderId, int receiverId);
 
         public Task<List<ListedFriendDto>> GetUserFriends(int userId);
+
+        public Task CancelFriendRequest(int senderId,int receiverId);
+        public Task Unfriend(int userId,int friendId);
     }
 
     public class FriendService : IFriendService
@@ -89,10 +92,16 @@ namespace Foodiefeed_api.services
 
         public async Task SendFriendRequest(int senderId, int receiverId)
         {
+            var friend = await _dbContext.Friends.FirstOrDefaultAsync(fr => (fr.UserId == senderId && fr.FriendUserId == receiverId)
+                                                                         || (fr.UserId == receiverId && fr.FriendUserId == senderId));
+
+
+            if (friend is not null) { throw new BadRequestException("This user already is your friend"); }
+
             var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
             var reflectedFriendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == receiverId && fr.ReceiverId == senderId);
 
-            if (friendRequest is not null && reflectedFriendRequest is not null) { throw new Exception("Request already sent"); }
+            if (friendRequest is not null || reflectedFriendRequest is not null) { throw new BadRequestException("Request already sent"); }
 
             _dbContext.FriendRequests.Add(new FriendRequest() { ReceiverId = receiverId,SenderId = senderId});
 
@@ -101,7 +110,8 @@ namespace Foodiefeed_api.services
 
         public async Task CancelFriendRequest(int senderId,int receiverId)
         {
-            var friendRequest = await _dbContext.FriendRequests.FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
+            var friendRequest = await _dbContext.FriendRequests
+                .FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
             
             if (friendRequest is null) { throw new NotFoundException("Such a friend request do not exist"); }
 
@@ -168,5 +178,20 @@ namespace Foodiefeed_api.services
 
             return friendsAsUserListDto;
         }
+
+        public async Task Unfriend(int userId,int friendId)
+        {
+            var friend = await _dbContext.Friends.FirstOrDefaultAsync(fr => (fr.UserId == userId && fr.FriendUserId == friendId) 
+                                                                         || (fr.UserId == friendId && fr.FriendUserId == userId));
+
+            //var reflectedFriend = await _dbContext.Friends.FirstOrDefaultAsync(fr => fr.UserId == friendId && fr.FriendUserId == userId);
+
+            if (friend is null) { throw new NotFoundException("Request already sent"); }
+
+            _dbContext.Remove(friend);
+            await Commit();
+
+        }
+
     }
 }
