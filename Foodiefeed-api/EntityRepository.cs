@@ -20,5 +20,12 @@ namespace Foodiefeed_api
 
             return entity;
         }
+
+        public async Task<T?> FindByIdAsync(int id)
+        {
+            var entity = await _entity.FindAsync(id);
+
+            return entity;
+        }
     }
 }

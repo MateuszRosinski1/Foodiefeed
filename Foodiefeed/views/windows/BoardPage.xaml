@@ -29,8 +29,6 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-
-
             <Grid ZIndex="10" Grid.Row="0">
                 <BoxView Color="White" 
                           WidthRequest="{Binding Source={x:Reference Page},Path=Width}" 
@@ -532,7 +530,8 @@
                                                        x:Name="newUsernameEntry" 
                                                        HeightRequest="50" 
                                                        WidthRequest="350" 
-                                                       Background="White">
+                                                       Background="White"
+                                                       Text="{Binding ChangedUsername}">
                                                 </Entry>
                                             </Border>
 
@@ -549,7 +548,8 @@
                                                     x:Name="newEmailEntry" 
                                                     HeightRequest="50" 
                                                     WidthRequest="350" 
-                                                    Background="White">
+                                                    Background="White"
+                                                    Text="{Binding ChangedEmail}">
                                                 </Entry>
                                             </Border>
                                             <VerticalStackLayout Spacing="10" VerticalOptions="Center">
@@ -568,7 +568,8 @@
                                                         x:Name="newPasswordEntry" 
                                                         HeightRequest="50" 
                                                         WidthRequest="350" 
-                                                        Background="White">
+                                                        Background="White"
+                                                        Text="{Binding ChangedPassword}">
                                                     </Entry>
                                                 </Border>
 
@@ -585,21 +586,36 @@
                                                             x:Name="newRePasswordEntry" 
                                                             HeightRequest="50" 
                                                             WidthRequest="350" 
-                                                            Background="White">
+                                                            Background="White"
+                                                            Text="{Binding ChangedRePassword}">
                                                     </Entry>
                                                 </Border>
                                             </VerticalStackLayout>
 
 
-                                            <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="End" Spacing="10">
-                                                <Button Text="Save Changes" BackgroundColor="#e0e0e0" FontAttributes="Bold" VerticalOptions="Center">
+                                            <HorizontalStackLayout HorizontalOptions="End" 
+                                                                   VerticalOptions="End" 
+                                                                   Spacing="10">
+                                                <Button Text="Save Changes" 
+                                                        BackgroundColor="#e0e0e0" 
+                                                        FontAttributes="Bold" 
+                                                        VerticalOptions="Center"
+                                                        Command="{Binding SaveChangedPersonalDataCommand}">
                                                     <Button.Shadow>
                                                         <Shadow Opacity="0.4"
-                                                                    Radius="10"/>
+                                                                Radius="10"/>
                                                     </Button.Shadow>
                                                 </Button>
                                             </HorizontalStackLayout>
-                                            <Button Text="←" Clicked="Button_Clicked" TextColor="Black" VerticalOptions="Start" HorizontalOptions="End" Command="{Binding OpenSettingsLandingPageCommand}"/>
+                                            <Button Text="←"
+                                                    Clicked="Button_Clicked" 
+                                                    TextColor="Black" 
+                                                    BackgroundColor="Transparent"
+                                                    Margin="0,-25,0,0" 
+                                                    FontSize="30" 
+                                                    VerticalOptions="Start" 
+                                                    HorizontalOptions="End" 
+                                                    Command="{Binding OpenSettingsLandingPageCommand}"/>
                                             <!--</VerticalStackLayout>-->
                                         </Grid>
                                     </Grid>

@@ -19,6 +19,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Foodiefeed.extension;
 using System.Collections.Specialized;
 using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Text;
 
 
 namespace Foodiefeed.viewmodels
@@ -129,6 +132,24 @@ namespace Foodiefeed.viewmodels
         #endregion
 
 
+        #region SettingsVariables
+        [ObservableProperty]
+        string changedUsername;
+
+        [ObservableProperty]
+        string changedEmail;
+
+        [ObservableProperty]
+        string changedPassword;
+
+        [ObservableProperty]
+        string changedRePassword;
+
+        [ObservableProperty]
+        string changedImageProfilePictureBase64;
+
+        #endregion
+
         public ObservableCollection<INotification> Notifications { get { return notifications; } }
         private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
 
@@ -166,7 +187,8 @@ namespace Foodiefeed.viewmodels
             this.ProfilePostsVisible = true; //on init true;
             this.ProfileFriendsVisible = false; //on init false
             this.NoPostOnProfile = false; // on init false
-            this.HubPanelVisible = false;
+            this.HubPanelVisible = false; // on init false
+            this.CanShowSearchPanel = true; //on init true
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
@@ -211,7 +233,6 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-
         }
 
         [RelayCommand]
@@ -263,6 +284,7 @@ namespace Foodiefeed.viewmodels
             await Task.Delay(100);
             this.PersonalDataEditorVisible = true;
             this.SettingsMainHubVisible = false;
+            ShowChangeUsernameEntry();
         }
 
         [RelayCommand]
@@ -308,6 +330,67 @@ namespace Foodiefeed.viewmodels
             this.ChangePasswordEntryVisible = false;
         }
 
+        [RelayCommand]
+        public async void SaveChangedPersonalData()
+        {
+            string endpoint = "";
+            StringContent content = null;
+            if (this.ChangeUsernameEntryVisible)
+            {
+                endpoint = Regex.IsMatch(ChangedUsername, "^(?=.*[a-zA-Z])[a-zA-Z0-9_]+$") ? $"api/user/change-username/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedUsername);
+                content = new StringContent(json,Encoding.UTF8,"application/json");
+            }
+            else if (this.ChangeEmailEntryVisible)
+            {
+                endpoint = Regex.IsMatch(ChangedEmail, @"^([\w-\.]+@([0-9a-zA-Z-.拉着,\u4e00-\u9fff]+)\.[a-zA-Z]{2,5})+$") ? $"api/user/change-email/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedEmail);
+                content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+            else if (this.ChangePasswordEntryVisible)
+            {
+                if (ChangedPassword != ChangedRePassword) HandleMissmatchPassword();
+                endpoint = Regex.IsMatch(ChangedPassword, "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$") ? $"api/user/change-password/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedPassword);
+                content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            if(endpoint != string.Empty && content is not null)
+             await UpdatePersonalData(endpoint,content);
+        }
+
+        private void HandleMissmatchPassword()
+        {
+
+        }
+
+        //private string HandlePersonalDataChange(string endpointBase,string propertyValue,string regex)
+        //{
+        //    if (Regex.IsMatch(propertyValue, regex))
+        //    {
+        //        return endpointBase + propertyValue;
+        //    }
+        //    else return string.Empty;
+        //}
+
+        private async Task UpdatePersonalData(string endpoint,StringContent contnet)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await client.PutAsync(endpoint, contnet);
+                }
+                catch(Exception ex)
+                {
+
+                }
+               
+            }
+        }
+
         public bool CanShowSearchPanel { get; set; }
         [RelayCommand]
         public void ShowSearchPanel()
@@ -349,7 +432,12 @@ namespace Foodiefeed.viewmodels
                 if (id != _userSession.Id.ToString())
                 {
                     CreateSearchResultHistory(id);
-                    ToProfileView();
+                    this.PostPageVisible = false;
+                    this.ProfilePageVisible = true;
+                    this.SettingsPageVisible = false;
+                    ProfilePosts.Clear();
+                    ProfileFollowersList.Clear();
+                    ProfileFriendsList.Clear();
                 }
 
                 OpenUserProfile(id);
@@ -465,6 +553,8 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void Search()
         {
+
+            SearchResults.Clear();
 
             if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
 
@@ -612,8 +702,9 @@ namespace Foodiefeed.viewmodels
                     UserId = user.Id.ToString(),
                     Username = user.Username,
                     Follows = user.FollowersCount.ToString(),
-                    Friends = user.FollowersCount.ToString()
+                    Friends = user.FriendsCount.ToString()
                 });
+
             }
         }
 
@@ -931,8 +1022,10 @@ namespace Foodiefeed.viewmodels
                 ProfilePostsVisible = false;
                 return;
             }
-            ProfilePosts.Clear();
-            foreach(var post in posts)
+
+            await Task.Run(() => { ProfilePosts.Clear(); });
+
+            foreach (var post in posts)
             {
                 var commentList = new List<CommentView>();
                 foreach (var comment in post.Comments)

@@ -19,6 +19,10 @@ namespace Foodiefeed_api.services
         public Task<List<UserDto>> SearchUsers(string usernameQuery, string userId);
         public Task<UserDto> GetById(string id);
         public Task<UserProfileModel> GetUserProfileModelAsync(string id, string askerId);
+
+        public Task ChangeUsername(int id, string value);
+        public Task ChangeEmail(int id, string value);
+        public Task ChangePassword(int id, string value);
     }
 
     public class UserService : IUserService
@@ -29,7 +33,12 @@ namespace Foodiefeed_api.services
         private readonly IEntityRepository<User> _entityRepository;
         private readonly IFriendService _friendService;
 
-        public UserService(dbContext context,IMapper mapper, IPasswordHasher<User> hasher,IEntityRepository<User> entityRepository,IFriendService friendService)
+        public UserService(dbContext context,
+            IMapper mapper, 
+            IPasswordHasher<User> hasher,
+            IEntityRepository<User> entityRepository,
+            IFriendService friendService,
+            IFollowerService followerService)
         {
             _context = context;
             _mapper = mapper;
@@ -40,7 +49,7 @@ namespace Foodiefeed_api.services
 
         public async Task<List<UserDto>> SearchUsers(string usernameQuery,string userId)
         {
-            var users = await _context.Users
+           var users = await _context.Users
                 .Where(u => u.Username.Contains(usernameQuery.Substring(0, 1)) && u.Id != Convert.ToInt32(userId))
                 .ToListAsync();
 
@@ -126,8 +135,8 @@ namespace Foodiefeed_api.services
             var friendsCount = await GetUserFriendsCount(userProfileModel.Id);
             var followersCount = await GetUserFollowersCount(userProfileModel.Id);
 
-           if(id != askerId)
-           {
+            if(id != askerId)
+            {
                 var asker = await _context.Users.Include(u => u.Followers)
                                                 .FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(askerId));
 
@@ -145,7 +154,7 @@ namespace Foodiefeed_api.services
                 userProfileModel.IsFriend = friend is null ? false : true;
                 userProfileModel.IsFollowed = follower is null ? false : true;
                 userProfileModel.HasPendingFriendRequest = friendRequest is null ? false : true;
-           }
+            }
 
             userProfileModel.FriendsCount = friendsCount.ToString();
             userProfileModel.FollowsCount = followersCount.ToString();
@@ -158,7 +167,9 @@ namespace Foodiefeed_api.services
 
         private async Task<int> GetUserFollowersCount(int id)
         {
-            return 0;
+            var followers = _context.Followers.Where(f => f.FollowedUserId == id);
+
+            return followers.Count();
         }
 
         private async Task<int> GetUserFriendsCount(int id)
@@ -176,9 +187,47 @@ namespace Foodiefeed_api.services
             if(user is null) { throw new NotFoundException("user not found"); }
 
             var userDto = _mapper.Map<UserDto>(user);
+            userDto.FollowersCount = await GetUserFollowersCount(user.Id);
+            userDto.FriendsCount = await GetUserFriendsCount(user.Id);
 
             return userDto;
 
+        }
+
+        public async Task ChangeUsername(int id,string value)
+        {
+            var user = await _entityRepository.FindByIdAsync(id);
+
+            if(user is null) { throw new NotFoundException($"User with {id} do not exist in current context"); }
+
+            user.Username = value;
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        public async Task ChangeEmail(int id, string value)
+        {
+            var user = await _entityRepository.FindByIdAsync(id);
+
+            if (user is null) { throw new NotFoundException($"User with {id} do not exist in current context"); }
+
+            user.Email = value;
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        public async Task ChangePassword(int id, string value)
+        {
+            var user = await _entityRepository.FindByIdAsync(id);
+
+            if (user is null) { throw new NotFoundException($"User with {id} do not exist in current context"); }
+
+            user.PasswordHash = _hasher.HashPassword(user,value);
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
     }
 }

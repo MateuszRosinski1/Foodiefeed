@@ -69,5 +69,27 @@ namespace Foodiefeed_api.Controllers
 
             return Ok("Status set to offline");
         }
+
+        [HttpPut("change-username/{id}")]
+        public async Task<IActionResult> ChangeUsername([FromRoute]int id, [FromBody] string value)
+        {
+            await _service.ChangeUsername(id,value);
+            return NoContent();
+        }
+
+        [HttpPut("change-email")]
+        public async Task<IActionResult> ChangeEmail([FromRoute] int id, [FromBody] string value)
+        {
+            await _service.ChangeEmail(id,value);
+            return NoContent();
+        }
+
+        [HttpPut("change-password")]
+        public async Task<IActionResult> ChangePassword([FromRoute] int id, [FromBody] string value)
+        {
+            await _service.ChangePassword(id,value);
+            return NoContent();
+        }
+
     }
 }
