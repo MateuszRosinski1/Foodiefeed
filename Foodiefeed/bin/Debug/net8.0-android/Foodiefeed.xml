@@ -135,6 +135,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FollowersButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._followersButtonColor"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ThemeFlag">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.themeFlag"/>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.clearNotificationsCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ClearNotificationsCommand"/>.</summary>
         </member>
@@ -321,11 +324,11 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.CancelFriendRequestCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.CancelFriendRequest(System.String)"/>.</summary>
         </member>
-        <member name="F:Foodiefeed.viewmodels.BoardViewModel.searchByVoiceCommand">
-            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SearchByVoiceCommand"/>.</summary>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.changeThemeCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ChangeThemeCommand"/>.</summary>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchByVoiceCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SearchByVoice"/>.</summary>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeThemeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChangeTheme"/>.</summary>
         </member>
         <member name="T:Foodiefeed.viewmodels.UserViewModel">
             <inheritdoc/>
@@ -538,6 +541,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FollowersButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ThemeFlag">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ThemeFlag" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
         </member>
@@ -675,6 +681,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FollowersButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ThemeFlag">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ThemeFlag" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

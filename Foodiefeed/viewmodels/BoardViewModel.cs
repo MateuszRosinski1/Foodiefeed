@@ -1,5 +1,5 @@
 #if ANDROID
-using Android.App;
+//using Android.App;
 #endif
 #if WINDOWS
 using Windows.Media.SpeechRecognition;
@@ -22,6 +22,7 @@ using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Text;
+using Foodiefeed.Resources.Styles;
 
 
 namespace Foodiefeed.viewmodels
@@ -423,7 +424,7 @@ namespace Foodiefeed.viewmodels
 
         [RelayCommand]
         public async void ShowUserProfile(string id)
-        {
+        {  
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
@@ -685,10 +686,35 @@ namespace Foodiefeed.viewmodels
             }
         }
 
+        [ObservableProperty]
+        bool themeFlag; //true - darktheme | true - lighttheme
+        [ObservableProperty]
+        string switchThemeMode = "Light Theme";
+
         [RelayCommand]
-        public async void SearchByVoice()
+        public void ChangeTheme()
         {
-            
+            ThemeFlag = !ThemeFlag;
+
+            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+
+            if (mergedDictionaries.Count > 2)
+            {
+                mergedDictionaries.Remove(mergedDictionaries.ElementAt(2));
+            }
+
+            if (ThemeFlag)
+            {
+                mergedDictionaries.Add(new DarkTheme());
+                SwitchThemeMode = "Dark Theme";
+
+            }
+            else
+            {
+                mergedDictionaries.Add(new LightTheme());
+                SwitchThemeMode = "Light Theme";
+            }
+
         }
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)

@@ -72,7 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\avatar.png" />
+	  <None Remove="Resources\Images\avatar.jpg" />
 	  <None Remove="Resources\Images\commenticon.png" />
 	  <None Remove="Resources\Images\doubleleft.png" />
 	  <None Remove="Resources\Images\doubleright.png" />
@@ -116,6 +116,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Resources\Styles\DarkTheme.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Resources\Styles\LightTheme.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

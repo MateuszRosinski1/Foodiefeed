@@ -36,6 +36,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.Resources.Style
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
+[D:/PracaInzynierska/Foodiefeed/Resources/Styles/DarkTheme.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.Resources.Styles.DarkTheme.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\DarkTheme.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\DarkTheme.xaml
+
+[D:/PracaInzynierska/Foodiefeed/Resources/Styles/LightTheme.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.Resources.Styles.LightTheme.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\LightTheme.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\LightTheme.xaml
+
 [D:/PracaInzynierska/Foodiefeed/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.Resources.Styles.Styles.xaml

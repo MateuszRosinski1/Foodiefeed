@@ -105,7 +105,6 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\re
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\doubleleft.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\showpasswordicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\likeicon.scale-100.png
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\avatar.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\threedotmenu.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\threedotfivexfive.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\doubleright.scale-100.png
@@ -195,3 +194,4 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\re
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\microphone.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\notificationicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\profileicon.scale-100.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\resizetizer\r\avatar.scale-100.jpg

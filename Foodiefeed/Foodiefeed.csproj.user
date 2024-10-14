@@ -18,6 +18,12 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="Resources\Styles\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Resources\Styles\LightTheme.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

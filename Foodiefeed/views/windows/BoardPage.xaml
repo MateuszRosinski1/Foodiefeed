@@ -30,7 +30,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid ZIndex="10" Grid.Row="0">
-                <BoxView Color="White" 
+                <BoxView Color="{DynamicResource MainBackgroundColor}" 
                           WidthRequest="{Binding Source={x:Reference Page},Path=Width}" 
                           HeightRequest="100" 
                           VerticalOptions="Start">
@@ -46,21 +46,21 @@
                         StrokeShape="RoundRectangle 20,20,20,20" 
                         HeightRequest="50" 
                         WidthRequest="420">
-                    <Grid>
-                        <Entry TextColor="Black" 
+                    <Grid BackgroundColor="{DynamicResource EntryBackround}">
+                        <Entry TextColor="{DynamicResource TextColor}" 
                                FontSize="18" 
                                Placeholder="Search" 
                                Margin="0" 
                                HeightRequest="40" 
                                WidthRequest="400" 
                                Text="{Binding SearchParam,Mode=TwoWay}"
-                               x:Name="SearchEntry">
+                               x:Name="SearchEntry"
+                               BackgroundColor="Transparent">
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
                             </Entry.Behaviors>
-                            
                         </Entry>
                         <ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}"/>
                         <!--<Grid.GestureRecognizers>
@@ -75,9 +75,10 @@
                     WidthRequest="50" 
                     VerticalOptions="Start" 
                     HorizontalOptions="Start" 
-                    Margin="20"/>
+                    Margin="20"
+                             BackgroundColor="Transparent"/>
                 <Border HorizontalOptions="Start" Margin="100,0,0,0" StrokeShape="RoundRectangle 40" BackgroundColor="#80808080" WidthRequest="42" HeightRequest="42">
-                    <Grid BackgroundColor="White" WidthRequest="41" HeightRequest="41">
+                    <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" WidthRequest="41" HeightRequest="41">
                         <VerticalStackLayout Spacing="4" VerticalOptions="Center">
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
@@ -119,9 +120,9 @@
 
                 <Grid Grid.Column="0">
                     <VerticalStackLayout IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}">
-                            <HorizontalStackLayout Background="#f0f0f0" Spacing="5" Padding="15">
-                                <Label Text="Notfications" TextColor="#111214" FontAttributes="Bold" FontSize="30" />
-                            <Button Text="Clear" Background="White" TextColor="Black" Scale="0.7" WidthRequest="100" FontSize="15"
+                        <HorizontalStackLayout Background="{DynamicResource SideBackgroundColor}" Spacing="5" Padding="15">
+                            <Label Text="Notfications" TextColor="{DynamicResource TextColor}" FontAttributes="Bold" FontSize="30" />
+                            <Button Text="Clear" Background="White" TextColor="{DynamicResource TextColor}" Scale="0.7" WidthRequest="100" FontSize="15"
                                     Command="{Binding ClearNotificationsCommand}">
                                 <Button.Shadow>
                                     <Shadow Opacity="0.3" Brush="Black"/>
@@ -132,13 +133,13 @@
                         <ScrollView HorizontalOptions="Start" 
                                      VerticalOptions="Start" 
                                      x:Name="hubScroll" 
-                                     BackgroundColor="#f0f0f0"
+                                     BackgroundColor="{DynamicResource SideBackgroundColor}"
                                      VerticalScrollBarVisibility="Always" 
                                      WidthRequest="300"
                                      HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                                      >
                             <!--pages-->
-                            <Grid BackgroundColor="#f0f0f0" Padding="0,10,0,0">
+                            <Grid BackgroundColor="Transparent" Padding="0,10,0,0">
                                 <VerticalStackLayout BindableLayout.ItemsSource="{Binding Notifications}" Spacing="15">
 
                                     <BindableLayout.ItemTemplate>
@@ -157,7 +158,7 @@
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
                           HorizontalOptions="Start" 
                           VerticalOptions="Start"
-                          BackgroundColor="#f0f0f0"
+                          BackgroundColor="{DynamicResource SideBackgroundColor}"
                           WidthRequest="300"
                           HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
                         <VerticalStackLayout VerticalOptions="Center" >
@@ -173,20 +174,20 @@
                 <!--PostGrid-->
                 <ScrollView 
                             Grid.Column="1"
-                            BackgroundColor="White"
+                            BackgroundColor="{DynamicResource MainBackgroundColor}"
                             WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 
                     <Grid>
-                        <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="White" Padding="30">
+                        <Grid x:Name="ProfileGrid" IsVisible="{Binding ProfilePageVisible}" BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="30">
                             <VerticalStackLayout>
                                 <Border ZIndex="1" 
                                         MaximumWidthRequest="1000" 
                                         VerticalOptions="Start" 
                                         HeightRequest="300" 
-                                        BackgroundColor="White"
+                                        BackgroundColor="{DynamicResource MainBackgroundColor}"
                                         StrokeShape="RoundRectangle 40">
                                     <Grid  Padding="15"  
-                                           BackgroundColor="White" >
+                                           BackgroundColor="{DynamicResource MainBackgroundColor}" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition />
@@ -205,17 +206,17 @@
                                                              Grid.Column="1">
                                             
                                             <Label Text="{Binding ProfileUsername}" 
-                                                   TextColor="Black" 
+                                                   TextColor="{DynamicResource TextColor}" 
                                                    FontSize="30" 
                                                    FontAttributes="Bold"/>
                                             
                                             <Label Text="{Binding ProfileFriends}" 
-                                                   TextColor="Black" 
+                                                   TextColor="{DynamicResource TextColor}"
                                                    FontSize="15" 
                                                    Margin="4,0,0,0"/>
                                             
                                             <Label Text="{Binding ProfileFollowers}" 
-                                                   TextColor="Black" 
+                                                   TextColor="{DynamicResource TextColor}" 
                                                    FontSize="15" 
                                                    Margin="4,0,0,0"/>
                                         </VerticalStackLayout>
@@ -398,10 +399,10 @@
                                     <Grid>
                                         <Label Text="This user has not posts yet." 
                                                FontSize="30" 
-                                               TextColor="Black" 
+                                               TextColor="{DynamicResource TextColor}"
                                                IsVisible="{Binding NoPostOnProfile}"/>
-                                        
-                                        <Label TextColor="Black" 
+
+                                        <Label TextColor="{DynamicResource TextColor}" 
                                                Text="Loading..." 
                                                IsVisible="{Binding LoadingLabelVisible}"/>
                                     </Grid>
@@ -422,9 +423,9 @@
                         </StackLayout>
 
                         <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
+                            <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
 
-                                <Grid BackgroundColor="White" Padding="20">
+                                <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="20">
 
                                     <Grid x:Name="settingsOptionsGrid" IsVisible="{Binding SettingsMainHubVisible}">
                                         <Grid.ColumnDefinitions>
@@ -435,13 +436,19 @@
 
                                         <VerticalStackLayout Grid.Column="0" Spacing="10">
                                             <Button Text="Change personal data" HorizontalOptions="Center" Clicked="Button_Clicked" Command="{Binding OpenPersonalDataEditorCommand}"/>
-                                            <Label Text="Change Theme" TextColor="Black" HorizontalOptions="Center"/>
+                                            <Label Text="Change Theme" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
                                         </VerticalStackLayout>
                                         <VerticalStackLayout Grid.Column="1" Spacing="10" Margin="0,10,0,0">
-                                            <Label Text="Click to change your personal data" TextColor="Black" HorizontalOptions="Center"/>
+                                            <Label Text="Click to change your personal data" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
                                             <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
-                                                <Button BackgroundColor="White" Text="Bright" TextColor="Black"/>
-                                                <Button BackgroundColor="Black" Text="Dark" TextColor="White"/>
+                                                <Switch Scale="1.5">
+                                                        <Switch.Behaviors>
+                                                            <toolkit:EventToCommandBehavior 
+                                                                        EventName="Toggled" 
+                                                                        Command="{Binding ChangeThemeCommand}"/>
+                                                        </Switch.Behaviors>
+                                                    </Switch>
+                                                    <Label TextColor="{DynamicResource TextColor}" Text="{Binding SwitchThemeMode,Mode=TwoWay}" VerticalOptions="Center"/>
                                             </HorizontalStackLayout>
                                         </VerticalStackLayout>
 
@@ -453,7 +460,7 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <Border Grid.Column="0" StrokeShape="RoundRectangle 30" BackgroundColor="Gray" StrokeThickness="2">
-                                            <VerticalStackLayout Spacing="40"  BackgroundColor="White" Padding="20">
+                                            <VerticalStackLayout Spacing="40"  BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="20">
 
                                                 <Button Text="Change Username" 
                                                         BackgroundColor="Transparent" 
@@ -514,7 +521,7 @@
                                             </VerticalStackLayout>
                                         </Border>
 
-                                        <Grid Grid.Column="1" BackgroundColor="White" Padding="20">
+                                        <Grid Grid.Column="1" BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="20">
                                             <!--<VerticalStackLayout Spacing="10" Padding="20" VerticalOptions="Center"  BackgroundColor="Blue">-->
 
                                             <Border Stroke="Gray" 
@@ -523,7 +530,7 @@
                                                     HeightRequest="60" WidthRequest="370"
                                                     IsVisible="{Binding ChangeUsernameEntryVisible}">
                                                 <Entry 
-                                                       TextColor="Black" 
+                                                       TextColor="{DynamicResource TextColor}" 
                                                        FontSize="18"
                                                        Placeholder="Username" 
                                                        Margin="0" 
@@ -541,14 +548,14 @@
                                                      HeightRequest="60" WidthRequest="370"
                                                      IsVisible="{Binding ChangeEmailEntryVisible}">
                                                 <Entry 
-                                                    TextColor="Black" 
+                                                    TextColor="{DynamicResource TextColor}" 
                                                     FontSize="18"
                                                     Placeholder="E-mial" 
                                                     Margin="0" 
                                                     x:Name="newEmailEntry" 
                                                     HeightRequest="50" 
                                                     WidthRequest="350" 
-                                                    Background="White"
+                                                    Background="{DynamicResource TextColor}"
                                                     Text="{Binding ChangedEmail}">
                                                 </Entry>
                                             </Border>
@@ -560,7 +567,7 @@
                                                      StrokeShape="RoundRectangle 20,20,20,20" 
                                                      HeightRequest="60" WidthRequest="370"
                                                      IsVisible="{Binding ChangePasswordEntryVisible}">
-                                                    <Entry TextColor="Black" 
+                                                    <Entry TextColor="{DynamicResource TextColor}" 
                                                         FontSize="18"
                                                         Placeholder="Password" 
                                                         IsPassword="True"
@@ -578,7 +585,7 @@
                                                          StrokeShape="RoundRectangle 20,20,20,20" 
                                                          HeightRequest="60" WidthRequest="370"
                                                          IsVisible="{Binding ChangePasswordEntryVisible}">
-                                                    <Entry TextColor="Black" 
+                                                    <Entry TextColor="{DynamicResource TextColor}" 
                                                             FontSize="18"
                                                             Placeholder="Retype Password" 
                                                             IsPassword="True"
@@ -609,7 +616,7 @@
                                             </HorizontalStackLayout>
                                             <Button Text="←"
                                                     Clicked="Button_Clicked" 
-                                                    TextColor="Black" 
+                                                    TextColor="{DynamicResource TextColor}" 
                                                     BackgroundColor="Transparent"
                                                     Margin="0,-25,0,0" 
                                                     FontSize="30" 
@@ -635,7 +642,7 @@
 
 
 
-                <ScrollView BackgroundColor="#f0f0f0" HorizontalOptions="End" 
+                <ScrollView BackgroundColor="{DynamicResource SideBackgroundColor}" HorizontalOptions="End" 
                             VerticalOptions="Start" 
                             VerticalScrollBarVisibility="Always" 
                             WidthRequest="300"
@@ -705,7 +712,7 @@
                   WidthRequest="145" 
                   HeightRequest="250">
                 <VerticalStackLayout>
-                    <Button CornerRadius="0" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
+                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
@@ -717,7 +724,7 @@
 
 
 
-                    <Button CornerRadius="0" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
+                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
@@ -729,7 +736,7 @@
 
 
 
-                    <Button CornerRadius="0" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
+                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
@@ -743,7 +750,7 @@
 
 
 
-                    <Button CornerRadius="0" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
+                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>

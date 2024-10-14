@@ -1,5 +1,8 @@
 ﻿
+using Foodiefeed.Resources.Styles;
 using Foodiefeed.viewmodels;
+using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
 
 namespace Foodiefeed
 {
@@ -13,8 +16,18 @@ namespace Foodiefeed
             _userSession = us;
             //MainPage = new LogInPage(vm);
             MainPage = new BoardPage(new BoardViewModel(us));
-
             //AppDomain.CurrentDomain.UnhandledException
+
+#if WINDOWS
+            SwitchHandler.Mapper.AppendToMapping("Custom", (h, v) =>
+            {
+                // Get rid of On/Off label beside switch, to match other platforms
+                h.PlatformView.OffContent = string.Empty;
+                h.PlatformView.OnContent = string.Empty;
+
+                h.PlatformView.MinWidth = 0;
+            });
+#endif
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
