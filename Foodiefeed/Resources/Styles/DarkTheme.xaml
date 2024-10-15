@@ -3,7 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.Resources.Styles.DarkTheme">
     <Color x:Key="MainBackgroundColor">#1c1c1c</Color>
-    <Color x:Key="TextColor">#FFFFFF</Color>
+    <Color x:Key="TextColor">#adadad</Color>
+    <Color x:Key="NotificationButtonTextColor">White</Color>
     <Color x:Key="SideBackgroundColor">#1f1f1f</Color>
     <Color x:Key="EntryBackround">#333333</Color>
+    <Color x:Key="MainBackgroundColorContrast">#2e2e2e</Color>
+    <Color x:Key="NotificationGrayButtonBackground">#707070</Color>
+    <Color x:Key="ProfileOptionsSection">#333333</Color>
+    <Color x:Key="PostBorderColor">#333333</Color>
+    <Color x:Key="PostBackgroundColor">#2e2e2e</Color>
 </ResourceDictionary>

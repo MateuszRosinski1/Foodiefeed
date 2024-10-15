@@ -2,9 +2,15 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.Resources.Styles.LightTheme">
-
     <Color x:Key="MainBackgroundColor">White</Color>
     <Color x:Key="TextColor">#000000</Color>
+    <Color x:Key="NotificationButtonTextColor">#000000</Color>
     <Color x:Key="SideBackgroundColor">#f0f0f0</Color>
     <Color x:Key="EntryBackround">White</Color>
+    <Color x:Key="MainBackgroundColorContrast">#e0e0e0</Color>
+    <Color x:Key="NotificationGrayButtonBackground">#e0e0e0</Color>
+    <Color x:Key="ProfileOptionsSection">#e8e8e8</Color>
+    <Color x:Key="PostBorderColor">Gray</Color>
+    <Color x:Key="PostBackgroundColor">White</Color>
+   
 </ResourceDictionary>

@@ -194,6 +194,7 @@ namespace Foodiefeed.viewmodels
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
             //Task.Run(UpdateFriendList);
+            ChangeTheme();
         }
 
         [RelayCommand]
@@ -482,11 +483,47 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         private Color _followersButtonColor = Color.FromHex("#c9c9c9");
 
+        private Color lightThemeClickedButton  = Color.FromHex("#ffffff");
+        private Color lightThemeUnClickedButton = Color.FromHex("#c9c9c9");
+
+        private Color darkThemeClickedButton = Color.FromHex("#212121");
+        private Color darkThemeUnClickedButton = Color.FromHex("#333333");
+
+        [ObservableProperty]
+        private Color _currentClickedButtonColor;
+        [ObservableProperty]
+        private Color _currentUnclickedButtonColor;
+
         private enum Buttons
         {
             PostButton,
             FriendsButton,
             FollowersButton
+        }
+
+        private async void ReloadProfileButtonColors(bool isDarkTheme)
+        {
+            if(isDarkTheme)
+            {
+                CurrentClickedButtonColor = darkThemeClickedButton;
+                CurrentUnclickedButtonColor = darkThemeUnClickedButton;
+            }
+            else
+            {
+                CurrentClickedButtonColor = lightThemeClickedButton;
+                CurrentUnclickedButtonColor = lightThemeUnClickedButton;
+            }
+
+            if (ProfilePostsVisible){
+                await SetButtonColors(Buttons.PostButton);
+            }
+            else if(ProfileFriendsVisible) {
+                await SetButtonColors(Buttons.FriendsButton);
+            }
+            else if(ProfileFollowersVisible) {
+                await SetButtonColors(Buttons.FollowersButton);
+            }
+
         }
 
         private async Task SetButtonColors(Buttons button)
@@ -495,21 +532,21 @@ namespace Foodiefeed.viewmodels
             switch (button)
             {
                 case Buttons.PostButton:
-                    SelfPostButtonColor = Color.FromHex("#ffffff");
-                    FriendsButtonColor = Color.FromHex("#c9c9c9"); 
-                    FollowersButtonColor = Color.FromHex("#c9c9c9");
+                    SelfPostButtonColor = CurrentClickedButtonColor;
+                    FriendsButtonColor = CurrentUnclickedButtonColor; 
+                    FollowersButtonColor = CurrentUnclickedButtonColor;
                     break;
 
                 case Buttons.FriendsButton:
-                    SelfPostButtonColor = Color.FromHex("#c9c9c9");
-                    FriendsButtonColor = Color.FromHex("#ffffff");
-                    FollowersButtonColor = Color.FromHex("#c9c9c9");
+                    SelfPostButtonColor = CurrentUnclickedButtonColor;
+                    FriendsButtonColor = CurrentClickedButtonColor;
+                    FollowersButtonColor = CurrentUnclickedButtonColor;
                     break;
 
                 case Buttons.FollowersButton:
-                    SelfPostButtonColor = Color.FromHex("#c9c9c9");
-                    FriendsButtonColor = Color.FromHex("#c9c9c9");
-                    FollowersButtonColor = Color.FromHex("#ffffff");
+                    SelfPostButtonColor = CurrentUnclickedButtonColor;
+                    FriendsButtonColor = CurrentUnclickedButtonColor;
+                    FollowersButtonColor = CurrentClickedButtonColor;
                     break;
             }
         }
@@ -707,14 +744,14 @@ namespace Foodiefeed.viewmodels
             {
                 mergedDictionaries.Add(new DarkTheme());
                 SwitchThemeMode = "Dark Theme";
-
+                ReloadProfileButtonColors(ThemeFlag);
             }
             else
             {
                 mergedDictionaries.Add(new LightTheme());
                 SwitchThemeMode = "Light Theme";
+                ReloadProfileButtonColors(ThemeFlag);
             }
-
         }
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
