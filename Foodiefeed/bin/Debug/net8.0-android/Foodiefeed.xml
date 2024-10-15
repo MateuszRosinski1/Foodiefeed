@@ -111,6 +111,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.LoadingLabelVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.loadingLabelVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.InternetAcces">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.internetAcces"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedUsername">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedUsername"/>
         </member>
@@ -146,6 +149,9 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SwitchThemeMode">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.switchThemeMode"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FailedActionMessage">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.failedActionMessage"/>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.clearNotificationsCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ClearNotificationsCommand"/>.</summary>
@@ -526,6 +532,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LoadingLabelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InternetAcces">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedUsername">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedUsername" generated properties.</summary>
         </member>
@@ -561,6 +570,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SwitchThemeMode">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SwitchThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FailedActionMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
@@ -676,6 +688,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LoadingLabelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InternetAcces">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedUsername">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedUsername" generated properties.</summary>
         </member>
@@ -711,6 +726,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SwitchThemeMode">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SwitchThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FailedActionMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

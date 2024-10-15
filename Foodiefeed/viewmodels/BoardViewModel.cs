@@ -166,9 +166,6 @@ namespace Foodiefeed.viewmodels
             _userSession = userSession;
             _userSession.Id = 15;
 
-
-            //WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("init"));
-
             notifications.Add(new BasicNotofication());
             notifications.Add(new FriendRequestNotification());
             notifications.Add(new BasicNotofication());
@@ -639,6 +636,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch(Exception ex)
                 {
+                    NotifiyFailedAction("Could not load search results due to service maintance. Try again later");
                     //code to show Something went wrong on search panel.
                 }
             }
@@ -660,6 +658,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Cant send friend request");
                     // code to handle unsuccsesful friend request.
                 }
             }
@@ -680,6 +679,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     // code to handle unsuccsesful unfriend action.
                 }
             }
@@ -700,7 +700,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-
+                    NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
 
             }
@@ -721,6 +721,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
 
                 }
 
@@ -742,6 +743,8 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Request was already canceled by sender.");
+
                     // code to handle unsuccsesful request cancel.
                 }
             }
@@ -782,6 +785,12 @@ namespace Foodiefeed.viewmodels
         {
             SearchResults.Clear();
 
+            if(users is null)
+            {
+                //hanlde no hisotry results
+                return;
+            }
+
             foreach (UserSearchResult user in users)
             {
                 SearchResults.Add(new UserSearchResultView()
@@ -791,11 +800,10 @@ namespace Foodiefeed.viewmodels
                     Follows = user.FollowersCount.ToString(),
                     Friends = user.FriendsCount.ToString()
                 });
-
             }
         }
 
-        private void DisplaySearchResultHistory()
+        private async void DisplaySearchResultHistory()
         {
 
             string ApplicationDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Foodiefeed");
@@ -811,9 +819,9 @@ namespace Foodiefeed.viewmodels
                 File.Create(SearchHistoryJsonPath);
             }
 
-            var json = File.ReadAllTextAsync(SearchHistoryJsonPath).Result;
+            var json = await File.ReadAllTextAsync(SearchHistoryJsonPath);
 
-            DisplaySearchResults(JsonToObject<ObservableCollection<UserSearchResult>>(json).Result); 
+            DisplaySearchResults(await JsonToObject<ObservableCollection<UserSearchResult>>(json)); 
             //add a block of code that displays that there are not search results.
 
         }
@@ -881,11 +889,13 @@ namespace Foodiefeed.viewmodels
                     if (response.IsSuccessStatusCode)
                     {
                         var results = await response.Content.ReadAsStringAsync();
-                        if(results is null) { return null; }
+                        if(results is null && results == string.Empty) { return null; }
                         return JsonConvert.DeserializeObject<UserSearchResult>(results);
                     }
                 }catch(Exception ex)
                 {
+                    NotifiyFailedAction("Something went wrong...");
+
                     //block of code handling execption
                 }
                 return null;
@@ -925,7 +935,7 @@ namespace Foodiefeed.viewmodels
                     }
                     catch(Exception ex)
                     {
-
+                        NotifiyFailedAction("Something went wrong...");
                     }
 
                     try
@@ -950,7 +960,7 @@ namespace Foodiefeed.viewmodels
                     }
                     catch (Exception e)
                     {
-
+                        NotifiyFailedAction("Something went wrong...");
                     }
                 }
                 await Task.Delay(60000);
@@ -1024,6 +1034,8 @@ namespace Foodiefeed.viewmodels
             catch (Exception ex)
             {
                 //MessageBox.Show($"An error occurred: {ex.Message}");
+                NotifiyFailedAction("Could not load user profile.");
+
             }
             finally
             {
@@ -1095,6 +1107,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -1171,6 +1184,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -1199,10 +1213,13 @@ namespace Foodiefeed.viewmodels
                     }
                     else if (!response.IsSuccessStatusCode)
                     {
+                        NotifiyFailedAction("Something went wrong...");
                         //code of block that displays that Friends are currently unavaiable
                     }
-                }catch (Exception e)
+                }
+                catch (Exception e)
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block that handle exception
                 }
             }
