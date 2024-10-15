@@ -1086,8 +1086,8 @@ namespace Foodiefeed.viewmodels
                 return;
             }
 
-            await Task.Run(() => { ProfilePosts.Clear(); });
-
+            //await Task.Run(() => { Dispatcher.GetForCurrentThread().Dispatch(() => { ProfilePosts.Clear(); }); });
+            await Dispatcher.GetForCurrentThread().DispatchAsync(() => { ProfilePosts.Clear(); });
             foreach (var post in posts)
             {
                 var commentList = new List<CommentView>();

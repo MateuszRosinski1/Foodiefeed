@@ -70,14 +70,14 @@
                     
                 </Border>
 
-                <ImageButton Source="logobutton.png" 
+                <ImageButton Source="{DynamicResource LogoPath}" 
                     HeightRequest="50" 
                     WidthRequest="50" 
                     VerticalOptions="Start" 
                     HorizontalOptions="Start" 
                     Margin="20"
                              BackgroundColor="Transparent"/>
-                <Border HorizontalOptions="Start" Margin="100,0,0,0" StrokeShape="RoundRectangle 40" BackgroundColor="#80808080" WidthRequest="42" HeightRequest="42">
+                <Border HorizontalOptions="Start" Margin="100,0,0,0" StrokeShape="RoundRectangle 5" BackgroundColor="#80808080" WidthRequest="42" HeightRequest="42">
                     <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" WidthRequest="41" HeightRequest="41">
                         <VerticalStackLayout Spacing="4" VerticalOptions="Center">
                             <BoxView BackgroundColor="Gray" WidthRequest="22" HeightRequest="3" Opacity="0.8" CornerRadius="50"/>
@@ -401,16 +401,19 @@
                                         </Border.Shadow>
                                     </Border>
 
-                                    <Grid>
+                                    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                                        
+                                        <VerticalStackLayout Margin="0,100,0,0">
+                                            <Label TextColor="{DynamicResource TextColor}" 
+                                                   Text="Loading..." 
+                                                   IsVisible="{Binding LoadingLabelVisible}"/>
+                                            <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}"/>
+                                        </VerticalStackLayout>
+                                        
                                         <Label Text="This user has not posts yet." 
                                                FontSize="30" 
                                                TextColor="{DynamicResource TextColor}"
                                                IsVisible="{Binding NoPostOnProfile}"/>
-
-                                        <Label TextColor="{DynamicResource TextColor}" 
-                                               Text="Loading..." 
-                                               IsVisible="{Binding LoadingLabelVisible}"/>
-                                        <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}"/>
                                     </Grid>
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
@@ -665,7 +668,8 @@
 
 
 
-                <ScrollView BackgroundColor="{DynamicResource SideBackgroundColor}" HorizontalOptions="End" 
+                <ScrollView BackgroundColor="{DynamicResource SideBackgroundColor}" 
+                            HorizontalOptions="End" 
                             VerticalOptions="Start" 
                             VerticalScrollBarVisibility="Always" 
                             WidthRequest="300"
@@ -695,7 +699,7 @@
             <Grid BackgroundColor="Transparent" VerticalOptions="Start" Margin="0,69,0,0" HorizontalOptions="Center" IsVisible="{Binding SearchPanelVisible}">
             <Grid>
                 <Path Data="M 220 0 L 150 25 H 50 C 0 24.997 -0.001 24.997 0 75 V 450 C 0.011 499.992 0.011 500.023 50 500 H 750 C 799.999 499.991 799.999 499.991 800 450 V 75 C 799.965 25.995 799.965 25.995 750.468 25.956 L 650 25 L 590 0 H 220"
-                      Fill="#e0e0e0">
+                      Fill="{DynamicResource MainBackgroundColorContrast}">
                 </Path>
             </Grid>
             <Grid>
@@ -728,59 +732,67 @@
             <Grid BackgroundColor="Transparent" 
                   HeightRequest="301" 
                   WidthRequest="151">
-                <Path Fill="#e0e0e0" Data="M 75 0 L 60 25 H 25 C -3 25 0 22 0 49.772 V 275 C 0 303 -3 300 25 300 H 125 C 153 300 150 303 150 275 V 50 C 150 21 153 25 125 25 H 90 L 75 0"/>
+                <Path Fill="{DynamicResource MainBackgroundColorContrast}" Data="M 75 0 L 60 25 H 25 C -3 25 0 22 0 49.772 V 275 C 0 303 -3 300 25 300 H 125 C 153 300 150 303 150 275 V 50 C 150 21 153 25 125 25 H 90 L 75 0"/>
             </Grid>
             <Grid BackgroundColor="Transparent" 
                   Margin="0,25,0,0" 
                   WidthRequest="145" 
                   HeightRequest="250">
                 <VerticalStackLayout>
-                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Main" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToMainViewCommand}">
+                    <Button CornerRadius="5" 
+                            TextColor="{DynamicResource TextColor}" 
+                            Text="Main" 
+                            FontSize="20" 
+                            FontAttributes="Bold" 
+                            HeightRequest="50" 
+                            BackgroundColor="{DynamicResource HubPanelBackground}" 
+                            Command="{Binding ToMainViewCommand}"
+                            >
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
-                        <Button.Shadow>
+                        <!--<Button.Shadow>
                             <Shadow Opacity="0"
                 Radius="50"/>
-                        </Button.Shadow>
+                        </Button.Shadow>-->
                     </Button>
 
 
 
-                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToProfileViewCommand}">
+                    <Button CornerRadius="5" TextColor="{DynamicResource TextColor}" Text="Profile" FontSize="20" FontAttributes="Bold" HeightRequest="50" BackgroundColor="{DynamicResource HubPanelBackground}" Command="{Binding ToProfileViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
-                        <Button.Shadow>
+                        <!--<Button.Shadow>
                             <Shadow Opacity="0"
                 Radius="50"/>
-                        </Button.Shadow>
+                        </Button.Shadow>-->
                     </Button>
 
 
 
-                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToRecipesViewCommand}">
+                    <Button CornerRadius="5" TextColor="{DynamicResource TextColor}" Text="Recipes"  FontSize="20" FontAttributes="Bold" HeightRequest="50" BackgroundColor="{DynamicResource HubPanelBackground}" Command="{Binding ToRecipesViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
-                        <Button.Shadow>
+                        <!--<Button.Shadow>
                             <Shadow Opacity="0"
                 Radius="50"/>
-                        </Button.Shadow>
+                        </Button.Shadow>-->
                     </Button>
 
 
 
 
 
-                    <Button CornerRadius="0" TextColor="{DynamicResource TextColor}" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" Background="#f0f0f0" Command="{Binding ToSettingViewCommand}">
+                    <Button CornerRadius="5" TextColor="{DynamicResource TextColor}" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" BackgroundColor="{DynamicResource HubPanelBackground}" Command="{Binding ToSettingViewCommand}">
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
-                        <Button.Shadow>
+                        <!--<Button.Shadow>
                             <Shadow Opacity="0"
                                     Radius="50"/>
-                        </Button.Shadow>
+                        </Button.Shadow>-->
                     </Button>
                 </VerticalStackLayout>
             </Grid>

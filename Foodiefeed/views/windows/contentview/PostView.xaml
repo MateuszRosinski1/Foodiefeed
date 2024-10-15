@@ -74,13 +74,41 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <HorizontalStackLayout  Grid.Column="0" Spacing="5">
-                            <Button  ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="170" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
-                            <Label x:Name="PostLikeCountLabel" TextColor="Black" FontSize="20" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
+                            <Button  ImageSource="likeicon.png" 
+                                     BackgroundColor="Transparent" 
+                                     FontSize="20"
+                                     WidthRequest="170"
+                                     HeightRequest="50" 
+                                     Padding="0,0,0,0" 
+                                     Text="Like It!"
+                                     TextColor="{DynamicResource TextColor}"/>
+                            <Label x:Name="PostLikeCountLabel" 
+                                   TextColor="{DynamicResource TextColor}" 
+                                   FontSize="20" 
+                                   LineBreakMode="TailTruncation" 
+                                   VerticalOptions="Center"/>
                         </HorizontalStackLayout>
 
-                        <Button Grid.Column="1" ImageSource="commenticon.png" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Comment"/>
+                        <Button Grid.Column="1" 
+                                ImageSource="commenticon.png" 
+                                HorizontalOptions="Center" 
+                                BackgroundColor="Transparent" 
+                                FontSize="20" WidthRequest="200" 
+                                HeightRequest="50"
+                                Padding="0,0,0,0" 
+                                Text="Comment"
+                                TextColor="{DynamicResource TextColor}"/>
 
-                        <Button Grid.Column="2" ImageSource="shareicon.png" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+                        <Button Grid.Column="2" 
+                                ImageSource="shareicon.png" 
+                                HorizontalOptions="EndAndExpand" 
+                                BackgroundColor="Transparent" 
+                                FontSize="20" 
+                                WidthRequest="200"
+                                HeightRequest="50" 
+                                Padding="0,0,0,0" 
+                                Text="Share"
+                                TextColor="{DynamicResource TextColor}"/>
 
                     </Grid>
                 </Grid>
@@ -93,7 +121,7 @@
         </Grid>
         
         <Grid ZIndex="0">
-            <Border BackgroundColor="#e0e0e0"
+            <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
                     Margin="35,-40,35,0"
                     >

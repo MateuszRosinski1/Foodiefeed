@@ -78,7 +78,8 @@
 	  <None Remove="Resources\Images\doubleright.png" />
 	  <None Remove="Resources\Images\hearthIcon.png" />
 	  <None Remove="Resources\Images\likeicon.png" />
-	  <None Remove="Resources\Images\logobutton.png" />
+	  <None Remove="Resources\Images\logodarktheme.png" />
+	  <None Remove="Resources\Images\logolighttheme.png" />
 	  <None Remove="Resources\Images\microphone.png" />
 	  <None Remove="Resources\Images\notificationicon.png" />
 	  <None Remove="Resources\Images\pfpreal.jpg" />

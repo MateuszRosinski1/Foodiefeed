@@ -4,12 +4,12 @@
              x:Class="Foodiefeed.views.windows.contentview.OnlineFreidnListElementView"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels" >
-    <Grid>
-        <HorizontalStackLayout Spacing="5">
+    <Grid BackgroundColor="Transparent" HeightRequest="70">
+        <HorizontalStackLayout Spacing="5" >
             <Grid>
                 <ImageButton CornerRadius="100" 
                              VerticalOptions="Center" 
-                             Source="avatar.png"  
+                             Source="avatar.jpg"  
                              WidthRequest="50" 
                              HeightRequest="50" 
                              x:Name="avatarImage"/>
@@ -17,12 +17,13 @@
                          HorizontalOptions="End" 
                          Fill="#0ba334"  
                          WidthRequest="15" 
-                         HeightRequest="15" 
+                         HeightRequest="15"
+                         Margin="0,0,0,10"
                          IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:OnlineFreidnListElementView}}, Path=IsOnline}"/>
             </Grid>
             <Label VerticalOptions="Center" 
                    x:Name="UsernameLabel" 
-                   TextColor="{DynamicResource NotificationButtonTextColor}" 
+                   TextColor="{DynamicResource TextColor}" 
                    FontAttributes="Bold"/>
         </HorizontalStackLayout>
         <ImageButton Source="profileicon.png" 
@@ -38,7 +39,8 @@
                  CornerRadius="10" 
                  HeightRequest="1" 
                  VerticalOptions="End" 
-                 Margin="0,0,0,0"/>
+                 HorizontalOptions="Fill"
+                 />
 
     </Grid>
 </ContentView>

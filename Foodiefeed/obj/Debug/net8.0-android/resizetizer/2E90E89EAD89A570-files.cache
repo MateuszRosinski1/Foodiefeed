@@ -4,7 +4,8 @@ obj\Debug\net8.0-android\resizetizer\r\drawable\doubleleft.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\doubleright.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\hearthicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\likeicon.png
-obj\Debug\net8.0-android\resizetizer\r\drawable\logobutton.png
+obj\Debug\net8.0-android\resizetizer\r\drawable\logodarktheme.png
+obj\Debug\net8.0-android\resizetizer\r\drawable\logolighttheme.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\microphone.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\notificationicon.png
 obj\Debug\net8.0-android\resizetizer\r\drawable\pfpreal.jpg

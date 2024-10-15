@@ -10,7 +10,7 @@
     <Border StrokeShape="RoundRectangle 4,15,15,4" 
             Stroke="DarkGray" >
         <Grid x:Name="mainGrid" 
-              BackgroundColor="{DynamicResource MainBackgroundColor}" >
+              BackgroundColor="{DynamicResource OnListFriendViewBackground}" >
             <HorizontalStackLayout VerticalOptions="Center">
                 <Border StrokeShape="RoundRectangle 100">
                     <Image VerticalOptions="Center" 
@@ -19,7 +19,10 @@
                            WidthRequest="75" 
                            Aspect="AspectFit"/>
                 </Border>
-                <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
+                <Label Margin="10,0,0,0" 
+                       VerticalOptions="Center"
+                       x:Name="UsernameLabel"
+                       TextColor="{DynamicResource TextColor}" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
                 <Grid>
 
 

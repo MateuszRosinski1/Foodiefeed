@@ -32,7 +32,6 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\d
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\showpasswordicon.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\threedotmenu.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\threedotfivexfive.png
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\logobutton.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\textlogo.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\doubleleft.png
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\shareicon.png
@@ -1090,3 +1089,5 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\lp\152\jl\files.cache
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\lp\155\jl\files.cache
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\lp\156\jl\files.cache
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\avatar.jpg
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\logodarktheme.png
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\logolighttheme.png
