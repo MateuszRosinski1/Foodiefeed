@@ -45,6 +45,9 @@
     <MauiXaml Update="views\windows\contentview\UserSearchResultView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\popups\FailedActionNotificationPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\popups\UserOptionPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

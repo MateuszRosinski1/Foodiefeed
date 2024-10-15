@@ -23,6 +23,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Networking;
 
 
 namespace Foodiefeed.viewmodels
@@ -132,6 +134,8 @@ namespace Foodiefeed.viewmodels
 
         #endregion
 
+        [ObservableProperty]
+        bool internetAcces;
 
         #region SettingsVariables
         [ObservableProperty]
@@ -161,6 +165,9 @@ namespace Foodiefeed.viewmodels
             DisplaySearchResultHistory();
             _userSession = userSession;
             _userSession.Id = 15;
+
+
+            //WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("init"));
 
             notifications.Add(new BasicNotofication());
             notifications.Add(new FriendRequestNotification());
@@ -193,8 +200,24 @@ namespace Foodiefeed.viewmodels
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
+            internteCheckThread = new Thread(InternetConnectionChecker);
+            internteCheckThread.Start();
             //Task.Run(UpdateFriendList);
             ChangeTheme();
+        }
+
+        private Thread internteCheckThread;
+        private void InternetConnectionChecker()
+        {
+            while(true){
+                NetworkAccess acces = Connectivity.NetworkAccess;
+                if (acces == NetworkAccess.Internet)
+                {
+                    InternetAcces = false;
+                }
+                else InternetAcces = true;
+                Thread.Sleep(5000);
+            }
         }
 
         [RelayCommand]
@@ -235,6 +258,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
+            NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -252,7 +276,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ToRecipesView()
         {
-
+            NotifiyFailedAction("hide");
         }
 
         [RelayCommand]
@@ -1188,7 +1212,7 @@ namespace Foodiefeed.viewmodels
         private async Task<string> GetUserProfileModel(string id)
         {
             var endpoint = $"api/user/user-profile/{id}/{_userSession.Id}";
-
+            
             using (var httpclient = new HttpClient())
             {
                 httpclient.BaseAddress = new Uri(apiBaseUrl);
@@ -1220,8 +1244,18 @@ namespace Foodiefeed.viewmodels
             ProfileLastName = LastName;
             ProfileName = FirstName;
             ProfileUsername = Username;
-            AvatarBase64 = imageBase64;
-            
+            AvatarBase64 = imageBase64;          
+        }
+
+        [ObservableProperty]
+        string failedActionMessage;
+
+        private async void NotifiyFailedAction(string message)
+        {
+            FailedActionMessage = message;
+            WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("show"));
+            await Task.Delay(3000);
+            WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("hide"));
         }
 
     }

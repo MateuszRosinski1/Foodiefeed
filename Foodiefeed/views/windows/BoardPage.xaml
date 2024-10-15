@@ -8,7 +8,7 @@
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview"
-             >
+             xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups">
 
 
     <ContentPage.Resources>
@@ -803,6 +803,23 @@
             <Grid.GestureRecognizers>
                 <PointerGestureRecognizer PointerExitedCommand="{Binding HideHubPanelCommand}"/>
             </Grid.GestureRecognizers>
+        </Grid>
+        <Grid BackgroundColor="Transparent"
+              HeightRequest="140" 
+              WidthRequest="250" 
+              HorizontalOptions="End"                          
+              VerticalOptions="Start"                         
+              Margin="0,-200,100,0">
+            <popup:FailedActionNotificationPopup />
+        </Grid>
+        <Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
+            <Grid BackgroundColor="Black" Opacity="0.4">
+                
+            </Grid>
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>
+                <ActivityIndicator IsRunning="True"/>
+            </VerticalStackLayout>
         </Grid>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
