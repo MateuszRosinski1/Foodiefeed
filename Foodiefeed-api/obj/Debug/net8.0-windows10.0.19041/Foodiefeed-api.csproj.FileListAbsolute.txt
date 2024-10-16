@@ -323,8 +323,6 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\w
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win-x86\native\Microsoft.WindowsAppRuntime.Bootstrap.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\runtimes\win\lib\net8.0\System.Speech.dll
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logobutton.scale-100.png
-D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logobutton.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\showpasswordicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\doubleright.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\threedotmenu.scale-100.png
@@ -343,9 +341,7 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\threedotfi
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\threedotfivexfive.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\threedotfivexfived.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\threedotfivexfived.scale-100.png
-D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\avatar.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\hearthicon.scale-100.png
-D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\avatar.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\hearthicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\Foodiefeed-api.MvcApplicationPartsAssemblyInfo.cs
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\FuzzySharp.dll
@@ -366,3 +362,9 @@ D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetize
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\profileicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\profileicon.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Bogus.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\avatar.scale-100.jpg
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\avatar.scale-100.jpg
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logolighttheme.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logodarktheme.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logolighttheme.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logodarktheme.scale-100.png

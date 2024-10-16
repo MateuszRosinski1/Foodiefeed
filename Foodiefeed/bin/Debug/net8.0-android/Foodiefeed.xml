@@ -36,6 +36,8 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -109,6 +111,24 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.LoadingLabelVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.loadingLabelVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.InternetAcces">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.internetAcces"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedUsername">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedUsername"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedEmail">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedEmail"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedPassword">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedPassword"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedRePassword">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedRePassword"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedImageProfilePictureBase64">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedImageProfilePictureBase64"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SelfPostButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._selfPostButtonColor"/>
         </member>
@@ -117,6 +137,21 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FollowersButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._followersButtonColor"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.CurrentClickedButtonColor">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._currentClickedButtonColor"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.CurrentUnclickedButtonColor">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._currentUnclickedButtonColor"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ThemeFlag">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.themeFlag"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SwitchThemeMode">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.switchThemeMode"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FailedActionMessage">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.failedActionMessage"/>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.clearNotificationsCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ClearNotificationsCommand"/>.</summary>
@@ -166,6 +201,12 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.OpenPersonalDataEditorCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.OpenPersonalDataEditor"/>.</summary>
         </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.openSettingsLandingPageCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.OpenSettingsLandingPageCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.OpenSettingsLandingPageCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.OpenSettingsLandingPage"/>.</summary>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.backToSettingHubCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.BackToSettingHubCommand"/>.</summary>
         </member>
@@ -195,6 +236,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeProfilePictureCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChangeProfilePicture"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.saveChangedPersonalDataCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalDataCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalDataCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalData"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.showSearchPanelCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowSearchPanelCommand"/>.</summary>
@@ -292,11 +339,11 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.CancelFriendRequestCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.CancelFriendRequest(System.String)"/>.</summary>
         </member>
-        <member name="F:Foodiefeed.viewmodels.BoardViewModel.searchByVoiceCommand">
-            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SearchByVoiceCommand"/>.</summary>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.changeThemeCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ChangeThemeCommand"/>.</summary>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchByVoiceCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SearchByVoice"/>.</summary>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeThemeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChangeTheme"/>.</summary>
         </member>
         <member name="T:Foodiefeed.viewmodels.UserViewModel">
             <inheritdoc/>
@@ -485,6 +532,24 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LoadingLabelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InternetAcces">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedUsername">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedUsername" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedEmail">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedEmail" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedRePassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedRePassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedImageProfilePictureBase64">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedImageProfilePictureBase64" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
         </member>
@@ -493,6 +558,21 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FollowersButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentClickedButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentClickedButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentUnclickedButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentUnclickedButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ThemeFlag">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ThemeFlag" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SwitchThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SwitchThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FailedActionMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
@@ -608,6 +688,24 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LoadingLabelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LoadingLabelVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InternetAcces">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedUsername">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedUsername" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedEmail">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedEmail" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedRePassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedRePassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedImageProfilePictureBase64">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedImageProfilePictureBase64" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
         </member>
@@ -616,6 +714,21 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FollowersButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FollowersButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentClickedButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentClickedButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentUnclickedButtonColor">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentUnclickedButtonColor" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ThemeFlag">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ThemeFlag" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SwitchThemeMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SwitchThemeMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FailedActionMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

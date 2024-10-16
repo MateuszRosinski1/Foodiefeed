@@ -1,5 +1,5 @@
 #if ANDROID
-using Android.App;
+//using Android.App;
 #endif
 #if WINDOWS
 using Windows.Media.SpeechRecognition;
@@ -19,6 +19,12 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Foodiefeed.extension;
 using System.Collections.Specialized;
 using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Text;
+using Foodiefeed.Resources.Styles;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Networking;
 
 
 namespace Foodiefeed.viewmodels
@@ -128,6 +134,26 @@ namespace Foodiefeed.viewmodels
 
         #endregion
 
+        [ObservableProperty]
+        bool internetAcces;
+
+        #region SettingsVariables
+        [ObservableProperty]
+        string changedUsername;
+
+        [ObservableProperty]
+        string changedEmail;
+
+        [ObservableProperty]
+        string changedPassword;
+
+        [ObservableProperty]
+        string changedRePassword;
+
+        [ObservableProperty]
+        string changedImageProfilePictureBase64;
+
+        #endregion
 
         public ObservableCollection<INotification> Notifications { get { return notifications; } }
         private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
@@ -166,11 +192,29 @@ namespace Foodiefeed.viewmodels
             this.ProfilePostsVisible = true; //on init true;
             this.ProfileFriendsVisible = false; //on init false
             this.NoPostOnProfile = false; // on init false
-            this.HubPanelVisible = false;
+            this.HubPanelVisible = false; // on init false
+            this.CanShowSearchPanel = true; //on init true
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
+            internteCheckThread = new Thread(InternetConnectionChecker);
+            internteCheckThread.Start();
             //Task.Run(UpdateFriendList);
+            ChangeTheme();
+        }
+
+        private Thread internteCheckThread;
+        private void InternetConnectionChecker()
+        {
+            while(true){
+                NetworkAccess acces = Connectivity.NetworkAccess;
+                if (acces == NetworkAccess.Internet)
+                {
+                    InternetAcces = false;
+                }
+                else InternetAcces = true;
+                Thread.Sleep(5000);
+            }
         }
 
         [RelayCommand]
@@ -211,7 +255,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-
+            NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -229,7 +273,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ToRecipesView()
         {
-
+            NotifiyFailedAction("hide");
         }
 
         [RelayCommand]
@@ -258,10 +302,19 @@ namespace Foodiefeed.viewmodels
 
 
         [RelayCommand]
-        public void OpenPersonalDataEditor()
+        public async void OpenPersonalDataEditor()
         {
+            await Task.Delay(100);
             this.PersonalDataEditorVisible = true;
             this.SettingsMainHubVisible = false;
+            ShowChangeUsernameEntry();
+        }
+
+        [RelayCommand]
+        public void OpenSettingsLandingPage()
+        {
+            this.PersonalDataEditorVisible = false;
+            this.SettingsMainHubVisible = true;
         }
 
         [RelayCommand]
@@ -301,10 +354,75 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async void SaveChangedPersonalData()
+        {
+            string endpoint = "";
+            StringContent content = null;
+            if (this.ChangeUsernameEntryVisible)
+            {
+                endpoint = Regex.IsMatch(ChangedUsername, "^(?=.*[a-zA-Z])[a-zA-Z0-9_]+$") ? $"api/user/change-username/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedUsername);
+                content = new StringContent(json,Encoding.UTF8,"application/json");
+            }
+            else if (this.ChangeEmailEntryVisible)
+            {
+                endpoint = Regex.IsMatch(ChangedEmail, @"^([\w-\.]+@([0-9a-zA-Z-.拉着,\u4e00-\u9fff]+)\.[a-zA-Z]{2,5})+$") ? $"api/user/change-email/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedEmail);
+                content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+            else if (this.ChangePasswordEntryVisible)
+            {
+                if (ChangedPassword != ChangedRePassword) HandleMissmatchPassword();
+                endpoint = Regex.IsMatch(ChangedPassword, "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$") ? $"api/user/change-password/{_userSession.Id}" : string.Empty;
+                var json = JsonConvert.SerializeObject(ChangedPassword);
+                content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
+            if(endpoint != string.Empty && content is not null)
+             await UpdatePersonalData(endpoint,content);
+        }
+
+        private void HandleMissmatchPassword()
+        {
+
+        }
+
+        //private string HandlePersonalDataChange(string endpointBase,string propertyValue,string regex)
+        //{
+        //    if (Regex.IsMatch(propertyValue, regex))
+        //    {
+        //        return endpointBase + propertyValue;
+        //    }
+        //    else return string.Empty;
+        //}
+
+        private async Task UpdatePersonalData(string endpoint,StringContent contnet)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+
+                try
+                {
+                    var response = await client.PutAsync(endpoint, contnet);
+                }
+                catch(Exception ex)
+                {
+
+                }
+               
+            }
+        }
+
+        public bool CanShowSearchPanel { get; set; }
+        [RelayCommand]
         public void ShowSearchPanel()
         {
-            this.SearchPanelVisible = true;
-            DisplaySearchResultHistory();
+            if (CanShowSearchPanel)
+            {
+                this.SearchPanelVisible = true;
+                DisplaySearchResultHistory();
+            }
         }
 
         [RelayCommand]
@@ -328,7 +446,7 @@ namespace Foodiefeed.viewmodels
 
         [RelayCommand]
         public async void ShowUserProfile(string id)
-        {
+        {  
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
@@ -337,7 +455,12 @@ namespace Foodiefeed.viewmodels
                 if (id != _userSession.Id.ToString())
                 {
                     CreateSearchResultHistory(id);
-                    ToProfileView();
+                    this.PostPageVisible = false;
+                    this.ProfilePageVisible = true;
+                    this.SettingsPageVisible = false;
+                    ProfilePosts.Clear();
+                    ProfileFollowersList.Clear();
+                    ProfileFriendsList.Clear();
                 }
 
                 OpenUserProfile(id);
@@ -381,11 +504,47 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         private Color _followersButtonColor = Color.FromHex("#c9c9c9");
 
+        private Color lightThemeClickedButton  = Color.FromHex("#ffffff");
+        private Color lightThemeUnClickedButton = Color.FromHex("#c9c9c9");
+
+        private Color darkThemeClickedButton = Color.FromHex("#212121");
+        private Color darkThemeUnClickedButton = Color.FromHex("#333333");
+
+        [ObservableProperty]
+        private Color _currentClickedButtonColor;
+        [ObservableProperty]
+        private Color _currentUnclickedButtonColor;
+
         private enum Buttons
         {
             PostButton,
             FriendsButton,
             FollowersButton
+        }
+
+        private async void ReloadProfileButtonColors(bool isDarkTheme)
+        {
+            if(isDarkTheme)
+            {
+                CurrentClickedButtonColor = darkThemeClickedButton;
+                CurrentUnclickedButtonColor = darkThemeUnClickedButton;
+            }
+            else
+            {
+                CurrentClickedButtonColor = lightThemeClickedButton;
+                CurrentUnclickedButtonColor = lightThemeUnClickedButton;
+            }
+
+            if (ProfilePostsVisible){
+                await SetButtonColors(Buttons.PostButton);
+            }
+            else if(ProfileFriendsVisible) {
+                await SetButtonColors(Buttons.FriendsButton);
+            }
+            else if(ProfileFollowersVisible) {
+                await SetButtonColors(Buttons.FollowersButton);
+            }
+
         }
 
         private async Task SetButtonColors(Buttons button)
@@ -394,21 +553,21 @@ namespace Foodiefeed.viewmodels
             switch (button)
             {
                 case Buttons.PostButton:
-                    SelfPostButtonColor = Color.FromHex("#ffffff");
-                    FriendsButtonColor = Color.FromHex("#c9c9c9"); 
-                    FollowersButtonColor = Color.FromHex("#c9c9c9");
+                    SelfPostButtonColor = CurrentClickedButtonColor;
+                    FriendsButtonColor = CurrentUnclickedButtonColor; 
+                    FollowersButtonColor = CurrentUnclickedButtonColor;
                     break;
 
                 case Buttons.FriendsButton:
-                    SelfPostButtonColor = Color.FromHex("#c9c9c9");
-                    FriendsButtonColor = Color.FromHex("#ffffff");
-                    FollowersButtonColor = Color.FromHex("#c9c9c9");
+                    SelfPostButtonColor = CurrentUnclickedButtonColor;
+                    FriendsButtonColor = CurrentClickedButtonColor;
+                    FollowersButtonColor = CurrentUnclickedButtonColor;
                     break;
 
                 case Buttons.FollowersButton:
-                    SelfPostButtonColor = Color.FromHex("#c9c9c9");
-                    FriendsButtonColor = Color.FromHex("#c9c9c9");
-                    FollowersButtonColor = Color.FromHex("#ffffff");
+                    SelfPostButtonColor = CurrentUnclickedButtonColor;
+                    FriendsButtonColor = CurrentUnclickedButtonColor;
+                    FollowersButtonColor = CurrentClickedButtonColor;
                     break;
             }
         }
@@ -453,6 +612,9 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void Search()
         {
+
+            SearchResults.Clear();
+
             if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
 
             var endpoint = $"api/user/search-users/{SearchParam}/{_userSession.Id}";
@@ -474,6 +636,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch(Exception ex)
                 {
+                    NotifiyFailedAction("Could not load search results due to service maintance. Try again later");
                     //code to show Something went wrong on search panel.
                 }
             }
@@ -495,6 +658,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Cant send friend request");
                     // code to handle unsuccsesful friend request.
                 }
             }
@@ -515,6 +679,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     // code to handle unsuccsesful unfriend action.
                 }
             }
@@ -535,7 +700,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-
+                    NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
 
             }
@@ -556,6 +721,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
 
                 }
 
@@ -577,20 +743,53 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Request was already canceled by sender.");
+
                     // code to handle unsuccsesful request cancel.
                 }
             }
         }
 
+        [ObservableProperty]
+        bool themeFlag; //true - darktheme | true - lighttheme
+        [ObservableProperty]
+        string switchThemeMode = "Light Theme";
+
         [RelayCommand]
-        public async void SearchByVoice()
+        public void ChangeTheme()
         {
-            
+            ThemeFlag = !ThemeFlag;
+
+            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+
+            if (mergedDictionaries.Count > 2)
+            {
+                mergedDictionaries.Remove(mergedDictionaries.ElementAt(2));
+            }
+
+            if (ThemeFlag)
+            {
+                mergedDictionaries.Add(new DarkTheme());
+                SwitchThemeMode = "Dark Theme";
+                ReloadProfileButtonColors(ThemeFlag);
+            }
+            else
+            {
+                mergedDictionaries.Add(new LightTheme());
+                SwitchThemeMode = "Light Theme";
+                ReloadProfileButtonColors(ThemeFlag);
+            }
         }
 
         private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {
             SearchResults.Clear();
+
+            if(users is null)
+            {
+                //hanlde no hisotry results
+                return;
+            }
 
             foreach (UserSearchResult user in users)
             {
@@ -599,12 +798,12 @@ namespace Foodiefeed.viewmodels
                     UserId = user.Id.ToString(),
                     Username = user.Username,
                     Follows = user.FollowersCount.ToString(),
-                    Friends = user.FollowersCount.ToString()
+                    Friends = user.FriendsCount.ToString()
                 });
             }
         }
 
-        private void DisplaySearchResultHistory()
+        private async void DisplaySearchResultHistory()
         {
 
             string ApplicationDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Foodiefeed");
@@ -620,9 +819,9 @@ namespace Foodiefeed.viewmodels
                 File.Create(SearchHistoryJsonPath);
             }
 
-            var json = File.ReadAllTextAsync(SearchHistoryJsonPath).Result;
+            var json = await File.ReadAllTextAsync(SearchHistoryJsonPath);
 
-            DisplaySearchResults(JsonToObject<ObservableCollection<UserSearchResult>>(json).Result); 
+            DisplaySearchResults(await JsonToObject<ObservableCollection<UserSearchResult>>(json)); 
             //add a block of code that displays that there are not search results.
 
         }
@@ -690,11 +889,13 @@ namespace Foodiefeed.viewmodels
                     if (response.IsSuccessStatusCode)
                     {
                         var results = await response.Content.ReadAsStringAsync();
-                        if(results is null) { return null; }
+                        if(results is null && results == string.Empty) { return null; }
                         return JsonConvert.DeserializeObject<UserSearchResult>(results);
                     }
                 }catch(Exception ex)
                 {
+                    NotifiyFailedAction("Something went wrong...");
+
                     //block of code handling execption
                 }
                 return null;
@@ -734,7 +935,7 @@ namespace Foodiefeed.viewmodels
                     }
                     catch(Exception ex)
                     {
-
+                        NotifiyFailedAction("Something went wrong...");
                     }
 
                     try
@@ -759,7 +960,7 @@ namespace Foodiefeed.viewmodels
                     }
                     catch (Exception e)
                     {
-
+                        NotifiyFailedAction("Something went wrong...");
                     }
                 }
                 await Task.Delay(60000);
@@ -833,6 +1034,8 @@ namespace Foodiefeed.viewmodels
             catch (Exception ex)
             {
                 //MessageBox.Show($"An error occurred: {ex.Message}");
+                NotifiyFailedAction("Could not load user profile.");
+
             }
             finally
             {
@@ -904,6 +1107,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -918,8 +1122,10 @@ namespace Foodiefeed.viewmodels
                 ProfilePostsVisible = false;
                 return;
             }
-            ProfilePosts.Clear();
-            foreach(var post in posts)
+
+            //await Task.Run(() => { Dispatcher.GetForCurrentThread().Dispatch(() => { ProfilePosts.Clear(); }); });
+            await Dispatcher.GetForCurrentThread().DispatchAsync(() => { ProfilePosts.Clear(); });
+            foreach (var post in posts)
             {
                 var commentList = new List<CommentView>();
                 foreach (var comment in post.Comments)
@@ -978,6 +1184,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -1006,10 +1213,13 @@ namespace Foodiefeed.viewmodels
                     }
                     else if (!response.IsSuccessStatusCode)
                     {
+                        NotifiyFailedAction("Something went wrong...");
                         //code of block that displays that Friends are currently unavaiable
                     }
-                }catch (Exception e)
+                }
+                catch (Exception e)
                 {
+                    NotifiyFailedAction("Something went wrong...");
                     //code block that handle exception
                 }
             }
@@ -1019,7 +1229,7 @@ namespace Foodiefeed.viewmodels
         private async Task<string> GetUserProfileModel(string id)
         {
             var endpoint = $"api/user/user-profile/{id}/{_userSession.Id}";
-
+            
             using (var httpclient = new HttpClient())
             {
                 httpclient.BaseAddress = new Uri(apiBaseUrl);
@@ -1051,8 +1261,18 @@ namespace Foodiefeed.viewmodels
             ProfileLastName = LastName;
             ProfileName = FirstName;
             ProfileUsername = Username;
-            AvatarBase64 = imageBase64;
-            
+            AvatarBase64 = imageBase64;          
+        }
+
+        [ObservableProperty]
+        string failedActionMessage;
+
+        private async void NotifiyFailedAction(string message)
+        {
+            FailedActionMessage = message;
+            WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("show"));
+            await Task.Delay(3000);
+            WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("hide"));
         }
 
     }

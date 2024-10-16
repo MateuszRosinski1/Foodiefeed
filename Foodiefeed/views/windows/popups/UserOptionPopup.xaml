@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:Foodiefeed.views.windows.popups"
              Color="Transparent"
              >
-    <Border BackgroundColor="White" StrokeShape="RoundRectangle 30">
+    <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 30">
+
+
+        <Frame BackgroundColor="{DynamicResource MainBackgroundColor}">
         
-    
-    <Frame BackgroundColor="White">
-        
-        <VerticalStackLayout BackgroundColor="White" 
+        <VerticalStackLayout BackgroundColor="Transparent "
                              WidthRequest="300" 
                              Padding="25">
                 <Image x:Name="avatarImage" 
@@ -23,12 +23,13 @@
                        HorizontalOptions="Center" 
                        FontSize="25" 
                        FontAttributes="Bold" 
-                       TextColor="Black"/>
+                       TextColor="{DynamicResource TextColor}"/>
 
                 <Button FontAttributes="Bold" 
                         x:Name="AddToFriendBtn" 
                         Text="Send friend request" 
-                        BackgroundColor="#e0e0e0" 
+                        BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                        TextColor="{DynamicResource TextColor}"
                         HeightRequest="40" 
                         FontSize="20" 
                         Margin="10"
@@ -43,7 +44,8 @@
                 <Button FontAttributes="Bold" 
                         x:Name="CancelFriendRequestBtn" 
                         Text="Cancel friend request" 
-                        BackgroundColor="#e0e0e0" 
+                        BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                        TextColor="{DynamicResource TextColor}"
                         HeightRequest="40" 
                         FontSize="20" 
                         Margin="10"
@@ -58,7 +60,8 @@
                 <Button FontAttributes="Bold" 
                         x:Name="UnfriendBtn" 
                         Text="Unfriend" 
-                        BackgroundColor="#e0e0e0" 
+                        BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                        TextColor="{DynamicResource TextColor}"
                         HeightRequest="40" 
                         FontSize="20" 
                         Margin="10"
@@ -73,7 +76,8 @@
                 <Button FontAttributes="Bold" 
                         x:Name="FollowBtn" 
                         Text="Follow" 
-                        BackgroundColor="#e32441" 
+                        BackgroundColor="#e32441"
+                        TextColor="White"
                         HeightRequest="40" 
                         FontSize="20" 
                         Margin="10"
@@ -89,6 +93,7 @@
                     x:Name="UnfollowBtn" 
                     Text="Unfollow" 
                     BackgroundColor="#e32441" 
+                    TextColor="White"
                     HeightRequest="40" 
                     FontSize="20" 
                     Margin="10"
@@ -105,7 +110,8 @@
                         HeightRequest="40" 
                         FontAttributes="Bold" 
                         FontSize="20" 
-                        BackgroundColor="White" 
+                        BackgroundColor="{DynamicResource MainBackgroundColor}" 
+                        TextColor="{DynamicResource TextColor}"
                         Margin="10"
                         Command="{Binding ShowUserProfilePopupCommand}"
                         CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">

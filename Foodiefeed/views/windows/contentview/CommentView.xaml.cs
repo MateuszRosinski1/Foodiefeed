@@ -60,4 +60,15 @@ public partial class CommentView : ContentView
 		var view = (CommentView)bindable;
 		view.LikeCountLabel.Text = newValue as string;
     }
+
+    private async void AnimateOptionDots(object sender, PointerEventArgs e)
+    {
+        await FirstCircle.ScaleTo(1.3, 100, Easing.BounceIn);
+        await FirstCircle.ScaleTo(1, 100, Easing.BounceOut);
+        await SecondCircle.ScaleTo(1.3, 100, Easing.BounceIn);
+        await SecondCircle.ScaleTo(1, 100, Easing.BounceOut);
+        await ThirdCircle.ScaleTo(1.3, 100, Easing.BounceIn);
+        await ThirdCircle.ScaleTo(1, 100, Easing.BounceOut);
+
+    }
 }

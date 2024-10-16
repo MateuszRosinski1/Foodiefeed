@@ -4,23 +4,22 @@
              x:Class="Foodiefeed.views.windows.contentview.UserSearchResultView"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
-    
-    <Border StrokeShape="RoundRectangle 20" BackgroundColor="White">
-        <Grid BackgroundColor="White" WidthRequest="650" HeightRequest="90">
+
+    <Border StrokeShape="RoundRectangle 20" BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeThickness="0.5">
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" WidthRequest="650" HeightRequest="90">
             <HorizontalStackLayout  Spacing="10">
-                <Image Source="avatar.png" WidthRequest="80" HeightRequest="90"/>
-                
+                <Image Source="avatar.jpg" WidthRequest="80" HeightRequest="90"/>
                 <VerticalStackLayout Spacing="3" VerticalOptions="Center">
-                    <Label x:Name="UsernameLabel" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="UsernameLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource TextColor}"/>
                     <HorizontalStackLayout Spacing="4">
-                        <Label x:Name="FollowsLabel" FontSize="15"  TextColor="Black"/>
-                        <Label x:Name="FriendsLabel" FontSize="15" TextColor="Black"/>
+                        <Label x:Name="FollowsLabel" FontSize="15"  TextColor="{DynamicResource TextColor}"/>
+                        <Label x:Name="FriendsLabel" FontSize="15" TextColor="{DynamicResource TextColor}"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="End"  Spacing="5" VerticalOptions="Center" Padding="10">
-                    <Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="#e0e0e0" Margin="0,0,10,0" VerticalOptions="Center" 
+                    <!--<Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Margin="0,0,10,0" VerticalOptions="Center" 
                             >
                         <Button.Shadow>
                             <Shadow Opacity="0.4"
@@ -39,15 +38,22 @@
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
                         </Button.GestureRecognizers>
-                    </Button>
+                    </Button>-->
 
-                <Button FontAttributes="Bold" Text="Profile" BackgroundColor="Black" TextColor="White" Margin="0,0,10,0" VerticalOptions="Center"
+                <Button FontAttributes="Bold" 
+                        Text="Profile"
+                        BackgroundColor="Black" 
+                        TextColor="White" 
+                        Margin="0,-10,0,0" 
+                        VerticalOptions="Center"
                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfileCommand}"
-                        CommandParameter="{Binding UserId}">
-                        <Button.Shadow>
+                        CommandParameter="{Binding UserId}"
+                        BorderWidth="0.5"
+                        BorderColor="DimGray">
+                        <!--<Button.Shadow>
                             <Shadow Opacity="0.4"
                                     Radius="10"/>
-                        </Button.Shadow>
+                        </Button.Shadow>-->
                         <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
                         </Button.GestureRecognizers>

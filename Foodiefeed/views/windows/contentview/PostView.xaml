@@ -13,11 +13,11 @@
         <Grid ZIndex="1">
             <Border
                 Margin="30,30,30,0" 
-                BackgroundColor="Gray" 
+                BackgroundColor="{DynamicResource PostBorderColor}" 
                 StrokeThickness="1" 
                 StrokeShape="RoundRectangle 40,40,40,40">
                 
-                <Grid Background="White" x:Name="Post"  BackgroundColor="White" >
+                <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post"  BackgroundColor="White" >
             
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -39,14 +39,10 @@
 
                     <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
-                            
                             <VerticalStackLayout>
-                                <Label TextColor="Black" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
-                                <Label TextColor="Black" FontSize="10" x:Name="PostTimeStampLabel"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel"/>
                             </VerticalStackLayout>
-                            
-                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="•"/>
-                            <Label TextColor="Black" FontSize="15" FontAttributes="Bold" Text="Follow"/>
                         </HorizontalStackLayout>
                         <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
                     </Grid>
@@ -54,7 +50,7 @@
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <VerticalStackLayout>
                             <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Label TextColor="Black" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
                             </ScrollView>
                             <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
                                 <Label.GestureRecognizers>
@@ -78,13 +74,41 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <HorizontalStackLayout  Grid.Column="0" Spacing="5">
-                            <Button  ImageSource="likeicon.png" BackgroundColor="Transparent" FontSize="20" WidthRequest="170" HeightRequest="50" Padding="0,0,0,0" Text="Like It!"/>
-                            <Label x:Name="PostLikeCountLabel" TextColor="Black" FontSize="20" LineBreakMode="TailTruncation" VerticalOptions="Center"/>
+                            <Button  ImageSource="likeicon.png" 
+                                     BackgroundColor="Transparent" 
+                                     FontSize="20"
+                                     WidthRequest="170"
+                                     HeightRequest="50" 
+                                     Padding="0,0,0,0" 
+                                     Text="Like It!"
+                                     TextColor="{DynamicResource TextColor}"/>
+                            <Label x:Name="PostLikeCountLabel" 
+                                   TextColor="{DynamicResource TextColor}" 
+                                   FontSize="20" 
+                                   LineBreakMode="TailTruncation" 
+                                   VerticalOptions="Center"/>
                         </HorizontalStackLayout>
 
-                        <Button Grid.Column="1" ImageSource="commenticon.png" HorizontalOptions="Center" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Comment"/>
+                        <Button Grid.Column="1" 
+                                ImageSource="commenticon.png" 
+                                HorizontalOptions="Center" 
+                                BackgroundColor="Transparent" 
+                                FontSize="20" WidthRequest="200" 
+                                HeightRequest="50"
+                                Padding="0,0,0,0" 
+                                Text="Comment"
+                                TextColor="{DynamicResource TextColor}"/>
 
-                        <Button Grid.Column="2" ImageSource="shareicon.png" HorizontalOptions="EndAndExpand" BackgroundColor="Transparent" FontSize="20" WidthRequest="200" HeightRequest="50" Padding="0,0,0,0" Text="Share"/>
+                        <Button Grid.Column="2" 
+                                ImageSource="shareicon.png" 
+                                HorizontalOptions="EndAndExpand" 
+                                BackgroundColor="Transparent" 
+                                FontSize="20" 
+                                WidthRequest="200"
+                                HeightRequest="50" 
+                                Padding="0,0,0,0" 
+                                Text="Share"
+                                TextColor="{DynamicResource TextColor}"/>
 
                     </Grid>
                 </Grid>
@@ -97,7 +121,7 @@
         </Grid>
         
         <Grid ZIndex="0">
-            <Border BackgroundColor="#e0e0e0"
+            <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
                     Margin="35,-40,35,0"
                     >

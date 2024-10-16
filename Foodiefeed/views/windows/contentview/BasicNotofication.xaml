@@ -2,12 +2,12 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Foodiefeed.views.windows.contentview.BasicNotofication">
-    <Border StrokeShape="RoundRectangle 10" BackgroundColor="White" WidthRequest="285">
-        <HorizontalStackLayout BackgroundColor="White" Spacing="5" WidthRequest="280">
+    <Border Stroke="Gray" StrokeShape="RoundRectangle 10"  WidthRequest="285" StrokeThickness="0.5">
+        <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" Spacing="5" WidthRequest="280">
             <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout Spacing="5">
                 <Label Text="Mariuszek29 liked your comment" 
-                       TextColor="Black" 
+                       TextColor="{DynamicResource TextColor}" 
                        FontSize="15" 
                        HeightRequest="50" 
                        WidthRequest="200" 
@@ -17,11 +17,15 @@
                        HorizontalTextAlignment="Center"
                        Margin="0,10,0,0"/>
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="5"  Margin="0,0,0,5">
-                    <Border BackgroundColor="#e0e0e0" WidthRequest="81" StrokeShape="RoundRectangle 40">
-                        <Label Text="Profile" FontSize="12" WidthRequest="80" HeightRequest="20" BackgroundColor="#e0e0e0" TextColor="Black" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                        <!--<Border.Shadow>
-                            <Shadow Opacity="0.5" Brush="Black"/>
-                        </Border.Shadow>-->
+                    <Border BackgroundColor="{DynamicResource NotificationGrayButtonBackground}" WidthRequest="81" StrokeShape="RoundRectangle 40">
+                        <Label Text="Profile" 
+                               FontSize="12" 
+                               WidthRequest="80" 
+                               HeightRequest="20" 
+                               BackgroundColor="Transparent" 
+                               TextColor="{DynamicResource NotificationButtonTextColor}" 
+                               HorizontalTextAlignment="Center" 
+                               VerticalTextAlignment="Center"/>
                     </Border>
                     <Border BackgroundColor="Black" WidthRequest="81" StrokeShape="RoundRectangle 40">
                         <Label BackgroundColor="Black" FontSize="12" Text="Show post" HeightRequest="20" HorizontalTextAlignment="Center" WidthRequest="80"/>
@@ -29,8 +33,5 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
-        <Border.Shadow>
-            <Shadow Opacity="0.5" Brush="Gray"/>
-        </Border.Shadow>
     </Border>
 </ContentView>

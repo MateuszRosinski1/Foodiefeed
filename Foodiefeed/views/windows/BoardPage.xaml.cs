@@ -30,13 +30,13 @@ namespace Foodiefeed
         private async void PointerGestureRecognizer_PointerEntered(object sender, PointerEventArgs e)
         {
             await AnimateFont(sender, 20, 25, 500, 200);
-            await AnimateShadow(sender, 0, 0.5, 50, 300);
+            //await AnimateShadow(sender, 0, 0.5, 50, 300);
         }
 
         private async void PointerGestureRecognizer_PointerExited(object sender, PointerEventArgs e)
         {
             await AnimateFont(sender,25,20,500,200);
-            await AnimateShadow(sender, 0.5, 0, 50, 300);
+            //await AnimateShadow(sender, 0.5, 0, 50, 300);
         }
 
         private async void CondenseButtonSizeAnimation(object sender, PointerEventArgs e)
@@ -68,59 +68,27 @@ namespace Foodiefeed
             animation.Commit(this, button.Text+"_Shadow", rate, lenght, Easing.Linear);
         }
 
-        //private async void FriendsButton_Clicked(object sender, EventArgs e)
+        //private void NotificationBellAnimation(object sender, PointerEventArgs e)
         //{
-        //    await SetButtonColors(FriendsButton);
-        //}
+        //    var path = sender as Microsoft.Maui.Controls.Shapes.Path;
 
-        //private async void FollowersButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await SetButtonColors(FollowersButton);
-        //}
+        //    if (path is null) return;
 
-        //private async void SelfPostButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await SetButtonColors(SelfPostButton);
-        //}
+        //    NotificationBellTransform.CenterX = path.Width / 2;
 
-        //private async Task SetButtonColors(Button activeButton)
-        //{
-        //    var buttons = new List<Button> { SelfPostButton, FriendsButton, FollowersButton };
+        //    var bellRotationFirstCycle = new Animation(v => NotificationBellTransform.Angle = v, 0, 15, Easing.Linear);
+        //    var bellRotationSecondCycle = new Animation(v => NotificationBellTransform.Angle = v, 15, -15, Easing.Linear);
+        //    var bellRotationThirdCycle = new Animation(v => NotificationBellTransform.Angle = v, -15, 0, Easing.Linear);
 
-        //    foreach (var button in buttons)
+        //    var sequentialAnimation = new Animation
         //    {
-        //        if (button == activeButton)
-        //        {
-        //            await button.ColorTo(Color.FromHex("#c9c9c9"), Colors.White, c => button.BackgroundColor = c, 100);
-        //        }
-        //        else
-        //        {
-        //            await button.ColorTo(Color.FromHex("#c9c9c9"), Color.FromHex("#c9c9c9"), c => button.BackgroundColor = c, 100);
-        //        }
-        //    }
+        //        { 0, 0.25, bellRotationFirstCycle },
+        //        { 0.25, 0.75, bellRotationSecondCycle },
+        //        { 0.75, 1, bellRotationThirdCycle }
+        //    };
+
+        //    sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
         //}
-
-        private void NotificationBellAnimation(object sender, PointerEventArgs e)
-        {
-            var path = sender as Microsoft.Maui.Controls.Shapes.Path;
-
-            if (path is null) return;
-
-            NotificationBellTransform.CenterX = path.Width / 2;
-
-            var bellRotationFirstCycle = new Animation(v => NotificationBellTransform.Angle = v, 0, 15, Easing.Linear);
-            var bellRotationSecondCycle = new Animation(v => NotificationBellTransform.Angle = v, 15, -15, Easing.Linear);
-            var bellRotationThirdCycle = new Animation(v => NotificationBellTransform.Angle = v, -15, 0, Easing.Linear);
-
-            var sequentialAnimation = new Animation
-            {
-                { 0, 0.25, bellRotationFirstCycle },
-                { 0.25, 0.75, bellRotationSecondCycle },
-                { 0.75, 1, bellRotationThirdCycle }
-            };
-
-            sequentialAnimation.Commit(this, "BellRotationSequential", 16, 600, Easing.Linear);
-        }
 
         private async void OptionButtonScaleAnimation(object sender, PointerEventArgs e)
         {
@@ -135,6 +103,18 @@ namespace Foodiefeed
             var button = sender as Button;
             if (button is null) return;
             await button.ScaleTo(1, 100,Easing.Linear);
+        }
+
+
+        //SearchPanel is shown when PersonalDataVisitor is set to visible.
+        //this is handled here to make vs code cleaner, no potential workaround cause IsTapStop 
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.CanShowSearchPanel = false;
+            SearchEntry.Unfocus();
+            await Task.Delay(1000);
+            vm.CanShowSearchPanel = true;
         }
     }
 }

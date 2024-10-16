@@ -6,7 +6,9 @@
              xmlns:converter="clr-namespace:Foodiefeed"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
 
-    <Grid Padding="25" BackgroundColor="WhiteSmoke" x:Name="CommentContainer">
+    <Frame CornerRadius="5" BorderColor="Transparent" BackgroundColor="{DynamicResource CommentViewBackground}">
+
+        <Grid  BackgroundColor="Transparent" x:Name="CommentContainer">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -14,23 +16,52 @@
         </Grid.RowDefinitions>
 
         <Grid BackgroundColor="Transparent" Grid.Row="0">
+
+            
             <HorizontalStackLayout Spacing="5">
                 <Image Source="avatar.png" HeightRequest="40" WidthRequest="40"/>
-                <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="Black" x:Name="UsernameLabel"/>
+                <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"/>
             </HorizontalStackLayout>
-            <ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" />
+            <!--<ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" BackgroundColor="Transparent"/>-->
+            <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
+                                <Ellipse Fill="Gray"
+                             StrokeThickness="0"
+                             WidthRequest="7.5"
+                             HeightRequest="7.5"
+                             Margin="0,1.5"
+                             x:Name="FirstCircle"/>
+                                <Ellipse Fill="Gray"
+                             StrokeThickness="0"
+                             WidthRequest="7.5"
+                             HeightRequest="7.5"
+                             Margin="0,1.5"
+                             x:Name="SecondCircle"/>
+                <Ellipse Fill="Gray"
+                             StrokeThickness="0"
+                             WidthRequest="7.5"
+                             HeightRequest="7.5"
+                             Margin="0,1.5"
+                             x:Name="ThirdCircle"/>
+                <VerticalStackLayout.GestureRecognizers>
+                    <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
+                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
+                              CommandParameter="{Binding UserId}"/>
+                </VerticalStackLayout.GestureRecognizers>
+            </VerticalStackLayout>
         </Grid>
 
         <Grid  Grid.Row="1" Margin="0,5">
-            <Label TextColor="Black" x:Name="CommentText" LineBreakMode="WordWrap"/>
+            <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap"/>
         </Grid>
 
         <HorizontalStackLayout  Grid.Row="2">
-            <Button BackgroundColor="Transparent"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" 
+            <Button BackgroundColor="Red"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" 
+                            TextColor="{DynamicResource TextColor}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=LikePostCommand}"
                             CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
 
-            <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="Black" FontSize="15" x:Name="LikeCountLabel"/>
+            <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel"/>
         </HorizontalStackLayout>
     </Grid>
+    </Frame>
 </ContentView>

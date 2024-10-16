@@ -7,35 +7,44 @@
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels" 
              MaximumWidthRequest="300">
 
-    <Border StrokeShape="RoundRectangle 4,15,15,4" Stroke="DarkGray" >
-        <Grid x:Name="mainGrid" BackgroundColor="White" >
+    <Border StrokeShape="RoundRectangle 4,15,15,4" 
+            Stroke="DarkGray" >
+        <Grid x:Name="mainGrid" 
+              BackgroundColor="{DynamicResource OnListFriendViewBackground}" >
             <HorizontalStackLayout VerticalOptions="Center">
                 <Border StrokeShape="RoundRectangle 100">
-                    <Image VerticalOptions="Center" x:Name="avatarImage" HeightRequest="75" WidthRequest="75" Aspect="AspectFit"/>
+                    <Image VerticalOptions="Center" 
+                           x:Name="avatarImage"
+                           HeightRequest="75"
+                           WidthRequest="75" 
+                           Aspect="AspectFit"/>
                 </Border>
-                <Label Margin="10,0,0,0" VerticalOptions="Center" x:Name="UsernameLabel" TextColor="Black" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
+                <Label Margin="10,0,0,0" 
+                       VerticalOptions="Center"
+                       x:Name="UsernameLabel"
+                       TextColor="{DynamicResource TextColor}" FontAttributes="Bold" WidthRequest="150" MaximumWidthRequest="150" LineBreakMode="TailTruncation"/>
                 <Grid>
 
 
                     <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30">
                         <Ellipse Fill="Gray"
-                 StrokeThickness="0"
-                 WidthRequest="7.5"
-                 HeightRequest="7.5"
-                 Margin="0,1.5"
-                 x:Name="FirstCircle"/>
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="FirstCircle"/>
                         <Ellipse Fill="Gray"
-                 StrokeThickness="0"
-                 WidthRequest="7.5"
-                 HeightRequest="7.5"
-                 Margin="0,1.5"
-                 x:Name="SecondCircle"/>
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="SecondCircle"/>
                         <Ellipse Fill="Gray"
-                 StrokeThickness="0"
-                 WidthRequest="7.5"
-                 HeightRequest="7.5"
-                 Margin="0,1.5"
-                 x:Name="ThirdCircle"/>
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="ThirdCircle"/>
 
                         <VerticalStackLayout.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
