@@ -2,7 +2,42 @@ namespace Foodiefeed.views.windows.contentview;
 
 public partial class BasicNotofication : ContentView , INotification
 {
-	public BasicNotofication()
+
+    public static BindableProperty ShowPostButtonVisibleProperty =
+        BindableProperty.Create(nameof(ShowPostButtonVisible), typeof(bool), typeof(FriendRequestNotification), default(bool));
+
+    public bool ShowPostButtonVisible
+    {
+        get => (bool)GetValue(ShowPostButtonVisibleProperty);
+        set => SetValue(ShowPostButtonVisibleProperty, value);
+    }
+
+
+    public static BindableProperty UserIdProperty =
+        BindableProperty.Create(nameof(UserId), typeof(string), typeof(FriendRequestNotification), default(string));
+
+    public string UserId
+    {
+        get => (string)GetValue(UserIdProperty);
+        set => SetValue(UserIdProperty, value);
+    }
+
+    public string Message
+    {
+        get => (string)GetValue(MessageProperty);
+        set => SetValue(MessageProperty, value);
+    }
+
+    public static BindableProperty MessageProperty =
+        BindableProperty.Create(nameof(Message),typeof(string),typeof(BasicNotofication),default(string), propertyChanged: OnUsernameChanged);
+
+    private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = bindable as BasicNotofication;
+        view.MessageLabel.Text = (string)newValue;
+    }
+
+    public BasicNotofication()
 	{
 		InitializeComponent();
 	}

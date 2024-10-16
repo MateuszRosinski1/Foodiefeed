@@ -24,7 +24,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Maui.Networking;
 
 
 namespace Foodiefeed.viewmodels
@@ -77,7 +76,7 @@ namespace Foodiefeed.viewmodels
         private string avatarBase64;
         #endregion
 
-        private const string apiBaseUrl = "http://localhost:5000";
+        private const string API_BASE_URL = "http://localhost:5000";
 
         [ObservableProperty]
         private string searchParam;
@@ -161,22 +160,24 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
+
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
             _userSession.Id = 15;
 
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new BasicNotofication() { Message = "123"});
+            //notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new FriendRequestNotification());
+            //notifications.Add(new FriendRequestNotification());
 
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
@@ -197,24 +198,122 @@ namespace Foodiefeed.viewmodels
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
-            internteCheckThread = new Thread(InternetConnectionChecker);
-            internteCheckThread.Start();
+
             //Task.Run(UpdateFriendList);
             ChangeTheme();
+            Connectivity.ConnectivityChanged += ConnectivityChanged;
+
+            
         }
 
-        private Thread internteCheckThread;
-        private void InternetConnectionChecker()
+        private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
         {
-            while(true){
-                NetworkAccess acces = Connectivity.NetworkAccess;
-                if (acces == NetworkAccess.Internet)
+            var access = Connectivity.NetworkAccess;
+            InternetAcces = !(access == NetworkAccess.Internet);
+        }
+
+        private Timer notificationTimer;
+
+        [RelayCommand]
+        void Appearing()
+        {
+            notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+        }
+
+        private async Task FetchNotifications()
+        {
+            using(var httpClient = new HttpClient()) {
+
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
                 {
-                    InternetAcces = false;
+                    var endpoint = $"api/notifications/get-all-for-user/{_userSession.Id}";
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception();
+                    }
+
+                    var results = await response.Content.ReadAsStringAsync();
+
+                    var notifications = await JsonToObject<List<NotificationDto>>(results);
+
+                    HandleNotificationsUpdate(notifications);
                 }
-                else InternetAcces = true;
-                Thread.Sleep(5000);
+                catch
+                {
+                    NotifiyFailedAction("Something went wrong...");
+                }
             }
+        }
+
+        private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
+        {
+            notifications.Sort((x,y) => y.Id.CompareTo(x.Id));
+
+            ObservableCollection<INotification> newNotifications = new ObservableCollection<INotification>();
+
+            foreach(var notification in notifications)
+            {
+                switch(notification.Type)
+                {
+                    case NotificationType.FriendRequest:
+                        newNotifications.Add(new FriendRequestNotification() { 
+                            Message = notification.Message, 
+                            UserId = notification.SenderId.ToString() });
+                        break;
+                    case NotificationType.AcceptedFriendRequest:
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            ShowPostButtonVisible = false
+                        });
+                        break;
+                    case NotificationType.PostLike:
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            ShowPostButtonVisible = true
+                        });
+                        break;
+                    case NotificationType.PostComment:
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            ShowPostButtonVisible = true
+                        });
+                        break;
+                    case NotificationType.CommentLike: break;
+                    case NotificationType.GainFollower:
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            ShowPostButtonVisible = false
+                        });
+                        break;
+                }
+            }
+
+
+
+            Notifications.Clear();
+
+            foreach (var newNotification in newNotifications)
+            {
+                Notifications.Add(newNotification);
+            }
+
+        } 
+
+        public void Dispose()
+        {
+            notificationTimer?.Dispose();
         }
 
         [RelayCommand]
@@ -400,7 +499,7 @@ namespace Foodiefeed.viewmodels
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -621,7 +720,7 @@ namespace Foodiefeed.viewmodels
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -650,7 +749,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -671,7 +770,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -692,7 +791,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);   
 
                 try
                 {
@@ -713,7 +812,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -735,7 +834,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -879,7 +978,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpclient = new HttpClient())
             {
-                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
                 var endpoint = $"api/user/{id}";
 
                 try
@@ -910,7 +1009,7 @@ namespace Foodiefeed.viewmodels
                 OnlineFriends.Clear();
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.BaseAddress = new Uri(apiBaseUrl);
+                    httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                     try
                     {
@@ -1092,8 +1191,8 @@ namespace Foodiefeed.viewmodels
 
             using(var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
-
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+                    
                 try
                 {
                     var response = await httpClient.GetAsync(endpoint);
@@ -1169,7 +1268,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -1197,7 +1296,7 @@ namespace Foodiefeed.viewmodels
 
             using(var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -1232,7 +1331,7 @@ namespace Foodiefeed.viewmodels
             
             using (var httpclient = new HttpClient())
             {
-                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {

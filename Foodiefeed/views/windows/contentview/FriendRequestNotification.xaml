@@ -6,7 +6,7 @@
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
             <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout>
-                <Label Text="Mariuszek 29 sended you a friend request" 
+                <Label x:Name="MessageLabel" 
                        TextColor="{DynamicResource TextColor}" 
                        HeightRequest="50" 
                        WidthRequest="200" 

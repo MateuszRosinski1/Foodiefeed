@@ -7,6 +7,30 @@ public partial class FriendRequestNotification : ContentView, INotification
 		InitializeComponent();
 	}
 
+    public static BindableProperty UserIdProperty =
+        BindableProperty.Create(nameof(UserId), typeof(string), typeof(FriendRequestNotification), default(string));
+
+    public string UserId
+    {
+        get => (string)GetValue(UserIdProperty);
+        set => SetValue(UserIdProperty, value);
+    }
+
+    public string Message
+    {
+        get => (string)GetValue(MessageProperty);
+        set => SetValue(MessageProperty, value);
+    }
+
+    public static BindableProperty MessageProperty =
+        BindableProperty.Create(nameof(Message), typeof(string), typeof(FriendRequestNotification), default(string), propertyChanged: OnUsernameChanged);
+
+    private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = bindable as FriendRequestNotification;
+        view.MessageLabel.Text = (string)newValue;
+    }
+
     public async Task HideAnimation(int distance, uint duration)
     {
         double xTranslation = -distance;

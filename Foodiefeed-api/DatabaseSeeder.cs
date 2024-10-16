@@ -116,18 +116,6 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
-            //if (!context.PostTags.Any())
-            //{
-            //    var postTagsFaker = new Faker<PostTag>()
-            //        .RuleFor(pt => pt.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-            //        .RuleFor(pt => pt.TagId, f => f.PickRandom(context.Tags.ToList()).Id);
-
-            //    var postTags = postTagsFaker.Generate(10000); // Generuj 200 posttagów
-
-            //    context.PostTags.AddRange(postTags);
-            //    context.SaveChanges();
-            //}
-
             if (!context.PostTags.Any())
             {
                 var postTagsFaker = new Faker<PostTag>()
@@ -154,19 +142,6 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
-            //if (!context.UserTags.Any())
-            //{
-            //    var userTagsFaker = new Faker<UserTag>()
-            //        .RuleFor(ut => ut.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
-            //        .RuleFor(ut => ut.TagId, f => f.PickRandom(context.Tags.ToList()).Id) 
-            //        .RuleFor(ut => ut.Score, f => f.Random.Int(1, 100));
-
-            //    var userTags = userTagsFaker.Generate(1000); 
-
-            //    context.UserTags.AddRange(userTags);
-            //    context.SaveChanges();
-            //}
-
             if (!context.UserTags.Any())
             {
                 var faker = new Faker();
@@ -191,41 +166,6 @@ namespace Foodiefeed_api
                 context.UserTags.AddRange(userTags); 
                 context.SaveChanges();
             }
-
-            //if (!context.Friends.Any())
-            //{            
-            //    var faker = new Faker<Friend>()
-            //        .RuleFor(f => f.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
-            //        .RuleFor(f => f.FriendUserId, (f, friend) =>
-            //        {
-            //            int friendUserId;
-            //            do
-            //            {
-            //                friendUserId = f.PickRandom(context.Users.ToList()).Id;
-            //            }
-            //            while (friendUserId == friend.UserId); 
-
-            //            return friendUserId;
-            //        });
-
-            //    int friendsCount = 350;
-            //    var friends = new List<Friend>();
-            //    while (friends.Count < friendsCount)
-            //    {
-            //        var newFriend = faker.Generate();
-
-            //        var exists = context.Friends.Any(f =>
-            //            (f.UserId == newFriend.UserId && f.FriendUserId == newFriend.FriendUserId) ||
-            //            (f.UserId == newFriend.FriendUserId && f.FriendUserId == newFriend.UserId));
-
-            //        if (!exists)
-            //        {
-            //            friends.Add(newFriend);
-            //        }
-            //    }
-            //    context.Friends.AddRange(friends);
-            //    context.SaveChanges();
-            //}
 
             if (!context.Friends.Any())
             {

@@ -21,6 +21,7 @@ namespace Foodiefeed_api.entities
 
         public Notification(NotificationType type)
         {
+            Type = type;
             switch(type)
             {
                 case NotificationType.FriendRequest:
@@ -41,10 +42,8 @@ namespace Foodiefeed_api.entities
                 case NotificationType.AcceptedFriendRequest:
                     this.Message = "you are now friend with ";
                     break;
-
             }
         }
-
     }
 
     public enum NotificationType

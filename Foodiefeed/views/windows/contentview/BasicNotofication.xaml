@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.views.windows.contentview.BasicNotofication">
+             x:Class="Foodiefeed.views.windows.contentview.BasicNotofication"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
+    
     <Border Stroke="Gray" StrokeShape="RoundRectangle 10"  WidthRequest="285" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" Spacing="5" WidthRequest="280">
             <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout Spacing="5">
-                <Label Text="Mariuszek29 liked your comment" 
+                <Label x:Name="MessageLabel"
                        TextColor="{DynamicResource TextColor}" 
                        FontSize="15" 
                        HeightRequest="50" 
@@ -26,9 +29,21 @@
                                TextColor="{DynamicResource NotificationButtonTextColor}" 
                                HorizontalTextAlignment="Center" 
                                VerticalTextAlignment="Center"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path= ShowUserProfileCommand}"
+                                                  CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:BasicNotofication}}, Path=UserId}"/>
+                        </Border.GestureRecognizers>
                     </Border>
-                    <Border BackgroundColor="Black" WidthRequest="81" StrokeShape="RoundRectangle 40">
-                        <Label BackgroundColor="Black" FontSize="12" Text="Show post" HeightRequest="20" HorizontalTextAlignment="Center" WidthRequest="80"/>
+                    <Border IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:BasicNotofication}}, Path=ShowPostButtonVisible}"                           
+                            BackgroundColor="Black" 
+                            WidthRequest="81" 
+                            StrokeShape="RoundRectangle 40">
+                        <Label BackgroundColor="Black" 
+                               FontSize="12" 
+                               Text="Show post" 
+                               HeightRequest="20" 
+                               HorizontalTextAlignment="Center" 
+                               WidthRequest="80"/>
                     </Border>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
