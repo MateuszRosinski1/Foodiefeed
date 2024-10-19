@@ -33,9 +33,6 @@ namespace Foodiefeed_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -44,6 +41,21 @@ namespace Foodiefeed_api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Foodiefeed_api.entities.CommentLike", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommentId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommentLikes");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Follower", b =>
@@ -133,9 +145,6 @@ namespace Foodiefeed_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Likes")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -181,6 +190,21 @@ namespace Foodiefeed_api.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostImages");
+                });
+
+            modelBuilder.Entity("Foodiefeed_api.entities.PostLike", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PostId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostLikes");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostProduct", b =>
@@ -310,6 +334,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.CommentLike", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.Comment", "Comment")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "User")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Follower", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.User", "FollowedUser")
@@ -427,6 +470,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.PostLike", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.Post", "Post")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "User")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.PostProduct", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.Post", null)
@@ -474,11 +536,18 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Comment", b =>
+                {
+                    b.Navigation("CommentLikes");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
                 {
                     b.Navigation("PostCommentMembers");
 
                     b.Navigation("PostImages");
+
+                    b.Navigation("PostLikes");
 
                     b.Navigation("PostProducts");
 
@@ -487,11 +556,15 @@ namespace Foodiefeed_api.Migrations
 
             modelBuilder.Entity("Foodiefeed_api.entities.User", b =>
                 {
+                    b.Navigation("CommentLikes");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Followers");
 
                     b.Navigation("Friends");
+
+                    b.Navigation("PostLikes");
 
                     b.Navigation("Posts");
 

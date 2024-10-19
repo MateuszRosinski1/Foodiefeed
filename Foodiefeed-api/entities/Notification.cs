@@ -19,28 +19,33 @@ namespace Foodiefeed_api.entities
 
         public NotificationType Type { get; set; }
 
-        public Notification(NotificationType type)
+        public Notification()
+        {
+            
+        }
+
+        public Notification(NotificationType type,string nickname)
         {
             Type = type;
             switch(type)
             {
                 case NotificationType.FriendRequest:
-                    this.Message = "has sended you a friend request.";
+                    this.Message = nickname + " has sended you a friend request.";
                     break;
                 case NotificationType.PostLike:
-                    this.Message = "has liked your post.";
+                    this.Message = nickname + " has liked your post.";
                     break;
                 case NotificationType.CommentLike:
-                    this.Message = "has liked your comment.";
+                    this.Message = nickname + " has liked your comment.";
                     break;
                 case NotificationType.PostComment:
-                    this.Message = "commented your post.";
+                    this.Message = nickname + " commented your post.";
                     break;
                 case NotificationType.GainFollower:
-                    this.Message = "is now your follower.";
+                    this.Message = nickname + " is now your follower.";
                     break;
                 case NotificationType.AcceptedFriendRequest:
-                    this.Message = "you are now friend with ";
+                    this.Message = "you are now friend with " + nickname;
                     break;
             }
         }

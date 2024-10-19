@@ -20,6 +20,8 @@ namespace Foodiefeed_api.entities
         public virtual DbSet<Follower> Followers { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<PostLike> PostLikes { get; set; }
+        public virtual DbSet<CommentLike> CommentLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -138,6 +140,37 @@ namespace Foodiefeed_api.entities
                 .HasOne(ut => ut.Tag) 
                 .WithMany()
                 .HasForeignKey(ut => ut.TagId);
+
+            modelBuilder.Entity<CommentLike>()
+        .HasKey(cl => new { cl.CommentId, cl.UserId });
+
+            modelBuilder.Entity<CommentLike>()
+                .HasOne(cl => cl.Comment)
+                .WithMany(c => c.CommentLikes)
+                .HasForeignKey(cl => cl.CommentId)
+                .OnDelete(DeleteBehavior.Cascade); // Możesz zostawić cascade tutaj
+
+            modelBuilder.Entity<CommentLike>()
+                .HasOne(cl => cl.User)
+                .WithMany(u => u.CommentLikes)
+                .HasForeignKey(cl => cl.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Zmień na Restrict lub NoAction, aby uniknąć konfliktu
+
+            // Konfiguracja dla encji PostLike
+            modelBuilder.Entity<PostLike>()
+                .HasKey(pl => new { pl.PostId, pl.UserId });
+
+            modelBuilder.Entity<PostLike>()
+                .HasOne(pl => pl.Post)
+                .WithMany(p => p.PostLikes)
+                .HasForeignKey(pl => pl.PostId)
+                .OnDelete(DeleteBehavior.Cascade); // Możesz zostawić cascade tutaj
+
+            modelBuilder.Entity<PostLike>()
+                .HasOne(pl => pl.User)
+                .WithMany(u => u.PostLikes)
+                .HasForeignKey(pl => pl.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
 

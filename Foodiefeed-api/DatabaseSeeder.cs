@@ -1,4 +1,5 @@
-﻿using Bogus;
+﻿using Azure.Core;
+using Bogus;
 using Bogus.DataSets;
 using Foodiefeed_api.entities;
 using System;
@@ -31,8 +32,8 @@ namespace Foodiefeed_api
             {
                 var postFaker = new Faker<Post>()
                     .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 20)))
-                    .RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
+                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 20)));
+                    //.RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
 
                 var posts = postFaker.Generate(2000);
 
@@ -44,8 +45,8 @@ namespace Foodiefeed_api
             {
                 var commentFaker = new Faker<Comment>()
                     .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 20)))
-                    .RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
+                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 20)));
+                    //.RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
 
                 var comments = commentFaker.Generate(20000);
 
@@ -300,18 +301,31 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+            //var allnotifications = context.Notifications.ToList();
+            //context.Notifications.RemoveRange(allnotifications);
+            //context.SaveChanges();
+
             if (!context.Notifications.Any()) {
                 
                 List<Notification> notifications = new List<Notification>();
                 foreach(var request in context.FriendRequests.ToList())
                 {
-                    notifications.Add(new Notification(NotificationType.FriendRequest) { SenderId = request.SenderId, ReceiverId = request.ReceiverId });
+                    var user = context.Users.FirstOrDefault(u => u.Id == request.SenderId);
+                    if(user is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.FriendRequest,user.Username) { SenderId = request.SenderId, ReceiverId = request.ReceiverId });
+                    }
                 }
 
                 foreach(var friend in context.Friends.ToList())
                 {
-                    notifications.Add(new Notification(NotificationType.AcceptedFriendRequest) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                    var user = context.Users.FirstOrDefault(u => u.Id == friend.UserId);
+                    if(user is not null) {
+                        notifications.Add(new Notification(NotificationType.AcceptedFriendRequest, user.Username) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                    }
                 }
+
+                //foreach(var comment)
 
                 context.Notifications.AddRange(notifications);
                 context.SaveChanges();

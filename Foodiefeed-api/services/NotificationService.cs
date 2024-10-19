@@ -8,7 +8,7 @@ namespace Foodiefeed_api.services
 {
     public interface INotificationService
     {
-        Task CreateNotification(NotificationType type, int sender, int Receiver);
+        Task CreateNotification(NotificationType type, int sender, int Receiver, string nickname);
         Task<List<NotificationDto>> GetNotificationByUserId(int id);
     }
 
@@ -35,9 +35,9 @@ namespace Foodiefeed_api.services
             return notificationsDtos;
         }
 
-        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId)
+        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId,string nickname)
         {
-            var notification = new Notification(type) { SenderId = senderId ,ReceiverId = ReceiverId};
+            var notification = new Notification(type,nickname) { SenderId = senderId ,ReceiverId = ReceiverId};
 
             _dbContext.Notifications.Add(notification);
 

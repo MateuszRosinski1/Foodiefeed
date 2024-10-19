@@ -165,7 +165,7 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 15;
+            _userSession.Id = 9;
 
             //notifications.Add(new BasicNotofication() { Message = "123"});
             //notifications.Add(new FriendRequestNotification());

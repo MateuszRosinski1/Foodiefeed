@@ -20,5 +20,9 @@
         public virtual ICollection<FriendRequest> ReceivedFriendRequests { get; set; }
 
         public virtual ICollection<Follower> Followers { get; set; }
+
+        public virtual ICollection<CommentLike> CommentLikes { get; set; }
+        public virtual ICollection<PostLike> PostLikes { get; set; }
+
     }
 }
