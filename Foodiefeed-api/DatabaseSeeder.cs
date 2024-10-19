@@ -41,6 +41,39 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+            var postlikes = context.PostLikes.ToList();
+
+            context.PostLikes.RemoveRange(postlikes);
+            context.SaveChanges();
+
+            if (!context.PostLikes.Any())
+            {
+                var postLikeFaker = new Faker<PostLike>()
+                    .RuleFor(p => p.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                    .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id);
+
+                // Pobieranie istniejących PostLikes do weryfikacji
+                var existingPostLikes = context.PostLikes.ToList();
+                var postLikesToAdd = new List<PostLike>();
+
+                for (int i = 0; i < 10000; i++) // Zakładam, że chcesz wygenerować 100 losowych PostLike
+                {
+                    var newPostLike = postLikeFaker.Generate();
+
+                    var exists = postLikesToAdd.FirstOrDefault(p => p.PostId == newPostLike.PostId && p.UserId == newPostLike.UserId);
+
+                    // Jeśli nie istnieje, dodaj do listy
+                    if (exists is null)
+                    {
+                        postLikesToAdd.Add(newPostLike);
+                    }
+                }
+
+                // Dodanie wszystkich nowych PostLikes na raz
+                context.PostLikes.AddRange(postLikesToAdd);
+                context.SaveChanges();
+            }
+
             if (!context.Comments.Any())
             {
                 var commentFaker = new Faker<Comment>()
@@ -51,6 +84,28 @@ namespace Foodiefeed_api
                 var comments = commentFaker.Generate(20000);
 
                 context.Comments.AddRange(comments);
+                context.SaveChanges();
+            }
+
+            if (!context.CommentLikes.Any())
+            {
+                var commentLikeFaker = new Faker<CommentLike>()
+                    .RuleFor(c => c.CommentId, f => f.PickRandom(context.Comments.ToList()).CommentId)
+                    .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id);
+
+                var commentLikesToAdd = new List<CommentLike>();
+                for (int i = 0; i < 10000; i++)
+                {
+                    var newCommentLike = commentLikeFaker.Generate();
+
+                    var exists = commentLikesToAdd.FirstOrDefault(cl => cl.CommentId == newCommentLike.CommentId && cl.UserId == newCommentLike.UserId);
+                    if (exists is null)
+                    {
+                        commentLikesToAdd.Add(newCommentLike);
+                    }
+                }
+
+                context.CommentLikes.AddRange(commentLikesToAdd);
                 context.SaveChanges();
             }
 
