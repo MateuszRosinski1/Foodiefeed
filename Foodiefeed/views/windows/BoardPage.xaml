@@ -188,9 +188,9 @@
                                                 ItemsUpdatingScrollMode="KeepScrollOffset">
                                     <CollectionView.Behaviors>
                                         <toolkit:EventToCommandBehavior
-                                        x:TypeArguments="ItemsViewScrolledEventArgs"
-                                        EventName="Scrolled"
-                                        Command="{Binding ScrolledNotificationsCommand}"/>
+                                                x:TypeArguments="ItemsViewScrolledEventArgs"
+                                                EventName="Scrolled"
+                                                Command="{Binding ScrolledNotificationsCommand}"/>
                                     </CollectionView.Behaviors>
                                 </CollectionView>
                             </Grid>

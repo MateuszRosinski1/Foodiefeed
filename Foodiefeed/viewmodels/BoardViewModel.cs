@@ -350,7 +350,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ShowLikedComment(string id)
         {
-
+            App.Current.MainPage.ShowPopup(new LikedCommendPopup(id));
         }
 
         [RelayCommand]
