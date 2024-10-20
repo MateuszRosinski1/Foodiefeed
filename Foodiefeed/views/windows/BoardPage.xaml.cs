@@ -117,6 +117,5 @@ namespace Foodiefeed
             vm.CanShowSearchPanel = true;
         }
 
- 
     }
 }

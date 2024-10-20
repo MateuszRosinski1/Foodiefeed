@@ -201,9 +201,7 @@ namespace Foodiefeed.viewmodels
 
             //Task.Run(UpdateFriendList);
             ChangeTheme();
-            Connectivity.ConnectivityChanged += ConnectivityChanged;
-
-            
+            Connectivity.ConnectivityChanged += ConnectivityChanged;            
         }
 
         private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
@@ -213,14 +211,20 @@ namespace Foodiefeed.viewmodels
         }
 
         private Timer notificationTimer;
-
+        bool windowloaded;
         [RelayCommand]
-        void Appearing()
+        async void Appearing()
         {
-            if(notificationTimer == null)
+            if(!windowloaded)
             {
-                notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+                FetchNotifications();
+                windowloaded = true;
             }
+                
+            //if(notificationTimer == null)
+            //{
+            //    notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            //}
         }
 
         private async Task FetchNotifications()
@@ -254,7 +258,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
         {
-            notifications.Sort((x,y) => y.Id.CompareTo(x.Id));
+            //notifications.Sort((x,y) => y.Id.CompareTo(x.Id));
 
             ObservableCollection<INotification> newNotifications = new ObservableCollection<INotification>();
 
@@ -313,21 +317,22 @@ namespace Foodiefeed.viewmodels
                 }
             }
             Notifications.Clear();
-            //foreach (var newNotification in newNotifications)
-            //{
-            //    Notifications.Add(newNotification);
-            //}
+            allNotifications.Clear();
+            allNotifications = newNotifications;
             DisplayNotifications(10, newNotifications);
 
         }
 
+        private ObservableCollection<INotification> allNotifications = new ObservableCollection<INotification>();
         private int currentNotificationsDisplayCount = 0;
 
         private async void DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
         {
-            for (int i = 0;i <= displayCount-1;i++)
+            var temp = currentNotificationsDisplayCount;
+            for (int i = currentNotificationsDisplayCount; i <= temp+displayCount; i++)
             {
-                    Notifications.Add(notifications[i]);             
+               Notifications.Add(notifications[i]);
+               currentNotificationsDisplayCount++;
             }
         }
 
@@ -382,6 +387,15 @@ namespace Foodiefeed.viewmodels
             if (e.LastVisibleItemIndex == Posts.Count() - 2)
             {
 
+            }
+        }
+
+        [RelayCommand]
+        public void ScrolledNotifications(ItemsViewScrolledEventArgs e)
+        {
+            if (e.LastVisibleItemIndex == Notifications.Count() - 2)
+            {
+                DisplayNotifications(10, allNotifications);
             }
         }
 
@@ -872,7 +886,6 @@ namespace Foodiefeed.viewmodels
                 catch
                 {
                     NotifiyFailedAction("Request was already canceled by sender.");
-
                     // code to handle unsuccsesful request cancel.
                 }
             }

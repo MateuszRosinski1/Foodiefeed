@@ -172,28 +172,29 @@
                                 </Button.Shadow>
                             </Button>
                         </HorizontalStackLayout>
-                        <ScrollView  HorizontalOptions="Start" 
+                        <Grid  HorizontalOptions="Start" 
                                      VerticalOptions="Start" 
                                      x:Name="hubScroll" 
                                      BackgroundColor="Transparent"
-                                     VerticalScrollBarVisibility="Always" 
-                                     WidthRequest="300"                                  
+                                     WidthRequest="300" 
                                      HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                                      >
                             <!--pages-->
                             <Grid BackgroundColor="Transparent" Padding="0,10,0,0">
-                                <!--<VerticalStackLayout BindableLayout.ItemsSource="{Binding Notifications}" Spacing="15">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
-                                           <
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </VerticalStackLayout>-->
                                 <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
                                                 ItemsSource="{Binding Notifications}" 
-                                                BackgroundColor="Transparent"/>
+                                                BackgroundColor="Transparent"
+                                                VerticalScrollBarVisibility="Always"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset">
+                                    <CollectionView.Behaviors>
+                                        <toolkit:EventToCommandBehavior
+                                        x:TypeArguments="ItemsViewScrolledEventArgs"
+                                        EventName="Scrolled"
+                                        Command="{Binding ScrolledNotificationsCommand}"/>
+                                    </CollectionView.Behaviors>
+                                </CollectionView>
                             </Grid>
-                        </ScrollView>
+                        </Grid>
                     </VerticalStackLayout>
                     
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
