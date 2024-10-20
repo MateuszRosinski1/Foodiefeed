@@ -34,7 +34,7 @@
                                                   CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:BasicNotofication}}, Path=UserId}"/>
                         </Border.GestureRecognizers>
                     </Border>
-                    <Border IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:BasicNotofication}}, Path=ShowPostButtonVisible}"                           
+                    <!--<Border IsVisible="{Binding Source={RelativeSource AncestorType={x:Type local:BasicNotofication}}, Path=ShowPostButtonVisible}"                           
                             BackgroundColor="Black" 
                             WidthRequest="81" 
                             StrokeShape="RoundRectangle 40">
@@ -44,7 +44,7 @@
                                HeightRequest="20" 
                                HorizontalTextAlignment="Center" 
                                WidthRequest="80"/>
-                    </Border>
+                    </Border>-->
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>

@@ -1,3 +1,5 @@
+using Foodiefeed.models.dto;
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class FriendRequestNotification : ContentView, INotification
@@ -10,6 +12,9 @@ public partial class FriendRequestNotification : ContentView, INotification
     public static BindableProperty UserIdProperty =
         BindableProperty.Create(nameof(UserId), typeof(string), typeof(FriendRequestNotification), default(string));
 
+    public static BindableProperty MessageProperty =
+        BindableProperty.Create(nameof(Message), typeof(string), typeof(FriendRequestNotification), default(string), propertyChanged: OnUsernameChanged);
+
     public string UserId
     {
         get => (string)GetValue(UserIdProperty);
@@ -21,9 +26,7 @@ public partial class FriendRequestNotification : ContentView, INotification
         get => (string)GetValue(MessageProperty);
         set => SetValue(MessageProperty, value);
     }
-
-    public static BindableProperty MessageProperty =
-        BindableProperty.Create(nameof(Message), typeof(string), typeof(FriendRequestNotification), default(string), propertyChanged: OnUsernameChanged);
+    public NotificationType Type { get => NotificationType.FriendRequest; set => Type = NotificationType.FriendRequest; }
 
     private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
     {

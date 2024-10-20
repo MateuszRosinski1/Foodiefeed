@@ -9,6 +9,8 @@ namespace Foodiefeed_api.entities
 
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
+        public int? CommentId { get; set; }
+        public int? PostId { get; set; }
 
         public string Message { get; set; }
 

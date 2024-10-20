@@ -2,6 +2,7 @@
 using Bogus;
 using Bogus.DataSets;
 using Foodiefeed_api.entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Foodiefeed_api
@@ -40,11 +41,6 @@ namespace Foodiefeed_api
                 context.Posts.AddRange(posts);
                 context.SaveChanges();
             }
-
-            var postlikes = context.PostLikes.ToList();
-
-            context.PostLikes.RemoveRange(postlikes);
-            context.SaveChanges();
 
             if (!context.PostLikes.Any())
             {
@@ -380,14 +376,67 @@ namespace Foodiefeed_api
                     }
                 }
 
-                //foreach(var comment)
+                foreach(var comment in context.CommentLikes.ToList()) 
+                {
+                    var user = context.Users.FirstOrDefault(u => u.Id == comment.UserId);
+                    var userComment = context.Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
+                    if (user is not null && userComment is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.CommentLike, user.Username) { SenderId = comment.UserId, ReceiverId = userComment.UserId,CommentId = comment.CommentId });
+                    }
+                }
 
+                foreach(var post in context.PostLikes.ToList())
+                {
+                    var user = context.Users.FirstOrDefault(u => u.Id ==post.UserId);
+                    var userPost = context.Posts.FirstOrDefault(p => p.PostId == post.PostId);
+                    if(user is not null && userPost is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.PostLike, user.Username) { SenderId = post.UserId, ReceiverId = userPost.UserId, PostId = post.PostId });
+                    }
+                }
+
+                foreach(var follower in context.Followers.ToList())
+                {
+                    var receiver = context.Users.FirstOrDefault(u => u.Id == follower.FollowedUserId);
+                    var sender = context.Users.FirstOrDefault(u => u.Id == follower.UserId);
+
+                    if(receiver is not null && sender is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.GainFollower, sender.Username) { SenderId = sender.Id,ReceiverId = receiver.Id });
+                    }
+                }
+
+                foreach (var post in context.Posts.Include(p => p.PostCommentMembers).ToList())
+                {
+                    var reciever = context.Users.FirstOrDefault(u => u.Id ==post.UserId);
+                    if( reciever is not null )
+                    {
+                        foreach (var member in post.PostCommentMembers)
+                        {
+                            var comment = context.Comments.FirstOrDefault(c => c.CommentId == member.CommentId);
+                            if (comment is not null)
+                            {
+                                var sender = context.Users.FirstOrDefault(u => u.Id == comment.UserId);
+
+                                if (sender is not null)
+                                {
+                                    notifications.Add(new Notification(NotificationType.PostComment, sender.Username)
+                                    {
+                                        ReceiverId = reciever.Id,
+                                        SenderId = sender.Id,
+                                        PostId = post.PostId,
+                                        CommentId = comment.CommentId,
+
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
                 context.Notifications.AddRange(notifications);
                 context.SaveChanges();
-            }
-
-
-            
+            }   
         }
     }
 }

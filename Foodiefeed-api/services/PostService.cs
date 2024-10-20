@@ -42,6 +42,8 @@ namespace Foodiefeed_api.services
                 .ThenInclude(p => p.PostProducts)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostCommentMembers)
+            .Include(u => u.Posts)
+                .ThenInclude(u => u.PostLikes)
             .FirstOrDefaultAsync(u => u.Id == Convert.ToInt32(userId));
 
             if (user is null) { throw new NotFoundException("user not found"); }
@@ -57,13 +59,15 @@ namespace Foodiefeed_api.services
             foreach (var post in posts)
             {
                 postsDtos[i].Username = user.Username;
-
+                postsDtos[i].Likes = post.PostLikes.Count();
                 var postCommentMembers = post.PostCommentMembers.ToList();
                 postsDtos[i].Comments = new List<CommentDto>();
 
                 foreach (var postComment in postCommentMembers)
                 {
-                    var comment = await _dbContext.Comments.FirstOrDefaultAsync(c => c.CommentId == postComment.CommentId);
+                    var comment = await _dbContext.Comments
+                         .Include(u => u.CommentLikes)
+                        .FirstOrDefaultAsync(c => c.CommentId == postComment.CommentId);
 
                     if(comment is null) { break; }
 
@@ -73,6 +77,7 @@ namespace Foodiefeed_api.services
 
                     if (username is null) { break; }
                     commentDto.Username = username;
+                    commentDto.Likes = comment.CommentLikes.Count();
                     postsDtos[i].Comments.Add(commentDto);
                 }
 

@@ -165,17 +165,17 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 9;
+            _userSession.Id = 15;
 
-            //notifications.Add(new BasicNotofication() { Message = "123"});
+            //notifications.Add(new BasicNotofication() { Message = "123",Type = NotificationType.AcceptedFriendRequest });
             //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new BasicNotofication());
-            //notifications.Add(new BasicNotofication());
-            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
+            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
+            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
             //notifications.Add(new FriendRequestNotification());
             //notifications.Add(new FriendRequestNotification());
             //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new BasicNotofication());
+            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
             //notifications.Add(new FriendRequestNotification());
             //notifications.Add(new FriendRequestNotification());
 
@@ -217,7 +217,10 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         void Appearing()
         {
-            notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            if(notificationTimer == null)
+            {
+                notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            }
         }
 
         private async Task FetchNotifications()
@@ -259,61 +262,96 @@ namespace Foodiefeed.viewmodels
             {
                 switch(notification.Type)
                 {
-                    case NotificationType.FriendRequest:
-                        newNotifications.Add(new FriendRequestNotification() { 
-                            Message = notification.Message, 
-                            UserId = notification.SenderId.ToString() });
-                        break;
-                    case NotificationType.AcceptedFriendRequest:
-                        newNotifications.Add(new BasicNotofication()
+                    case NotificationType.FriendRequest: //0
+                        newNotifications.Add(new FriendRequestNotification()
                         {
                             Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            ShowPostButtonVisible = false
+                            UserId = notification.SenderId.ToString()
                         });
                         break;
-                    case NotificationType.PostLike:
+                    case NotificationType.AcceptedFriendRequest: //5
                         newNotifications.Add(new BasicNotofication()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
-                            ShowPostButtonVisible = true
+                            Type = NotificationType.AcceptedFriendRequest
                         });
                         break;
-                    case NotificationType.PostComment:
-                        newNotifications.Add(new BasicNotofication()
+                    case NotificationType.PostLike: //1
+                        newNotifications.Add(new PostLikeNotification()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
-                            ShowPostButtonVisible = true
                         });
                         break;
-                    case NotificationType.CommentLike: break;
-                    case NotificationType.GainFollower:
+                    case NotificationType.PostComment: //2
+                        newNotifications.Add(new PostCommentNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            PostId = notification.PostId.ToString()
+                        });
+                        break;
+                    case NotificationType.CommentLike: //3
+                        newNotifications.Add(new CommentLikeNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString()
+                        });
+                        break;
+                    case NotificationType.GainFollower: //4
                         newNotifications.Add(new BasicNotofication()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
-                            ShowPostButtonVisible = false
+                            Type = NotificationType.GainFollower
+                            //ShowPostButtonVisible = false
                         });
                         break;
                 }
             }
-
-
-
             Notifications.Clear();
+            //foreach (var newNotification in newNotifications)
+            //{
+            //    Notifications.Add(newNotification);
+            //}
+            DisplayNotifications(10, newNotifications);
 
-            foreach (var newNotification in newNotifications)
+        }
+
+        private int currentNotificationsDisplayCount = 0;
+
+        private async void DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
+        {
+            for (int i = 0;i <= displayCount-1;i++)
             {
-                Notifications.Add(newNotification);
+                    Notifications.Add(notifications[i]);             
             }
-
-        } 
+        }
 
         public void Dispose()
         {
             notificationTimer?.Dispose();
+        }
+
+        [RelayCommand]
+        public void ShowCommentedPost(string id)
+        {
+
+        }
+
+        [RelayCommand]
+        public void ShowLikedComment(string id)
+        {
+
+        }
+
+        [RelayCommand]
+        public void ShowLikedPost(string id)
+        {
+
         }
 
         [RelayCommand]
@@ -341,10 +379,10 @@ namespace Foodiefeed.viewmodels
         public void Scrolled(ItemsViewScrolledEventArgs e)
         {
 
-            //if (e.LastVisibleItemIndex == Posts.Count() - 2)
-            //{
-            //   
-            //}
+            if (e.LastVisibleItemIndex == Posts.Count() - 2)
+            {
+
+            }
         }
 
 
@@ -485,15 +523,6 @@ namespace Foodiefeed.viewmodels
         {
 
         }
-
-        //private string HandlePersonalDataChange(string endpointBase,string propertyValue,string regex)
-        //{
-        //    if (Regex.IsMatch(propertyValue, regex))
-        //    {
-        //        return endpointBase + propertyValue;
-        //    }
-        //    else return string.Empty;
-        //}
 
         private async Task UpdatePersonalData(string endpoint,StringContent contnet)
         {

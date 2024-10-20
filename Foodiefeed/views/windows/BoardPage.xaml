@@ -13,6 +13,7 @@
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
         <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>
+        <x:Double x:Key="NoNotificationsHeightAdjustValue">100</x:Double>
         <x:Double x:Key="LeftBarHeightAdjustValue">170</x:Double>
         <x:Double x:Key="MidBarWidthAdjustValue">600</x:Double>
         <x:Double x:Key="MidBarHeightAdjustValue">100</x:Double>
@@ -20,6 +21,33 @@
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+
+        <DataTemplate x:Key="FriendRequestNotificationTemplate">
+            <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CommentLikeNotificationTemplate">
+            <views:CommentLikeNotification Message="{Binding Message}" UserId="{Binding UserId}" CommentId="{Binding CommentId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PostLikeNotificationTemplate">
+            <views:PostLikeNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PostCommentNotificationTemplate">
+            <views:PostCommentNotification Message="{Binding Message}" UserId="{Binding UserId}" PostId="{Binding PostId}" CommentId="{Binding CommentId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BasicNotificationTemplate">
+            <views:BasicNotofication Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <local:NotificationTemplateSelector x:Key="NotificationTemplateSelector"
+                                            FriendRequestNotificationTemplate="{StaticResource FriendRequestNotificationTemplate}"
+                                            CommentLikeNotificationTemplate="{StaticResource CommentLikeNotificationTemplate}"
+                                            PostLikeNotificationTemplate="{StaticResource PostLikeNotificationTemplate}"
+                                            PostCommentNotificationTemplate="{StaticResource PostCommentNotificationTemplate}"
+                                            BasicNotificationTemplate="{StaticResource BasicNotificationTemplate}"/>
     </ContentPage.Resources>
     
     <ContentPage.Behaviors>
@@ -154,23 +182,27 @@
                                      >
                             <!--pages-->
                             <Grid BackgroundColor="Transparent" Padding="0,10,0,0">
-                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Notifications}" Spacing="15">
+                                <!--<VerticalStackLayout BindableLayout.ItemsSource="{Binding Notifications}" Spacing="15">
                                     <BindableLayout.ItemTemplate>
                                         <DataTemplate>
-                                            <ContentView Content="{Binding .}"/>
+                                           <
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
-                                </VerticalStackLayout>
+                                </VerticalStackLayout>-->
+                                <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
+                                                ItemsSource="{Binding Notifications}" 
+                                                BackgroundColor="Transparent"/>
                             </Grid>
                         </ScrollView>
                     </VerticalStackLayout>
+                    
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
                           HorizontalOptions="Start" 
                           VerticalOptions="Start"
                           BackgroundColor="{DynamicResource SideBackgroundColor}"
                           WidthRequest="300"
                           Margin="0,0,0,0"
-                          HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
+                          HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource NoNotificationsHeightAdjustValue}}" >
                         <VerticalStackLayout VerticalOptions="Center" >
                             <Image Source="notificationicon.png" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label TextColor="#afafaf" Text="No notification yet" HorizontalOptions="Center"/>
@@ -182,8 +214,7 @@
 
 
                 <!--PostGrid-->
-                <ScrollView 
-                            Grid.Column="1"
+                <ScrollView Grid.Column="1"
                             BackgroundColor="{DynamicResource MainBackgroundColor}"
                             WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 

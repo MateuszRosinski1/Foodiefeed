@@ -1,20 +1,22 @@
+using Foodiefeed.models.dto;
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class BasicNotofication : ContentView , INotification
 {
-
-    public static BindableProperty ShowPostButtonVisibleProperty =
-        BindableProperty.Create(nameof(ShowPostButtonVisible), typeof(bool), typeof(FriendRequestNotification), default(bool));
-
-    public bool ShowPostButtonVisible
-    {
-        get => (bool)GetValue(ShowPostButtonVisibleProperty);
-        set => SetValue(ShowPostButtonVisibleProperty, value);
-    }
-
+    
 
     public static BindableProperty UserIdProperty =
-        BindableProperty.Create(nameof(UserId), typeof(string), typeof(FriendRequestNotification), default(string));
+        BindableProperty.Create(nameof(UserId), typeof(string), typeof(BasicNotofication), default(string));
+
+    //public static BindableProperty ShowPostButtonVisibleProperty =
+    //    BindableProperty.Create(nameof(ShowPostButtonVisible), typeof(string), typeof(BasicNotofication), default(string));
+
+    //public bool ShowPostButtonVisible
+    //{
+    //    get => (bool)GetValue(ShowPostButtonVisibleProperty);
+    //    set => SetValue(ShowPostButtonVisibleProperty, value);
+    //}
 
     public string UserId
     {
@@ -28,12 +30,20 @@ public partial class BasicNotofication : ContentView , INotification
         set => SetValue(MessageProperty, value);
     }
 
+    private NotificationType _type;
+
+    public NotificationType Type
+    {
+        get => _type;
+        set => _type = value; 
+    }
+
     public static BindableProperty MessageProperty =
         BindableProperty.Create(nameof(Message),typeof(string),typeof(BasicNotofication),default(string), propertyChanged: OnUsernameChanged);
 
     private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
     {
-        var view = bindable as BasicNotofication;
+        var view = (BasicNotofication)bindable;
         view.MessageLabel.Text = (string)newValue;
     }
 

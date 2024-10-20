@@ -70,6 +70,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\BasicNotofication.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\BasicNotofication.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/CommentLikeNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.CommentLikeNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\CommentLikeNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\CommentLikeNotification.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/CommentView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.CommentView.xaml
@@ -93,6 +99,18 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.OnListFriendView.xaml
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\OnListFriendView.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\OnListFriendView.xaml
+
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostCommentNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostCommentNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostCommentNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostCommentNotification.xaml
+
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostLikeNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostLikeNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostLikeNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostLikeNotification.xaml
 
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

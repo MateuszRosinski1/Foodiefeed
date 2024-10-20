@@ -11,6 +11,9 @@ namespace Foodiefeed_api.models.notifications
 
         public string Message { get; set; }
 
+        public int? CommentId { get; set; }
+        public int? PostId { get; set; }
+
         public NotificationType Type { get; set; }
     }
 }
