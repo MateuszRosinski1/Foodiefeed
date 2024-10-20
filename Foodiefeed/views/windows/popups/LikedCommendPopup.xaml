@@ -15,14 +15,14 @@
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" BackgroundColor="GreenYellow">
+            <Grid Grid.Row="0" BackgroundColor="Transparent">
 
 
                 <HorizontalStackLayout Spacing="5">
-                    <Image Source="avatar.png" HeightRequest="40" WidthRequest="40"/>
-                    <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"/>
+                    <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
+                    <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"
+                           Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Username}"/>
                 </HorizontalStackLayout>
-                <!--<ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" BackgroundColor="Transparent"/>-->
                 <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
                     <Ellipse Fill="Gray"
                          StrokeThickness="0"
@@ -50,14 +50,15 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <Grid  Grid.Row="1" Margin="0,5" BackgroundColor="Green">
-                <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap"/>
+            <Grid  Grid.Row="1" Margin="0,5" BackgroundColor="Transparent">
+                <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap" 
+                       Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=CommentContent}"/>
             </Grid>
 
-            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Blue">
-                <Label BackgroundColor="Red"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
+            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Transparent">
+                <Label BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
 
-                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel"/>
+                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel" Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Likes}"/>
             </HorizontalStackLayout>
         </Grid>
     </Frame>

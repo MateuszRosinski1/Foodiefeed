@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Foodiefeed")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+1b2a055de770ae5fc543bd2f26dcc0e00b343530")]
 [assembly: System.Reflection.AssemblyProductAttribute("Foodiefeed")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Foodiefeed")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

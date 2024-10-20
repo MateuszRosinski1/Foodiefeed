@@ -331,8 +331,15 @@ namespace Foodiefeed.viewmodels
             var temp = currentNotificationsDisplayCount;
             for (int i = currentNotificationsDisplayCount; i <= temp+displayCount; i++)
             {
-               Notifications.Add(notifications[i]);
-               currentNotificationsDisplayCount++;
+                try
+                {
+                    Notifications.Add(notifications[i]);
+                    currentNotificationsDisplayCount++;
+
+                }catch(IndexOutOfRangeException e)
+                {
+                    break;
+                }
             }
         }
 
@@ -348,14 +355,34 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ShowLikedComment(string commentId)
+        public async void ShowLikedComment(string commentId)
         {
-            var comment = GetCommentById(commentId);
-            App.Current.MainPage.ShowPopup(new LikedCommendPopup(comment.UserId,comment.ProfilePictureImageBase64,comment.Username,comment.CommentContent));
+            var comment = await GetCommentById(commentId);
+            App.Current.MainPage.ShowPopup(new LikedCommendPopup(comment.UserId.ToString(),comment.ImageBase64,comment.Username,comment.CommentContent,comment.Likes.ToString()));
         }
 
-        private CommentPopupDto GetCommentById(string id)
+        private async Task<CommentDto> GetCommentById(string id)
         {
+            using(var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/comments/get-comment-{id}";
+
+                try
+                {
+                    var response = await httpclient.GetAsync(endpoint);
+
+                    var results = await response.Content.ReadAsStringAsync();
+
+                    var comment = await JsonToObject<CommentDto>(results);
+                    return comment;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
 
         }
 
@@ -378,6 +405,7 @@ namespace Foodiefeed.viewmodels
                     i = i - 1;
                 }
             }
+            DisplayNotifications(10, allNotifications);
             //code to clear notification in database
         }
 
