@@ -348,9 +348,15 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ShowLikedComment(string id)
+        public void ShowLikedComment(string commentId)
         {
-            App.Current.MainPage.ShowPopup(new LikedCommendPopup(id));
+            var comment = GetCommentById(commentId);
+            App.Current.MainPage.ShowPopup(new LikedCommendPopup(comment.UserId,comment.ProfilePictureImageBase64,comment.Username,comment.CommentContent));
+        }
+
+        private CommentPopupDto GetCommentById(string id)
+        {
+
         }
 
         [RelayCommand]
