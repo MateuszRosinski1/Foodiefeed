@@ -10,6 +10,7 @@ namespace Foodiefeed_api.services
     public interface IPostService
     {
         public Task<List<PostDto>> GetProfilePostsAsync(string userId);
+        public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
     }
 
     public class PostService : IPostService
@@ -18,11 +19,11 @@ namespace Foodiefeed_api.services
         private readonly IEntityRepository<User> _userRepository;
         private readonly IMapper _mapper;
 
-        private struct Status
-        {
-            public const bool Online = true;
-            public const bool Offline = false;
-        }
+        //private struct Status
+        //{
+        //    public const bool Online = true;
+        //    public const bool Offline = false;
+        //}
 
         private async Task Commit() => await _dbContext.SaveChangesAsync();
 
@@ -31,6 +32,37 @@ namespace Foodiefeed_api.services
             _dbContext = dbContext;
             _userRepository = entityRepository;
             _mapper = mapper;
+        }
+
+        public async Task<PopupPostDto> GetPopupPostAsync(int id,int commentId)
+        {
+            var post = await _dbContext.Posts
+                .Include(p => p.PostLikes)
+                .Include(p => p.PostProducts)
+                .Include(p => p.PostLikes)
+                .FirstOrDefaultAsync(p => p.PostId == id);
+
+            if (post is null) throw new NotFoundException("post do not exist in current context");
+
+            var comment  = await _dbContext.Comments.Include(c => c.CommentLikes).FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+            if(comment is null) throw new NotFoundException("comment do not exist in current context."); 
+
+            var postUser = await _dbContext.Users.FirstOrDefaultAsync(up => up.Id == post.UserId);
+
+            var commentUser = await _dbContext.Users.FirstOrDefaultAsync(uc => uc.Id == comment.UserId);
+
+            var popupPostDto = _mapper.Map<PopupPostDto>(post);
+            popupPostDto.Username = postUser.Username;
+            popupPostDto.Likes = post.PostLikes.ToList().Count();
+            popupPostDto.CommentLikes = comment.CommentLikes.ToList().Count().ToString();
+            popupPostDto.CommentUsername = commentUser.Username;
+            popupPostDto.CommentContent = comment.CommentContent;
+            popupPostDto.CommentUserId = commentUser.Id.ToString();
+            //popupPostDto.CommentProfilePictureImageBase64 = imagebase64
+
+            return popupPostDto;
+
         }
 
         public async Task<List<PostDto>> GetProfilePostsAsync(string userId)

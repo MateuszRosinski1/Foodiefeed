@@ -29,6 +29,11 @@ public partial class PostCommentNotification : ContentView, INotification
         set => SetValue(UserIdProperty, value);
     }
 
+    public (string post, string comment) Ids
+    {
+        get { return (PostId,CommentId); }
+    }
+
     public string Message
     {
         get => (string)GetValue(MessageProperty);

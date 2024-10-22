@@ -21,5 +21,13 @@ namespace Foodiefeed_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("popup-post/{postId}/{commentId}")]
+        public async Task<IActionResult> GetPopupPost([FromRoute]int postId, [FromRoute]int commentId)
+        {
+            var response = await _postService.GetPopupPostAsync(postId, commentId);
+
+            return Ok(response);
+        }
     }
 }

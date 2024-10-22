@@ -7,17 +7,13 @@
              xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups"
              Color="Transparent">
     <Frame CornerRadius="10" BorderColor="Black" BackgroundColor="{DynamicResource CommentViewBackground}" HeightRequest="300" WidthRequest="700">
-
         <Grid  BackgroundColor="Transparent" x:Name="CommentContainer">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-
             <Grid Grid.Row="0" BackgroundColor="Transparent">
-
-
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
                     <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"

@@ -12,14 +12,7 @@ using Foodiefeed.views.windows.popups;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using Foodiefeed.models.dto;
-using System.Diagnostics;
-using System.Data;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Foodiefeed.extension;
 using System.Collections.Specialized;
-using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
@@ -212,10 +205,11 @@ namespace Foodiefeed.viewmodels
 
         private Timer notificationTimer;
         bool windowloaded;
+
         [RelayCommand]
         async void Appearing()
         {
-            if(!windowloaded)
+            if(!windowloaded)   // appearing command invoked 2 times for some reason
             {
                 FetchNotifications();
                 windowloaded = true;
@@ -266,28 +260,28 @@ namespace Foodiefeed.viewmodels
             {
                 switch(notification.Type)
                 {
-                    case NotificationType.FriendRequest: //0
-                        newNotifications.Add(new FriendRequestNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString()
-                        });
-                        break;
-                    case NotificationType.AcceptedFriendRequest: //5
-                        newNotifications.Add(new BasicNotofication()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            Type = NotificationType.AcceptedFriendRequest
-                        });
-                        break;
-                    case NotificationType.PostLike: //1
-                        newNotifications.Add(new PostLikeNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                        });
-                        break;
+                    //case NotificationType.FriendRequest: //0
+                    //    newNotifications.Add(new FriendRequestNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString()
+                    //    });
+                    //    break;
+                    //case NotificationType.AcceptedFriendRequest: //5
+                    //    newNotifications.Add(new BasicNotofication()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        Type = NotificationType.AcceptedFriendRequest
+                    //    });
+                    //    break;
+                    //case NotificationType.PostLike: //1
+                    //    newNotifications.Add(new PostLikeNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //    });
+                    //    break;
                     case NotificationType.PostComment: //2
                         newNotifications.Add(new PostCommentNotification()
                         {
@@ -297,23 +291,23 @@ namespace Foodiefeed.viewmodels
                             PostId = notification.PostId.ToString()
                         });
                         break;
-                    case NotificationType.CommentLike: //3
-                        newNotifications.Add(new CommentLikeNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            CommentId = notification.CommentId.ToString()
-                        });
-                        break;
-                    case NotificationType.GainFollower: //4
-                        newNotifications.Add(new BasicNotofication()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            Type = NotificationType.GainFollower
-                            //ShowPostButtonVisible = false
-                        });
-                        break;
+                    //case NotificationType.CommentLike: //3
+                    //    newNotifications.Add(new CommentLikeNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        CommentId = notification.CommentId.ToString()
+                    //    });
+                    //    break;
+                    //case NotificationType.GainFollower: //4
+                    //    newNotifications.Add(new BasicNotofication()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        Type = NotificationType.GainFollower
+                    //        //ShowPostButtonVisible = false
+                    //    });
+                    //    break;
                 }
             }
             Notifications.Clear();
@@ -349,16 +343,85 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ShowCommentedPost(string id)
+        public async void ShowCommentedPost((string post,string comment) id)
         {
+            var post = await GetPopupPost(id.post,id.comment);
 
+            if(post.PostImagesBase64 is null)
+            {
+                var popup = new CommentedPostPopup(post.CommentUserId,
+                post.CommentProfilePictureImageBase64,
+                post.CommentUsername,
+                post.CommentContent,
+                post.CommentLikes.ToString())
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                };
+
+                popup.SetImagesVisiblity(false);
+                App.Current.MainPage.ShowPopup(popup);
+            }
+            else
+            {
+                App.Current.MainPage.ShowPopup(new CommentedPostPopup(post.CommentUserId,
+                post.CommentProfilePictureImageBase64,
+                post.CommentUsername,
+                post.CommentContent,
+                post.Likes.ToString())
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                    ImageSource = post.PostImagesBase64[0],
+                    ImagesBase64 = post.PostImagesBase64
+                });
+            }
+            
+        }
+
+        private async Task<PopupPostDto> GetPopupPost(string postId,string commentId)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/posts/popup-post/{postId}/{commentId}";
+                try
+                {
+                    var respose  = await httpclient.GetAsync(endpoint);
+
+                    if(!respose.IsSuccessStatusCode)
+                    {
+
+                    }
+
+                    var json = await respose.Content.ReadAsStringAsync();
+
+                    var obj = await JsonToObject<PopupPostDto>(json);
+
+                    return obj;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+           
         }
 
         [RelayCommand]
         public async void ShowLikedComment(string commentId)
         {
             var comment = await GetCommentById(commentId);
-            App.Current.MainPage.ShowPopup(new LikedCommendPopup(comment.UserId.ToString(),comment.ImageBase64,comment.Username,comment.CommentContent,comment.Likes.ToString()));
+            App.Current.MainPage.ShowPopup(new LikedCommendPopup(
+                comment.UserId.ToString(),
+                comment.ImageBase64,
+                comment.Username,
+                comment.CommentContent,
+                comment.Likes.ToString()));
         }
 
         private async Task<CommentDto> GetCommentById(string id)
