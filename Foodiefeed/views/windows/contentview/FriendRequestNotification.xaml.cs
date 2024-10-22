@@ -26,7 +26,15 @@ public partial class FriendRequestNotification : ContentView, INotification
         get => (string)GetValue(MessageProperty);
         set => SetValue(MessageProperty, value);
     }
+
+    public (string UserId,int notificationId) Ids
+    {
+        get => (UserId, NotifcationId);
+    }
+
     public NotificationType Type { get => NotificationType.FriendRequest; set => Type = NotificationType.FriendRequest; }
+
+    public int NotifcationId { get; set; }
 
     private static void OnUsernameChanged(BindableObject bindable, object oldValue, object newValue)
     {

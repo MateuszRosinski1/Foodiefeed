@@ -18,6 +18,9 @@ namespace Foodiefeed.models.dto
         public int? PostId { get; set; }
 
         public NotificationType Type { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
     }
 
     public enum NotificationType

@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20241007200851_init.cs" />
+    <Compile Remove="Migrations\20241007200851_init.Designer.cs" />
+    <Compile Remove="Migrations\20241019154401_likes.cs" />
+    <Compile Remove="Migrations\20241019154401_likes.Designer.cs" />
+    <Compile Remove="Migrations\20241020111258_notifications.post.comment.ids.cs" />
+    <Compile Remove="Migrations\20241020111258_notifications.post.comment.ids.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="FuzzySharp" Version="2.0.2" />

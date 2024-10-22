@@ -8,7 +8,11 @@ namespace Foodiefeed_api.services
 {
     public interface INotificationService
     {
-        Task CreateNotification(NotificationType type, int sender, int Receiver, string nickname);
+        Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname);
+        Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int Id, NotificationTarget target);
+        Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId, int commentId);
+        Task RemoveRange(List<int> ids);
+
         Task<List<NotificationDto>> GetNotificationByUserId(int id);
     }
 
@@ -24,6 +28,14 @@ namespace Foodiefeed_api.services
             _mapper = mapper;
         }
 
+        public async Task RemoveRange(List<int> ids)
+        {
+            var notifications = _dbContext.Notifications.Where(n => ids.Contains(n.Id)).ToList();
+
+            _dbContext.Notifications.RemoveRange(notifications);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<NotificationDto>> GetNotificationByUserId(int id)
         {
             var notifications = await _dbContext.Notifications.Where(n => n.ReceiverId == id).ToListAsync();
@@ -35,7 +47,7 @@ namespace Foodiefeed_api.services
             return notificationsDtos;
         }
 
-        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId,string nickname)
+        public  async Task CreateNotification(NotificationType type, int senderId, int ReceiverId,string nickname)
         {
             var notification = new Notification(type,nickname) { SenderId = senderId ,ReceiverId = ReceiverId};
 
@@ -43,5 +55,32 @@ namespace Foodiefeed_api.services
 
             await _dbContext.SaveChangesAsync();         
         }
+
+        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname,int Id,NotificationTarget target)
+        {
+            Notification notification;
+            if (target == NotificationTarget.PostLike)
+            {
+                notification = new Notification(type, nickname) { SenderId = senderId, ReceiverId = ReceiverId, PostId = Id };
+            }
+            else
+            {
+                notification = new Notification(type, nickname) { SenderId = senderId, ReceiverId = ReceiverId, CommentId = Id };
+
+            }
+            _dbContext.Notifications.Add(notification);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId,int commentId)
+        {
+            var notification = new Notification(type, nickname) { SenderId = senderId, ReceiverId = ReceiverId,PostId = postId,CommentId = commentId };
+
+            _dbContext.Notifications.Add(notification);
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
+
 }

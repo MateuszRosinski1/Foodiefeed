@@ -38,6 +38,8 @@ public partial class BasicNotofication : ContentView , INotification
         set => _type = value; 
     }
 
+    public int NotifcationId { get; set; }
+
     public static BindableProperty MessageProperty =
         BindableProperty.Create(nameof(Message),typeof(string),typeof(BasicNotofication),default(string), propertyChanged: OnUsernameChanged);
 

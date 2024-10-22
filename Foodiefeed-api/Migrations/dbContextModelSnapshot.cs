@@ -115,6 +115,9 @@ namespace Foodiefeed_api.Migrations
                     b.Property<int?>("CommentId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

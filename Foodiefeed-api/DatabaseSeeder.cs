@@ -11,6 +11,8 @@ namespace Foodiefeed_api
     {
         public static void SeedData(dbContext context)
         {
+            //context.Database.EnsureDeleted();
+            //context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
                 var userFaker = new Faker<User>()
@@ -33,7 +35,7 @@ namespace Foodiefeed_api
             {
                 var postFaker = new Faker<Post>()
                     .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 20)));
+                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 400)));
                     //.RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
 
                 var posts = postFaker.Generate(2000);
@@ -74,7 +76,7 @@ namespace Foodiefeed_api
             {
                 var commentFaker = new Faker<Comment>()
                     .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 20)));
+                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 100)));
                     //.RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
 
                 var comments = commentFaker.Generate(20000);
@@ -373,6 +375,11 @@ namespace Foodiefeed_api
                     var user = context.Users.FirstOrDefault(u => u.Id == friend.UserId);
                     if(user is not null) {
                         notifications.Add(new Notification(NotificationType.AcceptedFriendRequest, user.Username) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                    }
+                    var user2 = context.Users.FirstOrDefault(u => u.Id == friend.FriendUserId);
+                    if (user2 is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.AcceptedFriendRequest, user2.Username) { SenderId = friend.FriendUserId, ReceiverId = friend.UserId });
                     }
                 }
 

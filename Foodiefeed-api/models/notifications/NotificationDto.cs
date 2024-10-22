@@ -10,9 +10,11 @@ namespace Foodiefeed_api.models.notifications
         public int SenderId { get; set; }
 
         public string Message { get; set; }
-
         public int? CommentId { get; set; }
         public int? PostId { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
 
         public NotificationType Type { get; set; }
     }

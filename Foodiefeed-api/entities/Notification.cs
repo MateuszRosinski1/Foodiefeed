@@ -14,6 +14,8 @@ namespace Foodiefeed_api.entities
 
         public string Message { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
         [ForeignKey("SenderId")]
         public virtual User Sender { get; set; }
         [ForeignKey("ReceiverId")]
@@ -23,7 +25,7 @@ namespace Foodiefeed_api.entities
 
         public Notification()
         {
-            
+
         }
 
         public Notification(NotificationType type,string nickname)
@@ -50,6 +52,7 @@ namespace Foodiefeed_api.entities
                     this.Message = "you are now friend with " + nickname;
                     break;
             }
+            CreatedAt = DateTime.Now;
         }
     }
 
@@ -61,5 +64,11 @@ namespace Foodiefeed_api.entities
         CommentLike,
         GainFollower,
         AcceptedFriendRequest
+    }
+
+    public enum NotificationTarget
+    {
+        PostLike,
+        CommentLike,
     }
 }

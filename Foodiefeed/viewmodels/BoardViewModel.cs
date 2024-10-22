@@ -17,7 +17,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
-using System.ComponentModel.Design;
 
 
 namespace Foodiefeed.viewmodels
@@ -159,20 +158,7 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 15;
-
-            //notifications.Add(new BasicNotofication() { Message = "123",Type = NotificationType.AcceptedFriendRequest });
-            //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
-            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
-            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
-            //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new BasicNotofication() { Message = "123", Type = NotificationType.AcceptedFriendRequest });
-            //notifications.Add(new FriendRequestNotification());
-            //notifications.Add(new FriendRequestNotification());
-
+            _userSession.Id = 100;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
@@ -253,7 +239,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
         {
-            //notifications.Sort((x,y) => y.Id.CompareTo(x.Id));
+            notifications.Sort((x,y) => y.CreatedAt.CompareTo(x.CreatedAt));
 
             ObservableCollection<INotification> newNotifications = new ObservableCollection<INotification>();
 
@@ -261,63 +247,67 @@ namespace Foodiefeed.viewmodels
             {
                 switch(notification.Type)
                 {
-                    //case NotificationType.FriendRequest: //0
-                    //    newNotifications.Add(new FriendRequestNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString()
-                    //    });
-                    //    break;
-                    //case NotificationType.AcceptedFriendRequest: //5
-                    //    newNotifications.Add(new BasicNotofication()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        Type = NotificationType.AcceptedFriendRequest
-                    //    });
-                    //    break;
+                    case NotificationType.FriendRequest: //0
+                        newNotifications.Add(new FriendRequestNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.AcceptedFriendRequest: //5
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.AcceptedFriendRequest,
+                            NotifcationId = notification.Id
+                        });
+                        break;
                     case NotificationType.PostLike: //1
                         newNotifications.Add(new PostLikeNotification()
                         {
                             Message = notification.Message,
-                           
                             PostId = notification.PostId.ToString(),
-                            UserId = notification.SenderId.ToString()
+                            UserId = notification.SenderId.ToString(),
+                            NotifcationId = notification.Id
                         });
                         break;
-                        //case NotificationType.PostComment: //2
-                        //    newNotifications.Add(new PostCommentNotification()
-                        //    {
-                        //        Message = notification.Message,
-                        //        UserId = notification.SenderId.ToString(),
-                        //        CommentId = notification.CommentId.ToString(),
-                        //        PostId = notification.PostId.ToString()
-                        //    });
-                        //    break;
-                        //case NotificationType.CommentLike: //3
-                        //    newNotifications.Add(new CommentLikeNotification()
-                        //    {
-                        //        Message = notification.Message,
-                        //        UserId = notification.SenderId.ToString(),
-                        //        CommentId = notification.CommentId.ToString()
-                        //    });
-                        //    break;
-                        //case NotificationType.GainFollower: //4
-                        //    newNotifications.Add(new BasicNotofication()
-                        //    {
-                        //        Message = notification.Message,
-                        //        UserId = notification.SenderId.ToString(),
-                        //        Type = NotificationType.GainFollower
-                        //        //ShowPostButtonVisible = false
-                        //    });
-                        //    break;
+                    case NotificationType.PostComment: //2
+                        newNotifications.Add(new PostCommentNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            PostId = notification.PostId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.CommentLike: //3
+                        newNotifications.Add(new CommentLikeNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.GainFollower: //4
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.GainFollower,
+                            NotifcationId = notification.Id
+                            //ShowPostButtonVisible = false
+                        });
+                        break;
                 }
             }
             Notifications.Clear();
             allNotifications.Clear();
             allNotifications = newNotifications;
-            DisplayNotifications(10, newNotifications);
-
+            DisplayNotifications(20, newNotifications);        
         }
 
         private ObservableCollection<INotification> allNotifications = new ObservableCollection<INotification>();
@@ -333,8 +323,8 @@ namespace Foodiefeed.viewmodels
                     Notifications.Add(notifications[i]);
                     currentNotificationsDisplayCount++;
 
-                }catch(IndexOutOfRangeException e)
-                {
+                }catch(ArgumentOutOfRangeException e)
+                {                   
                     break;
                 }
             }
@@ -514,17 +504,51 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         private async void ClearNotifications()
         {
-            for (int i = 0; i <= Notifications.Count - 1; i++)
+            List<int> NotificationsId = new List<int>();
+            for (int i = 0; i <= currentNotificationsDisplayCount - 1; i++)
             {
-                var notification = Notifications[i];
-                if(notification is not FriendRequestNotification)
+                var notification = Notifications[0];
+                if (notification is not FriendRequestNotification)
                 {
-                    await notification.HideAnimation(300, 150);
+                    //await notification.HideAnimation(300, 150);
+                    NotificationsId.Add(notification.NotifcationId);
+                    allNotifications.Remove(notification);
                     Notifications.Remove(notification);
-                    i = i - 1;
+                    //i = i - 1;
                 }
             }
-            DisplayNotifications(10, allNotifications);
+
+            using(var httpclient = new HttpClient())
+            {
+                //httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var endpoint = $"/api/notifications/remove-range-notifications/{_userSession.Id}";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(NotificationsId), Encoding.UTF8, "application/json");
+
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Delete,
+                        RequestUri = new Uri(API_BASE_URL + endpoint),
+                        Content = jsonContent
+                    };
+
+                    var response = await httpclient.SendAsync(request);
+
+
+                    currentNotificationsDisplayCount = 0;
+                    DisplayNotifications(10, allNotifications);
+                }
+                catch
+                {
+
+                }
+            }
+
+
+            
             //code to clear notification in database
         }
 
@@ -939,9 +963,36 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void AddToFriends(string id)
+        public async void DeclineFriendRequest((string senderId, int notificationId) ids)
         {
-            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
+            var endpoint = $"api/friends/request/delete/{ids.senderId}/{_userSession.Id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await httpClient.DeleteAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var notification = Notifications.FirstOrDefault(n => n.NotifcationId == ids.notificationId);
+                        Notifications.Remove(notification);
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("Cant send friend request");
+                    // code to handle unsuccsesful friend request.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void AcceptFriendRequest((string senderId,int notificationId) ids)
+        {
+            var endpoint = $"api/friends/request/accept/{ids.senderId}/{_userSession.Id}";
 
             using (var httpClient = new HttpClient())
             {
@@ -950,6 +1001,38 @@ namespace Foodiefeed.viewmodels
                 try
                 {
                     var response = await httpClient.PostAsync(endpoint, null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var notification = Notifications.FirstOrDefault(n => n.NotifcationId == ids.notificationId);
+                        Notifications.Remove(notification);
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("Cant send friend request");
+                    // code to handle unsuccsesful friend request.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void AddToFriends(string id)
+        {
+            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
+           
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await httpClient.PostAsync(endpoint, null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+ 
+                    }
                 }
                 catch
                 {

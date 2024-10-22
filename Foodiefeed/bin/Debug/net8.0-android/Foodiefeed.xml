@@ -43,6 +43,8 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -343,6 +345,18 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.Search"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.declineFriendRequestCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.DeclineFriendRequestCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.DeclineFriendRequestCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.DeclineFriendRequest(System.ValueTuple{System.String,System.Int32})"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.acceptFriendRequestCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.AcceptFriendRequestCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.AcceptFriendRequestCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.AcceptFriendRequest(System.ValueTuple{System.String,System.Int32})"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.addToFriendsCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.AddToFriendsCommand"/>.</summary>

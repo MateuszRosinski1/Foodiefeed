@@ -11,6 +11,8 @@ public partial class PostCommentNotification : ContentView, INotification
 		InitializeComponent();
 	}
 
+    public int NotifcationId { get; set; }
+
     public static BindableProperty UserIdProperty =
         BindableProperty.Create(nameof(UserId), typeof(string), typeof(PostCommentNotification), default(string));
 

@@ -9,6 +9,8 @@ public partial class PostLikeNotification : ContentView, INotification
 		InitializeComponent();
 	}
 
+    public int NotifcationId { get; set; }
+
     public async Task HideAnimation(int distance, uint duration)
     {
         double xTranslation = -distance;

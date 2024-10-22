@@ -21,5 +21,12 @@ namespace Foodiefeed_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete("remove-range-notifications/{userId}")]
+        public async Task<IActionResult> NotificationsRemoveRange([FromRoute]int userId,[FromBody]List<int> notificationsId)
+        {
+            await _notificationService.RemoveRange(notificationsId);
+            return Ok();
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace Foodiefeed.views.windows.contentview
     {
         public Task HideAnimation(int distance, uint duration);
         NotificationType Type { get; set; }
+        int NotifcationId { get; }
     }
 }
