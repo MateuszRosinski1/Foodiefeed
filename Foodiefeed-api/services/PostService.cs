@@ -11,6 +11,7 @@ namespace Foodiefeed_api.services
     {
         public Task<List<PostDto>> GetProfilePostsAsync(string userId);
         public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
+        public Task<PopupPostDto> GetLikedPostAsync(int id);
     }
 
     public class PostService : IPostService
@@ -32,6 +33,28 @@ namespace Foodiefeed_api.services
             _dbContext = dbContext;
             _userRepository = entityRepository;
             _mapper = mapper;
+        }
+
+        public async Task<PopupPostDto> GetLikedPostAsync(int id)
+        {
+            var post = await _dbContext.Posts
+                 .Include(p => p.PostLikes)
+                 .Include(p => p.PostProducts)
+                 .Include(p => p.PostLikes)
+                 .FirstOrDefaultAsync(p => p.PostId == id);
+
+            var postUser = await _dbContext.Users.FirstOrDefaultAsync(up => up.Id == post.UserId);
+
+            if (post is null) throw new NotFoundException("post do not exist in current context.");
+            if (postUser is null) throw new NotFoundException("user do not exist in current context.");
+
+            var popupPostDto = _mapper.Map<PopupPostDto>(post);
+            popupPostDto.Username = postUser.Username;
+            popupPostDto.Likes = post.PostLikes.ToList().Count();
+            //popupPostDto.PosterProfilePictureBase64 = imageBase64
+
+
+            return popupPostDto;
         }
 
         public async Task<PopupPostDto> GetPopupPostAsync(int id,int commentId)
@@ -59,6 +82,7 @@ namespace Foodiefeed_api.services
             popupPostDto.CommentUsername = commentUser.Username;
             popupPostDto.CommentContent = comment.CommentContent;
             popupPostDto.CommentUserId = commentUser.Id.ToString();
+            //popupPostDto.PosterProfilePictureBase64 = imageBase64
             //popupPostDto.CommentProfilePictureImageBase64 = imagebase64
 
             return popupPostDto;

@@ -4,6 +4,7 @@
              x:Class="Foodiefeed.views.windows.contentview.PostLikeNotification"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview">
+    
     <Border Stroke="Gray" StrokeShape="RoundRectangle 10"  WidthRequest="285" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" Spacing="5" WidthRequest="280">
             <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
@@ -44,7 +45,7 @@
                             WidthRequest="80"/>
                         <Border.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path= ShowLikedPostCommand}"
-                                              CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:PostLikeNotification}}, Path=PostId}"/>
+                                                  CommandParameter="{Binding PostId}"/>
                         </Border.GestureRecognizers>
                     </Border>
                 </HorizontalStackLayout>

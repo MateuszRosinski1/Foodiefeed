@@ -29,5 +29,13 @@ namespace Foodiefeed_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("popup-liked-post/{postId}")]
+        public async Task<IActionResult> GetLikedPost([FromRoute]int postId)
+        {
+            var response  = await _postService.GetLikedPostAsync(postId);
+
+            return Ok(response);
+        }
     }
 }

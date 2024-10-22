@@ -28,6 +28,13 @@ public partial class PostLikeNotification : ContentView, INotification
     public static BindableProperty PostIdProperty =
         BindableProperty.Create(nameof(PostId), typeof(string), typeof(PostLikeNotification), default(string));
 
+
+    public string PostId
+    {
+        get => (string)GetValue(PostIdProperty);
+        set => SetValue(PostIdProperty, value);
+    }
+
     public string UserId
     {
         get => (string)GetValue(UserIdProperty);
@@ -40,11 +47,7 @@ public partial class PostLikeNotification : ContentView, INotification
         set => SetValue(MessageProperty, value);
     }
 
-    public string PostId
-    {
-        get => (string)GetValue(PostIdProperty);
-        set => SetValue(PostIdProperty, value);
-    }
+    
 
     private static void OnMessageChanged(BindableObject bindable, object oldValue, object newValue)
     {

@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
+using System.ComponentModel.Design;
 
 
 namespace Foodiefeed.viewmodels
@@ -275,39 +276,41 @@ namespace Foodiefeed.viewmodels
                     //        Type = NotificationType.AcceptedFriendRequest
                     //    });
                     //    break;
-                    //case NotificationType.PostLike: //1
-                    //    newNotifications.Add(new PostLikeNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //    });
-                    //    break;
-                    case NotificationType.PostComment: //2
-                        newNotifications.Add(new PostCommentNotification()
+                    case NotificationType.PostLike: //1
+                        newNotifications.Add(new PostLikeNotification()
                         {
                             Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            CommentId = notification.CommentId.ToString(),
-                            PostId = notification.PostId.ToString()
+                           
+                            PostId = notification.PostId.ToString(),
+                            UserId = notification.SenderId.ToString()
                         });
                         break;
-                    //case NotificationType.CommentLike: //3
-                    //    newNotifications.Add(new CommentLikeNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        CommentId = notification.CommentId.ToString()
-                    //    });
-                    //    break;
-                    //case NotificationType.GainFollower: //4
-                    //    newNotifications.Add(new BasicNotofication()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        Type = NotificationType.GainFollower
-                    //        //ShowPostButtonVisible = false
-                    //    });
-                    //    break;
+                        //case NotificationType.PostComment: //2
+                        //    newNotifications.Add(new PostCommentNotification()
+                        //    {
+                        //        Message = notification.Message,
+                        //        UserId = notification.SenderId.ToString(),
+                        //        CommentId = notification.CommentId.ToString(),
+                        //        PostId = notification.PostId.ToString()
+                        //    });
+                        //    break;
+                        //case NotificationType.CommentLike: //3
+                        //    newNotifications.Add(new CommentLikeNotification()
+                        //    {
+                        //        Message = notification.Message,
+                        //        UserId = notification.SenderId.ToString(),
+                        //        CommentId = notification.CommentId.ToString()
+                        //    });
+                        //    break;
+                        //case NotificationType.GainFollower: //4
+                        //    newNotifications.Add(new BasicNotofication()
+                        //    {
+                        //        Message = notification.Message,
+                        //        UserId = notification.SenderId.ToString(),
+                        //        Type = NotificationType.GainFollower
+                        //        //ShowPostButtonVisible = false
+                        //    });
+                        //    break;
                 }
             }
             Notifications.Clear();
@@ -450,9 +453,62 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ShowLikedPost(string id)
+        public async void ShowLikedPost(string postId)
         {
+            var post = await GetPopupLikedPost(postId);
+            if (post.PostImagesBase64 is null)
+            {
+                var popup = new LikedPostPopup()
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                };
 
+                popup.SetImagesVisiblity(false);
+                App.Current.MainPage.ShowPopup(popup);
+            }
+            else
+            {
+                App.Current.MainPage.ShowPopup(new LikedPostPopup()
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                    ImageSource = post.PostImagesBase64[0],
+                    ImagesBase64 = post.PostImagesBase64
+                });
+            }
+        }
+
+        private async Task<PopupPostDto> GetPopupLikedPost(string id)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/posts/popup-liked-post/{id}";
+                try
+                {
+                    var respose = await httpclient.GetAsync(endpoint);
+
+                    if (!respose.IsSuccessStatusCode)
+                    {
+
+                    }
+
+                    var json = await respose.Content.ReadAsStringAsync();
+
+                    var obj = await JsonToObject<PopupPostDto>(json);
+
+                    return obj;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         [RelayCommand]
