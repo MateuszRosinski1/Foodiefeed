@@ -255,53 +255,52 @@ namespace Foodiefeed.viewmodels
                             NotifcationId = notification.Id
                         });
                         break;
-                    case NotificationType.AcceptedFriendRequest: //5
-                        newNotifications.Add(new BasicNotofication()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            Type = NotificationType.AcceptedFriendRequest,
-                            NotifcationId = notification.Id
-                        });
-                        break;
-                    case NotificationType.PostLike: //1
-                        newNotifications.Add(new PostLikeNotification()
-                        {
-                            Message = notification.Message,
-                            PostId = notification.PostId.ToString(),
-                            UserId = notification.SenderId.ToString(),
-                            NotifcationId = notification.Id
-                        });
-                        break;
-                    case NotificationType.PostComment: //2
-                        newNotifications.Add(new PostCommentNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            CommentId = notification.CommentId.ToString(),
-                            PostId = notification.PostId.ToString(),
-                            NotifcationId = notification.Id
-                        });
-                        break;
-                    case NotificationType.CommentLike: //3
-                        newNotifications.Add(new CommentLikeNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            CommentId = notification.CommentId.ToString(),
-                            NotifcationId = notification.Id
-                        });
-                        break;
-                    case NotificationType.GainFollower: //4
-                        newNotifications.Add(new BasicNotofication()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            Type = NotificationType.GainFollower,
-                            NotifcationId = notification.Id
-                            //ShowPostButtonVisible = false
-                        });
-                        break;
+                    //case NotificationType.AcceptedFriendRequest: //5
+                    //    newNotifications.Add(new BasicNotofication()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        Type = NotificationType.AcceptedFriendRequest,
+                    //        NotifcationId = notification.Id
+                    //    });
+                    //    break;
+                    //case NotificationType.PostLike: //1
+                    //    newNotifications.Add(new PostLikeNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        PostId = notification.PostId.ToString(),
+                    //        UserId = notification.SenderId.ToString(),
+                    //        NotifcationId = notification.Id
+                    //    });
+                    //    break;
+                    //case NotificationType.PostComment: //2
+                    //    newNotifications.Add(new PostCommentNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        CommentId = notification.CommentId.ToString(),
+                    //        PostId = notification.PostId.ToString(),
+                    //        NotifcationId = notification.Id
+                    //    });
+                    //    break;
+                    //case NotificationType.CommentLike: //3
+                    //    newNotifications.Add(new CommentLikeNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        CommentId = notification.CommentId.ToString(),
+                    //        NotifcationId = notification.Id
+                    //    });
+                    //    break;
+                    //case NotificationType.GainFollower: //4
+                    //    newNotifications.Add(new BasicNotofication()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        Type = NotificationType.GainFollower,
+                    //        NotifcationId = notification.Id
+                    //    });
+                    //    break;
                 }
             }
             Notifications.Clear();

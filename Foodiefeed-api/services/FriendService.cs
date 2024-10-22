@@ -169,6 +169,8 @@ namespace Foodiefeed_api.services
 
             var notification =  await _dbContext.Notifications.FirstOrDefaultAsync(n => n.SenderId == senderId && n.ReceiverId == receiverId && n.Type == NotificationType.FriendRequest) ;
 
+            if(notification is null) { throw new NotFoundException("Notification could not be removed cause it do not exist in current context."); }
+            _dbContext.Notifications.Remove(notification);
             _dbContext.FriendRequests.Remove(friendRequest);
 
             await Commit();
