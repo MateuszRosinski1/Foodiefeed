@@ -17,11 +17,13 @@ namespace Foodiefeed_api.services
     {
         private readonly dbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public FollowerService(dbContext dbContext,IMapper mapper)
+        public FollowerService(dbContext dbContext,IMapper mapper,INotificationService notificationService)
         {
             _dbContext = dbContext;
             _mapper = mapper;         
+            _notificationService = notificationService;
         }
 
         private async Task Commit()
@@ -34,7 +36,11 @@ namespace Foodiefeed_api.services
             var follower = await _dbContext.Followers.FirstOrDefaultAsync(f => f.UserId == userId && f.FollowedUserId == followedUserId);
 
             if(follower is not null) { throw new BadRequestException("user is already followed."); }
-          
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if(user is null) { throw new BadRequestException($"user with id:{userId} do not exist in current context"); }
+
+            await _notificationService.CreateNotification(NotificationType.GainFollower,userId,followedUserId,user.Username);
             _dbContext.Followers.Add(new Follower() { UserId = userId, FollowedUserId = followedUserId });
             await Commit();
         }
@@ -46,6 +52,13 @@ namespace Foodiefeed_api.services
 
             if (follower is null) { throw new BadRequestException("user is not follwed"); }
 
+            var notification = await _dbContext.Notifications.FirstOrDefaultAsync(u => u.Type == NotificationType.GainFollower &&
+            u.SenderId == userId &&
+            u.ReceiverId == unfollowedUserId);
+
+            if(notification is null) { throw new NotFoundException("notification do not exist in current context."); }
+
+            _dbContext.Notifications.Remove(notification);
             _dbContext.Followers.Remove(follower);
             await Commit();
         }

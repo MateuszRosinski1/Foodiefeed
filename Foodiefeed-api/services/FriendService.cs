@@ -105,6 +105,9 @@ namespace Foodiefeed_api.services
 
             if (friendRequest is not null || reflectedFriendRequest is not null) { throw new BadRequestException("Request already sent"); }
 
+            var username = _dbContext.Users.FirstOrDefault(u => u.Id == senderId).Username;
+
+            await _notificationService.CreateNotification(NotificationType.FriendRequest,senderId,receiverId,username);
             _dbContext.FriendRequests.Add(new FriendRequest() { ReceiverId = receiverId,SenderId = senderId});
 
             await Commit();
@@ -116,6 +119,15 @@ namespace Foodiefeed_api.services
                 .FirstOrDefaultAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId);
             
             if (friendRequest is null) { throw new NotFoundException("Such a friend request do not exist"); }
+
+            var notfication = await _dbContext.Notifications.FirstOrDefaultAsync
+                (fr => fr.ReceiverId == receiverId && 
+                 fr.SenderId == senderId && 
+                 fr.Type == NotificationType.FriendRequest);
+
+            if (notfication is null) { throw new NotFoundException("Request do not exist in current context."); }
+            _dbContext.Notifications.Remove(notfication);
+
 
             _dbContext.FriendRequests.Remove(friendRequest);
 

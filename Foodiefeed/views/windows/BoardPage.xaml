@@ -185,7 +185,11 @@
                                                 ItemsSource="{Binding Notifications}" 
                                                 BackgroundColor="Transparent"
                                                 VerticalScrollBarVisibility="Always"
-                                                ItemsUpdatingScrollMode="KeepScrollOffset">
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                >
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
                                     <CollectionView.Behaviors>
                                         <toolkit:EventToCommandBehavior
                                                 x:TypeArguments="ItemsViewScrolledEventArgs"
