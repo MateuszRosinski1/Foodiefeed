@@ -87,12 +87,17 @@
                                WidthRequest="400" 
                                Text="{Binding SearchParam,Mode=TwoWay}"
                                x:Name="SearchEntry"
-                               BackgroundColor="Transparent">
+                               BackgroundColor="Transparent"
+                               >
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
                             </Entry.Behaviors>
+                            <Entry.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEnteredCommand="{Binding SetSearchPanelVisibilityToTrueCommand}"
+                                                          PointerExitedCommand="{Binding SetSearchPanelVisibilityToFalseCommand}"/>
+                            </Entry.GestureRecognizers>
                         </Entry>
                         <ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}" BackgroundColor="Transparent"/>
                         <!--<Grid.GestureRecognizers>

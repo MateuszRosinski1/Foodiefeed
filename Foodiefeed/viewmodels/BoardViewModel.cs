@@ -158,7 +158,7 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 100;
+            _userSession.Id = 15;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
@@ -255,52 +255,52 @@ namespace Foodiefeed.viewmodels
                             NotifcationId = notification.Id
                         });
                         break;
-                    //case NotificationType.AcceptedFriendRequest: //5
-                    //    newNotifications.Add(new BasicNotofication()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        Type = NotificationType.AcceptedFriendRequest,
-                    //        NotifcationId = notification.Id
-                    //    });
-                    //    break;
-                    //case NotificationType.PostLike: //1
-                    //    newNotifications.Add(new PostLikeNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        PostId = notification.PostId.ToString(),
-                    //        UserId = notification.SenderId.ToString(),
-                    //        NotifcationId = notification.Id
-                    //    });
-                    //    break;
-                    //case NotificationType.PostComment: //2
-                    //    newNotifications.Add(new PostCommentNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        CommentId = notification.CommentId.ToString(),
-                    //        PostId = notification.PostId.ToString(),
-                    //        NotifcationId = notification.Id
-                    //    });
-                    //    break;
-                    //case NotificationType.CommentLike: //3
-                    //    newNotifications.Add(new CommentLikeNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        CommentId = notification.CommentId.ToString(),
-                    //        NotifcationId = notification.Id
-                    //    });
-                    //    break;
-                    //case NotificationType.GainFollower: //4
-                    //    newNotifications.Add(new BasicNotofication()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        Type = NotificationType.GainFollower,
-                    //        NotifcationId = notification.Id
-                    //    });
-                    //    break;
+                    case NotificationType.AcceptedFriendRequest: //5
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.AcceptedFriendRequest,
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.PostLike: //1
+                        newNotifications.Add(new PostLikeNotification()
+                        {
+                            Message = notification.Message,
+                            PostId = notification.PostId.ToString(),
+                            UserId = notification.SenderId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.PostComment: //2
+                        newNotifications.Add(new PostCommentNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            PostId = notification.PostId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.CommentLike: //3
+                        newNotifications.Add(new CommentLikeNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.GainFollower: //4
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.GainFollower,
+                            NotifcationId = notification.Id
+                        });
+                        break;
                 }
             }
             Notifications.Clear();
@@ -751,6 +751,18 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async Task SetSearchPanelVisibilityToTrue()
+        {
+            this.SearchPanelVisible = true;
+        }
+
+        [RelayCommand]
+        public async Task SetSearchPanelVisibilityToFalse()
+        {
+            this.SearchPanelVisible = false;
+        }
+
+        [RelayCommand]
         public void ShowHubPanel()
         {
             this.HubPanelVisible = true;
@@ -768,6 +780,7 @@ namespace Foodiefeed.viewmodels
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
+            SetButtonColors(Buttons.PostButton);
             try
             {
                 if (id != _userSession.Id.ToString())
@@ -1019,7 +1032,7 @@ namespace Foodiefeed.viewmodels
         public async void AddToFriends(string id)
         {
             var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
-           
+
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
@@ -1030,7 +1043,7 @@ namespace Foodiefeed.viewmodels
 
                     if (response.IsSuccessStatusCode)
                     {
- 
+
                     }
                 }
                 catch
@@ -1039,11 +1052,15 @@ namespace Foodiefeed.viewmodels
                     // code to handle unsuccsesful friend request.
                 }
             }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
         public async void UnfriendUser(string id)
         {
+
+
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
 
             using (var httpClient = new HttpClient())
@@ -1060,6 +1077,9 @@ namespace Foodiefeed.viewmodels
                     // code to handle unsuccsesful unfriend action.
                 }
             }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
+
         }
 
         [RelayCommand]
@@ -1079,8 +1099,8 @@ namespace Foodiefeed.viewmodels
                 {
                     NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
-
             }
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -1101,8 +1121,9 @@ namespace Foodiefeed.viewmodels
                     NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
 
                 }
-
             }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
