@@ -473,20 +473,27 @@
                                    HeightRequest="60" 
                                    Margin="0,5,0,0" 
                                    BorderColor="Transparent" 
-                                   HasShadow="True">
-                                <Grid>
-                                    <Button Text="Filter posts" ></Button>
-                                    <Button Text="Add post" ></Button>
-                                </Grid>
+                                   HasShadow="True" Padding="5">
+                                <HorizontalStackLayout>
+                                    <Frame Padding="0" BackgroundColor="{DynamicResource MainBackgroundColor}">
+                                        <Label Text="Filter posts" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Frame>
+                                    <Frame Padding="0" BackgroundColor="{DynamicResource MainBackgroundColor}">
+                                        <Label Text="Add Post" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ShowAddPostFormCommand}"/>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </HorizontalStackLayout>
                             </Frame>
                             <StackLayout Orientation="Vertical" x:Name="PostGrid"  
                                          BindableLayout.ItemsSource="{Binding Posts}">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <views:PostView Username="{Binding Username}"
-                            TimeStamp="{Binding TimeStamp}"
-                            PostTextContent="{Binding PostTextContent}"
-                            PostLikeCount="{Binding PostLikeCount}"/>
+                                                        TimeStamp="{Binding TimeStamp}"
+                                                        PostTextContent="{Binding PostTextContent}"
+                                                        PostLikeCount="{Binding PostLikeCount}"/>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
@@ -865,6 +872,7 @@
                 <PointerGestureRecognizer PointerExitedCommand="{Binding HideHubPanelCommand}"/>
             </Grid.GestureRecognizers>
         </Grid>
+        
         <Grid BackgroundColor="Transparent"
               HeightRequest="140" 
               WidthRequest="250" 
@@ -873,6 +881,7 @@
               Margin="0,-200,100,0">
             <popup:FailedActionNotificationPopup />
         </Grid>
+
         <Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
             <Grid BackgroundColor="Black" Opacity="0.4">
 
@@ -882,6 +891,60 @@
                 <ActivityIndicator IsRunning="True"/>
             </VerticalStackLayout>
         </Grid>
+
+        <Grid IsVisible="{Binding AddPostFormVisible}">
+            <Grid BackgroundColor="Black" Opacity="0.6">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding HideAddPostFormCommand}"/>
+                </Grid.GestureRecognizers>
+            </Grid>
+            <Frame HeightRequest="450" WidthRequest="700" BackgroundColor="{DynamicResource MainBackgroundColor}">
+                <Grid>
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding TagPickerVisible,Converter={StaticResource InverseBooleanConverter}}">
+                        <Border Stroke="{Binding EditorBorderColor}" StrokeShape="RoundRectangle 10">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}">
+                                <Editor Text="{Binding PostContent,Mode=TwoWay}" TextColor="{DynamicResource TextColor}" HeightRequest="300" Placeholder="Share your recipe here..." />
+                            </Grid>
+                        </Border>
+                        <Grid>
+                            <Button Text="Upload Images" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Start" Command="{Binding UploadPostImagesCommand}"/>
+                            <Button Text="Choose Tags" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Center" Command="{Binding ChooseTagsCommand}"/>
+                            <Button Text="Post" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="End" Command="{Binding AddPostCommand}"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
+                        <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 40">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}" HeightRequest="40">
+                                <Entry BackgroundColor="Transparent" Placeholder="Filter" Text="{Binding FilterParam,Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding FilterTagsCommand}"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Grid>
+                        </Border>
+                        <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 10">
+                            <ScrollView HeightRequest="200" VerticalScrollBarVisibility="Always" HorizontalScrollBarVisibility="Always">
+                                <Grid>
+                                    <toolkit:UniformItemsLayout BindableLayout.ItemsSource="{Binding Tags}"
+                                                            MaxColumns="6" 
+                                                            BackgroundColor="{DynamicResource EntryBackround}" 
+                                                            Padding="15">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:TagView Id="{Binding Id}" Name="{Binding Name}" FrameBackground="{Binding FrameBackground}"/>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </toolkit:UniformItemsLayout>
+                                <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"/>
+                                </Grid>
+                            </ScrollView>
+                        </Border>
+                        <Button Command="{Binding ChooseTagsCommand}"></Button>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
         </Grid.GestureRecognizers>

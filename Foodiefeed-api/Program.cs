@@ -2,6 +2,7 @@ using Foodiefeed_api;
 using Foodiefeed_api.entities;
 using Foodiefeed_api.services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     DatabaseSeeder.SeedData(new dbContext());
 }
+
+app.MapGet("/get-all-tags", async (dbContext context) =>
+{
+    var tags = await context.Tags.ToListAsync();
+    return Results.Ok(tags);
+});
 
 app.UseHttpsRedirection();
 

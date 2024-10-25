@@ -17,6 +17,9 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Platform;
+using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Maui.Core.Extensions;
 
 
 namespace Foodiefeed.viewmodels
@@ -124,6 +127,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool loadingLabelVisible;
 
+        [ObservableProperty]
+        bool addPostFormVisible;
+
         #endregion
 
         [ObservableProperty]
@@ -175,6 +181,7 @@ namespace Foodiefeed.viewmodels
             this.NoPostOnProfile = false; // on init false
             this.HubPanelVisible = false; // on init false
             this.CanShowSearchPanel = true; //on init true
+            this.AddPostFormVisible = false; //on init false
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
@@ -563,6 +570,161 @@ namespace Foodiefeed.viewmodels
             if (e.LastVisibleItemIndex == Posts.Count() - 2)
             {
 
+            }
+        }
+
+        [RelayCommand]
+        public void ShowAddPostForm()
+        {
+            this.AddPostFormVisible = true;
+        }
+
+        [RelayCommand]
+        public void HideAddPostForm()
+        {
+            this.AddPostFormVisible = false;
+        }
+
+        [RelayCommand]
+        public async void UploadPostImages()
+        {
+            var fileResult = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Wybierz plik",
+                FileTypes = FilePickerFileType.Images // lub inny typ
+            });
+
+            var temp = fileResult;
+        }
+
+        [ObservableProperty]
+        Color editorBorderColor = Brush.Gray.Color;
+
+        [ObservableProperty]
+        string postContent;
+
+        [ObservableProperty]
+        bool tagPickerVisible;
+
+        [RelayCommand]
+        public async void AddPost()
+        {
+            if(string.IsNullOrEmpty(PostContent))
+            {
+                EditorBorderColor = Color.FromHex("#e32441");
+                await Task.Delay(3000);
+                EditorBorderColor = Brush.Gray.Color;
+                return;
+            }
+        }
+
+
+        ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
+
+        public ObservableCollection<TagView> Tags { get { return tags; } set { tags = value; } }
+
+        [RelayCommand]
+        public async void ChooseTags()
+        {
+            Tags.Clear();
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = "/get-all-tags";
+
+                try
+                {
+                    var response = await http.GetAsync(endpoint);
+                    var results = await response.Content.ReadAsStringAsync();
+                    var tagslist = await JsonToObject<List<TagView>>(results);
+                    foreach(var tag in tagslist)
+                    {
+                        tag.FrameBackground = (Color)Application.Current.Resources["MainBackgroundColor"];
+                        Tags.Add(tag);
+                        alltags.Add(tag);
+                    }
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    this.TagPickerVisible = true;
+                }
+            }
+        }
+
+        [MaxLength(4)]
+        static ObservableCollection<TagView> pickedtags = new ObservableCollection<TagView>();
+
+        public static ObservableCollection<TagView> PickedTags { get { return pickedtags; } }
+
+        [ObservableProperty]
+        string filterParam;
+
+        [RelayCommand]
+        public async void PickTag(string id)
+        {
+            if (PickedTags.Contains(Tags.FirstOrDefault(t => t.Id == id)))
+            {
+                PickedTags.Remove(Tags.FirstOrDefault(t => t.Id == id));
+                return;
+            }
+
+            if (PickedTags.Count < 4)
+            {              
+                PickedTags.Add(Tags.FirstOrDefault(t => t.Id == id));
+            }
+        }
+
+        ObservableCollection<TagView> alltags = new ObservableCollection<TagView>();
+        [ObservableProperty]
+        bool tagsActivityIndicatorVisible;
+
+        [RelayCommand]
+        public async void FilterTags()
+        {
+
+            try
+            {
+                TagsActivityIndicatorVisible = true;
+                if (FilterParam == string.Empty)
+                {
+                    Tags.Clear();
+                    foreach (var tag in alltags)
+                    {                      
+                        Tags.Add(tag);
+                    }
+                    return;
+                }
+                var newtags = alltags.Where(t => t.Name.Contains(FilterParam))
+                           .ToObservableCollection();
+                Tags.Clear();
+                foreach (var tag in newtags)
+                {      
+                    //if(PickedTags.Contains(tag))
+                    //{
+                    //    tag.FrameBackground = Brush.Green.Color;
+                    //}
+                    Tags.Add(tag);                 
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                foreach (var tag in Tags)
+                {
+                    if (PickedTags.Contains(tag))
+                    {
+                        tag.FrameBackground = Brush.Green.Color;
+                    }
+                }
+                TagsActivityIndicatorVisible = false;
             }
         }
 

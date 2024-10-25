@@ -51,7 +51,13 @@
     <MauiXaml Update="views\windows\contentview\PostView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\TagView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\UserSearchResultView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="views\windows\popups\AddPostPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="views\windows\popups\CommentedPostPopup.xaml">
