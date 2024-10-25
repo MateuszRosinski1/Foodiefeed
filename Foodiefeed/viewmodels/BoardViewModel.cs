@@ -582,7 +582,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-            NotifiyFailedAction("show");
+            //NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -1059,8 +1059,6 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void UnfriendUser(string id)
         {
-
-
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
 
             using (var httpClient = new HttpClient())

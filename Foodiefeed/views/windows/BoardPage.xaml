@@ -99,7 +99,7 @@
                                                           PointerExitedCommand="{Binding SetSearchPanelVisibilityToFalseCommand}"/>
                             </Entry.GestureRecognizers>
                         </Entry>
-                        <ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}" BackgroundColor="Transparent"/>
+                        <!--<ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}" BackgroundColor="Transparent"/>-->
                         <!--<Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ShowSearchPanelCommand}" />
                         </Grid.GestureRecognizers>-->
@@ -468,17 +468,29 @@
                             </VerticalStackLayout>
                         </Grid>
 
-                        <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" 
-                                     BindableLayout.ItemsSource="{Binding Posts}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <views:PostView Username="{Binding Username}"
-                                                    TimeStamp="{Binding TimeStamp}"
-                                                    PostTextContent="{Binding PostTextContent}"
-                                                    PostLikeCount="{Binding PostLikeCount}"/>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </StackLayout>
+                        <VerticalStackLayout IsVisible="{Binding PostPageVisible}">
+                            <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                   HeightRequest="60" 
+                                   Margin="0,5,0,0" 
+                                   BorderColor="Transparent" 
+                                   HasShadow="True">
+                                <Grid>
+                                    <Button Text="Filter posts" ></Button>
+                                    <Button Text="Add post" ></Button>
+                                </Grid>
+                            </Frame>
+                            <StackLayout Orientation="Vertical" x:Name="PostGrid"  
+                                         BindableLayout.ItemsSource="{Binding Posts}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:PostView Username="{Binding Username}"
+                            TimeStamp="{Binding TimeStamp}"
+                            PostTextContent="{Binding PostTextContent}"
+                            PostLikeCount="{Binding PostLikeCount}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </VerticalStackLayout>
 
                         <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
                             <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
