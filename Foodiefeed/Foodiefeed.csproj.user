@@ -27,6 +27,9 @@
     <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\CommentLikeNotification.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\CommentView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -39,13 +42,28 @@
     <MauiXaml Update="views\windows\contentview\OnListFriendView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\PostCommentNotification.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\PostLikeNotification.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\PostView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="views\windows\contentview\UserSearchResultView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\popups\CommentedPostPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\popups\FailedActionNotificationPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="views\windows\popups\LikedCommendPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="views\windows\popups\LikedPostPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="views\windows\popups\UserOptionPopup.xaml">

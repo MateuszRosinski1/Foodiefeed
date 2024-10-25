@@ -12,19 +12,11 @@ using Foodiefeed.views.windows.popups;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using Foodiefeed.models.dto;
-using System.Diagnostics;
-using System.Data;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Foodiefeed.extension;
 using System.Collections.Specialized;
-using static Foodiefeed.views.windows.contentview.OnlineFreidnListElementView;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Maui.Networking;
 
 
 namespace Foodiefeed.viewmodels
@@ -77,7 +69,7 @@ namespace Foodiefeed.viewmodels
         private string avatarBase64;
         #endregion
 
-        private const string apiBaseUrl = "http://localhost:5000";
+        private const string API_BASE_URL = "http://localhost:5000";
 
         [ObservableProperty]
         private string searchParam;
@@ -161,23 +153,12 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
+
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
             _userSession.Id = 15;
-
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new BasicNotofication());
-            notifications.Add(new FriendRequestNotification());
-            notifications.Add(new FriendRequestNotification());
-
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
@@ -197,39 +178,376 @@ namespace Foodiefeed.viewmodels
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
-            internteCheckThread = new Thread(InternetConnectionChecker);
-            internteCheckThread.Start();
+
             //Task.Run(UpdateFriendList);
             ChangeTheme();
+            Connectivity.ConnectivityChanged += ConnectivityChanged;            
         }
 
-        private Thread internteCheckThread;
-        private void InternetConnectionChecker()
+        private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
         {
-            while(true){
-                NetworkAccess acces = Connectivity.NetworkAccess;
-                if (acces == NetworkAccess.Internet)
+            var access = Connectivity.NetworkAccess;
+            InternetAcces = !(access == NetworkAccess.Internet);
+        }
+
+        private Timer notificationTimer;
+        bool windowloaded;
+
+        [RelayCommand]
+        async void Appearing()
+        {
+            if(!windowloaded)   // appearing command invoked 2 times for some reason
+            {
+                FetchNotifications();
+                windowloaded = true;
+            }
+                
+            //if(notificationTimer == null)
+            //{
+            //    notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            //}
+        }
+
+        private async Task FetchNotifications()
+        {
+            using(var httpClient = new HttpClient()) {
+
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
                 {
-                    InternetAcces = false;
+                    var endpoint = $"api/notifications/get-all-for-user/{_userSession.Id}";
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception();
+                    }
+
+                    var results = await response.Content.ReadAsStringAsync();
+
+                    var notifications = await JsonToObject<List<NotificationDto>>(results);
+
+                    HandleNotificationsUpdate(notifications);
                 }
-                else InternetAcces = true;
-                Thread.Sleep(5000);
+                catch
+                {
+                    NotifiyFailedAction("Something went wrong...");
+                }
+            }
+        }
+
+        private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
+        {
+            notifications.Sort((x,y) => y.CreatedAt.CompareTo(x.CreatedAt));
+
+            ObservableCollection<INotification> newNotifications = new ObservableCollection<INotification>();
+
+            foreach(var notification in notifications)
+            {
+                switch(notification.Type)
+                {
+                    case NotificationType.FriendRequest: //0
+                        newNotifications.Add(new FriendRequestNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.AcceptedFriendRequest: //5
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.AcceptedFriendRequest,
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.PostLike: //1
+                        newNotifications.Add(new PostLikeNotification()
+                        {
+                            Message = notification.Message,
+                            PostId = notification.PostId.ToString(),
+                            UserId = notification.SenderId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.PostComment: //2
+                        newNotifications.Add(new PostCommentNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            PostId = notification.PostId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.CommentLike: //3
+                        newNotifications.Add(new CommentLikeNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                    case NotificationType.GainFollower: //4
+                        newNotifications.Add(new BasicNotofication()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            Type = NotificationType.GainFollower,
+                            NotifcationId = notification.Id
+                        });
+                        break;
+                }
+            }
+            Notifications.Clear();
+            allNotifications.Clear();
+            allNotifications = newNotifications;
+            DisplayNotifications(20, newNotifications);        
+        }
+
+        private ObservableCollection<INotification> allNotifications = new ObservableCollection<INotification>();
+        private int currentNotificationsDisplayCount = 0;
+
+        private async void DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
+        {
+            var temp = currentNotificationsDisplayCount;
+            for (int i = currentNotificationsDisplayCount; i <= temp+displayCount; i++)
+            {
+                try
+                {
+                    Notifications.Add(notifications[i]);
+                    currentNotificationsDisplayCount++;
+
+                }catch(ArgumentOutOfRangeException e)
+                {                   
+                    break;
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            notificationTimer?.Dispose();
+        }
+
+        [RelayCommand]
+        public async void ShowCommentedPost((string post,string comment) id)
+        {
+            var post = await GetPopupPost(id.post,id.comment);
+
+            if(post.PostImagesBase64 is null)
+            {
+                var popup = new CommentedPostPopup(post.CommentUserId,
+                post.CommentProfilePictureImageBase64,
+                post.CommentUsername,
+                post.CommentContent,
+                post.CommentLikes.ToString())
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                };
+
+                popup.SetImagesVisiblity(false);
+                App.Current.MainPage.ShowPopup(popup);
+            }
+            else
+            {
+                App.Current.MainPage.ShowPopup(new CommentedPostPopup(post.CommentUserId,
+                post.CommentProfilePictureImageBase64,
+                post.CommentUsername,
+                post.CommentContent,
+                post.Likes.ToString())
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                    ImageSource = post.PostImagesBase64[0],
+                    ImagesBase64 = post.PostImagesBase64
+                });
+            }
+            
+        }
+
+        private async Task<PopupPostDto> GetPopupPost(string postId,string commentId)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/posts/popup-post/{postId}/{commentId}";
+                try
+                {
+                    var respose  = await httpclient.GetAsync(endpoint);
+
+                    if(!respose.IsSuccessStatusCode)
+                    {
+
+                    }
+
+                    var json = await respose.Content.ReadAsStringAsync();
+
+                    var obj = await JsonToObject<PopupPostDto>(json);
+
+                    return obj;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+           
+        }
+
+        [RelayCommand]
+        public async void ShowLikedComment(string commentId)
+        {
+            var comment = await GetCommentById(commentId);
+            App.Current.MainPage.ShowPopup(new LikedCommendPopup(
+                comment.UserId.ToString(),
+                comment.ImageBase64,
+                comment.Username,
+                comment.CommentContent,
+                comment.Likes.ToString()));
+        }
+
+        private async Task<CommentDto> GetCommentById(string id)
+        {
+            using(var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/comments/get-comment-{id}";
+
+                try
+                {
+                    var response = await httpclient.GetAsync(endpoint);
+
+                    var results = await response.Content.ReadAsStringAsync();
+
+                    var comment = await JsonToObject<CommentDto>(results);
+                    return comment;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+        }
+
+        [RelayCommand]
+        public async void ShowLikedPost(string postId)
+        {
+            var post = await GetPopupLikedPost(postId);
+            if (post.PostImagesBase64 is null)
+            {
+                var popup = new LikedPostPopup()
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                };
+
+                popup.SetImagesVisiblity(false);
+                App.Current.MainPage.ShowPopup(popup);
+            }
+            else
+            {
+                App.Current.MainPage.ShowPopup(new LikedPostPopup()
+                {
+                    Username = post.Username,
+                    TimeStamp = "10 hours ago",
+                    PostTextContent = post.Description,
+                    PostLikeCount = post.Likes.ToString(),
+                    ImageSource = post.PostImagesBase64[0],
+                    ImagesBase64 = post.PostImagesBase64
+                });
+            }
+        }
+
+        private async Task<PopupPostDto> GetPopupLikedPost(string id)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/posts/popup-liked-post/{id}";
+                try
+                {
+                    var respose = await httpclient.GetAsync(endpoint);
+
+                    if (!respose.IsSuccessStatusCode)
+                    {
+
+                    }
+
+                    var json = await respose.Content.ReadAsStringAsync();
+
+                    var obj = await JsonToObject<PopupPostDto>(json);
+
+                    return obj;
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
 
         [RelayCommand]
         private async void ClearNotifications()
         {
-            for (int i = 0; i <= Notifications.Count - 1; i++)
+            List<int> NotificationsId = new List<int>();
+            for (int i = 0; i <= currentNotificationsDisplayCount - 1; i++)
             {
-                var notification = Notifications[i];
-                if(notification is not FriendRequestNotification)
+                var notification = Notifications[0];
+                if (notification is not FriendRequestNotification)
                 {
-                    await notification.HideAnimation(300, 150);
+                    //await notification.HideAnimation(300, 150);
+                    NotificationsId.Add(notification.NotifcationId);
+                    allNotifications.Remove(notification);
                     Notifications.Remove(notification);
-                    i = i - 1;
+                    //i = i - 1;
                 }
             }
+
+            using(var httpclient = new HttpClient())
+            {
+                //httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var endpoint = $"/api/notifications/remove-range-notifications/{_userSession.Id}";
+
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(NotificationsId), Encoding.UTF8, "application/json");
+
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Delete,
+                        RequestUri = new Uri(API_BASE_URL + endpoint),
+                        Content = jsonContent
+                    };
+
+                    var response = await httpclient.SendAsync(request);
+
+
+                    currentNotificationsDisplayCount = 0;
+                    DisplayNotifications(10, allNotifications);
+                }
+                catch
+                {
+
+                }
+            }
+
+
+            
             //code to clear notification in database
         }
 
@@ -242,10 +560,19 @@ namespace Foodiefeed.viewmodels
         public void Scrolled(ItemsViewScrolledEventArgs e)
         {
 
-            //if (e.LastVisibleItemIndex == Posts.Count() - 2)
-            //{
-            //   
-            //}
+            if (e.LastVisibleItemIndex == Posts.Count() - 2)
+            {
+
+            }
+        }
+
+        [RelayCommand]
+        public void ScrolledNotifications(ItemsViewScrolledEventArgs e)
+        {
+            if (e.LastVisibleItemIndex == Notifications.Count() - 2)
+            {
+                DisplayNotifications(10, allNotifications);
+            }
         }
 
 
@@ -255,7 +582,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-            NotifiyFailedAction("show");
+            //NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -387,20 +714,11 @@ namespace Foodiefeed.viewmodels
 
         }
 
-        //private string HandlePersonalDataChange(string endpointBase,string propertyValue,string regex)
-        //{
-        //    if (Regex.IsMatch(propertyValue, regex))
-        //    {
-        //        return endpointBase + propertyValue;
-        //    }
-        //    else return string.Empty;
-        //}
-
         private async Task UpdatePersonalData(string endpoint,StringContent contnet)
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -433,6 +751,18 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async Task SetSearchPanelVisibilityToTrue()
+        {
+            this.SearchPanelVisible = true;
+        }
+
+        [RelayCommand]
+        public async Task SetSearchPanelVisibilityToFalse()
+        {
+            this.SearchPanelVisible = false;
+        }
+
+        [RelayCommand]
         public void ShowHubPanel()
         {
             this.HubPanelVisible = true;
@@ -450,6 +780,7 @@ namespace Foodiefeed.viewmodels
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
+            SetButtonColors(Buttons.PostButton);
             try
             {
                 if (id != _userSession.Id.ToString())
@@ -621,7 +952,7 @@ namespace Foodiefeed.viewmodels
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -644,17 +975,23 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void AddToFriends(string id)
+        public async void DeclineFriendRequest((string senderId, int notificationId) ids)
         {
-            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
+            var endpoint = $"api/friends/request/delete/{ids.senderId}/{_userSession.Id}";
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
-                    var response = await httpClient.PostAsync(endpoint, null);
+                    var response = await httpClient.DeleteAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var notification = Notifications.FirstOrDefault(n => n.NotifcationId == ids.notificationId);
+                        Notifications.Remove(notification);
+                    }
                 }
                 catch
                 {
@@ -665,13 +1002,68 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async void AcceptFriendRequest((string senderId,int notificationId) ids)
+        {
+            var endpoint = $"api/friends/request/accept/{ids.senderId}/{_userSession.Id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await httpClient.PostAsync(endpoint, null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var notification = Notifications.FirstOrDefault(n => n.NotifcationId == ids.notificationId);
+                        Notifications.Remove(notification);
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("Cant send friend request");
+                    // code to handle unsuccsesful friend request.
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async void AddToFriends(string id)
+        {
+            var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await httpClient.PostAsync(endpoint, null);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("Cant send friend request");
+                    // code to handle unsuccsesful friend request.
+                }
+            }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
+        }
+
+        [RelayCommand]
         public async void UnfriendUser(string id)
         {
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -683,6 +1075,9 @@ namespace Foodiefeed.viewmodels
                     // code to handle unsuccsesful unfriend action.
                 }
             }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
+
         }
 
         [RelayCommand]
@@ -692,7 +1087,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);   
 
                 try
                 {
@@ -702,8 +1097,8 @@ namespace Foodiefeed.viewmodels
                 {
                     NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
-
             }
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -713,7 +1108,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -724,8 +1119,9 @@ namespace Foodiefeed.viewmodels
                     NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
 
                 }
-
             }
+
+            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -735,7 +1131,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -744,7 +1140,6 @@ namespace Foodiefeed.viewmodels
                 catch
                 {
                     NotifiyFailedAction("Request was already canceled by sender.");
-
                     // code to handle unsuccsesful request cancel.
                 }
             }
@@ -879,7 +1274,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpclient = new HttpClient())
             {
-                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
                 var endpoint = $"api/user/{id}";
 
                 try
@@ -910,7 +1305,7 @@ namespace Foodiefeed.viewmodels
                 OnlineFriends.Clear();
                 using (var httpClient = new HttpClient())
                 {
-                    httpClient.BaseAddress = new Uri(apiBaseUrl);
+                    httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                     try
                     {
@@ -1092,8 +1487,8 @@ namespace Foodiefeed.viewmodels
 
             using(var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
-
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+                    
                 try
                 {
                     var response = await httpClient.GetAsync(endpoint);
@@ -1169,7 +1564,7 @@ namespace Foodiefeed.viewmodels
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -1197,7 +1592,7 @@ namespace Foodiefeed.viewmodels
 
             using(var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(apiBaseUrl);
+                client.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -1232,7 +1627,7 @@ namespace Foodiefeed.viewmodels
             
             using (var httpclient = new HttpClient())
             {
-                httpclient.BaseAddress = new Uri(apiBaseUrl);
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {

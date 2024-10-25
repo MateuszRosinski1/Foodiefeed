@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 
@@ -65,48 +66,17 @@ public partial class UserOptionPopup : Popup
             UnfollowBtn.IsVisible = false;
             FollowBtn.IsVisible = true;
         }
+
+        WeakReferenceMessenger.Default.Register<string, string>(this, "popup", (r, d) =>
+        {
+            if (d == "close")
+            {
+                WeakReferenceMessenger.Default.Unregister<string>(this);
+                MainThread.BeginInvokeOnMainThread(() => { this.Close(); });
+            }
+        });
+
     }
-    //private static void OnFriendChanged(BindableObject bindable, object oldValue, object newValue)
-    //{
-    //    var view = (UserOptionPopup)bindable;
-    //    if (view.IsFriend == true)
-    //    {
-    //        view.UnfriendBtn.IsVisible = true;
-    //        view.AddToFriendBtn.IsVisible = false;
-    //    }
-    //    else
-    //    {
-    //        view.UnfriendBtn.IsVisible = false;
-    //        view.AddToFriendBtn.IsVisible = true;
-    //    }
-    //}
-
-    //private static void OnFollowChanged(BindableObject bindable, object oldValue, object newValue)
-    //{
-    //    var view = (UserOptionPopup)bindable;
-    //    if (view.IsFollowed == true)
-    //    {
-    //        view.UnfollowBtn.IsVisible = true;
-    //        view.FollowBtn.IsVisible = false;
-    //    }
-    //    else
-    //    {
-    //        view.UnfollowBtn.IsVisible = false;
-    //        view.FollowBtn.IsVisible = true;
-    //    }
-    //}
-
-    //public bool IsFriend
-    //{
-    //    get => (bool)GetValue(IsFriendProperty);
-    //    set => SetValue(IsFriendProperty, value);
-    //}
-
-    //public bool IsFollowed
-    //{
-    //    get => (bool)GetValue(IsFollowedProperty);
-    //    set => SetValue(IsFollowedProperty, value);
-    //}
 
     public string UserId
     {

@@ -8,12 +8,12 @@
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview"
-             xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups">
-
-
+             xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups"
+             >
     <ContentPage.Resources>
         <local:AdjustPostSpace x:Key="AdjustPostSpace"/>
         <local:FollowOrNotFollowConverter x:Key="FollowOrNotFollowConverter"/>
+        <x:Double x:Key="NoNotificationsHeightAdjustValue">100</x:Double>
         <x:Double x:Key="LeftBarHeightAdjustValue">170</x:Double>
         <x:Double x:Key="MidBarWidthAdjustValue">600</x:Double>
         <x:Double x:Key="MidBarHeightAdjustValue">100</x:Double>
@@ -21,7 +21,39 @@
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+
+        <DataTemplate x:Key="FriendRequestNotificationTemplate">
+            <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CommentLikeNotificationTemplate">
+            <views:CommentLikeNotification Message="{Binding Message}" UserId="{Binding UserId}" CommentId="{Binding CommentId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PostLikeNotificationTemplate">
+            <views:PostLikeNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PostCommentNotificationTemplate">
+            <views:PostCommentNotification Message="{Binding Message}" UserId="{Binding UserId}" PostId="{Binding PostId}" CommentId="{Binding CommentId}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BasicNotificationTemplate">
+            <views:BasicNotofication Message="{Binding Message}" UserId="{Binding UserId}"/>
+        </DataTemplate>
+
+        <local:NotificationTemplateSelector x:Key="NotificationTemplateSelector"
+                                            FriendRequestNotificationTemplate="{StaticResource FriendRequestNotificationTemplate}"
+                                            CommentLikeNotificationTemplate="{StaticResource CommentLikeNotificationTemplate}"
+                                            PostLikeNotificationTemplate="{StaticResource PostLikeNotificationTemplate}"
+                                            PostCommentNotificationTemplate="{StaticResource PostCommentNotificationTemplate}"
+                                            BasicNotificationTemplate="{StaticResource BasicNotificationTemplate}"/>
     </ContentPage.Resources>
+    
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    
     <Grid>
 
         <Grid >
@@ -55,19 +87,24 @@
                                WidthRequest="400" 
                                Text="{Binding SearchParam,Mode=TwoWay}"
                                x:Name="SearchEntry"
-                               BackgroundColor="Transparent">
+                               BackgroundColor="Transparent"
+                               >
                             <Entry.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="Focused" Command="{Binding ShowSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
                                 <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
                             </Entry.Behaviors>
+                            <Entry.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEnteredCommand="{Binding SetSearchPanelVisibilityToTrueCommand}"
+                                                          PointerExitedCommand="{Binding SetSearchPanelVisibilityToFalseCommand}"/>
+                            </Entry.GestureRecognizers>
                         </Entry>
-                        <ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}" BackgroundColor="Transparent"/>
+                        <!--<ImageButton Source="microphone.png" Scale="0.5" HorizontalOptions="End" Command="{Binding SearchByVoiceCommand}" BackgroundColor="Transparent"/>-->
                         <!--<Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ShowSearchPanelCommand}" />
                         </Grid.GestureRecognizers>-->
                     </Grid>
-                    
+
                 </Border>
 
                 <ImageButton Source="{DynamicResource LogoPath}" 
@@ -92,12 +129,14 @@
                         <Shadow Opacity="0.4" Brush="Black"/>
                     </Border.Shadow>
                 </Border>
-                
+
                 <HorizontalStackLayout HorizontalOptions="End">
                     <!--<Path BackgroundColor="Transparent" ZIndex="100" VerticalOptions="Center" Scale="1" WidthRequest="40" HeightRequest="35"  Fill="DarkGray" 
                           Data="M 27 6 C 31.995 13.5353 26.805 20.97 32.916 28.491 C 28.5345 28.518 12.0105 28.44 6.0315 28.4055 C 11.9775 21 8.235 13.5 12 6 C 13.425 3.555 16.485 2.235 19.512 2.247 C 23.13 2.385 25.275 3.4575 26.985 5.985">
                         <Path.GestureRecognizers>
-                            --><!--Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"--><!--
+                            -->
+                    <!--Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"-->
+                    <!--
                             <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
                         </Path.GestureRecognizers>
                         <Path.RenderTransform>
@@ -119,9 +158,10 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
-                    <VerticalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" 
+                    <VerticalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
                                          IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}">
-                        <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" 
+
+                        <HorizontalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
                                                Spacing="5" 
                                                Padding="10"
                                                HeightRequest="70">
@@ -137,32 +177,42 @@
                                 </Button.Shadow>
                             </Button>
                         </HorizontalStackLayout>
-                        <ScrollView  HorizontalOptions="Start" 
+                        <Grid  HorizontalOptions="Start" 
                                      VerticalOptions="Start" 
                                      x:Name="hubScroll" 
                                      BackgroundColor="Transparent"
-                                     VerticalScrollBarVisibility="Always" 
-                                     WidthRequest="300"                                  
+                                     WidthRequest="300" 
                                      HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                                      >
                             <!--pages-->
                             <Grid BackgroundColor="Transparent" Padding="0,10,0,0">
-                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Notifications}" Spacing="15">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
-                                            <ContentView Content="{Binding .}"/>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </VerticalStackLayout>
+                                <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
+                                                ItemsSource="{Binding Notifications}" 
+                                                BackgroundColor="Transparent"
+                                                VerticalScrollBarVisibility="Always"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                >
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.Behaviors>
+                                        <toolkit:EventToCommandBehavior
+                                                x:TypeArguments="ItemsViewScrolledEventArgs"
+                                                EventName="Scrolled"
+                                                Command="{Binding ScrolledNotificationsCommand}"/>
+                                    </CollectionView.Behaviors>
+                                </CollectionView>
                             </Grid>
-                        </ScrollView>
+                        </Grid>
                     </VerticalStackLayout>
+                    
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
                           HorizontalOptions="Start" 
                           VerticalOptions="Start"
                           BackgroundColor="{DynamicResource SideBackgroundColor}"
                           WidthRequest="300"
-                          HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
+                          Margin="0,0,0,0"
+                          HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource NoNotificationsHeightAdjustValue}}" >
                         <VerticalStackLayout VerticalOptions="Center" >
                             <Image Source="notificationicon.png" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label TextColor="#afafaf" Text="No notification yet" HorizontalOptions="Center"/>
@@ -171,11 +221,10 @@
                     <!--<a target="_blank" href="https://icons8.com/icon/83193/notification">Notification</a> icon by
                     <a target="_blank" href="https://icons8.com">Icons8</a>-->
                 </Grid>
-                
+
 
                 <!--PostGrid-->
-                <ScrollView 
-                            Grid.Column="1"
+                <ScrollView Grid.Column="1"
                             BackgroundColor="{DynamicResource MainBackgroundColor}"
                             WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 
@@ -206,17 +255,17 @@
                                                              VerticalOptions="Center" 
                                                              BackgroundColor="Transparent" 
                                                              Grid.Column="1">
-                                            
+
                                             <Label Text="{Binding ProfileUsername}" 
                                                    TextColor="{DynamicResource TextColor}" 
                                                    FontSize="30" 
                                                    FontAttributes="Bold"/>
-                                            
+
                                             <Label Text="{Binding ProfileFriends}" 
                                                    TextColor="{DynamicResource TextColor}"
                                                    FontSize="15" 
                                                    Margin="4,0,0,0"/>
-                                            
+
                                             <Label Text="{Binding ProfileFollowers}" 
                                                    TextColor="{DynamicResource TextColor}" 
                                                    FontSize="15" 
@@ -263,7 +312,7 @@
                                     </Border.Shadow>
 
                                 </Border>
-                                
+
                                 <Border Margin="0,-40,0,0" 
                                         ZIndex="0" 
                                         BackgroundColor="{DynamicResource ProfileOptionsSection}" 
@@ -339,7 +388,7 @@
                                             BackgroundColor="{DynamicResource ProfileOptionsSection}" 
                                             StrokeShape="RoundRectangle 40,40,40,40" 
                                             MaximumWidthRequest="1200">
-                                        
+
                                         <toolkit:UniformItemsLayout MaxColumns="3"
                                                                     BackgroundColor="Transparent" 
                                                                     HeightRequest="1000" 
@@ -402,14 +451,14 @@
                                     </Border>
 
                                     <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                                        
+
                                         <VerticalStackLayout Margin="0,100,0,0">
                                             <Label TextColor="{DynamicResource TextColor}" 
                                                    Text="Loading..." 
                                                    IsVisible="{Binding LoadingLabelVisible}"/>
                                             <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}"/>
                                         </VerticalStackLayout>
-                                        
+
                                         <Label Text="This user has not posts yet." 
                                                FontSize="30" 
                                                TextColor="{DynamicResource TextColor}"
@@ -419,17 +468,29 @@
                             </VerticalStackLayout>
                         </Grid>
 
-                        <StackLayout Orientation="Vertical" x:Name="PostGrid" IsVisible="{Binding PostPageVisible}" 
-                                     BindableLayout.ItemsSource="{Binding Posts}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <views:PostView Username="{Binding Username}"
-                                                    TimeStamp="{Binding TimeStamp}"
-                                                    PostTextContent="{Binding PostTextContent}"
-                                                    PostLikeCount="{Binding PostLikeCount}"/>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </StackLayout>
+                        <VerticalStackLayout IsVisible="{Binding PostPageVisible}">
+                            <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                   HeightRequest="60" 
+                                   Margin="0,5,0,0" 
+                                   BorderColor="Transparent" 
+                                   HasShadow="True">
+                                <Grid>
+                                    <Button Text="Filter posts" ></Button>
+                                    <Button Text="Add post" ></Button>
+                                </Grid>
+                            </Frame>
+                            <StackLayout Orientation="Vertical" x:Name="PostGrid"  
+                                         BindableLayout.ItemsSource="{Binding Posts}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:PostView Username="{Binding Username}"
+                            TimeStamp="{Binding TimeStamp}"
+                            PostTextContent="{Binding PostTextContent}"
+                            PostLikeCount="{Binding PostLikeCount}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </VerticalStackLayout>
 
                         <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
                             <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
@@ -451,13 +512,13 @@
                                             <Label Text="Click to change your personal data" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
                                             <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
                                                 <Switch Scale="1.5">
-                                                        <Switch.Behaviors>
-                                                            <toolkit:EventToCommandBehavior 
+                                                    <Switch.Behaviors>
+                                                        <toolkit:EventToCommandBehavior 
                                                                         EventName="Toggled" 
                                                                         Command="{Binding ChangeThemeCommand}"/>
-                                                        </Switch.Behaviors>
-                                                    </Switch>
-                                                    <Label TextColor="{DynamicResource TextColor}" Text="{Binding SwitchThemeMode,Mode=TwoWay}" VerticalOptions="Center"/>
+                                                    </Switch.Behaviors>
+                                                </Switch>
+                                                <Label TextColor="{DynamicResource TextColor}" Text="{Binding SwitchThemeMode,Mode=TwoWay}" VerticalOptions="Center"/>
                                             </HorizontalStackLayout>
                                         </VerticalStackLayout>
 
@@ -696,7 +757,7 @@
 
 
         </Grid>
-            <Grid BackgroundColor="Transparent" VerticalOptions="Start" Margin="0,69,0,0" HorizontalOptions="Center" IsVisible="{Binding SearchPanelVisible}">
+        <Grid BackgroundColor="Transparent" VerticalOptions="Start" Margin="0,69,0,0" HorizontalOptions="Center" IsVisible="{Binding SearchPanelVisible}">
             <Grid>
                 <Path Data="M 220 0 L 150 25 H 50 C 0 24.997 -0.001 24.997 0 75 V 450 C 0.011 499.992 0.011 500.023 50 500 H 750 C 799.999 499.991 799.999 499.991 800 450 V 75 C 799.965 25.995 799.965 25.995 750.468 25.956 L 650 25 L 590 0 H 220"
                       Fill="{DynamicResource MainBackgroundColorContrast}">
@@ -717,8 +778,8 @@
                     </VerticalStackLayout>
                 </ScrollView>
             </Grid>
-            
-            
+
+
             <Grid.Shadow>
                 <Shadow Opacity="0.6 "
                         Brush="Black"/>
@@ -728,7 +789,7 @@
               HorizontalOptions="Start" 
               Margin="46,72,0,0" 
               IsVisible="{Binding HubPanelVisible}"
-              >            
+              >
             <Grid BackgroundColor="Transparent" 
                   HeightRequest="301" 
                   WidthRequest="151">
@@ -814,7 +875,7 @@
         </Grid>
         <Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
             <Grid BackgroundColor="Black" Opacity="0.4">
-                
+
             </Grid>
             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                 <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>

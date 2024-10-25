@@ -28,6 +28,7 @@ namespace Foodiefeed_api.services
         private readonly dbContext _dbContext;
         private readonly IEntityRepository<User> _userRepository;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
         private struct Status
         {
@@ -37,11 +38,12 @@ namespace Foodiefeed_api.services
 
         private async Task Commit() => await _dbContext.SaveChangesAsync();
 
-        public FriendService(dbContext dbContext,IEntityRepository<User> entityRepository,IMapper mapper)
+        public FriendService(dbContext dbContext,IEntityRepository<User> entityRepository,IMapper mapper,INotificationService notificationService)
         {
             _dbContext = dbContext;
             _userRepository = entityRepository;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<List<ListedFriendDto>> GetOnlineFriends(int id)
@@ -103,6 +105,9 @@ namespace Foodiefeed_api.services
 
             if (friendRequest is not null || reflectedFriendRequest is not null) { throw new BadRequestException("Request already sent"); }
 
+            var username = _dbContext.Users.FirstOrDefault(u => u.Id == senderId).Username;
+
+            await _notificationService.CreateNotification(NotificationType.FriendRequest,senderId,receiverId,username);
             _dbContext.FriendRequests.Add(new FriendRequest() { ReceiverId = receiverId,SenderId = senderId});
 
             await Commit();
@@ -115,6 +120,15 @@ namespace Foodiefeed_api.services
             
             if (friendRequest is null) { throw new NotFoundException("Such a friend request do not exist"); }
 
+            var notfication = await _dbContext.Notifications.FirstOrDefaultAsync
+                (fr => fr.ReceiverId == receiverId && 
+                 fr.SenderId == senderId && 
+                 fr.Type == NotificationType.FriendRequest);
+
+            if (notfication is null) { throw new NotFoundException("Request do not exist in current context."); }
+            _dbContext.Notifications.Remove(notfication);
+
+
             _dbContext.FriendRequests.Remove(friendRequest);
 
             await Commit();
@@ -126,6 +140,21 @@ namespace Foodiefeed_api.services
 
             if(friendRequest is  null) { throw new NotFoundException("There is no such request"); }
 
+            var notification = await _dbContext.Notifications.FirstOrDefaultAsync(n => n.SenderId == senderId && n.ReceiverId == receiverId && n.Type == NotificationType.FriendRequest);
+
+            if(notification is null) { throw new NotFoundException("???"); }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == receiverId);
+            if (user is null) { 
+                _dbContext.Notifications.Remove(notification); // if user do not exist the notification should not exist either.
+                throw new NotFoundException("User that send u firend request does not exist in current context."); 
+            }
+
+            await _notificationService.CreateNotification(NotificationType.AcceptedFriendRequest, receiverId, senderId, user.Username);
+
+            //var newNotification = new Notification(NotificationType.AcceptedFriendRequest, user.Username) { SenderId = receiverId, ReceiverId = senderId };
+            //_dbContext.Notifications.Add(newNotification);
+            _dbContext.Notifications.Remove(notification);
             _dbContext.FriendRequests.Remove(friendRequest);
             _dbContext.Friends.Add(new Friend() { UserId = senderId, FriendUserId = receiverId });
 
@@ -138,6 +167,10 @@ namespace Foodiefeed_api.services
 
             if(friendRequest is null) { throw new NotFoundException("No request to decline. This friend request do not exist in current context."); }
 
+            var notification =  await _dbContext.Notifications.FirstOrDefaultAsync(n => n.SenderId == senderId && n.ReceiverId == receiverId && n.Type == NotificationType.FriendRequest) ;
+
+            if(notification is null) { throw new NotFoundException("Notification could not be removed cause it do not exist in current context."); }
+            _dbContext.Notifications.Remove(notification);
             _dbContext.FriendRequests.Remove(friendRequest);
 
             await Commit();

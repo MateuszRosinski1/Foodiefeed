@@ -1,6 +1,8 @@
-﻿using Bogus;
+﻿using Azure.Core;
+using Bogus;
 using Bogus.DataSets;
 using Foodiefeed_api.entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Foodiefeed_api
@@ -9,6 +11,8 @@ namespace Foodiefeed_api
     {
         public static void SeedData(dbContext context)
         {
+            //context.Database.EnsureDeleted();
+            //context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
                 var userFaker = new Faker<User>()
@@ -31,8 +35,8 @@ namespace Foodiefeed_api
             {
                 var postFaker = new Faker<Post>()
                     .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 20)))
-                    .RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
+                    .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 400)));
+                    //.RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
 
                 var posts = postFaker.Generate(2000);
 
@@ -40,16 +44,66 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+            if (!context.PostLikes.Any())
+            {
+                var postLikeFaker = new Faker<PostLike>()
+                    .RuleFor(p => p.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                    .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id);
+
+                // Pobieranie istniejących PostLikes do weryfikacji
+                var existingPostLikes = context.PostLikes.ToList();
+                var postLikesToAdd = new List<PostLike>();
+
+                for (int i = 0; i < 10000; i++) // Zakładam, że chcesz wygenerować 100 losowych PostLike
+                {
+                    var newPostLike = postLikeFaker.Generate();
+
+                    var exists = postLikesToAdd.FirstOrDefault(p => p.PostId == newPostLike.PostId && p.UserId == newPostLike.UserId);
+
+                    // Jeśli nie istnieje, dodaj do listy
+                    if (exists is null)
+                    {
+                        postLikesToAdd.Add(newPostLike);
+                    }
+                }
+
+                // Dodanie wszystkich nowych PostLikes na raz
+                context.PostLikes.AddRange(postLikesToAdd);
+                context.SaveChanges();
+            }
+
             if (!context.Comments.Any())
             {
                 var commentFaker = new Faker<Comment>()
                     .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id)
-                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 20)))
-                    .RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
+                    .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 100)));
+                    //.RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
 
                 var comments = commentFaker.Generate(20000);
 
                 context.Comments.AddRange(comments);
+                context.SaveChanges();
+            }
+
+            if (!context.CommentLikes.Any())
+            {
+                var commentLikeFaker = new Faker<CommentLike>()
+                    .RuleFor(c => c.CommentId, f => f.PickRandom(context.Comments.ToList()).CommentId)
+                    .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id);
+
+                var commentLikesToAdd = new List<CommentLike>();
+                for (int i = 0; i < 10000; i++)
+                {
+                    var newCommentLike = commentLikeFaker.Generate();
+
+                    var exists = commentLikesToAdd.FirstOrDefault(cl => cl.CommentId == newCommentLike.CommentId && cl.UserId == newCommentLike.UserId);
+                    if (exists is null)
+                    {
+                        commentLikesToAdd.Add(newCommentLike);
+                    }
+                }
+
+                context.CommentLikes.AddRange(commentLikesToAdd);
                 context.SaveChanges();
             }
 
@@ -116,18 +170,6 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
-            //if (!context.PostTags.Any())
-            //{
-            //    var postTagsFaker = new Faker<PostTag>()
-            //        .RuleFor(pt => pt.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-            //        .RuleFor(pt => pt.TagId, f => f.PickRandom(context.Tags.ToList()).Id);
-
-            //    var postTags = postTagsFaker.Generate(10000); // Generuj 200 posttagów
-
-            //    context.PostTags.AddRange(postTags);
-            //    context.SaveChanges();
-            //}
-
             if (!context.PostTags.Any())
             {
                 var postTagsFaker = new Faker<PostTag>()
@@ -154,19 +196,6 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
-            //if (!context.UserTags.Any())
-            //{
-            //    var userTagsFaker = new Faker<UserTag>()
-            //        .RuleFor(ut => ut.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
-            //        .RuleFor(ut => ut.TagId, f => f.PickRandom(context.Tags.ToList()).Id) 
-            //        .RuleFor(ut => ut.Score, f => f.Random.Int(1, 100));
-
-            //    var userTags = userTagsFaker.Generate(1000); 
-
-            //    context.UserTags.AddRange(userTags);
-            //    context.SaveChanges();
-            //}
-
             if (!context.UserTags.Any())
             {
                 var faker = new Faker();
@@ -191,41 +220,6 @@ namespace Foodiefeed_api
                 context.UserTags.AddRange(userTags); 
                 context.SaveChanges();
             }
-
-            //if (!context.Friends.Any())
-            //{            
-            //    var faker = new Faker<Friend>()
-            //        .RuleFor(f => f.UserId, f => f.PickRandom(context.Users.ToList()).Id) 
-            //        .RuleFor(f => f.FriendUserId, (f, friend) =>
-            //        {
-            //            int friendUserId;
-            //            do
-            //            {
-            //                friendUserId = f.PickRandom(context.Users.ToList()).Id;
-            //            }
-            //            while (friendUserId == friend.UserId); 
-
-            //            return friendUserId;
-            //        });
-
-            //    int friendsCount = 350;
-            //    var friends = new List<Friend>();
-            //    while (friends.Count < friendsCount)
-            //    {
-            //        var newFriend = faker.Generate();
-
-            //        var exists = context.Friends.Any(f =>
-            //            (f.UserId == newFriend.UserId && f.FriendUserId == newFriend.FriendUserId) ||
-            //            (f.UserId == newFriend.FriendUserId && f.FriendUserId == newFriend.UserId));
-
-            //        if (!exists)
-            //        {
-            //            friends.Add(newFriend);
-            //        }
-            //    }
-            //    context.Friends.AddRange(friends);
-            //    context.SaveChanges();
-            //}
 
             if (!context.Friends.Any())
             {
@@ -360,25 +354,96 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+            //var allnotifications = context.Notifications.ToList();
+            //context.Notifications.RemoveRange(allnotifications);
+            //context.SaveChanges();
+
             if (!context.Notifications.Any()) {
                 
                 List<Notification> notifications = new List<Notification>();
                 foreach(var request in context.FriendRequests.ToList())
                 {
-                    notifications.Add(new Notification(NotificationType.FriendRequest) { SenderId = request.SenderId, ReceiverId = request.ReceiverId });
+                    var user = context.Users.FirstOrDefault(u => u.Id == request.SenderId);
+                    if(user is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.FriendRequest,user.Username) { SenderId = request.SenderId, ReceiverId = request.ReceiverId });
+                    }
                 }
 
                 foreach(var friend in context.Friends.ToList())
                 {
-                    notifications.Add(new Notification(NotificationType.AcceptedFriendRequest) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                    var user = context.Users.FirstOrDefault(u => u.Id == friend.UserId);
+                    if(user is not null) {
+                        notifications.Add(new Notification(NotificationType.AcceptedFriendRequest, user.Username) { SenderId = friend.UserId, ReceiverId = friend.FriendUserId });
+                    }
+                    var user2 = context.Users.FirstOrDefault(u => u.Id == friend.FriendUserId);
+                    if (user2 is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.AcceptedFriendRequest, user2.Username) { SenderId = friend.FriendUserId, ReceiverId = friend.UserId });
+                    }
                 }
 
+                foreach(var comment in context.CommentLikes.ToList()) 
+                {
+                    var user = context.Users.FirstOrDefault(u => u.Id == comment.UserId);
+                    var userComment = context.Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
+                    if (user is not null && userComment is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.CommentLike, user.Username) { SenderId = comment.UserId, ReceiverId = userComment.UserId,CommentId = comment.CommentId });
+                    }
+                }
+
+                foreach(var post in context.PostLikes.ToList())
+                {
+                    var user = context.Users.FirstOrDefault(u => u.Id ==post.UserId);
+                    var userPost = context.Posts.FirstOrDefault(p => p.PostId == post.PostId);
+                    if(user is not null && userPost is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.PostLike, user.Username) { SenderId = post.UserId, ReceiverId = userPost.UserId, PostId = post.PostId });
+                    }
+                }
+
+                foreach(var follower in context.Followers.ToList())
+                {
+                    var receiver = context.Users.FirstOrDefault(u => u.Id == follower.FollowedUserId);
+                    var sender = context.Users.FirstOrDefault(u => u.Id == follower.UserId);
+
+                    if(receiver is not null && sender is not null)
+                    {
+                        notifications.Add(new Notification(NotificationType.GainFollower, sender.Username) { SenderId = sender.Id,ReceiverId = receiver.Id });
+                    }
+                }
+
+                foreach (var post in context.Posts.Include(p => p.PostCommentMembers).ToList())
+                {
+                    var reciever = context.Users.FirstOrDefault(u => u.Id ==post.UserId);
+                    if( reciever is not null )
+                    {
+                        foreach (var member in post.PostCommentMembers)
+                        {
+                            var comment = context.Comments.FirstOrDefault(c => c.CommentId == member.CommentId);
+                            if (comment is not null)
+                            {
+                                var sender = context.Users.FirstOrDefault(u => u.Id == comment.UserId);
+
+                                if (sender is not null)
+                                {
+                                    notifications.Add(new Notification(NotificationType.PostComment, sender.Username)
+                                    {
+                                        ReceiverId = reciever.Id,
+                                        SenderId = sender.Id,
+                                        PostId = post.PostId,
+                                        CommentId = comment.CommentId,
+
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
                 context.Notifications.AddRange(notifications);
                 context.SaveChanges();
-            }
-
-
-            
+            }   
         }
     }
 }

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.popups.CommentedPostPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             Color="Transparent">
+
+    <VerticalStackLayout WidthRequest="800">
+
+        <Grid ZIndex="1">
+            <Border
+             Margin="30,30,30,0" 
+             BackgroundColor="{DynamicResource PostBorderColor}" 
+             StrokeThickness="1" 
+             StrokeShape="RoundRectangle 40,40,40,40">
+
+                <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post"  BackgroundColor="White" >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <!--0 username follow | 3 dots to go to profile-->
+
+                        <RowDefinition/>
+                        <!--1 post text content-->
+
+                        <RowDefinition/>
+                        <!--2 images-->
+
+                        <RowDefinition/>
+                        <!--3 like comments share-->
+
+                        <RowDefinition/>
+                        <!--4 comment section-->
+
+                    </Grid.RowDefinitions>
+
+                    <Grid  Padding="30" Grid.Row="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <VerticalStackLayout>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
+                    </Grid>
+
+                    <Grid Padding="30,0,20,20" Grid.Row="1" >
+                        <VerticalStackLayout>
+                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
+                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                            </ScrollView>
+                            <!--<Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ExpandPostContentText"/>
+                                    <PointerGestureRecognizer PointerEntered="UnderlineText" PointerExited="UnUnderLineText"/>
+                                </Label.GestureRecognizers>
+                            </Label>-->
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid Padding="30,0,30,15" Grid.Row="2" x:Name="ImagesGrid">
+                        <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
+                        <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
+                        <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
+                    </Grid>
+
+                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                            <Button  ImageSource="likeicon.png" 
+                                  BackgroundColor="Transparent" 
+                                  FontSize="20"
+                                  WidthRequest="170"
+                                  HeightRequest="50" 
+                                  Padding="0,0,0,0" 
+                                  Text="Like It!"
+                                  TextColor="{DynamicResource TextColor}"/>
+                            <Label x:Name="PostLikeCountLabel" 
+                                TextColor="{DynamicResource TextColor}" 
+                                FontSize="20" 
+                                LineBreakMode="TailTruncation" 
+                                VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <Button Grid.Column="1" 
+                             ImageSource="commenticon.png" 
+                             HorizontalOptions="Center" 
+                             BackgroundColor="Transparent" 
+                             FontSize="20" WidthRequest="200" 
+                             HeightRequest="50"
+                             Padding="0,0,0,0" 
+                             Text="Comment"
+                             TextColor="{DynamicResource TextColor}"/>
+
+                        <Button Grid.Column="2" 
+                             ImageSource="shareicon.png" 
+                             HorizontalOptions="EndAndExpand" 
+                             BackgroundColor="Transparent" 
+                             FontSize="20" 
+                             WidthRequest="200"
+                             HeightRequest="50" 
+                             Padding="0,0,0,0" 
+                             Text="Share"
+                             TextColor="{DynamicResource TextColor}"/>
+
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid ZIndex="0">
+            <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                 StrokeShape="RoundRectangle 0,0,20,20"
+                 Margin="35,-40,35,0">
+                <VerticalStackLayout HeightRequest="250" Padding="10" Margin="0,30,0,0">
+                    <Label Text="New Comment" TextColor="Red" FontAttributes="Bold"/>
+                    <Frame CornerRadius="10" BorderColor="Red" BackgroundColor="{DynamicResource CommentViewBackground}" HeightRequest="200">
+                        <Grid  BackgroundColor="Transparent" x:Name="CommentContainer">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" BackgroundColor="Red">
+                                
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
+                                    <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="CommentUsernameLabel"
+                                            Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentUsername}"/>
+                                </HorizontalStackLayout>
+                                <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
+                                    <Ellipse Fill="Gray"
+                                              StrokeThickness="0"
+                                              WidthRequest="7.5"
+                                              HeightRequest="7.5"
+                                              Margin="0,1.5"
+                                              x:Name="FirstCircle"/>
+                                    <Ellipse Fill="Gray"
+                                              StrokeThickness="0"
+                                              WidthRequest="7.5"
+                                              HeightRequest="7.5"
+                                              Margin="0,1.5"
+                                              x:Name="SecondCircle"/>
+                                    <Ellipse Fill="Gray"
+                                              StrokeThickness="0"
+                                              WidthRequest="7.5"
+                                              HeightRequest="7.5"
+                                              Margin="0,1.5"
+                                              x:Name="ThirdCircle"/>
+                                    <VerticalStackLayout.GestureRecognizers>
+                                        <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfilePopupCommand}"
+                                           CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=CommentUserId}"/>
+                                    </VerticalStackLayout.GestureRecognizers>
+                                </VerticalStackLayout>
+                                
+                            </Grid>
+                           
+
+                            <Grid  Grid.Row="1" Margin="0,5" BackgroundColor="Transparent">
+                                <ScrollView>
+                                    <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap" 
+                                           Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentContent}"/>
+                                </ScrollView>
+                            </Grid>
+
+                            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Red">
+                                <Label BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
+
+                                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel" 
+                                       Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentLikes}"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+            </Border>
+
+        </Grid>
+    </VerticalStackLayout>
+</toolkit:Popup>

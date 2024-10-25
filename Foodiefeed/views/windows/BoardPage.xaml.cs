@@ -116,5 +116,6 @@ namespace Foodiefeed
             await Task.Delay(1000);
             vm.CanShowSearchPanel = true;
         }
+
     }
 }

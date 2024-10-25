@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification">
+             x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
+             
     <Border Stroke="Gray" StrokeShape="RoundRectangle 10" WidthRequest="285" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
             <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout>
-                <Label Text="Mariuszek 29 sended you a friend request" 
+                <Label x:Name="MessageLabel" 
                        TextColor="{DynamicResource TextColor}" 
                        HeightRequest="50" 
                        WidthRequest="200" 
@@ -23,7 +25,12 @@
                                BackgroundColor="#e32441" 
                                HeightRequest="25" 
                                WidthRequest="60" 
-                               HorizontalTextAlignment="Center"></Label>
+                               HorizontalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=AcceptFriendRequestCommand}"
+                                                      CommandParameter="{Binding Ids}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
                     </Border>
                     <Border  BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                              StrokeShape="RoundRectangle 5">
@@ -32,7 +39,12 @@
                                BackgroundColor="{DynamicResource NotificationGrayButtonBackground}" 
                                HeightRequest="25" 
                                WidthRequest="60" 
-                               HorizontalTextAlignment="Center"></Label>
+                               HorizontalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=DeclineFriendRequestCommand}"
+                                                      CommandParameter="{Binding Ids}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
                     </Border>
                 </HorizontalStackLayout>
             </VerticalStackLayout>

@@ -4,9 +4,7 @@
              x:Class="Foodiefeed.views.windows.contentview.PostView"
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Name="PostContentView"
-             MaximumWidthRequest="1000"
-             HeightRequest="{Binding Source={x:Reference PostContentView}}"
-             >
+             MaximumWidthRequest="1000">
     
     <VerticalStackLayout>
 
@@ -16,9 +14,9 @@
                 BackgroundColor="{DynamicResource PostBorderColor}" 
                 StrokeThickness="1" 
                 StrokeShape="RoundRectangle 40,40,40,40">
-                
+
                 <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post"  BackgroundColor="White" >
-            
+
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <!--0 username follow | 3 dots to go to profile-->
@@ -41,7 +39,7 @@
                         <HorizontalStackLayout Spacing="10">
                             <VerticalStackLayout>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
-                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
                         <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
@@ -112,11 +110,6 @@
 
                     </Grid>
                 </Grid>
-                    <!--<Border.Shadow>
-                        <Shadow Opacity="0.15"
-                            Brush="Black"
-                            Offset="0,5"/>
-                    </Border.Shadow>-->    
             </Border>
         </Grid>
         

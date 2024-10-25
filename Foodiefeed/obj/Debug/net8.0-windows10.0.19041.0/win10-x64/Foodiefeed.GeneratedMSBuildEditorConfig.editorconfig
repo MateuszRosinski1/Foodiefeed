@@ -66,6 +66,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\BasicNotofication.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\BasicNotofication.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/CommentLikeNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.CommentLikeNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\CommentLikeNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\CommentLikeNotification.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/CommentView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.CommentView.xaml
@@ -90,6 +96,18 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\OnListFriendView.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\OnListFriendView.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostCommentNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostCommentNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostCommentNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostCommentNotification.xaml
+
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostLikeNotification.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostLikeNotification.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostLikeNotification.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostLikeNotification.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostView.xaml
@@ -102,11 +120,29 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\UserSearchResultView.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\UserSearchResultView.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/popups/CommentedPostPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.CommentedPostPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\popups\CommentedPostPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\popups\CommentedPostPopup.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/popups/FailedActionNotificationPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.FailedActionNotificationPopup.xaml
 build_metadata.AdditionalFiles.TargetPath = views\windows\popups\FailedActionNotificationPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\popups\FailedActionNotificationPopup.xaml
+
+[D:/PracaInzynierska/Foodiefeed/views/windows/popups/LikedCommendPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.LikedCommendPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\popups\LikedCommendPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\popups\LikedCommendPopup.xaml
+
+[D:/PracaInzynierska/Foodiefeed/views/windows/popups/LikedPostPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.LikedPostPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\popups\LikedPostPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\popups\LikedPostPopup.xaml
 
 [D:/PracaInzynierska/Foodiefeed/views/windows/popups/UserOptionPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

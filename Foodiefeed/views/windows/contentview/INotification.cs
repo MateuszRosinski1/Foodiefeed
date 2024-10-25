@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foodiefeed.models.dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,7 @@ namespace Foodiefeed.views.windows.contentview
     public interface INotification
     {
         public Task HideAnimation(int distance, uint duration);
+        NotificationType Type { get; set; }
+        int NotifcationId { get; }
     }
 }

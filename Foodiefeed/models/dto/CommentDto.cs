@@ -13,5 +13,6 @@ namespace Foodiefeed.models.dto
         public int Likes { get; set; }
         public int UserId { get; set; }
         public string Username { get; set; }
+        public string ImageBase64 { get; set; }
     }
 }
