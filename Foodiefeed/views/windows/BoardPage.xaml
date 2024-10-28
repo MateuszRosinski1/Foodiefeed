@@ -893,7 +893,7 @@
         </Grid>
 
         <Grid IsVisible="{Binding AddPostFormVisible}">
-            <Grid BackgroundColor="Black" Opacity="0.6">
+            <Grid BackgroundColor="Black" Opacity="0.5">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding HideAddPostFormCommand}"/>
                 </Grid.GestureRecognizers>
@@ -923,7 +923,7 @@
                             </BindableLayout.ItemTemplate>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
-                    
+
                     <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
                         <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 40">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}" HeightRequest="40">
@@ -955,6 +955,11 @@
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
+            <Border IsVisible="{Binding NoTagsPickedNotifierVisible}" HeightRequest="475" WidthRequest="700" StrokeThickness="0" StrokeShape="RoundRectangle 10">
+                <Grid BackgroundColor="#050505" Opacity="0.6" HeightRequest="475" WidthRequest="700">
+                    <Label Text="You must pick 4 tags to post." TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+            </Border>
         </Grid>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />

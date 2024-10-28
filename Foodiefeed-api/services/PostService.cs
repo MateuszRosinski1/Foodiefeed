@@ -12,6 +12,7 @@ namespace Foodiefeed_api.services
         public Task<List<PostDto>> GetProfilePostsAsync(string userId);
         public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
         public Task<PopupPostDto> GetLikedPostAsync(int id);
+        public Task CreatePostAsync(CreatePostDto dto);
     }
 
     public class PostService : IPostService
@@ -33,6 +34,16 @@ namespace Foodiefeed_api.services
             _dbContext = dbContext;
             _userRepository = entityRepository;
             _mapper = mapper;
+        }
+
+        public async Task CreatePostAsync(CreatePostDto dto)
+        {
+            var post = _mapper.Map<Post>(dto);
+
+            post.CreateTime = DateTime.Now.ToUniversalTime();
+            
+            _dbContext.Posts.Add(post);
+            await Commit();
         }
 
         public async Task<PopupPostDto> GetLikedPostAsync(int id)

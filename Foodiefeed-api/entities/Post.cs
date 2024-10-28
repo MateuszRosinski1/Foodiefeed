@@ -7,7 +7,8 @@ namespace Foodiefeed_api.entities
         public int PostId { get; set; }
         public int UserId { get; set; }
         public string Description { get; set; }
-        //public int Likes { get; set; }
+        
+        public DateTime CreateTime { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

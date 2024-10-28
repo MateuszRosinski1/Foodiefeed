@@ -18,6 +18,7 @@ namespace Foodiefeed_api
             CreateMap<User, UserProfileModel>();
             CreateMap<Post, PostDto>();
             CreateMap<Post, PopupPostDto>();
+            CreateMap<CreatePostDto, Post>();
             CreateMap<Comment,CommentDto>();
             CreateMap<Notification, NotificationDto>();
         }

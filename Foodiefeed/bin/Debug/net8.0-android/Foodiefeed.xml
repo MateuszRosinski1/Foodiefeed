@@ -55,6 +55,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -158,6 +159,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.TagPickerVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.tagPickerVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.NoTagsPickedNotifierVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.noTagsPickedNotifierVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterParam">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.filterParam"/>
         </member>
@@ -247,6 +251,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.UploadPostImagesCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.UploadPostImages"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.unloadImageCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.UnloadImageCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.UnloadImageCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.UnloadImage(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.addPostCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.AddPostCommand"/>.</summary>
@@ -699,6 +709,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NoTagsPickedNotifierVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NoTagsPickedNotifierVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilterParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilterParam" generated properties.</summary>
         </member>
@@ -872,6 +885,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NoTagsPickedNotifierVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NoTagsPickedNotifierVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilterParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilterParam" generated properties.</summary>

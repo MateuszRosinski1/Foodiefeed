@@ -151,6 +151,9 @@ namespace Foodiefeed_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostId"));
 
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -256,6 +259,29 @@ namespace Foodiefeed_api.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("PostTags");
+                });
+
+            modelBuilder.Entity("Foodiefeed_api.entities.Recipe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Tag", b =>
@@ -527,6 +553,25 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("Foodiefeed_api.entities.Recipe", b =>
+                {
+                    b.HasOne("Foodiefeed_api.entities.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foodiefeed_api.entities.User", "User")
+                        .WithMany("Recipes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Foodiefeed_api.entities.UserTag", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.Tag", "Tag")
@@ -579,6 +624,8 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("ReceivedFriendRequests");
+
+                    b.Navigation("Recipes");
 
                     b.Navigation("SendFriendRequests");
 

@@ -20,6 +20,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Maui.Platform;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
+using System.Net.Http.Headers;
 
 
 namespace Foodiefeed.viewmodels
@@ -160,7 +161,7 @@ namespace Foodiefeed.viewmodels
         public BoardViewModel(UserSession userSession)
         {
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-            AddPostImages.Add(new PostImageView() { ImageSource = "C:/Users/book5.jpg" });
+            AddPostImages.Add(new PostImageView() { ImageSource = "D:/book13.jpg" });
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
@@ -643,6 +644,10 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool tagPickerVisible;
 
+
+        [ObservableProperty]
+        bool noTagsPickedNotifierVisible;
+        
         [RelayCommand]
         public async void AddPost()
         {
@@ -652,8 +657,90 @@ namespace Foodiefeed.viewmodels
                 await Task.Delay(3000);
                 EditorBorderColor = Brush.Gray.Color;
                 return;
+            }else if (PickedTags.Count != 4)
+            {
+                NoTagsPickedNotifierVisible = true;
+                await Task.Delay(3000);
+                NoTagsPickedNotifierVisible = false;
+                return;
             }
+            
+            using (var content = new MultipartFormDataContent())
+            {
+                content.Add(new StringContent(_userSession.Id.ToString()), "UserId");
+                content.Add(new StringContent(PostContent), "Description");
+
+                foreach (var tag in PickedTags)
+                {
+                    content.Add(new StringContent(tag.Id), "TagsId");
+                }
+
+                var imageStreams = new List<Stream>();
+
+                try
+                {
+                    foreach (var image in AddPostImages)
+                    {
+                        var fileStream = new FileStream(image.ImageSource, FileMode.Open, FileAccess.Read);
+                        imageStreams.Add(fileStream);
+
+                        var streamContent = new StreamContent(fileStream);
+                        var fileExtension = Path.GetExtension(image.ImageSource).ToLower();
+                        string mimeType = fileExtension switch
+                        {
+                            ".jpg" or ".jpeg" => "image/jpeg",
+                            ".png" => "image/png",
+                            _ => "application/octet-stream" 
+                        };
+                        streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(mimeType);
+                        content.Add(streamContent, "Images", Path.GetFileName(image.ImageSource));
+                    }
+
+                    using (var http = new HttpClient())
+                    {
+                        http.BaseAddress = new Uri(API_BASE_URL);
+                        var endpoint = "api/posts/create";
+
+                        try
+                        {
+                            var response = await http.PostAsync(endpoint, content);
+
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Console.WriteLine($"Error in sending request: {ex.Message}");
+                        }
+                    }
+                }
+                finally
+                {
+                    foreach (var stream in imageStreams)
+                    {
+                        stream.Dispose();
+                    }
+                }
+
+
+            }
+
         }
+
+        //private async Task<AddPostDto> CreateAddPostDto()
+        //{
+        //    return new AddPostDto() { UserId = _userSession.Id,
+        //        Description = PostContent, 
+        //        TagsId = new List<int>() { 
+        //            Convert.ToInt32(Tags[0].Id), 
+        //            Convert.ToInt32(Tags[1].Id),
+        //            Convert.ToInt32(Tags[2].Id),
+        //            Convert.ToInt32(Tags[3].Id) },
+
+        //    };
+        //}
 
         ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
 

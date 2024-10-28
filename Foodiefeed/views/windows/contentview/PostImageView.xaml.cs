@@ -1,4 +1,6 @@
 
+using System.IO;
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class PostImageView : ContentView
@@ -9,7 +11,23 @@ public partial class PostImageView : ContentView
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostImageView)bindable;
-		view.image.Source = newValue as string;
+		
+		if(newValue is string filePath && !string.IsNullOrWhiteSpace(filePath))
+		{
+			byte[] data;
+
+			using(var filestream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+			{
+				using (var memorystream = new MemoryStream())
+				{
+					filestream.CopyTo(memorystream);
+                    memorystream.Position = 0;
+                    data = memorystream.ToArray();
+				}
+			}
+
+			view.image.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() => new MemoryStream(data));
+		}
     }
 
     public string ImageSource
