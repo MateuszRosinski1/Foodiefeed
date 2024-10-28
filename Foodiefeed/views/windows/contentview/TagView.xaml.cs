@@ -78,7 +78,7 @@ public partial class TagView : ContentView
         }
         else
         {
-            FrameBackground = (Color)Application.Current.Resources["MainBackgroundColor"];
+            FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
         }
     }
 }

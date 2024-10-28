@@ -86,6 +86,10 @@ namespace Foodiefeed_api.services
             //popupPostDto.CommentProfilePictureImageBase64 = imagebase64
 
             return popupPostDto;
+        }
+
+        public async Task UploadPost(CreatePostDto dto)
+        {
 
         }
 

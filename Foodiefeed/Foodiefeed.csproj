@@ -144,6 +144,9 @@
 	  <MauiXaml Update="views\windows\contentview\PostCommentNotification.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\PostImageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\PostLikeNotification.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

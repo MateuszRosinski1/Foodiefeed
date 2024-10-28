@@ -52,6 +52,9 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -155,6 +158,12 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.TagPickerVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.tagPickerVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterParam">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.filterParam"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.TagsActivityIndicatorVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.tagsActivityIndicatorVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SelfPostButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._selfPostButtonColor"/>
         </member>
@@ -227,6 +236,12 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.HideAddPostFormCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.HideAddPostForm"/>.</summary>
         </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.applyTagsCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ApplyTagsCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ApplyTagsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ApplyTags"/>.</summary>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.uploadPostImagesCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.UploadPostImagesCommand"/>.</summary>
         </member>
@@ -244,6 +259,18 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChooseTagsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChooseTags"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.pickTagCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.PickTagCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.PickTagCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.PickTag(System.String)"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.filterTagsCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterTags"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.scrolledNotificationsCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledNotificationsCommand"/>.</summary>
@@ -672,6 +699,12 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilterParam">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilterParam" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TagsActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TagsActivityIndicatorVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
         </member>
@@ -839,6 +872,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilterParam">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilterParam" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TagsActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TagsActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>

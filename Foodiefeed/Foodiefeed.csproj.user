@@ -45,6 +45,9 @@
     <MauiXaml Update="views\windows\contentview\PostCommentNotification.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\PostImageView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\PostLikeNotification.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

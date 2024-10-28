@@ -106,6 +106,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostCommentNotification.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostCommentNotification.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostImageView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostImageView.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\PostImageView.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\PostImageView.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/PostLikeNotification.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.PostLikeNotification.xaml

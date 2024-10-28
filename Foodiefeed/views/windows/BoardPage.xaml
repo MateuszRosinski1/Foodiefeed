@@ -898,7 +898,7 @@
                     <TapGestureRecognizer Command="{Binding HideAddPostFormCommand}"/>
                 </Grid.GestureRecognizers>
             </Grid>
-            <Frame HeightRequest="450" WidthRequest="700" BackgroundColor="{DynamicResource MainBackgroundColor}">
+            <Frame HeightRequest="475" WidthRequest="700" BackgroundColor="{DynamicResource MainBackgroundColor}">
                 <Grid>
                     <VerticalStackLayout Spacing="10" IsVisible="{Binding TagPickerVisible,Converter={StaticResource InverseBooleanConverter}}">
                         <Border Stroke="{Binding EditorBorderColor}" StrokeShape="RoundRectangle 10">
@@ -911,7 +911,19 @@
                             <Button Text="Choose Tags" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Center" Command="{Binding ChooseTagsCommand}"/>
                             <Button Text="Post" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="End" Command="{Binding AddPostCommand}"/>
                         </Grid>
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AddPostImages}" 
+                                               BackgroundColor="Transparent" 
+                                               WidthRequest="650" 
+                                               HeightRequest="60"
+                                               VerticalOptions="Center">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <views:PostImageView ImageSource="{Binding ImageSource}"/>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
                     </VerticalStackLayout>
+                    
                     <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
                         <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 40">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}" HeightRequest="40">
@@ -929,22 +941,21 @@
                                                             MaxColumns="6" 
                                                             BackgroundColor="{DynamicResource EntryBackround}" 
                                                             Padding="15">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
-                                            <views:TagView Id="{Binding Id}" Name="{Binding Name}" FrameBackground="{Binding FrameBackground}"/>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
-                                </toolkit:UniformItemsLayout>
-                                <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"/>
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:TagView Id="{Binding Id}" Name="{Binding Name}" FrameBackground="{Binding FrameBackground}"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </toolkit:UniformItemsLayout>
+                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"/>
                                 </Grid>
                             </ScrollView>
                         </Border>
-                        <Button Command="{Binding ChooseTagsCommand}"></Button>
+                        <Button Command="{Binding ApplyTagsCommand}" Text="Save"></Button>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
         </Grid>
-
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
         </Grid.GestureRecognizers>

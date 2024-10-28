@@ -160,7 +160,7 @@ namespace Foodiefeed.viewmodels
         public BoardViewModel(UserSession userSession)
         {
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-
+            AddPostImages.Add(new PostImageView() { ImageSource = "C:/Users/book5.jpg" });
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
@@ -582,19 +582,56 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void HideAddPostForm()
         {
+            Tags.Clear();
+            alltags.Clear();
+            PickedTags.Clear();
+            PostContent = string.Empty;
+            FilterParam = string.Empty;
+            this.TagPickerVisible = false;
             this.AddPostFormVisible = false;
         }
 
         [RelayCommand]
+        public void ApplyTags()
+        {
+            TagPickerVisible = false;
+        }
+
+        ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
+        public ObservableCollection<PostImageView> AddPostImages { get { return addPostImages; } }
+
+        [RelayCommand]
         public async void UploadPostImages()
         {
-            var fileResult = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Wybierz plik",
-                FileTypes = FilePickerFileType.Images // lub inny typ
-            });
+            var fileResult = await FilePicker.Default.PickMultipleAsync(new PickOptions
+                {
+                    PickerTitle = "Choose maximum 10 images.",
+                    FileTypes = FilePickerFileType.Images ,                 
+                });
 
-            var temp = fileResult;
+            if (fileResult is null) return;
+
+            var selectedFiles = fileResult.Take(10).ToList();
+            foreach ( var file in selectedFiles )
+            {
+                if(AddPostImages.Count < 10)
+                {
+                    AddPostImages.Add(new PostImageView() { ImageSource = file.FullPath });
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void UnloadImage(string path)
+        {
+            foreach(var image in AddPostImages)
+            {
+                if(image.ImageSource == path)
+                {
+                    AddPostImages.Remove(image);
+                    return;
+                }
+            }
         }
 
         [ObservableProperty]
@@ -618,7 +655,6 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-
         ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
 
         public ObservableCollection<TagView> Tags { get { return tags; } set { tags = value; } }
@@ -640,14 +676,14 @@ namespace Foodiefeed.viewmodels
                     var tagslist = await JsonToObject<List<TagView>>(results);
                     foreach(var tag in tagslist)
                     {
-                        tag.FrameBackground = (Color)Application.Current.Resources["MainBackgroundColor"];
+                        tag.FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
                         Tags.Add(tag);
                         alltags.Add(tag);
                     }
                 }
                 catch
                 {
-
+                    //
                 }
                 finally
                 {
@@ -736,7 +772,6 @@ namespace Foodiefeed.viewmodels
                 DisplayNotifications(10, allNotifications);
             }
         }
-
 
         [RelayCommand]
         public void ToMainView()
