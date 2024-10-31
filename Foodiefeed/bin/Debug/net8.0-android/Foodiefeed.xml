@@ -56,6 +56,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -108,6 +109,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangePasswordEntryVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changePasswordEntryVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeProfilePictureVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changeProfilePictureVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileFriendsVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileFriendsVisible"/>
         </member>
@@ -147,8 +151,8 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedRePassword">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedRePassword"/>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedImageProfilePictureBase64">
-            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedImageProfilePictureBase64"/>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedImageProfilePicturePath">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedImageProfilePicturePath"/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.EditorBorderColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.editorBorderColor"/>
@@ -359,6 +363,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeProfilePictureCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChangeProfilePicture"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.chooseNewProfilePictureCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ChooseNewProfilePictureCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChooseNewProfilePictureCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChooseNewProfilePicture"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.saveChangedPersonalDataCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalDataCommand"/>.</summary>
@@ -658,6 +668,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangePasswordEntryVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangePasswordEntryVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangeProfilePictureVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangeProfilePictureVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProfileFriendsVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProfileFriendsVisible" generated properties.</summary>
         </member>
@@ -697,8 +710,8 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedRePassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedRePassword" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedImageProfilePictureBase64">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedImageProfilePictureBase64" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedImageProfilePicturePath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedImageProfilePicturePath" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EditorBorderColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EditorBorderColor" generated properties.</summary>
@@ -835,6 +848,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangePasswordEntryVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangePasswordEntryVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangeProfilePictureVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangeProfilePictureVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProfileFriendsVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProfileFriendsVisible" generated properties.</summary>
         </member>
@@ -874,8 +890,8 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedRePassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedRePassword" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedImageProfilePictureBase64">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedImageProfilePictureBase64" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedImageProfilePicturePath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedImageProfilePicturePath" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EditorBorderColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EditorBorderColor" generated properties.</summary>

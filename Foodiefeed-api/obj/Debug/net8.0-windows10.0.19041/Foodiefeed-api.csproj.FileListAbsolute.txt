@@ -368,3 +368,7 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logolightt
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\logodarktheme.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logolighttheme.scale-100.png
 D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\logodarktheme.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Azure.Storage.Blobs.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Azure.Storage.Common.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\System.ClientModel.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\System.IO.Hashing.dll

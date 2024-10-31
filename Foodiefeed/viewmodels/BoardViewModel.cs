@@ -108,6 +108,9 @@ namespace Foodiefeed.viewmodels
         bool changePasswordEntryVisible;
 
         [ObservableProperty]
+        bool changeProfilePictureVisible;
+
+        [ObservableProperty]
         bool profileFriendsVisible;
 
         [ObservableProperty]
@@ -150,7 +153,7 @@ namespace Foodiefeed.viewmodels
         string changedRePassword;
 
         [ObservableProperty]
-        string changedImageProfilePictureBase64;
+        string changedImageProfilePicturePath;
 
         #endregion
 
@@ -175,6 +178,7 @@ namespace Foodiefeed.viewmodels
             this.SettingsMainHubVisible = true; //on init true
             this.ChangeUsernameEntryVisible = false; //on init false
             this.ChangeEmailEntryVisible = false; //on init false
+            this.ChangeProfilePictureVisible = false; // on init false
             this.ChangePasswordEntryVisible = false; //on init false
             this.ProfileFollowersVisible = false; //on init false
             this.ProfilePostsVisible = true; //on init true;
@@ -607,7 +611,7 @@ namespace Foodiefeed.viewmodels
             var fileResult = await FilePicker.Default.PickMultipleAsync(new PickOptions
                 {
                     PickerTitle = "Choose maximum 10 images.",
-                    FileTypes = FilePickerFileType.Images ,                 
+                    FileTypes = FilePickerFileType.Images               
                 });
 
             if (fileResult is null) return;
@@ -714,7 +718,7 @@ namespace Foodiefeed.viewmodels
                         {
                             //Console.WriteLine($"Error in sending request: {ex.Message}");
                         }
-                    }
+                     }
                 }
                 finally
                 {
@@ -940,6 +944,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = true; 
             this.ChangeEmailEntryVisible = false; 
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -947,6 +954,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible =true; 
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -954,6 +964,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible = false;
             this.ChangePasswordEntryVisible = true;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -962,6 +975,35 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible = false;
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = true;
+
+            ClearDataChangeEntries();
+        }
+
+        private void ClearDataChangeEntries()
+        {
+            this.ChangedUsername = string.Empty;
+            this.ChangedEmail = string.Empty;
+            this.ChangedPassword = string.Empty;
+            this.ChangedRePassword = string.Empty;
+            this.ChangedImageProfilePicturePath = string.Empty;
+        }
+
+        [RelayCommand]
+        public async void ChooseNewProfilePicture()
+        {
+            var fileResult = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Pick your new profile picture wisely :)",
+                FileTypes = FilePickerFileType.Images,
+            });
+
+            if(fileResult is null)
+            {
+                return;
+            }
+
+            this.ChangedImageProfilePicturePath = fileResult.FullPath;
         }
 
         [RelayCommand]

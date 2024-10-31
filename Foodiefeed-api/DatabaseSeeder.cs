@@ -1,15 +1,21 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Bogus;
 using Bogus.DataSets;
 using Foodiefeed_api.entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+
 namespace Foodiefeed_api
 {
     public class DatabaseSeeder
     {
-        public static void SeedData(dbContext context)
+        //https://www.crcv.ucf.edu/data/Selfie/ dataset for selfies
+        //https://www.kaggle.com/datasets/trolukovich/food11-image-dataset dataset for dishes images
+        //https://github.com/karansikka1/iFood_2019?tab=readme-ov-file dish images
+        public static async void SeedData(dbContext context)
         {
             //context.Database.EnsureDeleted();
             //context.Database.EnsureCreated();
@@ -31,12 +37,72 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+
+            //var blobSerivceClient = new BlobServiceClient("");
+            //var containerClient = blobSerivceClient.GetBlobContainerClient("images-storage");
+
+            //var selfiesPathLocal = "D:/ImageDataset/Selfie-dataset/Selfie-dataset/images";
+            //var random = new Random();
+            //var selfies = Directory.GetFiles(selfiesPathLocal, "*.jpg");
+
+            //foreach (var user in context.Users.ToList())
+            //{
+            //    var dir = $"{user.Id}/";
+
+            //    var profilePicturePath = dir + "pfp.jpg";
+
+            //    var randomProfilePicture = selfies[random.Next(selfies.Length)];
+
+            //    var blobClient = containerClient.GetBlobClient(profilePicturePath);
+
+            //    using (var stream = File.OpenRead(randomProfilePicture))
+            //    {
+            //        await blobClient.UploadAsync(stream, true);
+            //    }
+            //}
+
+            //var imageDatasetPath = "D:/ImageDataset/train/train_set/";
+
+            //var imagesPath = Directory.GetFiles(imageDatasetPath, "*.jpg");
+
+            //foreach (var post in context.Posts.ToList())
+            //{
+            //    var dir = $"{post.UserId}/posts/{post.PostId}/";
+            //    var random = new Random();
+            //    var imageCount = random.Next(1, 10);
+
+            //    for(int  i =1 ; i <= imageCount; i++)
+            //    {
+            //        var imgPath = dir + i.ToString() + ".jpg";
+
+            //        var blobClient = containerClient.GetBlobClient(imgPath);
+
+            //        var randomImage = imagesPath[random.Next(imagesPath.Length)];
+
+            //        using (var stream = File.OpenRead(randomImage))
+            //        {
+            //            await blobClient.UploadAsync(stream,true);
+            //        }
+
+
+            //    }
+            //}
+
+            //foreach(var user in context.Users.ToList())
+            //{
+            //    var userFolder = $"{user.Id}/posts/";
+
+            //    var blobClient = containerClient.GetBlobClient($"{userFolder}placeholder.txt");
+            //    
+            //    var placeholderContent = new BinaryData("Folder placeholder");
+            //    blobClient.Upload(placeholderContent, overwrite: true);
+            //}
+
             if (!context.Posts.Any())
             {
                 var postFaker = new Faker<Post>()
                     .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id)
                     .RuleFor(p => p.Description, f => f.Lorem.Sentence(f.Random.Int(5, 400)));
-                    //.RuleFor(p => p.Likes, f => f.Random.Int(0, 1000));
 
                 var posts = postFaker.Generate(2000);
 
@@ -50,24 +116,21 @@ namespace Foodiefeed_api
                     .RuleFor(p => p.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
                     .RuleFor(p => p.UserId, f => f.PickRandom(context.Users.ToList()).Id);
 
-                // Pobieranie istniejących PostLikes do weryfikacji
                 var existingPostLikes = context.PostLikes.ToList();
                 var postLikesToAdd = new List<PostLike>();
 
-                for (int i = 0; i < 10000; i++) // Zakładam, że chcesz wygenerować 100 losowych PostLike
+                for (int i = 0; i < 10000; i++) 
                 {
                     var newPostLike = postLikeFaker.Generate();
 
                     var exists = postLikesToAdd.FirstOrDefault(p => p.PostId == newPostLike.PostId && p.UserId == newPostLike.UserId);
 
-                    // Jeśli nie istnieje, dodaj do listy
                     if (exists is null)
                     {
                         postLikesToAdd.Add(newPostLike);
                     }
                 }
 
-                // Dodanie wszystkich nowych PostLikes na raz
                 context.PostLikes.AddRange(postLikesToAdd);
                 context.SaveChanges();
             }
@@ -77,7 +140,6 @@ namespace Foodiefeed_api
                 var commentFaker = new Faker<Comment>()
                     .RuleFor(c => c.UserId, f => f.PickRandom(context.Users.ToList()).Id)
                     .RuleFor(c => c.CommentContent, f => f.Lorem.Sentence(f.Random.Int(10, 100)));
-                    //.RuleFor(c => c.Likes, f => f.Random.Int(0, 50));
 
                 var comments = commentFaker.Generate(20000);
 
@@ -209,7 +271,6 @@ namespace Foodiefeed_api
                     var tagId = tagIds[faker.Random.Int(0, tagIds.Count - 1)];
                     var score = faker.Random.Int(1, 100);
 
-                    // Sprawdzamy, czy rekord już istnieje
                     if (!userTags.Any(ut => ut.UserId == userId && ut.TagId == tagId) &&
                         !context.UserTags.Any(ut => ut.UserId == userId && ut.TagId == tagId)) 
                     {

@@ -21,6 +21,7 @@
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <local:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
 
         <DataTemplate x:Key="FriendRequestNotificationTemplate">
             <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
@@ -244,12 +245,18 @@
                                             <ColumnDefinition />
                                             <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        <ImageButton Grid.Column="0" 
+                                        <ImageButton Grid.Column="0"
+                                                     BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                                                      CornerRadius="100"
                                                      HeightRequest="200" 
                                                      WidthRequest="200"  
-                                                     Source="pfpreal.jpg" 
-                                                     Aspect="AspectFill"/>
+                                                     Source="{Binding AvatarBase64,Converter={StaticResource Base64ToImageSourceConverter}}" 
+                                                     Aspect="AspectFill">
+                                            <ImageButton.Shadow>
+                                                <Shadow Brush="{DynamicResource TextColor}"
+                                                        Opacity="0.5"/>
+                                            </ImageButton.Shadow>
+                                        </ImageButton>
 
                                         <VerticalStackLayout Padding="5" 
                                                              VerticalOptions="Center" 
@@ -693,13 +700,38 @@
                                                 </Border>
                                             </VerticalStackLayout>
 
+                                            <Grid IsVisible="{Binding ChangeProfilePictureVisible}" Padding="50">
+                                                <Border  Stroke="Gray" 
+                                                         StrokeThickness="0.5" 
+                                                         StrokeShape="RoundRectangle 20"                                                                                       
+                                                         BackgroundColor="{DynamicResource EntryBackround}">
+                                                    
+                                                    <VerticalStackLayout VerticalOptions="Center" 
+                                                                         Spacing="10">
+                                                        <Border StrokeThickness="0" 
+                                                                StrokeShape="RoundRectangle 150" 
+                                                                HeightRequest="250"  
+                                                                WidthRequest="250" 
+                                                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
+                                                            <Image Source="{Binding ChangedImageProfilePicturePath}" 
+                                                                   HeightRequest="250"  
+                                                                   WidthRequest="250" 
+                                                                   Aspect="AspectFill"/>
 
+
+                                                        </Border>
+                                                        <Button Command="{Binding ChooseNewProfilePictureCommand}" 
+                                                                Text="Choose image..."></Button>
+                                                    </VerticalStackLayout>
+                                                </Border>
+
+                                            </Grid>
+                                            
                                             <HorizontalStackLayout HorizontalOptions="End" 
                                                                    VerticalOptions="End" 
                                                                    Spacing="10">
                                                 <Button Text="Save Changes" 
                                                         BackgroundColor="#e0e0e0" 
-                                                        FontAttributes="Bold" 
                                                         VerticalOptions="Center"
                                                         Command="{Binding SaveChangedPersonalDataCommand}">
                                                     <Button.Shadow>
@@ -927,7 +959,7 @@
                     <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
                         <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 40">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}" HeightRequest="40">
-                                <Entry BackgroundColor="Transparent" Placeholder="Filter" Text="{Binding FilterParam,Mode=TwoWay}">
+                                <Entry BackgroundColor="Transparent" TextColor="{DynamicResource TextColor}" Placeholder="Filter" Text="{Binding FilterParam,Mode=TwoWay}">
                                     <Entry.Behaviors>
                                         <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding FilterTagsCommand}"/>
                                     </Entry.Behaviors>
@@ -951,7 +983,7 @@
                                 </Grid>
                             </ScrollView>
                         </Border>
-                        <Button Command="{Binding ApplyTagsCommand}" Text="Save"></Button>
+                        <Button TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Command="{Binding ApplyTagsCommand}" Text="Save"></Button>
                     </VerticalStackLayout>
                 </Grid>
             </Frame>
