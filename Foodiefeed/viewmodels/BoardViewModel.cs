@@ -73,7 +73,13 @@ namespace Foodiefeed.viewmodels
         private string avatarBase64;
         #endregion
 
-        private const string API_BASE_URL = "http://localhost:5000";
+
+#if WINDOWS
+       private const string API_BASE_URL = "http://localhost:5000";
+#endif
+#if ANDROID
+        private const string API_BASE_URL = "http://10.0.2.2:5000";
+#endif
 
         [ObservableProperty]
         private string searchParam;
@@ -163,14 +169,14 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            Notifications.Add(new BasicNotofication());
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-            AddPostImages.Add(new PostImageView() { ImageSource = "D:/book13.jpg" });
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
             _userSession.Id = 15;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
-
+            Console.WriteLine("1231231");
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
             this.SettingsPageVisible = false; //on init false
@@ -263,7 +269,8 @@ namespace Foodiefeed.viewmodels
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.AcceptedFriendRequest: //5
@@ -272,7 +279,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             Type = NotificationType.AcceptedFriendRequest,
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.PostLike: //1
@@ -281,7 +289,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             PostId = notification.PostId.ToString(),
                             UserId = notification.SenderId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.PostComment: //2
@@ -291,7 +300,8 @@ namespace Foodiefeed.viewmodels
                             UserId = notification.SenderId.ToString(),
                             CommentId = notification.CommentId.ToString(),
                             PostId = notification.PostId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.CommentLike: //3
@@ -300,7 +310,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             CommentId = notification.CommentId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.GainFollower: //4
@@ -309,7 +320,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             Type = NotificationType.GainFollower,
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                 }
@@ -732,18 +744,6 @@ namespace Foodiefeed.viewmodels
 
         }
 
-        //private async Task<AddPostDto> CreateAddPostDto()
-        //{
-        //    return new AddPostDto() { UserId = _userSession.Id,
-        //        Description = PostContent, 
-        //        TagsId = new List<int>() { 
-        //            Convert.ToInt32(Tags[0].Id), 
-        //            Convert.ToInt32(Tags[1].Id),
-        //            Convert.ToInt32(Tags[2].Id),
-        //            Convert.ToInt32(Tags[3].Id) },
-
-        //    };
-        //}
 
         ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
 
@@ -855,12 +855,9 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ScrolledNotifications(ItemsViewScrolledEventArgs e)
+        public void NotificationsThresholdExeed()
         {
-            if (e.LastVisibleItemIndex == Notifications.Count() - 2)
-            {
-                DisplayNotifications(10, allNotifications);
-            }
+           DisplayNotifications(10, allNotifications);
         }
 
         [RelayCommand]
@@ -1073,18 +1070,21 @@ namespace Foodiefeed.viewmodels
         {
             Task.Delay(200).Wait();
             this.SearchPanelVisible = false;
+            CanShowSearchPanel = false;
         }
 
         [RelayCommand]
         public async Task SetSearchPanelVisibilityToTrue()
         {
-            this.SearchPanelVisible = true;
+            CanShowSearchPanel = true;
         }
 
         [RelayCommand]
         public async Task SetSearchPanelVisibilityToFalse()
         {
-            this.SearchPanelVisible = false;
+            if(!SearchPanelVisible) {
+                CanShowSearchPanel = false;
+            }
         }
 
         [RelayCommand]

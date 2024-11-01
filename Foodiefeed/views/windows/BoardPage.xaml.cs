@@ -24,7 +24,7 @@ namespace Foodiefeed
 
         private void OnScrolled(object sender, ItemsViewScrolledEventArgs e)
         {
-
+            int i = 0; 
         }
 
         private async void PointerGestureRecognizer_PointerEntered(object sender, PointerEventArgs e)
@@ -116,6 +116,5 @@ namespace Foodiefeed
             await Task.Delay(1000);
             vm.CanShowSearchPanel = true;
         }
-
     }
 }

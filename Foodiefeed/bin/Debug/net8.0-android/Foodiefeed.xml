@@ -286,11 +286,11 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterTags"/>.</summary>
         </member>
-        <member name="F:Foodiefeed.viewmodels.BoardViewModel.scrolledNotificationsCommand">
-            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledNotificationsCommand"/>.</summary>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.notificationsThresholdExeedCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeedCommand"/>.</summary>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledNotificationsCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ScrolledNotifications(Microsoft.Maui.Controls.ItemsViewScrolledEventArgs)"/>.</summary>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeed"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.toMainViewCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ToMainViewCommand"/>.</summary>

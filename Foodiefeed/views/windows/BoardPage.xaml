@@ -24,23 +24,23 @@
         <local:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
 
         <DataTemplate x:Key="FriendRequestNotificationTemplate">
-            <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+            <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}" ImageBase64="{Binding ImageBase64}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="CommentLikeNotificationTemplate">
-            <views:CommentLikeNotification Message="{Binding Message}" UserId="{Binding UserId}" CommentId="{Binding CommentId}"/>
+            <views:CommentLikeNotification Message="{Binding Message}" UserId="{Binding UserId}" CommentId="{Binding CommentId}" ImageBase64="{Binding ImageBase64}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="PostLikeNotificationTemplate">
-            <views:PostLikeNotification Message="{Binding Message}" UserId="{Binding UserId}"/>
+            <views:PostLikeNotification Message="{Binding Message}" UserId="{Binding UserId}" ImageBase64="{Binding ImageBase64}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="PostCommentNotificationTemplate">
-            <views:PostCommentNotification Message="{Binding Message}" UserId="{Binding UserId}" PostId="{Binding PostId}" CommentId="{Binding CommentId}"/>
+            <views:PostCommentNotification Message="{Binding Message}" UserId="{Binding UserId}" PostId="{Binding PostId}" CommentId="{Binding CommentId}" ImageBase64="{Binding ImageBase64}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="BasicNotificationTemplate">
-            <views:BasicNotofication Message="{Binding Message}" UserId="{Binding UserId}"/>
+            <views:BasicNotofication Message="{Binding Message}" UserId="{Binding UserId}" ImageBase64="{Binding ImageBase64}"/>
         </DataTemplate>
 
         <local:NotificationTemplateSelector x:Key="NotificationTemplateSelector"
@@ -72,6 +72,14 @@
                     </BoxView.Shadow>
                 </BoxView>
 
+                <ImageButton Source="{DynamicResource LogoPath}" 
+                             HeightRequest="50" 
+                             WidthRequest="50" 
+                             VerticalOptions="Start" 
+                             HorizontalOptions="Start" 
+                             Margin="20"
+                             BackgroundColor="Transparent"/>
+                
                 <Border Margin="0,20,0,0" 
                         VerticalOptions="Start" 
                         Stroke="Gray" 
@@ -105,16 +113,9 @@
                             <TapGestureRecognizer Command="{Binding ShowSearchPanelCommand}" />
                         </Grid.GestureRecognizers>-->
                     </Grid>
-
                 </Border>
 
-                <ImageButton Source="{DynamicResource LogoPath}" 
-                    HeightRequest="50" 
-                    WidthRequest="50" 
-                    VerticalOptions="Start" 
-                    HorizontalOptions="Start" 
-                    Margin="20"
-                             BackgroundColor="Transparent"/>
+                
                 <Border HorizontalOptions="Start" Margin="100,0,0,0" StrokeShape="RoundRectangle 5" BackgroundColor="#80808080" WidthRequest="42" HeightRequest="42">
                     <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" WidthRequest="41" HeightRequest="41">
                         <VerticalStackLayout Spacing="4" VerticalOptions="Center">
@@ -186,22 +187,29 @@
                                      HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
                                      >
                             <!--pages-->
-                            <Grid BackgroundColor="Transparent" Padding="0,10,0,0">
+                            <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <!--<CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
+                                                ItemsSource="{Binding Notifications}" 
+                                                BackgroundColor="Transparent"
+                                                VerticalScrollBarVisibility="Always"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                RemainingItemsThreshold="10"
+                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExeedCommand}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                </CollectionView>-->
                                 <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
                                                 ItemsSource="{Binding Notifications}" 
                                                 BackgroundColor="Transparent"
                                                 VerticalScrollBarVisibility="Always"
                                                 ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                RemainingItemsThreshold="10"
+                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExeedCommand}"
                                                 >
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
-                                    <CollectionView.Behaviors>
-                                        <toolkit:EventToCommandBehavior
-                                                x:TypeArguments="ItemsViewScrolledEventArgs"
-                                                EventName="Scrolled"
-                                                Command="{Binding ScrolledNotificationsCommand}"/>
-                                    </CollectionView.Behaviors>
                                 </CollectionView>
                             </Grid>
                         </Grid>

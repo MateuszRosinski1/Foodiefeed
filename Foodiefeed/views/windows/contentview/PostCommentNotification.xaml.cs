@@ -25,6 +25,33 @@ public partial class PostCommentNotification : ContentView, INotification
     public static BindableProperty PostIdProperty =
         BindableProperty.Create(nameof(PostId), typeof(string), typeof(PostCommentNotification), default(string));
 
+    public static BindableProperty ImageBase64Property =
+        BindableProperty.Create(nameof(ImageBase64), typeof(string), typeof(PostCommentNotification), default(string), propertyChanged: OnImageChanged);
+
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostCommentNotification)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.image.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
+    }
+
+    public string ImageBase64
+    {
+        get => (string)GetValue(ImageBase64Property);
+        set => SetValue(ImageBase64Property, value);
+    }
+
     public string UserId
     {
         get => (string)GetValue(UserIdProperty);

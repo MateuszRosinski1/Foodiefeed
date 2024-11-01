@@ -9,14 +9,32 @@ public partial class BasicNotofication : ContentView , INotification
     public static BindableProperty UserIdProperty =
         BindableProperty.Create(nameof(UserId), typeof(string), typeof(BasicNotofication), default(string));
 
-    //public static BindableProperty ShowPostButtonVisibleProperty =
-    //    BindableProperty.Create(nameof(ShowPostButtonVisible), typeof(string), typeof(BasicNotofication), default(string));
+    public static BindableProperty ImageBase64Property =
+        BindableProperty.Create(nameof(ImageBase64), typeof(string), typeof(BasicNotofication), default(string),propertyChanged: OnImageChanged);
 
-    //public bool ShowPostButtonVisible
-    //{
-    //    get => (bool)GetValue(ShowPostButtonVisibleProperty);
-    //    set => SetValue(ShowPostButtonVisibleProperty, value);
-    //}
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (BasicNotofication)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.image.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
+    }
+
+    public string ImageBase64
+    {
+        get => (string)GetValue(ImageBase64Property);
+        set => SetValue(ImageBase64Property, value);
+    }
 
     public string UserId
     {

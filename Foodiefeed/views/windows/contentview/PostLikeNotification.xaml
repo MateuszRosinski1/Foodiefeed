@@ -7,7 +7,7 @@
     
     <Border Stroke="Gray" StrokeShape="RoundRectangle 10"  WidthRequest="285" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" Spacing="5" WidthRequest="280">
-            <ImageButton Source="pfpreal.jpg" HeightRequest="70" WidthRequest="70" CornerRadius="100" Aspect="AspectFill" Margin="10,0,0,0"/>
+            <Image x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0"/>
             <VerticalStackLayout Spacing="5">
                 <Label x:Name="MessageLabel"
                 TextColor="{DynamicResource TextColor}" 

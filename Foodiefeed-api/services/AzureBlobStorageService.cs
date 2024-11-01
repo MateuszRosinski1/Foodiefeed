@@ -15,13 +15,16 @@ namespace Foodiefeed_api.services
 
     public class AzureBlobStorageService : IAzureBlobStorageSerivce
     {
-        private readonly BlobServiceClient blobService = new BlobServiceClient("AZURE_FILE_STORAGE_SYSTEM_KEY");
-
+        private readonly BlobServiceClient blobService;
         private readonly BlobContainerClient container;
 
+        private readonly IConfiguration _config;
 
-        public AzureBlobStorageService()
+        public AzureBlobStorageService(IConfiguration config)
         {
+            _config = config;
+            string constr = _config["AZURE_FILE_STORAGE_SYSTEM_KEY"];
+            blobService = new BlobServiceClient(constr);
             container = blobService.GetBlobContainerClient("images-storage");
         }
 
