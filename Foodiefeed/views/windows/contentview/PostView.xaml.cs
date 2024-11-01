@@ -22,6 +22,9 @@ public partial class PostView : ContentView
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(PostView), default(string), propertyChanged: OnUsernameTextChanged);
 
+    public static BindableProperty PfpImageBase64Property =
+        BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageChanged);
+
     public static readonly BindableProperty TimeStampProperty = 
         BindableProperty.Create(nameof(TimeStamp),typeof(string),typeof(PostView),default(string),propertyChanged: OnTimeStampChanged);
 
@@ -39,6 +42,12 @@ public partial class PostView : ContentView
     int currentImageIndex;
 
     #region Properties
+
+    public string PfpImageBase64
+    {
+        get => (string)GetValue(PfpImageBase64Property);
+        set => SetValue(PfpImageBase64Property, value);
+    }
 
     public static readonly BindableProperty ImagesBase64Property =
     BindableProperty.Create(
@@ -125,6 +134,24 @@ public partial class PostView : ContentView
     {
         var view = (PostView)bindable;
         view.PostLikeCountLabel.Text = newValue as string;
+    }
+
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
     }
 
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)

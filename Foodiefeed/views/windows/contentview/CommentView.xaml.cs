@@ -19,6 +19,9 @@ public partial class CommentView : ContentView
 	public static readonly BindableProperty LikeCountProperty =
 		BindableProperty.Create(nameof(LikeCount), typeof(string), typeof(CommentView), default(string), propertyChanged: LikeCountTextChanged);
 
+    public static BindableProperty PfpImageBase64Property =
+        BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(CommentView), default(string), propertyChanged: OnImageChanged);
+
     public string CommentContent
 	{
 		get => (string)GetValue(CommentContentProperty);
@@ -37,11 +40,35 @@ public partial class CommentView : ContentView
 		set => SetValue(LikeCountProperty, value);
 	}
 
+    public string PfpImageBase64
+    {
+        get => (string)GetValue(PfpImageBase64Property);
+        set => SetValue(PfpImageBase64Property, value);
+    }
 
-	public CommentView()
+
+    public CommentView()
 	{
 		InitializeComponent();
 	}
+
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (CommentView)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
+    }
 
     private static void OnUsernameTextChanged(BindableObject bindable, object oldValue, object newValue)
     {

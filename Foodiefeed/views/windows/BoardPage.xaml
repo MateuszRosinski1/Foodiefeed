@@ -436,7 +436,8 @@
                                                                 PostTextContent="{Binding PostTextContent}"
                                                                 PostLikeCount="{Binding PostLikeCount}"
                                                                 ImageSource="{Binding ImageSource}"
-                                                                ImagesBase64="{Binding ImagesBase64}"/>
+                                                                ImagesBase64="{Binding ImagesBase64}"
+                                                                PfpImageBase64="{Binding PfpImageBase64}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>

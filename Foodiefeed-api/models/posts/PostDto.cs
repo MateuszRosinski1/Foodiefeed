@@ -6,6 +6,7 @@ namespace Foodiefeed_api.models.posts
     {
         public int PostId { get; set; }
         public int UserId { get; set; } 
+        public string ProfilePictureBase64 { get; set; }
         public required string Username { get; set; }
         public required string Description { get; set; }
         public int Likes { get; set; }

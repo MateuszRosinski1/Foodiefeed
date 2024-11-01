@@ -37,6 +37,7 @@
 
                     <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
+                            <ImageButton CornerRadius="100" HeightRequest="50" WidthRequest="50" x:Name="pfpImage" Aspect="AspectFill"/>
                             <VerticalStackLayout>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
@@ -125,7 +126,8 @@
                                 <DataTemplate>
                                     <local:CommentView Username="{Binding Username}" 
                                            CommentContent="{Binding CommentContent}"
-                                           LikeCount="{Binding LikeCount}"/>
+                                           LikeCount="{Binding LikeCount}"
+                                           PfpImageBase64="{Binding PfpImageBase64}"/>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>

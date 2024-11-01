@@ -95,6 +95,7 @@ namespace Foodiefeed_api.services
             popupPostDto.CommentUsername = commentUser.Username;
             popupPostDto.CommentContent = comment.CommentContent;
             popupPostDto.CommentUserId = commentUser.Id.ToString();
+
             var pfpImgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId);
             var commentImgStream = await AzureBlobStorageService.FetchProfileImageAsync(Convert.ToInt32(popupPostDto.CommentUserId));
             popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpImgStream);
@@ -127,6 +128,10 @@ namespace Foodiefeed_api.services
                 postsDtos[i].ConvertDateTimeToTimeSpan(post.CreateTime);
                 postsDtos[i].Username = user.Username;
                 postsDtos[i].Likes = post.PostLikes.Count();
+
+                var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(postsDtos[i].UserId);
+                postsDtos[i].ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);
+
                 var postCommentMembers = post.PostCommentMembers.ToList();
                 postsDtos[i].Comments = new List<CommentDto>();
 
@@ -145,6 +150,10 @@ namespace Foodiefeed_api.services
                     if (username is null) { break; }
                     commentDto.Username = username;
                     commentDto.Likes = comment.CommentLikes.Count();
+
+                    var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
+                    commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream);
+
                     postsDtos[i].Comments.Add(commentDto);
                 }
 

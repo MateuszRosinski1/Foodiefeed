@@ -1843,8 +1843,8 @@ namespace Foodiefeed.viewmodels
                 return;
             }
 
-            //await Task.Run(() => { Dispatcher.GetForCurrentThread().Dispatch(() => { ProfilePosts.Clear(); }); });
             await Dispatcher.GetForCurrentThread().DispatchAsync(() => { ProfilePosts.Clear(); });
+
             foreach (var post in posts)
             {
                 var commentList = new List<CommentView>();
@@ -1856,7 +1856,8 @@ namespace Foodiefeed.viewmodels
                         CommentContent = comment.CommentContent,
                         CommentId = comment.CommentId.ToString(),
                         LikeCount = comment.Likes.ToString(),
-                        UserId = comment.UserId.ToString()
+                        UserId = comment.UserId.ToString(),
+                        PfpImageBase64 = comment.ImageBase64
                     }); ;
                 }
 
@@ -1874,7 +1875,8 @@ namespace Foodiefeed.viewmodels
                     PostTextContent = post.Description,
                     ImageSource = post.PostImagesBase64[0],
                     Comments = commentList,
-                    ImagesBase64 = imageBase64list
+                    ImagesBase64 = imageBase64list,
+                    PfpImageBase64 = post.ProfilePictureBase64
                 };
 
       
