@@ -225,7 +225,6 @@ namespace Foodiefeed.viewmodels
             using(var httpClient = new HttpClient()) {
 
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
-
                 try
                 {
                     var endpoint = $"api/notifications/get-all-for-user/{_userSession.Id}";

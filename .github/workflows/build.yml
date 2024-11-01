@@ -1,0 +1,28 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest  # Ustawiamy na Windowsa
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.x' # Podaj wersję .NET, której używasz
+
+      - name: Build the project
+        env:
+          AZURE_FILE_STORAGE_SYSTEM_KEY: ${{ secrets.AZURE_FILE_STORAGE_SYSTEM_KEY }}
+        run: |
+          dotnet build
