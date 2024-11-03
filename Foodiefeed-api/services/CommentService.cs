@@ -10,6 +10,7 @@ namespace Foodiefeed_api.services
     {
         Task<CommentDto> GetCommentById(int id);
         Task AddNewComment(int postId,NewCommentDto dto);
+        Task EditComment(int commentId, string newContent);
     }
 
     public class CommentService : ICommentService
@@ -45,8 +46,17 @@ namespace Foodiefeed_api.services
             _dbContext.PostCommentMembers.Add(new PostCommentMember() { CommentId = comment.CommentId,PostId = postId });
             await _dbContext.SaveChangesAsync();
 
-            _notificationService.CreateNotification(NotificationType.PostComment, comment.UserId, post.UserId,, post.PostId, comment.CommentId, nickname);
+            await _notificationService.CreateNotification(NotificationType.PostComment, comment.UserId, post.UserId, nickname, post.PostId, comment.CommentId);
+        }
 
+        public async Task EditComment(int commentId,string newContent)
+        {
+            var comment = await _dbContext.Comments.FirstOrDefaultAsync(c => c.CommentId == commentId);
+
+            if (comment is null) { throw new NotFoundException("comment you trying to edit do not exist in current context"); }
+
+            comment.CommentContent = newContent;
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<CommentDto> GetCommentById(int id)
