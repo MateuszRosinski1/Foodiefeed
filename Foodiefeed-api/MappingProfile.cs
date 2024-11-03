@@ -21,6 +21,7 @@ namespace Foodiefeed_api
             CreateMap<CreatePostDto, Post>();
             CreateMap<Comment,CommentDto>();
             CreateMap<Notification, NotificationDto>();
+            CreateMap<NewCommentDto, Comment>();
         }
     }
 }

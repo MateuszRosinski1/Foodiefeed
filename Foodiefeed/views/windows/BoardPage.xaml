@@ -434,7 +434,10 @@
                                                                 PostLikeCount="{Binding PostLikeCount}"
                                                                 ImageSource="{Binding ImageSource}"
                                                                 ImagesBase64="{Binding ImagesBase64}"
-                                                                PfpImageBase64="{Binding PfpImageBase64}"/>
+                                                                PfpImageBase64="{Binding PfpImageBase64}"
+                                                                PostId="{Binding PostId}"
+                                                                NewCommentContent="{Binding NewCommentContent}"
+                                                                Payload="{Binding Payload}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
@@ -506,7 +509,13 @@
                                         <views:PostView Username="{Binding Username}"
                                                         TimeStamp="{Binding TimeStamp}"
                                                         PostTextContent="{Binding PostTextContent}"
-                                                        PostLikeCount="{Binding PostLikeCount}"/>
+                                                        PostLikeCount="{Binding PostLikeCount}"
+                                                        ImageSource="{Binding ImageSource}"
+                                                        ImagesBase64="{Binding ImagesBase64}"
+                                                        PfpImageBase64="{Binding PfpImageBase64}"
+                                                        PostId="{Binding PostId}"
+                                                        NewCommentContent="{Binding NewCommentContent}"
+                                                        Payload="{Binding Payload}"/>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>

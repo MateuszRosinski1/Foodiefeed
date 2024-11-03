@@ -176,10 +176,10 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 15;
+            _userSession.Id = 50;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
-            Posts.Add(new PostView());
+            Posts.Add(new PostView() { PostId = "5"});
 
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
@@ -429,6 +429,42 @@ namespace Foodiefeed.viewmodels
                 }
             }
            
+        }
+
+        [RelayCommand]
+        public async void AddNewComment((string postId,string commentContent) payload)
+        {
+            var newComment = new NewCommentDto()
+            {
+                UserId = _userSession.Id.ToString(),
+                CommentContent = payload.commentContent
+            };
+
+            if (string.IsNullOrEmpty(payload.commentContent))
+            {
+                NotifiyFailedAction("Comment conetnt cannot be empty.");
+                return;
+            }
+
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/comments/add-new-comment-{payload.postId}";
+
+                var content = new StringContent(JsonConvert.SerializeObject(newComment), Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await httpclient.PostAsync(endpoint, content);
+                }
+                catch
+                {
+
+                }
+
+            }
+
         }
 
         [RelayCommand]
@@ -1883,7 +1919,9 @@ namespace Foodiefeed.viewmodels
                     ImageSource = post.PostImagesBase64[0],
                     Comments = commentList,
                     ImagesBase64 = imageBase64list,
-                    PfpImageBase64 = post.ProfilePictureBase64
+                    PfpImageBase64 = post.ProfilePictureBase64,
+                    PostId = post.PostId.ToString(),
+
                 };
 
       

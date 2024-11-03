@@ -51,8 +51,9 @@ namespace Foodiefeed
                 _userSession.SetOffline();
                 _userSession.UnbindId();
             }
+            
 
-            Application.Current.Quit();
+            Application.Current.Quit();            
         }
 
 
