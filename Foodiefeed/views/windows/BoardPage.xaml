@@ -941,7 +941,10 @@
                     <VerticalStackLayout Spacing="10" IsVisible="{Binding TagPickerVisible,Converter={StaticResource InverseBooleanConverter}}">
                         <Border Stroke="{Binding EditorBorderColor}" StrokeShape="RoundRectangle 10">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}">
-                                <Editor Text="{Binding PostContent,Mode=TwoWay}" TextColor="{DynamicResource TextColor}" HeightRequest="300" Placeholder="Share your recipe here..." />
+                                <Editor Text="{Binding PostContent,Mode=TwoWay}" 
+                                        TextColor="{DynamicResource TextColor}" 
+                                        HeightRequest="300" 
+                                        Placeholder="Share your recipe here..." />
                             </Grid>
                         </Border>
                         <Grid>

@@ -178,7 +178,9 @@ namespace Foodiefeed.viewmodels
             _userSession = userSession;
             _userSession.Id = 15;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
-            Console.WriteLine("1231231");
+
+            Posts.Add(new PostView());
+
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
             this.SettingsPageVisible = false; //on init false
