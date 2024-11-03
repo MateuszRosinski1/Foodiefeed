@@ -31,7 +31,7 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpPut("edit-comment-{commentId}")]
-        public async Task<IActionResult> EditComment([FromRoute]int commentId,string newContent)
+        public async Task<IActionResult> EditComment([FromRoute]int commentId,[FromBody]string newContent)
         {
             await commentService.EditComment(commentId, newContent);
             return NoContent();

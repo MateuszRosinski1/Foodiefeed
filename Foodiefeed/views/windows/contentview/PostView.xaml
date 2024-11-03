@@ -165,7 +165,8 @@
                                     <local:CommentView Username="{Binding Username}" 
                                            CommentContent="{Binding CommentContent}"
                                            LikeCount="{Binding LikeCount}"
-                                           PfpImageBase64="{Binding PfpImageBase64}"/>
+                                           PfpImageBase64="{Binding PfpImageBase64}"
+                                           EditButtonVisible="{Binding EditButtonVisible}"/>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>

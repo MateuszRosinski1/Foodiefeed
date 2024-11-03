@@ -21,6 +21,7 @@ using Microsoft.Maui.Platform;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
+using CommunityToolkit.Maui.Core;
 
 
 namespace Foodiefeed.viewmodels
@@ -176,7 +177,7 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
-            _userSession.Id = 50;
+            _userSession.Id = 15;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             Posts.Add(new PostView() { PostId = "5"});
@@ -432,6 +433,55 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async void OpenCommentEditor(string commentId)
+        {
+            var popup = new EditCommentPopup(commentId);
+            popup.Closed += DisposeEditCommentPopup;
+            Application.Current.MainPage.ShowPopup(popup);
+        }
+
+        private void DisposeEditCommentPopup(object? sender, PopupClosedEventArgs e)
+        {
+            editedCommentContent = string.Empty;
+        }
+
+        [ObservableProperty]
+        string editedCommentContent;
+
+        [RelayCommand]
+        public async void EditComment(string commentId)
+        {
+            if(EditedCommentContent == string.Empty)
+            {
+                NotifiyFailedAction("Comment content cannot be empty");
+                return;
+            }
+
+            using (var http = new HttpClient()) {
+
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var content = new StringContent(JsonConvert.SerializeObject(EditedCommentContent), Encoding.UTF8, "application/json");
+                var endpoint = $"api/comments/edit-comment-{commentId}";
+
+                try
+                {
+                    var response = await http.PutAsync(endpoint, content);
+                    if(response.IsSuccessStatusCode)
+                    {
+                        NotifiyFailedAction("Comment edited succesfuly");
+                        return;
+                    }
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+        [RelayCommand]
         public async void AddNewComment((string postId,string commentContent) payload)
         {
             var newComment = new NewCommentDto()
@@ -439,7 +489,7 @@ namespace Foodiefeed.viewmodels
                 UserId = _userSession.Id.ToString(),
                 CommentContent = payload.commentContent
             };
-
+            
             if (string.IsNullOrEmpty(payload.commentContent))
             {
                 NotifiyFailedAction("Comment conetnt cannot be empty.");
@@ -462,9 +512,19 @@ namespace Foodiefeed.viewmodels
                 {
 
                 }
-
             }
 
+            var post = Posts.FirstOrDefault(p => p.PostId == payload.postId);
+            if (post != null)
+            {
+                //post.Comments.Add(new CommentView() { });
+                //UPDATE CURRENT UI/ HTTP GET FOR SINGLE COMMENT REQUIRED
+            }
+            var profilepost = ProfilePosts.FirstOrDefault(p => p.PostId == payload.postId);
+            if(profilepost != null)
+            {
+
+            }
         }
 
         [RelayCommand]
@@ -906,7 +966,6 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-            //NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -1893,15 +1952,18 @@ namespace Foodiefeed.viewmodels
                 var commentList = new List<CommentView>();
                 foreach (var comment in post.Comments)
                 {
-                    commentList.Add(new CommentView()
+                    var temp = comment.UserId == _userSession.Id ? true : false;
+                    var newcomment = new CommentView()
                     {
                         Username = comment.Username,
                         CommentContent = comment.CommentContent,
                         CommentId = comment.CommentId.ToString(),
                         LikeCount = comment.Likes.ToString(),
                         UserId = comment.UserId.ToString(),
-                        PfpImageBase64 = comment.ImageBase64
-                    }); ;
+                        PfpImageBase64 = comment.ImageBase64,
+                        EditButtonVisible = temp
+                    };
+                    commentList.Add(newcomment);
                 }
 
                 var imageBase64list = new List<string>();
