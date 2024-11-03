@@ -144,6 +144,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.p
 build_metadata.AdditionalFiles.TargetPath = views\windows\popups\CommentedPostPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\popups\CommentedPostPopup.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/popups/EditCommentPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.EditCommentPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\popups\EditCommentPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\popups\EditCommentPopup.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/popups/FailedActionNotificationPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.FailedActionNotificationPopup.xaml

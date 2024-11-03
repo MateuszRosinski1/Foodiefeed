@@ -5,8 +5,6 @@ namespace Foodiefeed.views.windows.contentview;
 
 public partial class CommentView : ContentView
 {
-    //public static readonly BindableProperty ImageBase64;
-
     public string CommentId { get; set; }
 	public string UserId { get; set; }
 
@@ -19,8 +17,17 @@ public partial class CommentView : ContentView
 	public static readonly BindableProperty LikeCountProperty =
 		BindableProperty.Create(nameof(LikeCount), typeof(string), typeof(CommentView), default(string), propertyChanged: LikeCountTextChanged);
 
-    public static BindableProperty PfpImageBase64Property =
+    public static readonly BindableProperty PfpImageBase64Property =
         BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(CommentView), default(string), propertyChanged: OnImageChanged);
+
+    public static readonly BindableProperty EditButtonVisibleProperty =
+        BindableProperty.Create(nameof(EditButtonVisible), typeof(bool), typeof(CommentView), default(bool));
+
+    public bool EditButtonVisible
+    {
+        get =>  (bool)GetValue(EditButtonVisibleProperty);
+        set => SetValue(EditButtonVisibleProperty, value);
+    }
 
     public string CommentContent
 	{
@@ -96,6 +103,5 @@ public partial class CommentView : ContentView
         await SecondCircle.ScaleTo(1, 100, Easing.BounceOut);
         await ThirdCircle.ScaleTo(1.3, 100, Easing.BounceIn);
         await ThirdCircle.ScaleTo(1, 100, Easing.BounceOut);
-
     }
 }

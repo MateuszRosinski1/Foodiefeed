@@ -66,6 +66,9 @@
     <MauiXaml Update="views\windows\popups\CommentedPostPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\popups\EditCommentPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\popups\FailedActionNotificationPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
