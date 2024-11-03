@@ -19,7 +19,7 @@
 
             
             <HorizontalStackLayout Spacing="5">
-                <Image x:Name="pfpImage" HeightRequest="40" WidthRequest="40"/>
+                <ImageButton x:Name="pfpImage" CornerRadius="5" HeightRequest="40" WidthRequest="40"/>
                 <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"/>
             </HorizontalStackLayout>
             <!--<ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" BackgroundColor="Transparent"/>-->

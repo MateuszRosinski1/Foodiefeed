@@ -259,13 +259,9 @@
                                                      HeightRequest="200" 
                                                      WidthRequest="200"  
                                                      Source="{Binding AvatarBase64,Converter={StaticResource Base64ToImageSourceConverter}}" 
-                                                     Aspect="AspectFill">
-                                            <ImageButton.Shadow>
-                                                <Shadow Brush="{DynamicResource TextColor}"
-                                                        Opacity="0.5"/>
-                                            </ImageButton.Shadow>
-                                        </ImageButton>
-
+                                                     Aspect="AspectFill"
+                                                     BorderWidth="1"
+                                                     BorderColor="{DynamicResource TextColor}"/>
                                         <VerticalStackLayout Padding="5" 
                                                              VerticalOptions="Center" 
                                                              BackgroundColor="Transparent" 
@@ -287,7 +283,8 @@
                                                    Margin="4,0,0,0"/>
                                         </VerticalStackLayout>
 
-                                        <HorizontalStackLayout HorizontalOptions="End" 
+                                        <HorizontalStackLayout IsVisible="{Binding ProfileAddFriendAndFollowButtonsVisible}"
+                                                               HorizontalOptions="End" 
                                                                VerticalOptions="Center"
                                                                Padding="10" 
                                                                Grid.Column="2">

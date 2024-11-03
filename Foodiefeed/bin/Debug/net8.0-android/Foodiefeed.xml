@@ -82,6 +82,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchParam">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.searchParam"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileAddFriendAndFollowButtonsVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileAddFriendAndFollowButtonsVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SearchPanelVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.searchPanelVisible"/>
         </member>
@@ -641,6 +644,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchParam" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProfileAddFriendAndFollowButtonsVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProfileAddFriendAndFollowButtonsVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchPanelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchPanelVisible" generated properties.</summary>
         </member>
@@ -820,6 +826,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchParam" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProfileAddFriendAndFollowButtonsVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProfileAddFriendAndFollowButtonsVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchPanelVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchPanelVisible" generated properties.</summary>

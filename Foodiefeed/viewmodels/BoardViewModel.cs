@@ -85,6 +85,8 @@ namespace Foodiefeed.viewmodels
         private string searchParam;
 
         #region VisibilityFlags
+        [ObservableProperty]
+        bool profileAddFriendAndFollowButtonsVisible;
 
         [ObservableProperty]
         bool searchPanelVisible;
@@ -1101,7 +1103,8 @@ namespace Foodiefeed.viewmodels
 
         [RelayCommand]
         public async void ShowUserProfile(string id)
-        {  
+        {
+            ProfileAddFriendAndFollowButtonsVisible = false;
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
@@ -1117,6 +1120,7 @@ namespace Foodiefeed.viewmodels
                     ProfilePosts.Clear();
                     ProfileFollowersList.Clear();
                     ProfileFriendsList.Clear();
+                    ProfileAddFriendAndFollowButtonsVisible = true;
                 }
 
                 OpenUserProfile(id);
@@ -1143,6 +1147,7 @@ namespace Foodiefeed.viewmodels
             SetButtonColors(Buttons.PostButton);
             try
             {
+                ProfileAddFriendAndFollowButtonsVisible = true;
                 OpenUserProfile(id);
             }
             catch (Exception ex)
