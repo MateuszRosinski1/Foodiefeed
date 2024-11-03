@@ -9,17 +9,44 @@ namespace Foodiefeed_api.services
     public interface ICommentService
     {
         Task<CommentDto> GetCommentById(int id);
+        Task AddNewComment(int postId,NewCommentDto dto);
     }
 
     public class CommentService : ICommentService
     {
         private readonly dbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IAzureBlobStorageSerivce AzureBlobStorageService;
+        private readonly INotificationService _notificationService;
+        private readonly IEntityRepository<User> _entityRepository;
 
-        public CommentService(dbContext context,IMapper mapper)
+        public CommentService(dbContext context,IMapper mapper, IAzureBlobStorageSerivce azureBlobStorageService, INotificationService notificationService,IEntityRepository<User> entityRepository)
         {
             _dbContext = context;
             _mapper = mapper;
+            AzureBlobStorageService = azureBlobStorageService;
+            _notificationService = notificationService;
+            _entityRepository = entityRepository;
+        }
+
+        public async Task AddNewComment(int postId, NewCommentDto dto)
+        {
+            var comment = _mapper.Map<Comment>(dto);
+
+            var post = _dbContext.Posts.FirstOrDefault(p => p.PostId == postId);
+            if (post is null) { throw new NotFoundException("Post you are trying to comment do not exist in current context."); }
+
+            var user = await _entityRepository.FindByIdAsync(dto.UserId); // cannot be null
+            var nickname = user.Username;
+
+            _dbContext.Comments.Add(comment);
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.PostCommentMembers.Add(new PostCommentMember() { CommentId = comment.CommentId,PostId = postId });
+            await _dbContext.SaveChangesAsync();
+
+            _notificationService.CreateNotification(NotificationType.PostComment, comment.UserId, post.UserId,, post.PostId, comment.CommentId, nickname);
+
         }
 
         public async Task<CommentDto> GetCommentById(int id)
@@ -35,8 +62,11 @@ namespace Foodiefeed_api.services
             var commentDto = _mapper.Map<CommentDto>(comment);
             commentDto.Likes = comment.CommentLikes.ToList().Count();
             commentDto.Username = user.Username;
-            //commentDto.ImageBase64 = 
+            var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
+            commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream);
             return commentDto; 
         }
+
+
     }
 }
