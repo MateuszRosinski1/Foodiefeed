@@ -60,6 +60,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -222,6 +223,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.OpenCommentEditorCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.OpenCommentEditor(System.String)"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.deleteCommentCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.DeleteCommentCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.DeleteCommentCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.DeleteComment(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.editCommentCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.EditCommentCommand"/>.</summary>

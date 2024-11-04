@@ -440,9 +440,32 @@ namespace Foodiefeed.viewmodels
             Application.Current.MainPage.ShowPopup(popup);
         }
 
+        [RelayCommand]
+        public async void DeleteComment(string commentId)
+        {
+            using(var http = new HttpClient())
+            {
+                var endpoint = $"api/comments/delete-comment-{commentId}";
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        NotifiyFailedAction("Could not delete comment at the moment, try again later");
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("internal server error, try again later.");
+                }
+            }
+        }
+
         private void DisposeEditCommentPopup(object? sender, PopupClosedEventArgs e)
         {
-            editedCommentContent = string.Empty;
+            EditedCommentContent = string.Empty;
         }
 
         [ObservableProperty]

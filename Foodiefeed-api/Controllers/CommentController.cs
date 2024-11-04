@@ -36,5 +36,12 @@ namespace Foodiefeed_api.Controllers
             await commentService.EditComment(commentId, newContent);
             return NoContent();
         }
+
+        [HttpDelete("delete-comment-{commentId}")]
+        public async Task<IActionResult> DeleteComment([FromRoute]int commentId)
+        {
+            await commentService.DeleteComment(commentId);
+            return NoContent();
+        }
     }
 }

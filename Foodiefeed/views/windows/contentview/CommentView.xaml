@@ -24,12 +24,17 @@
             </HorizontalStackLayout>
              <HorizontalStackLayout HorizontalOptions="End">
                     <Button Text="Edit"
-                            x:Name="editButton"
                             TextColor="{DynamicResource TextColor}" 
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=OpenCommentEditorCommand}"
                             CommandParameter="{Binding CommentId}"
                             BackgroundColor="{DynamicResource EntryBackround}"
                             IsVisible="{Binding EditButtonVisible}"/>
+                    <Button Text="Delete"
+                            TextColor="{DynamicResource TextColor}" 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=DeleteCommentCommand}"
+                            CommandParameter="{Binding CommentId}"
+                            BackgroundColor="{DynamicResource EntryBackround}"
+                            IsVisible="{Binding EditButtonVisible}"/>           
                     <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30"  Scale="0.75" IsVisible="{Binding EditButtonVisible,Converter={converter:InverseBooleanConverter}}">
                         <Ellipse Fill="Gray"
                                  StrokeThickness="0"

@@ -11,6 +11,7 @@ namespace Foodiefeed_api.services
         Task<CommentDto> GetCommentById(int id);
         Task AddNewComment(int postId,NewCommentDto dto);
         Task EditComment(int commentId, string newContent);
+        Task DeleteComment(int commentId);
     }
 
     public class CommentService : ICommentService
@@ -77,6 +78,16 @@ namespace Foodiefeed_api.services
             return commentDto; 
         }
 
+        public async Task DeleteComment(int commentId)
+        {
+            var comment = await _dbContext.Comments.FirstAsync(c => c.CommentId == commentId);
+            var member = await _dbContext.PostCommentMembers.FirstAsync(m => m.CommentId == commentId);
+
+            _dbContext.Comments.Remove(comment);
+            _dbContext.PostCommentMembers.Remove(member);
+            await _dbContext.SaveChangesAsync();
+
+        }
 
     }
 }
