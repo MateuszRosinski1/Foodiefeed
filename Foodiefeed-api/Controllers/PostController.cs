@@ -1,9 +1,10 @@
-﻿using Foodiefeed_api.services;
+﻿using Foodiefeed_api.models.posts;
+using Foodiefeed_api.services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foodiefeed_api.Controllers
 {
-    [ApiController]
+    //[ApiController]
     [Route("api/posts")]
     public class PostController : Controller
     {
@@ -36,6 +37,20 @@ namespace Foodiefeed_api.Controllers
             var response  = await _postService.GetLikedPostAsync(postId);
 
             return Ok(response);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreatePost([FromForm]CreatePostDto dto)
+        {
+            await _postService.CreatePostAsync(dto);
+            return NoContent();
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeletePost(int postId,int userId)
+        {
+            await _postService.DeletePostAsync(postId,userId);
+            return NoContent();
         }
     }
 }

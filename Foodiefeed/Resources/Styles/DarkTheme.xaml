@@ -15,5 +15,6 @@
     <Color x:Key="CommentViewBackground">#404040</Color>
     <Color x:Key="OnListFriendViewBackground">#1f1f1f</Color>
     <Color x:Key="HubPanelBackground">#1f1f1f</Color>
+    <Color x:Key="TagViewFrameBackground">#1c1c1c</Color>
     <x:String x:Key="LogoPath">logodarktheme.png</x:String>
 </ResourceDictionary>

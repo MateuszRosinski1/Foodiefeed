@@ -11,6 +11,7 @@ namespace Foodiefeed.models.dto
         public int PostId { get; set; }
         public int UserId { get; set; }
         public string Username { get; set; }
+        public string ProfilePictureBase64 { get; set; }
         public required string TimeStamp { get; set; }
         public required string Description { get; set; }
         public int Likes { get; set; }

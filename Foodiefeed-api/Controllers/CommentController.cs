@@ -1,4 +1,5 @@
-﻿using Foodiefeed_api.services;
+﻿using Foodiefeed_api.models.comment;
+using Foodiefeed_api.services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foodiefeed_api.Controllers
@@ -20,6 +21,27 @@ namespace Foodiefeed_api.Controllers
         {
             var response  = await commentService.GetCommentById(commentId);
             return Ok(response);
+        }
+
+        [HttpPost("add-new-comment-{postId}")]
+        public async Task<IActionResult> AddNewComment([FromBody] NewCommentDto dto, [FromRoute] int postId)
+        {
+            await commentService.AddNewComment(postId, dto);
+            return NoContent();
+        }
+
+        [HttpPut("edit-comment-{commentId}")]
+        public async Task<IActionResult> EditComment([FromRoute]int commentId,[FromBody]string newContent)
+        {
+            await commentService.EditComment(commentId, newContent);
+            return NoContent();
+        }
+
+        [HttpDelete("delete-comment-{commentId}")]
+        public async Task<IActionResult> DeleteComment([FromRoute]int commentId)
+        {
+            await commentService.DeleteComment(commentId);
+            return NoContent();
         }
     }
 }

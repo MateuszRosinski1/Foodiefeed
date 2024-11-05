@@ -2,6 +2,7 @@ using Foodiefeed_api;
 using Foodiefeed_api.entities;
 using Foodiefeed_api.services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
-
+builder.Services.AddScoped<IAzureBlobStorageSerivce, AzureBlobStorageService>();
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
@@ -35,6 +36,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     DatabaseSeeder.SeedData(new dbContext());
 }
+
+app.MapGet("/get-all-tags", async (dbContext context) =>
+{
+    var tags = await context.Tags.ToListAsync();
+    return Results.Ok(tags);
+});
 
 app.UseHttpsRedirection();
 

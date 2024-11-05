@@ -19,35 +19,48 @@
 
             
             <HorizontalStackLayout Spacing="5">
-                <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40"/>
+                <ImageButton x:Name="pfpImage" CornerRadius="5" HeightRequest="40" WidthRequest="40"/>
                 <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"/>
             </HorizontalStackLayout>
-            <!--<ImageButton HorizontalOptions="End" HeightRequest="1" Scale="0.5" Source="threedotfivexfived.png" BackgroundColor="Transparent"/>-->
-            <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
-                                <Ellipse Fill="Gray"
-                             StrokeThickness="0"
-                             WidthRequest="7.5"
-                             HeightRequest="7.5"
-                             Margin="0,1.5"
-                             x:Name="FirstCircle"/>
-                                <Ellipse Fill="Gray"
-                             StrokeThickness="0"
-                             WidthRequest="7.5"
-                             HeightRequest="7.5"
-                             Margin="0,1.5"
-                             x:Name="SecondCircle"/>
-                <Ellipse Fill="Gray"
-                             StrokeThickness="0"
-                             WidthRequest="7.5"
-                             HeightRequest="7.5"
-                             Margin="0,1.5"
-                             x:Name="ThirdCircle"/>
-                <VerticalStackLayout.GestureRecognizers>
-                    <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
-                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
-                              CommandParameter="{Binding UserId}"/>
-                </VerticalStackLayout.GestureRecognizers>
-            </VerticalStackLayout>
+             <HorizontalStackLayout HorizontalOptions="End">
+                    <Button Text="Edit"
+                            TextColor="{DynamicResource TextColor}" 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=OpenCommentEditorCommand}"
+                            CommandParameter="{Binding CommentId}"
+                            BackgroundColor="{DynamicResource EntryBackround}"
+                            IsVisible="{Binding EditButtonVisible}"/>
+                    <Button Text="Delete"
+                            TextColor="{DynamicResource TextColor}" 
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=DeleteCommentCommand}"
+                            CommandParameter="{Binding CommentId}"
+                            BackgroundColor="{DynamicResource EntryBackround}"
+                            IsVisible="{Binding EditButtonVisible}"/>           
+                    <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30"  Scale="0.75" IsVisible="{Binding EditButtonVisible,Converter={converter:InverseBooleanConverter}}">
+                        <Ellipse Fill="Gray"
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="FirstCircle"/>
+                        <Ellipse Fill="Gray"
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="SecondCircle"/>
+                        <Ellipse Fill="Gray"
+                                 StrokeThickness="0"
+                                 WidthRequest="7.5"
+                                 HeightRequest="7.5"
+                                 Margin="0,1.5"
+                                 x:Name="ThirdCircle"/>
+                    <VerticalStackLayout.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
+                                  CommandParameter="{Binding UserId}"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
         </Grid>
 
         <Grid  Grid.Row="1" Margin="0,5">

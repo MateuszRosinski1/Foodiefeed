@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.PostImageView"
+             HeightRequest="50" WidthRequest="50"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
+        <Grid BackgroundColor="Transparent">
+            <Border StrokeShape="RoundRectangle 10" BackgroundColor="Transparent" StrokeThickness="1">
+            <Image x:Name="image" Source="avatar.jpg" HeightRequest="45" WidthRequest="45" BackgroundColor="Black" Aspect="AspectFit"/>
+        </Border>
+            <Button HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    HeightRequest="12" 
+                    WidthRequest="12" 
+                    CornerRadius="100"                
+                    Text="X"
+                    FontSize="10"
+                    FontAttributes="Bold"
+                    Padding="0"
+                    MinimumHeightRequest="0"
+                    MinimumWidthRequest="0"
+                    BackgroundColor="IndianRed"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path=UnloadImageCommand}"
+                    CommandParameter="{Binding ImageSource}"/>
+        </Grid>
+</ContentView>

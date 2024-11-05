@@ -22,6 +22,7 @@ namespace Foodiefeed_api.entities
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<PostLike> PostLikes { get; set; }
         public virtual DbSet<CommentLike> CommentLikes { get; set; }
+        public virtual DbSet<Recipe> Recipes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -148,15 +149,14 @@ namespace Foodiefeed_api.entities
                 .HasOne(cl => cl.Comment)
                 .WithMany(c => c.CommentLikes)
                 .HasForeignKey(cl => cl.CommentId)
-                .OnDelete(DeleteBehavior.Cascade); // Możesz zostawić cascade tutaj
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CommentLike>()
                 .HasOne(cl => cl.User)
                 .WithMany(u => u.CommentLikes)
                 .HasForeignKey(cl => cl.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Zmień na Restrict lub NoAction, aby uniknąć konfliktu
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Konfiguracja dla encji PostLike
             modelBuilder.Entity<PostLike>()
                 .HasKey(pl => new { pl.PostId, pl.UserId });
 
@@ -164,7 +164,7 @@ namespace Foodiefeed_api.entities
                 .HasOne(pl => pl.Post)
                 .WithMany(p => p.PostLikes)
                 .HasForeignKey(pl => pl.PostId)
-                .OnDelete(DeleteBehavior.Cascade); // Możesz zostawić cascade tutaj
+                .OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<PostLike>()
                 .HasOne(pl => pl.User)
@@ -172,6 +172,11 @@ namespace Foodiefeed_api.entities
                 .HasForeignKey(pl => pl.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Recipe>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Recipes)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

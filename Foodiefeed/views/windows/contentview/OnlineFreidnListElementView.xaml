@@ -9,7 +9,6 @@
             <Grid>
                 <ImageButton CornerRadius="100" 
                              VerticalOptions="Center" 
-                             Source="avatar.jpg"  
                              WidthRequest="50" 
                              HeightRequest="50" 
                              x:Name="avatarImage"/>

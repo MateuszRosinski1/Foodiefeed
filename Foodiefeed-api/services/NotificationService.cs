@@ -19,13 +19,14 @@ namespace Foodiefeed_api.services
     public class NotificationService : INotificationService
     {
         private readonly dbContext _dbContext;
-
+        private readonly IAzureBlobStorageSerivce AzureBlobStorageSerivce;
         private readonly IMapper _mapper;
 
-        public NotificationService(dbContext dbContext,IMapper mapper)
+        public NotificationService(dbContext dbContext,IMapper mapper, IAzureBlobStorageSerivce azureBlobStorageSerivce)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            AzureBlobStorageSerivce = azureBlobStorageSerivce;
         }
 
         public async Task RemoveRange(List<int> ids)
@@ -43,6 +44,12 @@ namespace Foodiefeed_api.services
             if (notifications is null) { throw new NotFoundException("No Notifications found."); }
 
             var notificationsDtos = _mapper.Map<List<NotificationDto>>(notifications);
+
+            foreach (var dto in notificationsDtos)
+            {
+                var imgStream = await AzureBlobStorageSerivce.FetchProfileImageAsync(dto.SenderId);
+                dto.Base64 = await AzureBlobStorageSerivce.ConvertStreamToBase64Async(imgStream);
+            }
 
             return notificationsDtos;
         }

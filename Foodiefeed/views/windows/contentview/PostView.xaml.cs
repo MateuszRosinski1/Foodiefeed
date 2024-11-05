@@ -19,8 +19,20 @@ public partial class PostView : ContentView
 
     #region BindableProperties
 
+    public static readonly BindableProperty PayloadProperty =
+        BindableProperty.Create(nameof(Payload), typeof((string, string)), typeof(PostView), default((string, string)));
+
+    public static readonly BindableProperty NewCommentContentProperty =
+        BindableProperty.Create(nameof(NewCommentContent), typeof(string), typeof(PostView), default(string),propertyChanged: OnCommentContentChanged);
+
+    public static readonly BindableProperty PostIdProperty =
+        BindableProperty.Create(nameof(PostId), typeof(string), typeof(PostView), default(string));
+
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(PostView), default(string), propertyChanged: OnUsernameTextChanged);
+
+    public static BindableProperty PfpImageBase64Property =
+        BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageChanged);
 
     public static readonly BindableProperty TimeStampProperty = 
         BindableProperty.Create(nameof(TimeStamp),typeof(string),typeof(PostView),default(string),propertyChanged: OnTimeStampChanged);
@@ -34,11 +46,44 @@ public partial class PostView : ContentView
     public static readonly BindableProperty ImageSourceProperty =
         BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageSourceChanged);
 
+    public static readonly BindableProperty DeleteButtonVisibleProperty =
+        BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(CommentView), default(bool));
+
+    public bool DeleteButtonVisible
+    {
+        get => (bool)GetValue(DeleteButtonVisibleProperty);
+        set => SetValue(DeleteButtonVisibleProperty, value);
+    }
+
     #endregion
 
     int currentImageIndex;
 
     #region Properties
+
+    public (string,string) Payload
+    {
+        get => ((string,string))GetValue(PayloadProperty);
+        set => SetValue(PayloadProperty, value);
+    }
+
+    public string NewCommentContent
+    {
+        get => (string)GetValue(NewCommentContentProperty);
+        set => SetValue(NewCommentContentProperty, value);
+    }
+
+    public string PostId
+    {
+        get => (string)GetValue(PostIdProperty);
+        set => SetValue(PostIdProperty, value);
+    }
+
+    public string PfpImageBase64
+    {
+        get => (string)GetValue(PfpImageBase64Property);
+        set => SetValue(PfpImageBase64Property, value);
+    }
 
     public static readonly BindableProperty ImagesBase64Property =
     BindableProperty.Create(
@@ -47,23 +92,7 @@ public partial class PostView : ContentView
         typeof(PostView),        
         new List<string>(),     
         propertyChanged: OnImagesBase64Changed 
-    );
-
-    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
-    {
-        var control = (PostView)bindable;
-        var newImagesList = newValue as List<string>;
-
-        if (newImagesList != null)
-        {
-            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
-
-            if (newImagesList.Count > 0)
-            {
-                control.ImageSource = newImagesList[0]; 
-            }
-        }
-    }
+    ); 
 
     public List<string> ImagesBase64
     {
@@ -103,6 +132,28 @@ public partial class PostView : ContentView
 
     #endregion
 
+    private static void OnCommentContentChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+        view.Payload = (view.PostId, newValue as string);
+    }
+
+    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (PostView)bindable;
+        var newImagesList = newValue as List<string>;
+
+        if (newImagesList != null)
+        {
+            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
+
+            if (newImagesList.Count > 0)
+            {
+                control.ImageSource = newImagesList[0];
+            }
+        }
+    }
+
     private static void OnPostTextContentChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostView)bindable;
@@ -125,6 +176,24 @@ public partial class PostView : ContentView
     {
         var view = (PostView)bindable;
         view.PostLikeCountLabel.Text = newValue as string;
+    }
+
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
     }
 
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -260,5 +329,22 @@ public partial class PostView : ContentView
             swipeLeftButton.IsVisible = true;
         }
         ImageSource = ImagesBase64[currentImageIndex];
+    }
+
+    private async void FontHover(object sender, PointerEventArgs e)
+    {
+        await AnimateFont(sender, 15, 25, 500, 200);
+    }
+
+    private async void FontUnhover(object sender, PointerEventArgs e)
+    {
+        await AnimateFont(sender, 25, 15, 500, 200);
+    }
+
+    private async Task AnimateFont(object sender, int from, int to, uint rate, uint lenght)
+    {
+        Button button = (Button)sender;
+        var animation = new Animation(v => button.FontSize = v, from, to);
+        animation.Commit(this, button.Text + "_Font", rate, lenght, Easing.BounceIn);
     }
 }

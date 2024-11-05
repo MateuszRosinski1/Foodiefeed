@@ -10,6 +10,8 @@ namespace Foodiefeed.models.dto
     {
         public int Id { get; set; }
 
+        public string Base64 { get; set; }
+
         public int SenderId { get; set; }
 
         public string Message { get; set; }

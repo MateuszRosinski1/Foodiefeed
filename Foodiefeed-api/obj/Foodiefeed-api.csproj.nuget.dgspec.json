@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.22.2, )"
+            },
             "Bogus": {
               "target": "Package",
               "version": "[35.6.1, )"
@@ -173,11 +177,11 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.71, )"
+              "version": "[8.0.92, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
-              "version": "[8.0.14, )"
+              "version": "[8.0.92, )"
             },
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
@@ -228,11 +232,11 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.71, )"
+              "version": "[8.0.92, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
-              "version": "[8.0.14, )"
+              "version": "[8.0.92, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",

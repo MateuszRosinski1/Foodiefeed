@@ -17,6 +17,11 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Maui.Platform;
+using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Maui.Core.Extensions;
+using System.Net.Http.Headers;
+using CommunityToolkit.Maui.Core;
 
 
 namespace Foodiefeed.viewmodels
@@ -69,12 +74,20 @@ namespace Foodiefeed.viewmodels
         private string avatarBase64;
         #endregion
 
-        private const string API_BASE_URL = "http://localhost:5000";
+
+#if WINDOWS
+       private const string API_BASE_URL = "http://localhost:5000";
+#endif
+#if ANDROID
+        private const string API_BASE_URL = "http://10.0.2.2:5000";
+#endif
 
         [ObservableProperty]
         private string searchParam;
 
         #region VisibilityFlags
+        [ObservableProperty]
+        bool profileAddFriendAndFollowButtonsVisible;
 
         [ObservableProperty]
         bool searchPanelVisible;
@@ -104,6 +117,9 @@ namespace Foodiefeed.viewmodels
         bool changePasswordEntryVisible;
 
         [ObservableProperty]
+        bool changeProfilePictureVisible;
+
+        [ObservableProperty]
         bool profileFriendsVisible;
 
         [ObservableProperty]
@@ -124,6 +140,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool loadingLabelVisible;
 
+        [ObservableProperty]
+        bool addPostFormVisible;
+
         #endregion
 
         [ObservableProperty]
@@ -143,7 +162,7 @@ namespace Foodiefeed.viewmodels
         string changedRePassword;
 
         [ObservableProperty]
-        string changedImageProfilePictureBase64;
+        string changedImageProfilePicturePath;
 
         #endregion
 
@@ -153,13 +172,15 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            Notifications.Add(new BasicNotofication());
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-
             notifications.CollectionChanged += OnNotificationsChanged;
             DisplaySearchResultHistory();
             _userSession = userSession;
             _userSession.Id = 15;
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
+
+            Posts.Add(new PostView() { PostId = "5"});
 
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
@@ -168,6 +189,7 @@ namespace Foodiefeed.viewmodels
             this.SettingsMainHubVisible = true; //on init true
             this.ChangeUsernameEntryVisible = false; //on init false
             this.ChangeEmailEntryVisible = false; //on init false
+            this.ChangeProfilePictureVisible = false; // on init false
             this.ChangePasswordEntryVisible = false; //on init false
             this.ProfileFollowersVisible = false; //on init false
             this.ProfilePostsVisible = true; //on init true;
@@ -175,6 +197,7 @@ namespace Foodiefeed.viewmodels
             this.NoPostOnProfile = false; // on init false
             this.HubPanelVisible = false; // on init false
             this.CanShowSearchPanel = true; //on init true
+            this.AddPostFormVisible = false; //on init false
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
@@ -213,7 +236,6 @@ namespace Foodiefeed.viewmodels
             using(var httpClient = new HttpClient()) {
 
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
-
                 try
                 {
                     var endpoint = $"api/notifications/get-all-for-user/{_userSession.Id}";
@@ -252,7 +274,8 @@ namespace Foodiefeed.viewmodels
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.AcceptedFriendRequest: //5
@@ -261,7 +284,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             Type = NotificationType.AcceptedFriendRequest,
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.PostLike: //1
@@ -270,7 +294,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             PostId = notification.PostId.ToString(),
                             UserId = notification.SenderId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.PostComment: //2
@@ -280,7 +305,8 @@ namespace Foodiefeed.viewmodels
                             UserId = notification.SenderId.ToString(),
                             CommentId = notification.CommentId.ToString(),
                             PostId = notification.PostId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.CommentLike: //3
@@ -289,7 +315,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             CommentId = notification.CommentId.ToString(),
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                     case NotificationType.GainFollower: //4
@@ -298,7 +325,8 @@ namespace Foodiefeed.viewmodels
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
                             Type = NotificationType.GainFollower,
-                            NotifcationId = notification.Id
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
                         });
                         break;
                 }
@@ -402,6 +430,123 @@ namespace Foodiefeed.viewmodels
                 }
             }
            
+        }
+
+        [RelayCommand]
+        public async void OpenCommentEditor(string commentId)
+        {
+            var popup = new EditCommentPopup(commentId);
+            popup.Closed += DisposeEditCommentPopup;
+            Application.Current.MainPage.ShowPopup(popup);
+        }
+
+        [RelayCommand]
+        public async void DeleteComment(string commentId)
+        {
+            using(var http = new HttpClient())
+            {
+                var endpoint = $"api/comments/delete-comment-{commentId}";
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        NotifiyFailedAction("Could not delete comment at the moment, try again later");
+                    }
+                }
+                catch
+                {
+                    NotifiyFailedAction("internal server error, try again later.");
+                }
+            }
+        }
+
+        private void DisposeEditCommentPopup(object? sender, PopupClosedEventArgs e)
+        {
+            EditedCommentContent = string.Empty;
+        }
+
+        [ObservableProperty]
+        string editedCommentContent;
+
+        [RelayCommand]
+        public async void EditComment(string commentId)
+        {
+            if(EditedCommentContent == string.Empty)
+            {
+                NotifiyFailedAction("Comment content cannot be empty");
+                return;
+            }
+
+            using (var http = new HttpClient()) {
+
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var content = new StringContent(JsonConvert.SerializeObject(EditedCommentContent), Encoding.UTF8, "application/json");
+                var endpoint = $"api/comments/edit-comment-{commentId}";
+
+                try
+                {
+                    var response = await http.PutAsync(endpoint, content);
+                    if(response.IsSuccessStatusCode)
+                    {
+                        NotifiyFailedAction("Comment edited succesfuly");
+                        return;
+                    }
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
+        [RelayCommand]
+        public async void AddNewComment((string postId,string commentContent) payload)
+        {
+            var newComment = new NewCommentDto()
+            {
+                UserId = _userSession.Id.ToString(),
+                CommentContent = payload.commentContent
+            };
+            
+            if (string.IsNullOrEmpty(payload.commentContent))
+            {
+                NotifiyFailedAction("Comment conetnt cannot be empty.");
+                return;
+            }
+
+            using (var httpclient = new HttpClient())
+            {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/comments/add-new-comment-{payload.postId}";
+
+                var content = new StringContent(JsonConvert.SerializeObject(newComment), Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await httpclient.PostAsync(endpoint, content);
+                }
+                catch
+                {
+
+                }
+            }
+
+            var post = Posts.FirstOrDefault(p => p.PostId == payload.postId);
+            if (post != null)
+            {
+                //post.Comments.Add(new CommentView() { });
+                //UPDATE CURRENT UI/ HTTP GET FOR SINGLE COMMENT REQUIRED
+            }
+            var profilepost = ProfilePosts.FirstOrDefault(p => p.PostId == payload.postId);
+            if(profilepost != null)
+            {
+            }
         }
 
         [RelayCommand]
@@ -567,14 +712,281 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ScrolledNotifications(ItemsViewScrolledEventArgs e)
+        public void ShowAddPostForm()
         {
-            if (e.LastVisibleItemIndex == Notifications.Count() - 2)
+            this.AddPostFormVisible = true;
+        }
+
+        [RelayCommand]
+        public void HideAddPostForm()
+        {
+            Tags.Clear();
+            alltags.Clear();
+            PickedTags.Clear();
+            PostContent = string.Empty;
+            FilterParam = string.Empty;
+            this.TagPickerVisible = false;
+            this.AddPostFormVisible = false;
+        }
+
+        [RelayCommand]
+        public void ApplyTags()
+        {
+            TagPickerVisible = false;
+        }
+
+        ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
+        public ObservableCollection<PostImageView> AddPostImages { get { return addPostImages; } }
+
+        [RelayCommand]
+        public async void UploadPostImages()
+        {
+            var fileResult = await FilePicker.Default.PickMultipleAsync(new PickOptions
+                {
+                    PickerTitle = "Choose maximum 10 images.",
+                    FileTypes = FilePickerFileType.Images               
+                });
+
+            if (fileResult is null) return;
+
+            var selectedFiles = fileResult.Take(10).ToList();
+            foreach ( var file in selectedFiles )
             {
-                DisplayNotifications(10, allNotifications);
+                if(AddPostImages.Count < 10)
+                {
+                    AddPostImages.Add(new PostImageView() { ImageSource = file.FullPath });
+                }
             }
         }
 
+        [RelayCommand]
+        public void UnloadImage(string path)
+        {
+            foreach(var image in AddPostImages)
+            {
+                if(image.ImageSource == path)
+                {
+                    AddPostImages.Remove(image);
+                    return;
+                }
+            }
+        }
+
+        [ObservableProperty]
+        Color editorBorderColor = Brush.Gray.Color;
+
+        [ObservableProperty]
+        string postContent;
+
+        [ObservableProperty]
+        bool tagPickerVisible;
+
+
+        [ObservableProperty]
+        bool noTagsPickedNotifierVisible;
+
+        [RelayCommand]
+        public async void DeletePost(string postId)
+        {
+            //var endpoint = $""
+        }
+
+        [RelayCommand]
+        public async void AddPost()
+        {
+            if(string.IsNullOrEmpty(PostContent))
+            {
+                EditorBorderColor = Color.FromHex("#e32441");
+                await Task.Delay(3000);
+                EditorBorderColor = Brush.Gray.Color;
+                return;
+            }else if (PickedTags.Count != 4)
+            {
+                NoTagsPickedNotifierVisible = true;
+                await Task.Delay(3000);
+                NoTagsPickedNotifierVisible = false;
+                return;
+            }
+            
+            using (var content = new MultipartFormDataContent())
+            {
+                content.Add(new StringContent(_userSession.Id.ToString()), "UserId");
+                content.Add(new StringContent(PostContent), "Description");
+
+                foreach (var tag in PickedTags)
+                {
+                    content.Add(new StringContent(tag.Id), "TagsId");
+                }
+
+                var imageStreams = new List<Stream>();
+
+                try
+                {
+                    foreach (var image in AddPostImages)
+                    {
+                        var fileStream = new FileStream(image.ImageSource, FileMode.Open, FileAccess.Read);
+                        imageStreams.Add(fileStream);
+
+                        var streamContent = new StreamContent(fileStream);
+                        var fileExtension = Path.GetExtension(image.ImageSource).ToLower();
+                        string mimeType = fileExtension switch
+                        {
+                            ".jpg" or ".jpeg" => "image/jpeg",
+                            ".png" => "image/png",
+                            _ => "application/octet-stream" 
+                        };
+                        streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(mimeType);
+                        content.Add(streamContent, "Images", Path.GetFileName(image.ImageSource));
+                    }
+
+                    using (var http = new HttpClient())
+                    {
+                        http.BaseAddress = new Uri(API_BASE_URL);
+                        var endpoint = "api/posts/create";
+
+                        try
+                        {
+                            var response = await http.PostAsync(endpoint, content);
+
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Console.WriteLine($"Error in sending request: {ex.Message}");
+                        }
+                     }
+                }
+                finally
+                {
+                    foreach (var stream in imageStreams)
+                    {
+                        stream.Dispose();
+                    }
+                }
+
+
+            }
+
+        }
+
+
+        ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
+
+        public ObservableCollection<TagView> Tags { get { return tags; } set { tags = value; } }
+
+        [RelayCommand]
+        public async void ChooseTags()
+        {
+            Tags.Clear();
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = "/get-all-tags";
+
+                try
+                {
+                    var response = await http.GetAsync(endpoint);
+                    var results = await response.Content.ReadAsStringAsync();
+                    var tagslist = await JsonToObject<List<TagView>>(results);
+                    foreach(var tag in tagslist)
+                    {
+                        tag.FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
+                        Tags.Add(tag);
+                        alltags.Add(tag);
+                    }
+                }
+                catch
+                {
+                    //
+                }
+                finally
+                {
+                    this.TagPickerVisible = true;
+                }
+            }
+        }
+
+        [MaxLength(4)]
+        static ObservableCollection<TagView> pickedtags = new ObservableCollection<TagView>();
+
+        public static ObservableCollection<TagView> PickedTags { get { return pickedtags; } }
+
+        [ObservableProperty]
+        string filterParam;
+
+        [RelayCommand]
+        public async void PickTag(string id)
+        {
+            if (PickedTags.Contains(Tags.FirstOrDefault(t => t.Id == id)))
+            {
+                PickedTags.Remove(Tags.FirstOrDefault(t => t.Id == id));
+                return;
+            }
+
+            if (PickedTags.Count < 4)
+            {              
+                PickedTags.Add(Tags.FirstOrDefault(t => t.Id == id));
+            }
+        }
+
+        ObservableCollection<TagView> alltags = new ObservableCollection<TagView>();
+        [ObservableProperty]
+        bool tagsActivityIndicatorVisible;
+
+        [RelayCommand]
+        public async void FilterTags()
+        {
+
+            try
+            {
+                TagsActivityIndicatorVisible = true;
+                if (FilterParam == string.Empty)
+                {
+                    Tags.Clear();
+                    foreach (var tag in alltags)
+                    {                      
+                        Tags.Add(tag);
+                    }
+                    return;
+                }
+                var newtags = alltags.Where(t => t.Name.Contains(FilterParam))
+                           .ToObservableCollection();
+                Tags.Clear();
+                foreach (var tag in newtags)
+                {      
+                    //if(PickedTags.Contains(tag))
+                    //{
+                    //    tag.FrameBackground = Brush.Green.Color;
+                    //}
+                    Tags.Add(tag);                 
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                foreach (var tag in Tags)
+                {
+                    if (PickedTags.Contains(tag))
+                    {
+                        tag.FrameBackground = Brush.Green.Color;
+                    }
+                }
+                TagsActivityIndicatorVisible = false;
+            }
+        }
+
+        [RelayCommand]
+        public void NotificationsThresholdExeed()
+        {
+           DisplayNotifications(10, allNotifications);
+        }
 
         [RelayCommand]
         public void ToMainView()
@@ -582,7 +994,6 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
-            //NotifiyFailedAction("show");
         }
 
         [RelayCommand]
@@ -656,6 +1067,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = true; 
             this.ChangeEmailEntryVisible = false; 
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -663,6 +1077,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible =true; 
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -670,6 +1087,9 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible = false;
             this.ChangePasswordEntryVisible = true;
+            this.ChangeProfilePictureVisible = false;
+
+            ClearDataChangeEntries();
         }
 
         [RelayCommand]
@@ -678,6 +1098,35 @@ namespace Foodiefeed.viewmodels
             this.ChangeUsernameEntryVisible = false;
             this.ChangeEmailEntryVisible = false;
             this.ChangePasswordEntryVisible = false;
+            this.ChangeProfilePictureVisible = true;
+
+            ClearDataChangeEntries();
+        }
+
+        private void ClearDataChangeEntries()
+        {
+            this.ChangedUsername = string.Empty;
+            this.ChangedEmail = string.Empty;
+            this.ChangedPassword = string.Empty;
+            this.ChangedRePassword = string.Empty;
+            this.ChangedImageProfilePicturePath = string.Empty;
+        }
+
+        [RelayCommand]
+        public async void ChooseNewProfilePicture()
+        {
+            var fileResult = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                PickerTitle = "Pick your new profile picture wisely :)",
+                FileTypes = FilePickerFileType.Images,
+            });
+
+            if(fileResult is null)
+            {
+                return;
+            }
+
+            this.ChangedImageProfilePicturePath = fileResult.FullPath;
         }
 
         [RelayCommand]
@@ -748,18 +1197,21 @@ namespace Foodiefeed.viewmodels
         {
             Task.Delay(200).Wait();
             this.SearchPanelVisible = false;
+            CanShowSearchPanel = false;
         }
 
         [RelayCommand]
         public async Task SetSearchPanelVisibilityToTrue()
         {
-            this.SearchPanelVisible = true;
+            CanShowSearchPanel = true;
         }
 
         [RelayCommand]
         public async Task SetSearchPanelVisibilityToFalse()
         {
-            this.SearchPanelVisible = false;
+            if(!SearchPanelVisible) {
+                CanShowSearchPanel = false;
+            }
         }
 
         [RelayCommand]
@@ -776,7 +1228,8 @@ namespace Foodiefeed.viewmodels
 
         [RelayCommand]
         public async void ShowUserProfile(string id)
-        {  
+        {
+            ProfileAddFriendAndFollowButtonsVisible = false;
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
@@ -792,6 +1245,7 @@ namespace Foodiefeed.viewmodels
                     ProfilePosts.Clear();
                     ProfileFollowersList.Clear();
                     ProfileFriendsList.Clear();
+                    ProfileAddFriendAndFollowButtonsVisible = true;
                 }
 
                 OpenUserProfile(id);
@@ -818,6 +1272,7 @@ namespace Foodiefeed.viewmodels
             SetButtonColors(Buttons.PostButton);
             try
             {
+                ProfileAddFriendAndFollowButtonsVisible = true;
                 OpenUserProfile(id);
             }
             catch (Exception ex)
@@ -1518,21 +1973,25 @@ namespace Foodiefeed.viewmodels
                 return;
             }
 
-            //await Task.Run(() => { Dispatcher.GetForCurrentThread().Dispatch(() => { ProfilePosts.Clear(); }); });
             await Dispatcher.GetForCurrentThread().DispatchAsync(() => { ProfilePosts.Clear(); });
+
             foreach (var post in posts)
             {
                 var commentList = new List<CommentView>();
                 foreach (var comment in post.Comments)
                 {
-                    commentList.Add(new CommentView()
+                    var temp = comment.UserId == _userSession.Id ? true : false;
+                    var newcomment = new CommentView()
                     {
                         Username = comment.Username,
                         CommentContent = comment.CommentContent,
                         CommentId = comment.CommentId.ToString(),
                         LikeCount = comment.Likes.ToString(),
-                        UserId = comment.UserId.ToString()
-                    }); ;
+                        UserId = comment.UserId.ToString(),
+                        PfpImageBase64 = comment.ImageBase64,
+                        EditButtonVisible = temp
+                    };
+                    commentList.Add(newcomment);
                 }
 
                 var imageBase64list = new List<string>();
@@ -1549,7 +2008,10 @@ namespace Foodiefeed.viewmodels
                     PostTextContent = post.Description,
                     ImageSource = post.PostImagesBase64[0],
                     Comments = commentList,
-                    ImagesBase64 = imageBase64list
+                    ImagesBase64 = imageBase64list,
+                    PfpImageBase64 = post.ProfilePictureBase64,
+                    PostId = post.PostId.ToString(),
+                    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false
                 };
 
       

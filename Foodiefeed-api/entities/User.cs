@@ -24,5 +24,7 @@
         public virtual ICollection<CommentLike> CommentLikes { get; set; }
         public virtual ICollection<PostLike> PostLikes { get; set; }
 
+        public virtual ICollection<Recipe> Recipes { get; set; }
+
     }
 }

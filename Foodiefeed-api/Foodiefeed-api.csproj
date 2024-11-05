@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
     <RootNamespace>Foodiefeed_api</RootNamespace>
+    <UserSecretsId>ed42e7f5-fe9f-4487-9a29-61ffaccdd0f8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.22.2" />
     <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="FuzzySharp" Version="2.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
