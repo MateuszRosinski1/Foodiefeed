@@ -546,7 +546,6 @@ namespace Foodiefeed.viewmodels
             var profilepost = ProfilePosts.FirstOrDefault(p => p.PostId == payload.postId);
             if(profilepost != null)
             {
-
             }
         }
 
@@ -785,7 +784,13 @@ namespace Foodiefeed.viewmodels
 
         [ObservableProperty]
         bool noTagsPickedNotifierVisible;
-        
+
+        [RelayCommand]
+        public async void DeletePost(string postId)
+        {
+            //var endpoint = $""
+        }
+
         [RelayCommand]
         public async void AddPost()
         {
@@ -2006,7 +2011,7 @@ namespace Foodiefeed.viewmodels
                     ImagesBase64 = imageBase64list,
                     PfpImageBase64 = post.ProfilePictureBase64,
                     PostId = post.PostId.ToString(),
-
+                    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false
                 };
 
       

@@ -46,6 +46,15 @@ public partial class PostView : ContentView
     public static readonly BindableProperty ImageSourceProperty =
         BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageSourceChanged);
 
+    public static readonly BindableProperty DeleteButtonVisibleProperty =
+        BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(CommentView), default(bool));
+
+    public bool DeleteButtonVisible
+    {
+        get => (bool)GetValue(DeleteButtonVisibleProperty);
+        set => SetValue(DeleteButtonVisibleProperty, value);
+    }
+
     #endregion
 
     int currentImageIndex;

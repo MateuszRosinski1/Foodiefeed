@@ -13,6 +13,7 @@ namespace Foodiefeed_api.services
         public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
         public Task<PopupPostDto> GetLikedPostAsync(int id);
         public Task CreatePostAsync(CreatePostDto dto);
+        public Task DeletePostAsync(int postId,int userId);
     }
 
     public class PostService : IPostService
@@ -174,6 +175,28 @@ namespace Foodiefeed_api.services
             }
 
             return postsDtos;
+        }
+
+        public async Task DeletePostAsync(int postId, int userId)
+        {
+             List<Comment> comments = new List<Comment>();
+
+            var commentmembers = _dbContext.PostCommentMembers.Where(m => m.PostId == postId).ToList();
+
+            foreach (var member in commentmembers)
+            {
+                var comment = await _dbContext.Comments.FirstAsync(c => c.CommentId == member.CommentId);
+                comments.Add(comment);
+            }
+
+            var post = await _dbContext.Posts.FirstAsync(p => p.PostId == postId);
+
+            _dbContext.PostCommentMembers.RemoveRange(commentmembers);
+            _dbContext.Comments.RemoveRange(comments);
+            _dbContext.Posts.Remove(post);
+            await _dbContext.SaveChangesAsync();
+
+            await AzureBlobStorageService.RemvePostImagesRangeAsync(userId, postId);      
         }
     }
 }

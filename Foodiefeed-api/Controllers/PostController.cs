@@ -45,5 +45,12 @@ namespace Foodiefeed_api.Controllers
             await _postService.CreatePostAsync(dto);
             return NoContent();
         }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeletePost(int postId,int userId)
+        {
+            await _postService.DeletePostAsync(postId,userId);
+            return NoContent();
+        }
     }
 }

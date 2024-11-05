@@ -437,7 +437,8 @@
                                                                 PfpImageBase64="{Binding PfpImageBase64}"
                                                                 PostId="{Binding PostId}"
                                                                 NewCommentContent="{Binding NewCommentContent}"
-                                                                Payload="{Binding Payload}"/>
+                                                                Payload="{Binding Payload}"
+                                                                DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
@@ -515,7 +516,8 @@
                                                         PfpImageBase64="{Binding PfpImageBase64}"
                                                         PostId="{Binding PostId}"
                                                         NewCommentContent="{Binding NewCommentContent}"
-                                                        Payload="{Binding Payload}"/>
+                                                        Payload="{Binding Payload}"
+                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
