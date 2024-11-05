@@ -22,6 +22,8 @@ using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
+using System.Net.Http.Json;
+using System.Collections.Generic;
 
 
 namespace Foodiefeed.viewmodels
@@ -172,15 +174,15 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            _userSession = userSession;
+            _userSession.Id = 15;
             Notifications.Add(new BasicNotofication());
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
             notifications.CollectionChanged += OnNotificationsChanged;
-            DisplaySearchResultHistory();
-            _userSession = userSession;
-            _userSession.Id = 15;
-            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
+            //DisplaySearchResultHistory();           
+            MainWallPostThresholdExceed();
 
-            Posts.Add(new PostView() { PostId = "5"});
+            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
@@ -221,7 +223,7 @@ namespace Foodiefeed.viewmodels
         {
             if(!windowloaded)   // appearing command invoked 2 times for some reason
             {
-                FetchNotifications();
+                //FetchNotifications();
                 windowloaded = true;
             }
                 
@@ -257,6 +259,54 @@ namespace Foodiefeed.viewmodels
                     NotifiyFailedAction("Something went wrong...");
                 }
             }
+        }
+
+        List<int> seenPostId = new List<int>();
+
+        [ObservableProperty]
+        bool wallPostLoadingActivityIndicatorVisible;
+
+        [RelayCommand]
+        public async Task MainWallPostThresholdExceed()
+        {
+            WallPostLoadingActivityIndicatorVisible = true;
+            using (var http = new HttpClient())
+            {              
+                try
+                {
+                    var endpoint = $"/api/posts/generate-wall-posts?userId={_userSession.Id}";
+                    var content = new StringContent(JsonConvert.SerializeObject(seenPostId), Encoding.UTF8, "application/json");
+
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri(API_BASE_URL + endpoint),
+                        Content = content
+                    };
+
+                    var response = await http.SendAsync(request);
+
+                    if(!response.IsSuccessStatusCode) { throw new Exception(); }
+
+                    var results = await response.Content.ReadAsStringAsync();
+                    var dtos = await JsonToObject<List<PostDto>>(results);
+                    seenPostId.AddRange(dtos.Select(dtos => dtos.PostId));
+                    await DisplayPosts(dtos,Posts);
+                }
+                catch
+                {
+                    NotifiyFailedAction("Could not load new post at the moment, try again later.");
+                }
+                finally
+                {
+                    WallPostLoadingActivityIndicatorVisible = false;
+                }
+            }
+        }
+
+        private async Task DisplayWallPosts(string json)
+        {
+
         }
 
         private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
@@ -702,16 +752,6 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void Scrolled(ItemsViewScrolledEventArgs e)
-        {
-
-            if (e.LastVisibleItemIndex == Posts.Count() - 2)
-            {
-
-            }
-        }
-
-        [RelayCommand]
         public void ShowAddPostForm()
         {
             this.AddPostFormVisible = true;
@@ -983,7 +1023,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void NotificationsThresholdExeed()
+        public void NotificationsThresholdExceed()
         {
            DisplayNotifications(10, allNotifications);
         }
@@ -1873,7 +1913,7 @@ namespace Foodiefeed.viewmodels
                 await Task.WhenAll(postsTask, friendsTask, followersTask);
 
                 var posts = await JsonToObject<List<PostDto>>(await postsTask);
-                DisplayProfilePosts(posts);
+                DisplayPosts(posts,ProfilePosts);
 
                 var friends = await JsonToObject<List<ListedFriendDto>>(await friendsTask);
                 DisplayProfileFriends(friends);
@@ -1964,16 +2004,16 @@ namespace Foodiefeed.viewmodels
             return string.Empty;
         }
 
-        private async Task DisplayProfilePosts(List<PostDto> posts)
+        private async Task DisplayPosts(List<PostDto> posts,ObservableCollection<PostView> collection)
         {
-            if (posts == null || posts.Count == 0)
+            if (ProfilePageVisible && (posts == null || posts.Count == 0))
             {
                 NoPostOnProfile = true;
                 ProfilePostsVisible = false;
                 return;
             }
 
-            await Dispatcher.GetForCurrentThread().DispatchAsync(() => { ProfilePosts.Clear(); });
+            if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
 
             foreach (var post in posts)
             {
@@ -2015,7 +2055,8 @@ namespace Foodiefeed.viewmodels
                 };
 
       
-                ProfilePosts.Add(postview);
+                //ProfilePosts.Add(postview);
+                collection.Add(postview);
                 await Task.Delay(100);
             }           
         }

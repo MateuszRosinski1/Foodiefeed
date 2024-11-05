@@ -244,10 +244,10 @@ namespace Foodiefeed_api.services
                     .Include(p => p.PostLikes)
                     .Include(p => p.PostCommentMembers)
                         .ThenInclude(pm => pm.Comment)
+                        .ThenInclude(c => c.CommentLikes)
                     .Where(p => orderedPostIds.Select(op => op.PostId).Contains(p.PostId))
                     .ToListAsync();
 
-                
                 var sortedPosts = orderedPostIds
                     .Join(postEntities,
                           op => op.PostId,
@@ -263,6 +263,23 @@ namespace Foodiefeed_api.services
                 {
                     var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(dto.UserId, dto.PostId);
                     dto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams);
+
+                    var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.UserId);
+                    dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);
+                    dto.Likes = postEntities.First(p => p.PostId == dto.PostId).PostLikes.Count;
+                    foreach(var comment in dto.Comments)
+                    {
+                        var entity = await _dbContext.Comments
+                         .Include(u => u.CommentLikes)
+                         .Include(e => e.User)
+                        .FirstAsync(c => c.CommentId == comment.CommentId);
+                        comment.Likes = entity.CommentLikes.ToList().Count;
+                        comment.Username = entity.User.Username;
+
+                        var stream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
+                        comment.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
+                    }
+
                 }
 
                 return dtos;
