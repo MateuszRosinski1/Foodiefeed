@@ -4,6 +4,7 @@ using Foodiefeed_api.exceptions;
 using Foodiefeed_api.models.posts;
 using Microsoft.EntityFrameworkCore;
 using Foodiefeed_api.models.comment;
+using Windows.UI;
 
 namespace Foodiefeed_api.services
 {
@@ -14,6 +15,7 @@ namespace Foodiefeed_api.services
         public Task<PopupPostDto> GetLikedPostAsync(int id);
         public Task CreatePostAsync(CreatePostDto dto);
         public Task DeletePostAsync(int postId,int userId);
+        public Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId);
     }
 
     public class PostService : IPostService
@@ -76,7 +78,7 @@ namespace Foodiefeed_api.services
             var post = await _dbContext.Posts
                 .Include(p => p.PostLikes)
                 .Include(p => p.PostProducts)
-                .Include(p => p.PostLikes)
+                .Include(p => p.PostLikes) // ?? check
                 .FirstOrDefaultAsync(p => p.PostId == id);
 
             if (post is null) throw new NotFoundException("post do not exist in current context");
@@ -197,6 +199,78 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
 
             await AzureBlobStorageService.RemvePostImagesRangeAsync(userId, postId);      
+        }
+
+        public async Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId)
+        {
+            try
+            {
+                var userTags = await _dbContext.UserTags
+                    .Where(ut => ut.UserId == userId)
+                    .ToDictionaryAsync(ut => ut.TagId, ut => ut.Score);
+
+                var posts = _dbContext.Posts
+                    .Where(p => !viewedPostsId.Contains(p.PostId))
+                    .Select(p => new
+                    {
+                        Post = p,
+                        PostTags = p.PostTags.Select(pt => pt.TagId).ToList(),
+                        DaysSinceCreated = (DateTime.Now - p.CreateTime).TotalDays
+                    })
+                    .AsEnumerable() 
+                    .Select(p => new
+                    {
+                        Post = p.Post,
+                        TagScoreSum = p.PostTags
+                            .Where(tagId => userTags.ContainsKey(tagId)) 
+                            .Sum(tagId => userTags[tagId]),
+                        DaysSinceCreated = p.DaysSinceCreated
+                    })
+                    .Select(p => new
+                    {
+                        Post = p.Post,
+                        PostScore = p.TagScoreSum + (100 / (1 + p.DaysSinceCreated)) 
+                    })
+                    .OrderByDescending(p => p.PostScore)
+                    .Take(15)
+                    .ToList();
+
+                //create a anonymous type list containg id and index for post
+                var orderedPostIds = posts.Select((p, index) => new { p.Post.PostId, Index = index }).ToList();
+
+                //retrive post entity from anonymous types
+                var postEntities = await _dbContext.Posts
+                    .Include(p => p.User)
+                    .Include(p => p.PostLikes)
+                    .Include(p => p.PostCommentMembers)
+                        .ThenInclude(pm => pm.Comment)
+                    .Where(p => orderedPostIds.Select(op => op.PostId).Contains(p.PostId))
+                    .ToListAsync();
+
+                
+                var sortedPosts = orderedPostIds
+                    .Join(postEntities,
+                          op => op.PostId,
+                          pe => pe.PostId,
+                          (op, pe) => new { op.Index, Post = pe })
+                    .OrderBy(x => x.Index)  
+                    .Select(x => x.Post)
+                    .ToList();
+
+                var dtos = _mapper.Map<List<PostDto>>(sortedPosts);
+
+                foreach(var dto in dtos)
+                {
+                    var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(dto.UserId, dto.PostId);
+                    dto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams);
+                }
+
+                return dtos;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
