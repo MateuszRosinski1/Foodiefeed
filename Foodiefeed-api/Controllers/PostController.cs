@@ -52,5 +52,12 @@ namespace Foodiefeed_api.Controllers
             await _postService.DeletePostAsync(postId,userId);
             return NoContent();
         }
+
+        [HttpGet("generate-wall-posts")]
+        public async Task<IActionResult> GenerateWallPosts(int userId,[FromBody]List<int> viewedPostsId)
+        {
+            var response = await _postService.GenerateWallPostsAsync(userId,viewedPostsId);
+            return Ok(response);
+        }
     }
 }

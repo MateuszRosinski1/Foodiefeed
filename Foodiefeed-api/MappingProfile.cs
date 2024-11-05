@@ -16,10 +16,15 @@ namespace Foodiefeed_api
             CreateMap<User, ListedFriendDto>();
             CreateMap<User,UserDto>();
             CreateMap<User, UserProfileModel>();
-            CreateMap<Post, PostDto>();
+            CreateMap<Post, PostDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.PostCommentMembers.Select(pm => pm.Comment)));
             CreateMap<Post, PopupPostDto>();
             CreateMap<CreatePostDto, Post>();
-            CreateMap<Comment,CommentDto>();
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
+                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.CommentLikes.Count));
+
             CreateMap<Notification, NotificationDto>();
             CreateMap<NewCommentDto, Comment>();
         }

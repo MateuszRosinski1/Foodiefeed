@@ -17,6 +17,7 @@
         <x:Double x:Key="LeftBarHeightAdjustValue">170</x:Double>
         <x:Double x:Key="MidBarWidthAdjustValue">600</x:Double>
         <x:Double x:Key="MidBarHeightAdjustValue">100</x:Double>
+        <x:Double x:Key="PostCollectionViewAdjustValue">160</x:Double>
         <x:Double x:Key="RightBarHeightAdjustValue">100</x:Double>
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
@@ -133,18 +134,6 @@
                 </Border>
 
                 <HorizontalStackLayout HorizontalOptions="End">
-                    <!--<Path BackgroundColor="Transparent" ZIndex="100" VerticalOptions="Center" Scale="1" WidthRequest="40" HeightRequest="35"  Fill="DarkGray" 
-                          Data="M 27 6 C 31.995 13.5353 26.805 20.97 32.916 28.491 C 28.5345 28.518 12.0105 28.44 6.0315 28.4055 C 11.9775 21 8.235 13.5 12 6 C 13.425 3.555 16.485 2.235 19.512 2.247 C 23.13 2.385 25.275 3.4575 26.985 5.985">
-                        <Path.GestureRecognizers>
-                            -->
-                    <!--Data="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"-->
-                    <!--
-                            <PointerGestureRecognizer PointerEntered="NotificationBellAnimation"/>
-                        </Path.GestureRecognizers>
-                        <Path.RenderTransform>
-                            <RotateTransform x:Name="NotificationBellTransform"/>
-                        </Path.RenderTransform>
-                    </Path>-->
                     <BoxView WidthRequest="200" BackgroundColor="MediumPurple" HeightRequest="30" VerticalOptions="Center" Margin="100,0,0,0"></BoxView>
                 </HorizontalStackLayout>
 
@@ -179,13 +168,12 @@
                                 </Button.Shadow>
                             </Button>
                         </HorizontalStackLayout>
-                        <Grid  HorizontalOptions="Start" 
-                                     VerticalOptions="Start" 
-                                     x:Name="hubScroll" 
-                                     BackgroundColor="Transparent"
-                                     WidthRequest="300" 
-                                     HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" 
-                                     >
+                        <Grid   HorizontalOptions="Start" 
+                                VerticalOptions="Start" 
+                                x:Name="hubScroll" 
+                                BackgroundColor="Transparent"
+                                WidthRequest="300" 
+                                HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
                             <!--pages-->
                             <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
                                 <!--<CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
@@ -234,6 +222,7 @@
 
                 <!--PostGrid-->
                 <ScrollView Grid.Column="1"
+                            IsVisible="{Binding PostPageVisible,Converter={StaticResource InverseBooleanConverter}}"
                             BackgroundColor="{DynamicResource MainBackgroundColor}"
                             WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 
@@ -424,8 +413,7 @@
                                     <StackLayout Orientation="Vertical" 
                                                  x:Name="ProfilePostGrid" 
                                                  IsVisible="{Binding ProfilePostsVisible}" 
-                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}"
-                                                 >
+                                                 BindableLayout.ItemsSource="{Binding ProfilePosts}">
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
                                                 <views:PostView Username="{Binding Username}"
@@ -484,44 +472,7 @@
                                 </VerticalStackLayout>
                             </VerticalStackLayout>
                         </Grid>
-
-                        <VerticalStackLayout IsVisible="{Binding PostPageVisible}">
-                            <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
-                                   HeightRequest="60" 
-                                   Margin="0,5,0,0" 
-                                   BorderColor="Transparent" 
-                                   HasShadow="True" Padding="5">
-                                <HorizontalStackLayout>
-                                    <Frame Padding="0" BackgroundColor="{DynamicResource MainBackgroundColor}">
-                                        <Label Text="Filter posts" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                    </Frame>
-                                    <Frame Padding="0" BackgroundColor="{DynamicResource MainBackgroundColor}">
-                                        <Label Text="Add Post" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding ShowAddPostFormCommand}"/>
-                                        </Frame.GestureRecognizers>
-                                    </Frame>
-                                </HorizontalStackLayout>
-                            </Frame>
-                            <StackLayout Orientation="Vertical" x:Name="PostGrid"  
-                                         BindableLayout.ItemsSource="{Binding Posts}">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:PostView Username="{Binding Username}"
-                                                        TimeStamp="{Binding TimeStamp}"
-                                                        PostTextContent="{Binding PostTextContent}"
-                                                        PostLikeCount="{Binding PostLikeCount}"
-                                                        ImageSource="{Binding ImageSource}"
-                                                        ImagesBase64="{Binding ImagesBase64}"
-                                                        PfpImageBase64="{Binding PfpImageBase64}"
-                                                        PostId="{Binding PostId}"
-                                                        NewCommentContent="{Binding NewCommentContent}"
-                                                        Payload="{Binding Payload}"
-                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </StackLayout>
-                        </VerticalStackLayout>
+                       
 
                         <Grid IsVisible="{Binding SettingsPageVisible}" Padding="40">
                             <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" MaximumWidthRequest="1000">
@@ -722,7 +673,7 @@
                                                          StrokeThickness="0.5" 
                                                          StrokeShape="RoundRectangle 20"                                                                                       
                                                          BackgroundColor="{DynamicResource EntryBackround}">
-                                                    
+
                                                     <VerticalStackLayout VerticalOptions="Center" 
                                                                          Spacing="10">
                                                         <Border StrokeThickness="0" 
@@ -743,7 +694,7 @@
                                                 </Border>
 
                                             </Grid>
-                                            
+
                                             <HorizontalStackLayout HorizontalOptions="End" 
                                                                    VerticalOptions="End" 
                                                                    Spacing="10">
@@ -780,10 +731,60 @@
 
                 </ScrollView>
 
+                <Grid Grid.Column="1">
+                    <VerticalStackLayout IsVisible="{Binding PostPageVisible}"
+                                         BackgroundColor="{DynamicResource MainBackgroundColor}"
+                                         WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
 
+                        <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                               HeightRequest="60" 
+                               Margin="0,5,0,0" 
+                               BorderColor="Transparent" 
+                               HasShadow="True" Padding="5">
+                            <HorizontalStackLayout>
+                                <Frame Padding="0" 
+                                       BackgroundColor="{DynamicResource MainBackgroundColor}">
+                                    <Label Text="Add Post" TextColor="{DynamicResource TextColor}" 
+                                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ShowAddPostFormCommand}"/>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                            </HorizontalStackLayout>
+                        </Frame>
+                        <CollectionView ItemsSource="{Binding Posts}"
+                                        RemainingItemsThreshold="5"
+                                        VerticalScrollBarVisibility="Always"
+                                        ItemsUpdatingScrollMode="KeepScrollOffset"
+                                        RemainingItemsThresholdReachedCommand="{Binding MainWallPostThresholdExceedCommand}"                                  
+                                        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostCollectionViewAdjustValue}}">
+                            <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:PostView Username="{Binding Username}"
+                                                        TimeStamp="{Binding TimeStamp}"
+                                                        PostTextContent="{Binding PostTextContent}"
+                                                        PostLikeCount="{Binding PostLikeCount}"
+                                                        ImageSource="{Binding ImageSource}"
+                                                        ImagesBase64="{Binding ImagesBase64}"
+                                                        PfpImageBase64="{Binding PfpImageBase64}"
+                                                        PostId="{Binding PostId}"
+                                                        NewCommentContent="{Binding NewCommentContent}"
+                                                        Payload="{Binding Payload}"
+                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                        </CollectionView>
 
+                        
 
-
+                    </VerticalStackLayout>
+                    <Grid VerticalOptions="End" 
+                          ZIndex="100"
+                          HorizontalOptions="Center" BackgroundColor="Transparent" HeightRequest="100" WidthRequest="500"
+                          IsVisible="{Binding WallPostLoadingActivityIndicatorVisible}">
+                        <ActivityIndicator IsRunning="True"/>
+                    </Grid>
+                </Grid>
 
                 <ScrollView BackgroundColor="{DynamicResource SideBackgroundColor}" 
                             HorizontalOptions="End" 
@@ -805,8 +806,6 @@
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
                 </ScrollView>
-
-
             </Grid>
 
 

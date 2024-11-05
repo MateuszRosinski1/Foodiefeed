@@ -41,7 +41,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.CommentLike", b =>
@@ -56,7 +56,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CommentLikes");
+                    b.ToTable("CommentLikes", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Follower", b =>
@@ -71,7 +71,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("FollowedUserId");
 
-                    b.ToTable("Followers");
+                    b.ToTable("Followers", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Friend", b =>
@@ -86,7 +86,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("FriendUserId");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.FriendRequest", b =>
@@ -101,7 +101,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("FriendRequests");
+                    b.ToTable("FriendRequests", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Notification", b =>
@@ -140,7 +140,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
@@ -165,7 +165,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostCommentMember", b =>
@@ -180,7 +180,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("CommentId");
 
-                    b.ToTable("PostCommentMembers");
+                    b.ToTable("PostCommentMembers", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostImage", b =>
@@ -202,7 +202,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostImages");
+                    b.ToTable("PostImages", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostLike", b =>
@@ -217,7 +217,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PostLikes");
+                    b.ToTable("PostLikes", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostProduct", b =>
@@ -239,7 +239,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostProducts");
+                    b.ToTable("PostProducts", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.PostTag", b =>
@@ -258,7 +258,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("PostTags");
+                    b.ToTable("PostTags", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Recipe", b =>
@@ -281,7 +281,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Tag", b =>
@@ -298,7 +298,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.User", b =>
@@ -338,7 +338,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.UserTag", b =>
@@ -356,7 +356,7 @@ namespace Foodiefeed_api.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("UserTags");
+                    b.ToTable("UserTags", (string)null);
                 });
 
             modelBuilder.Entity("Foodiefeed_api.entities.Comment", b =>

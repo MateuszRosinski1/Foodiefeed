@@ -17,8 +17,6 @@ namespace Foodiefeed_api
         //https://github.com/karansikka1/iFood_2019?tab=readme-ov-file dish images
         public static async void SeedData(dbContext context)
         {
-            //context.Database.EnsureDeleted();
-            //context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
                 var userFaker = new Faker<User>()
@@ -234,28 +232,25 @@ namespace Foodiefeed_api
 
             if (!context.PostTags.Any())
             {
-                var postTagsFaker = new Faker<PostTag>()
-                    .RuleFor(pt => pt.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-                    .RuleFor(pt => pt.TagId, f => f.PickRandom(context.Tags.ToList()).Id)
-                    .RuleFor(pt => pt.Description, f => "");
-
-                var postTagsSet = new HashSet<(int PostId, int TagId)>();
                 var postTags = new List<PostTag>();
-
-                while (postTags.Count < 10000)
+                var allTags = context.Tags.ToList();
+                var posts = context.Posts.Include(p => p.PostTags).ToList();
+                foreach (var post in posts)
                 {
-                    var newPostTag = postTagsFaker.Generate();
 
-                    //postTagsSet.Add returns true if the method is able to add an element, otherwise false
-                    //hashset was uset cause of efficiency reasons
-                    if (postTagsSet.Add((newPostTag.PostId, newPostTag.TagId)))
+                    while (post.PostTags.Count < 4)
                     {
-                        postTags.Add(newPostTag);
+                        var randomTag = allTags[new Random().Next(allTags.Count)];
+
+                        bool tagExists = context.PostTags.Any(pt => pt.PostId == post.PostId && pt.TagId == randomTag.Id);
+
+                        if (!tagExists)
+                        {
+                            post.PostTags.Add(new PostTag { PostId = post.PostId, TagId = randomTag.Id, Description = "" });
+                            context.SaveChanges();
+                        }
                     }
                 }
-
-                context.PostTags.AddRange(postTags);
-                context.SaveChanges();
             }
 
             if (!context.UserTags.Any())
@@ -263,22 +258,23 @@ namespace Foodiefeed_api
                 var faker = new Faker();
                 var userIds = context.Users.Select(u => u.Id).ToList();
                 var tagIds = context.Tags.Select(t => t.Id).ToList();
-                var userTags = new List<UserTag>(); 
 
-                while (userTags.Count < 1000) 
+                foreach (var id in userIds)
                 {
-                    var userId = userIds[faker.Random.Int(0, userIds.Count - 1)];
-                    var tagId = tagIds[faker.Random.Int(0, tagIds.Count - 1)];
-                    var score = faker.Random.Int(1, 100);
+                    var user = await context.Users.Include(u => u.UserTags).FirstAsync(u => u.Id == id);
 
-                    if (!userTags.Any(ut => ut.UserId == userId && ut.TagId == tagId) &&
-                        !context.UserTags.Any(ut => ut.UserId == userId && ut.TagId == tagId)) 
+                    foreach(var tag in tagIds)
                     {
-                        userTags.Add(new UserTag { UserId = userId, TagId = tagId, Score = score });
+                        var initTag = new UserTag()
+                        {
+                            UserId = user.Id,
+                            TagId = tag,
+                            Score = faker.Random.Int(0, 100)
+                        };
+                        user.UserTags.Add(initTag);
                     }
                 }
 
-                context.UserTags.AddRange(userTags); 
                 context.SaveChanges();
             }
 

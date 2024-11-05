@@ -10,6 +10,7 @@ namespace Foodiefeed_api.entities
         [Key]
         public int TagId { get; set; }
 
+        [Range(0,100)]
         public int Score { get; set; } 
 
         [ForeignKey("UserId")]
