@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Windows.Storage;
 
 namespace Foodiefeed_api.services
@@ -11,6 +12,8 @@ namespace Foodiefeed_api.services
         public Task<Stream> FetchProfileImageAsync(int userId);
         public Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams);
         public Task<string> ConvertStreamToBase64Async(Stream stream);
+
+        public Task RemvePostImagesRangeAsync(int userId, int postId);
     }
 
     public class AzureBlobStorageService : IAzureBlobStorageSerivce
@@ -119,5 +122,17 @@ namespace Foodiefeed_api.services
             "image/jpeg" => ".jpeg",
             "image/png" => ".png",         
         };
+
+        public async Task RemvePostImagesRangeAsync(int userId, int postId)
+        {
+            var dir = $"{userId}/posts/{postId}/";
+
+
+            await foreach (BlobItem item in container.GetBlobsAsync(prefix: dir))
+            {
+                BlobClient client = container.GetBlobClient(item.Name);
+                await client.DeleteIfExistsAsync();
+            }
+        }
     }
 }
