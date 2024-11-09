@@ -6,7 +6,9 @@ namespace Foodiefeed_api.entities
     {
         public int PostProductId { get; set; }
         public int PostId { get; set; }
-        public string Product { get; set; }
-        //public virtual Post Post { get; set; }
+        public int ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public virtual Products Product { get; set; }
     }
 }

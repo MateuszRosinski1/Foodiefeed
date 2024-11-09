@@ -4,9 +4,9 @@ using Bogus.DataSets;
 using Foodiefeed_api.entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Newtonsoft.Json;
 
 namespace Foodiefeed_api
 {
@@ -15,8 +15,13 @@ namespace Foodiefeed_api
         //https://www.crcv.ucf.edu/data/Selfie/ dataset for selfies
         //https://www.kaggle.com/datasets/trolukovich/food11-image-dataset dataset for dishes images
         //https://github.com/karansikka1/iFood_2019?tab=readme-ov-file dish images
+        //https://www.kaggle.com/datasets/kaggle/recipe-ingredients-dataset?resource=download products dataset
         public static async void SeedData(dbContext context)
         {
+
+            
+
+
             if (!context.Users.Any())
             {
                 var userFaker = new Faker<User>()
@@ -206,16 +211,41 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
+            if (!context.Products.Any())
+            {
+                var products = Product.ProductNames;
+
+                List<Products> productsList = new List<Products>();
+
+                foreach (var product in products)
+                {
+                    productsList.Add(new Products() { Name = product });
+                }
+
+                context.Products.AddRange(productsList);
+                context.SaveChanges();
+            }
+
             if (!context.PostProducts.Any())
             {
                 var postProductFaker = new Faker<PostProduct>()
-                    .RuleFor(pp => pp.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-                    .RuleFor(pp => pp.Product, f => f.Commerce.ProductName());
+                     .RuleFor(pp => pp.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                     .RuleFor(pp => pp.ProductId, f => f.PickRandom(context.Products.ToList()).Id);
 
                 var postProducts = postProductFaker.Generate(20000);
-                context.PostProducts.AddRange(postProducts);
-                context.SaveChanges();
 
+                var noDupes = new List<PostProduct>();
+
+                foreach(var product in postProducts)
+                {
+                    if (!noDupes.Contains(product))
+                    {
+                        noDupes.Add(product);
+                    }
+                }
+
+                context.PostProducts.AddRange(noDupes);
+                context.SaveChanges();
             }
 
             if (!context.Tags.Any())

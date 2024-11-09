@@ -23,6 +23,7 @@ namespace Foodiefeed_api.entities
         public virtual DbSet<PostLike> PostLikes { get; set; }
         public virtual DbSet<CommentLike> CommentLikes { get; set; }
         public virtual DbSet<Recipe> Recipes { get; set; }
+        public virtual DbSet<Products> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

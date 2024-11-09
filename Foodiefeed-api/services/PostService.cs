@@ -165,13 +165,13 @@ namespace Foodiefeed_api.services
 
                 
 
-                var postProducts = post.PostProducts.ToList();
-                postsDtos[i].ProductsName = new List<string>();
+                //var postProducts = post.PostProducts.ToList();
+                //postsDtos[i].ProductsName = new List<string>();
 
-                foreach (var product in postProducts)
-                {                    
-                    postsDtos[i].ProductsName.Add(product.Product);
-                }
+                //foreach (var product in postProducts)
+                //{                    
+                //    postsDtos[i].ProductsName.Add(product.Product);
+                //}
                 i++;
 
             }

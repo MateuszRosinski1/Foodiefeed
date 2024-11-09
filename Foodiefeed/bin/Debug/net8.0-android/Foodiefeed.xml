@@ -162,6 +162,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangedImageProfilePicturePath">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.changedImageProfilePicturePath"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.WallPostLoadingActivityIndicatorVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.wallPostLoadingActivityIndicatorVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.EditedCommentContent">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.editedCommentContent"/>
         </member>
@@ -213,6 +216,12 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.AppearingCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.Appearing"/>.</summary>
         </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.mainWallPostThresholdExceedCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.MainWallPostThresholdExceedCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.MainWallPostThresholdExceedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.MainWallPostThresholdExceed"/>.</summary>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.showCommentedPostCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowCommentedPostCommand"/>.</summary>
         </member>
@@ -260,12 +269,6 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ClearNotificationsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ClearNotifications"/>.</summary>
-        </member>
-        <member name="F:Foodiefeed.viewmodels.BoardViewModel.scrolledCommand">
-            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledCommand"/>.</summary>
-        </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ScrolledCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.Scrolled(Microsoft.Maui.Controls.ItemsViewScrolledEventArgs)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.showAddPostFormCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowAddPostFormCommand"/>.</summary>
@@ -327,11 +330,11 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterTags"/>.</summary>
         </member>
-        <member name="F:Foodiefeed.viewmodels.BoardViewModel.notificationsThresholdExeedCommand">
-            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeedCommand"/>.</summary>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.notificationsThresholdExceedCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceedCommand"/>.</summary>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeedCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExeed"/>.</summary>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceed"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.toMainViewCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ToMainViewCommand"/>.</summary>
@@ -757,6 +760,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ChangedImageProfilePicturePath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ChangedImageProfilePicturePath" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.WallPostLoadingActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "WallPostLoadingActivityIndicatorVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EditedCommentContent">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EditedCommentContent" generated properties.</summary>
         </member>
@@ -942,6 +948,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ChangedImageProfilePicturePath">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ChangedImageProfilePicturePath" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.WallPostLoadingActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "WallPostLoadingActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EditedCommentContent">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EditedCommentContent" generated properties.</summary>
