@@ -5,6 +5,7 @@
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Name="PostContentView"
              MaximumWidthRequest="1000"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
 
     <VerticalStackLayout>
@@ -42,6 +43,7 @@
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
+                            <Button Text="Products" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" TextColor="{DynamicResource TextColor}" Clicked="ShowProducts"></Button>
                         </HorizontalStackLayout>
                         <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
                         <Button BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
@@ -56,7 +58,14 @@
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <VerticalStackLayout>
                             <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                <Grid>
+                                    <Grid x:Name="PostContentGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                    <Grid x:Name="PostProductsGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                </Grid>
                             </ScrollView>
                             <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
                                 <Label.GestureRecognizers>

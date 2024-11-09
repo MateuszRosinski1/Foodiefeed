@@ -47,7 +47,37 @@ public partial class PostView : ContentView
         BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageSourceChanged);
 
     public static readonly BindableProperty DeleteButtonVisibleProperty =
-        BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(CommentView), default(bool));
+        BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(PostView), default(bool));
+
+    public static readonly BindableProperty PostProductsProperty =
+        BindableProperty.Create(nameof(PostProducts), typeof(List<string>), typeof(PostView), default(List<string>),propertyChanged: OnProductsChanged);
+
+    public static readonly BindableProperty PostContentVisibleProperty =
+        BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(PostView), default(bool),propertyChanged: OnContentVisiblityChanged);
+
+    private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+        view.PostContentGrid.IsVisible = (bool)newValue;
+        view.PostProductsGrid.IsVisible = !(bool)newValue;
+
+    }
+
+    private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+       var view = (PostView)bindable;
+
+       List<string> Products = newValue as List<string>;
+
+       string productString = string.Empty;
+
+       foreach(var product in Products)
+       {
+            productString += product + '\n';
+       }
+
+        view.PostProductsContentLabel.Text = productString;
+    }
 
     public bool DeleteButtonVisible
     {
@@ -55,11 +85,22 @@ public partial class PostView : ContentView
         set => SetValue(DeleteButtonVisibleProperty, value);
     }
 
+    public bool PostContentVisible {
+        get => (bool)GetValue(PostContentVisibleProperty);
+        set => SetValue(PostContentVisibleProperty, value);
+    }
+
     #endregion
 
     int currentImageIndex;
 
     #region Properties
+
+    public List<string> PostProducts
+    {
+        get => (List<string>)GetValue(PostProductsProperty);
+        set => SetValue(PostProductsProperty, value);
+    }
 
     public (string,string) Payload
     {
@@ -222,6 +263,7 @@ public partial class PostView : ContentView
         PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
+        PostContentVisible = true;
     }
 
     #region animations
@@ -346,5 +388,10 @@ public partial class PostView : ContentView
         Button button = (Button)sender;
         var animation = new Animation(v => button.FontSize = v, from, to);
         animation.Commit(this, button.Text + "_Font", rate, lenght, Easing.BounceIn);
+    }
+
+    private void ShowProducts(object sender, EventArgs e)
+    {
+        PostContentVisible = !PostContentVisible;
     }
 }

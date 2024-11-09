@@ -426,7 +426,9 @@
                                                                 PostId="{Binding PostId}"
                                                                 NewCommentContent="{Binding NewCommentContent}"
                                                                 Payload="{Binding Payload}"
-                                                                DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
+                                                                DeleteButtonVisible="{Binding DeleteButtonVisible}"
+                                                                PostProducts="{Binding PostProducts}"
+                                                                PostContentVisible="{Binding PostContentVisible}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
@@ -770,7 +772,9 @@
                                                         PostId="{Binding PostId}"
                                                         NewCommentContent="{Binding NewCommentContent}"
                                                         Payload="{Binding Payload}"
-                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
+                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"
+                                                        PostProducts="{Binding PostProducts}"
+                                                        PostContentVisible="{Binding PostContentVisible}"/>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                         </CollectionView>

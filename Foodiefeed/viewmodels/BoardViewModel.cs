@@ -2051,6 +2051,7 @@ namespace Foodiefeed.viewmodels
                     ImagesBase64 = imageBase64list,
                     PfpImageBase64 = post.ProfilePictureBase64,
                     PostId = post.PostId.ToString(),
+                    PostProducts = post.ProductsName,
                     DeleteButtonVisible = post.UserId == _userSession.Id ? true : false
                 };
 

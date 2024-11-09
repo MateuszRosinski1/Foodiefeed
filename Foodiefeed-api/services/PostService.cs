@@ -114,6 +114,7 @@ namespace Foodiefeed_api.services
                 .ThenInclude(p => p.PostImages)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostProducts)
+                .ThenInclude(pp => pp.Product)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostCommentMembers)
             .Include(u => u.Posts)
@@ -169,8 +170,8 @@ namespace Foodiefeed_api.services
                 //postsDtos[i].ProductsName = new List<string>();
 
                 //foreach (var product in postProducts)
-                //{                    
-                //    postsDtos[i].ProductsName.Add(product.Product);
+                //{
+                //    postsDtos[i].ProductsName.Add(product.Product.Name);
                 //}
                 i++;
 
@@ -245,6 +246,8 @@ namespace Foodiefeed_api.services
                     .Include(p => p.PostCommentMembers)
                         .ThenInclude(pm => pm.Comment)
                         .ThenInclude(c => c.CommentLikes)
+                    .Include(p => p.PostProducts)
+                        .ThenInclude(pp => pp.Product)
                     .Where(p => orderedPostIds.Select(op => op.PostId).Contains(p.PostId))
                     .ToListAsync();
 
