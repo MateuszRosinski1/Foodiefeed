@@ -55,6 +55,9 @@ public partial class PostView : ContentView
     public static readonly BindableProperty PostContentVisibleProperty =
         BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(PostView), default(bool),propertyChanged: OnContentVisiblityChanged);
 
+    public static readonly BindableProperty PostImagesVisibleProperty =
+        BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(PostView), default(bool));
+
     private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostView)bindable;
@@ -67,9 +70,13 @@ public partial class PostView : ContentView
     {
        var view = (PostView)bindable;
 
+       if (newValue is null) return;
+
        List<string> Products = newValue as List<string>;
 
        string productString = string.Empty;
+
+       
 
        foreach(var product in Products)
        {
@@ -77,6 +84,12 @@ public partial class PostView : ContentView
        }
 
         view.PostProductsContentLabel.Text = productString;
+    }
+
+    public bool PostImagesVisible
+    {
+        get => (bool)GetValue(PostImagesVisibleProperty);
+        set => SetValue(PostImagesVisibleProperty, value);
     }
 
     public bool DeleteButtonVisible
@@ -130,8 +143,7 @@ public partial class PostView : ContentView
     BindableProperty.Create(
         nameof(ImagesBase64),    
         typeof(List<string>),    
-        typeof(PostView),        
-        new List<string>(),     
+        typeof(PostView),default(List<string>),     
         propertyChanged: OnImagesBase64Changed 
     ); 
 
@@ -390,8 +402,27 @@ public partial class PostView : ContentView
         animation.Commit(this, button.Text + "_Font", rate, lenght, Easing.BounceIn);
     }
 
+
+    private async void UnscaleButton(object sender, PointerEventArgs e)
+    {
+        var hsl = (HorizontalStackLayout)sender;
+        await hsl.ScaleTo(1,250,Easing.Linear);
+    }
+
+    private async void ScaleButton(object sender, PointerEventArgs e)
+    {
+        var hsl = (HorizontalStackLayout)sender;
+        await hsl.ScaleTo(1.2, 250, Easing.Linear);
+    }
+
     private void ShowProducts(object sender, EventArgs e)
     {
         PostContentVisible = !PostContentVisible;
+    }
+
+    private async void ScaleButtonn(object sender, PointerEventArgs e)
+    {
+        var hsl = (Button)sender;
+        await hsl.ScaleTo(1.2, 250, Easing.Linear);
     }
 }

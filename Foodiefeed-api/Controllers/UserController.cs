@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Foodiefeed_api.services;
 using Foodiefeed_api.models.user;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Foodiefeed_api.Controllers
 {
@@ -38,6 +39,7 @@ namespace Foodiefeed_api.Controllers
             return Ok(response);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto)
         {
@@ -46,6 +48,7 @@ namespace Foodiefeed_api.Controllers
             return Ok("User Created Succesfully");
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto)
         {
@@ -54,6 +57,7 @@ namespace Foodiefeed_api.Controllers
             return Ok(userId);
         }
 
+        
         [HttpPut("SetOnline/{id}")]
         public async Task<IActionResult> SetOnline([FromRoute]int id)
         {

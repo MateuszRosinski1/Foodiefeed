@@ -20,6 +20,7 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<IAzureBlobStorageSerivce, AzureBlobStorageService>();
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
@@ -42,6 +43,13 @@ app.MapGet("/get-all-tags", async (dbContext context) =>
     var tags = await context.Tags.ToListAsync();
     return Results.Ok(tags);
 });
+
+app.MapGet("/get-all-products", async (dbContext context) =>
+{
+    var products = await context.Products.ToListAsync();
+    return Results.Ok(products);
+});
+
 
 app.UseHttpsRedirection();
 

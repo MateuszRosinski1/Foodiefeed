@@ -17,13 +17,10 @@ using System.Text.RegularExpressions;
 using System.Text;
 using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Maui.Platform;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
-using System.Net.Http.Json;
-using System.Collections.Generic;
 
 
 namespace Foodiefeed.viewmodels
@@ -180,7 +177,7 @@ namespace Foodiefeed.viewmodels
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
             notifications.CollectionChanged += OnNotificationsChanged;
             //DisplaySearchResultHistory();           
-            MainWallPostThresholdExceed();
+            //MainWallPostThresholdExceed();
 
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
@@ -200,6 +197,7 @@ namespace Foodiefeed.viewmodels
             this.HubPanelVisible = false; // on init false
             this.CanShowSearchPanel = true; //on init true
             this.AddPostFormVisible = false; //on init false
+            PostContentEditorVisible = true;
 
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
@@ -755,6 +753,7 @@ namespace Foodiefeed.viewmodels
         public void ShowAddPostForm()
         {
             this.AddPostFormVisible = true;
+            PostContentEditorVisible = true;
         }
 
         [RelayCommand]
@@ -763,16 +762,25 @@ namespace Foodiefeed.viewmodels
             Tags.Clear();
             alltags.Clear();
             PickedTags.Clear();
+
+            allproducts.Clear();
+            Products.Clear();
+            PickedProducts.Clear();
+
+            this.AddPostFormVisible = false;
             PostContent = string.Empty;
             FilterParam = string.Empty;
             this.TagPickerVisible = false;
-            this.AddPostFormVisible = false;
+            ProductPickerVisible = false;
         }
 
         [RelayCommand]
         public void ApplyTags()
         {
             TagPickerVisible = false;
+            PostContentEditorVisible = true;
+            Tags.Clear();
+            alltags.Clear();
         }
 
         ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
@@ -821,14 +829,23 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool tagPickerVisible;
 
+        [ObservableProperty]
+        bool postContentEditorVisible;
 
         [ObservableProperty]
-        bool noTagsPickedNotifierVisible;
+        bool productPickerVisible;
+
+        [ObservableProperty]
+        bool postModelvalidationFailedNotifierVisible;
+
+        [ObservableProperty]
+        string errMsg;
 
         [RelayCommand]
         public async void DeletePost(string postId)
         {
             //var endpoint = $""
+            int i = 0;
         }
 
         [RelayCommand]
@@ -842,9 +859,19 @@ namespace Foodiefeed.viewmodels
                 return;
             }else if (PickedTags.Count != 4)
             {
-                NoTagsPickedNotifierVisible = true;
+                ErrMsg = "You must pick 4 tags to post.";
+                PostModelvalidationFailedNotifierVisible = true;
                 await Task.Delay(3000);
-                NoTagsPickedNotifierVisible = false;
+                ErrMsg = string.Empty;
+                PostModelvalidationFailedNotifierVisible = false;
+                return;
+            }else if (!PickedProducts.Any())
+            {
+                ErrMsg = "You must pick atleat one recipe product";
+                PostModelvalidationFailedNotifierVisible = true;
+                await Task.Delay(3000);
+                ErrMsg = string.Empty;
+                PostModelvalidationFailedNotifierVisible = false;
                 return;
             }
             
@@ -856,6 +883,11 @@ namespace Foodiefeed.viewmodels
                 foreach (var tag in PickedTags)
                 {
                     content.Add(new StringContent(tag.Id), "TagsId");
+                }
+
+                foreach(var product in PickedProducts)
+                {
+                    content.Add(new StringContent(product.Id), "ProductsId");
                 }
 
                 var imageStreams = new List<Stream>();
@@ -917,14 +949,17 @@ namespace Foodiefeed.viewmodels
 
         public ObservableCollection<TagView> Tags { get { return tags; } set { tags = value; } }
 
+        [ObservableProperty]
+        bool addPostFormActivityIndicatorVisible;
+
         [RelayCommand]
         public async void ChooseTags()
         {
+            AddPostFormActivityIndicatorVisible = true;
             Tags.Clear();
             using(var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
-
                 var endpoint = "/get-all-tags";
 
                 try
@@ -934,18 +969,28 @@ namespace Foodiefeed.viewmodels
                     var tagslist = await JsonToObject<List<TagView>>(results);
                     foreach(var tag in tagslist)
                     {
-                        tag.FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
+                        if (PickedTags.FirstOrDefault(t => t.Id == tag.Id) is not null)
+                        {
+                            tag.FrameBackground = Brush.Green.Color;
+                        }
+                        else
+                        {
+                            tag.FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
+                        }
                         Tags.Add(tag);
                         alltags.Add(tag);
                     }
                 }
                 catch
                 {
-                    //
+                    AddPostFormVisible = false;
+                    NotifiyFailedAction("Could not retrive tags from the server, try again later.");
                 }
                 finally
                 {
-                    this.TagPickerVisible = true;
+                    TagPickerVisible = true;
+                    PostContentEditorVisible = false;
+                    AddPostFormActivityIndicatorVisible = false;
                 }
             }
         }
@@ -961,15 +1006,16 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async void PickTag(string id)
         {
-            if (PickedTags.Contains(Tags.FirstOrDefault(t => t.Id == id)))
+            var tag = PickedTags.FirstOrDefault(t => t.Id == id);
+            if (tag is not null)
             {
-                PickedTags.Remove(Tags.FirstOrDefault(t => t.Id == id));
+                PickedTags.Remove(tag);
                 return;
             }
 
             if (PickedTags.Count < 4)
             {              
-                PickedTags.Add(Tags.FirstOrDefault(t => t.Id == id));
+                PickedTags.Add(Tags.First(t => t.Id == id));
             }
         }
 
@@ -978,8 +1024,9 @@ namespace Foodiefeed.viewmodels
         bool tagsActivityIndicatorVisible;
 
         [RelayCommand]
-        public async void FilterTags()
+        public async Task FilterTags()
         {
+            if (!AddPostFormVisible) return;
 
             try
             {
@@ -998,10 +1045,6 @@ namespace Foodiefeed.viewmodels
                 Tags.Clear();
                 foreach (var tag in newtags)
                 {      
-                    //if(PickedTags.Contains(tag))
-                    //{
-                    //    tag.FrameBackground = Brush.Green.Color;
-                    //}
                     Tags.Add(tag);                 
                 }
             }
@@ -1019,6 +1062,190 @@ namespace Foodiefeed.viewmodels
                     }
                 }
                 TagsActivityIndicatorVisible = false;
+            }
+        }
+
+
+        ObservableCollection<ProductView> allproducts = new ObservableCollection<ProductView>();
+        public ObservableCollection<ProductView> Products { get; set; } = new ObservableCollection<ProductView>();
+        static ObservableCollection<ProductView> pickedProducts = new ObservableCollection<ProductView>();
+        public static ObservableCollection<ProductView> PickedProducts { get { return pickedProducts; } }
+
+        [RelayCommand]
+        public async Task LoadProducts()
+        {
+            AddPostFormActivityIndicatorVisible = true;
+            var endpoint = "/get-all-products";
+
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.GetAsync(endpoint);
+
+                    var resutls = await response.Content.ReadAsStringAsync();
+
+                    var products = await JsonToObject<ObservableCollection<ProductView>>(resutls);
+                    allproducts = new ObservableCollection<ProductView>(products);
+
+                    foreach(var product in allproducts)
+                    {
+                        if (PickedProducts.FirstOrDefault(t => t.Id == product.Id) is not null)
+                        {
+                            product.FrameBackground = Brush.Green.Color;
+                        }
+                        else
+                        {
+                            product.FrameBackground = (Color)Application.Current.Resources["TagViewFrameBackground"];
+                        }
+                    }
+
+                    for(int i = 0;i <= 100;i++)
+                    {
+                        Products.Add(new ProductView() { 
+                            Id = allproducts[i].Id, 
+                            Name = allproducts[i].Name, 
+                            FrameBackground = allproducts[i].FrameBackground 
+                        });
+                    }
+
+                }
+                catch
+                {
+                    NotifiyFailedAction("internal server error, try again later");
+                }
+                finally 
+                {
+                    PostContentEditorVisible = false;
+                    ProductPickerVisible = true;
+                    AddPostFormActivityIndicatorVisible = false;
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task PickProduct(string id) {
+
+            var product  = PickedProducts.FirstOrDefault(p => p.Id == id);
+            if (product is not null)
+            {
+                PickedProducts.Remove(product);
+                return;
+            }
+
+            PickedProducts.Add(Products.First(p => p.Id == id));          
+        }
+
+        [ObservableProperty]
+        bool productsActivityIndicatorVisible;
+
+        private bool _canTresholdEventBeFired = true;
+
+        [RelayCommand]
+        public async Task FilterProducts() {
+
+            if (!AddPostFormVisible) return;
+
+            _canTresholdEventBeFired = false;
+            try
+            {
+                ProductsActivityIndicatorVisible = true;
+                if (string.IsNullOrEmpty(FilterParam))
+                {
+                    _canTresholdEventBeFired = true;
+                    Products.Clear();
+                    for (int i = 0; i <= 100; i++)
+                    {
+                        Products.Add(new ProductView()
+                        {
+                            Id = allproducts[i].Id,
+                            Name = allproducts[i].Name,
+                            FrameBackground = allproducts[i].FrameBackground
+                        });
+                    }
+                    return;
+                }
+                var newproducts = allproducts.Where(t => t.Name.Contains(FilterParam))
+                           .ToObservableCollection();
+
+                Products.Clear();
+                foreach (var product in newproducts)
+                {
+
+                    Products.Add(product);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                foreach (var product in Products)
+                {
+                    if (PickedProducts.Contains(product))
+                    {
+                        product.FrameBackground = Brush.Green.Color;
+                    }
+                }
+                ProductsActivityIndicatorVisible = false;
+            }
+        }
+
+        [RelayCommand]
+        public async Task ApplyProducts()
+        {
+            ProductPickerVisible = false;
+            PostContentEditorVisible = true;
+            Products.Clear();
+            allproducts.Clear();
+        }
+
+        private bool _isLoadingMore = false;
+        private const double LoadThreshold = 0.8;
+        private const int ItemsToLoad = 100;
+
+        [RelayCommand]
+        public async Task ProductsScroll(ScrollView scrollView)
+        {
+            if (!_canTresholdEventBeFired) return;
+
+            if (_isLoadingMore || ProductsActivityIndicatorVisible)
+                return;
+
+            if (scrollView == null || scrollView.Height <= 0)
+                return;
+
+            double totalScrollableHeight = scrollView.ContentSize.Height - scrollView.Height;
+            double scrolledRatio = scrollView.ScrollY / totalScrollableHeight;
+
+            if (scrolledRatio >= LoadThreshold)
+            {
+                _isLoadingMore = true;
+                ProductsActivityIndicatorVisible = true;
+
+                await LoadMoreProducts();
+
+                ProductsActivityIndicatorVisible = false;
+                _isLoadingMore = false;
+            }
+        }
+
+        private async Task LoadMoreProducts()
+        {
+            int currentCount = Products.Count();
+            int maxCount = allproducts.Count();
+
+            for (int i = currentCount; i < Math.Min(currentCount + ItemsToLoad, maxCount); i++)
+            {
+                Products.Add(new ProductView
+                {
+                    Id = allproducts[i].Id,
+                    Name = allproducts[i].Name,
+                    FrameBackground = allproducts[i].FrameBackground
+                });
             }
         }
 
@@ -1431,8 +1658,34 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void LikePost(string id)
         {
-            int i = 1;
-            int j = 2;
+        }
+
+        [RelayCommand]
+        public async void SaveRecipe(string postId)
+        {
+            var endpoint = $"api/recipes/save/{_userSession.Id}/{postId}";
+
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.PostAsync(endpoint, null);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var message = await response.Content.ReadAsStringAsync();
+                        NotifiyFailedAction(message);
+                        return;
+                    }
+                    NotifiyFailedAction("recipe saved succesfuly");
+                }
+                catch
+                {
+                    NotifiyFailedAction("internal server error, try again later");
+                }
+            }
         }
 
         [RelayCommand]
@@ -2013,7 +2266,12 @@ namespace Foodiefeed.viewmodels
                 return;
             }
 
+
             if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
+
+            //var temp2 = posts.First(t => t.PostId == 2006);
+
+            //posts = [temp2];
 
             foreach (var post in posts)
             {
@@ -2040,24 +2298,50 @@ namespace Foodiefeed.viewmodels
                     imageBase64list.Add(image);
                 }
 
-                var postview = new PostView()
+                try
                 {
-                    Username = post.Username,
-                    TimeStamp = post.TimeStamp,
-                    PostLikeCount = post.Likes.ToString(),
-                    PostTextContent = post.Description,
-                    ImageSource = post.PostImagesBase64[0],
-                    Comments = commentList,
-                    ImagesBase64 = imageBase64list,
-                    PfpImageBase64 = post.ProfilePictureBase64,
-                    PostId = post.PostId.ToString(),
-                    PostProducts = post.ProductsName,
-                    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false
-                };
-
-      
-                //ProfilePosts.Add(postview);
-                collection.Add(postview);
+                    if (imageBase64list.Count() == 0)
+                    {
+                        var postview = new PostView()
+                        {
+                            Username = post.Username,
+                            TimeStamp = post.TimeStamp,
+                            PostLikeCount = post.Likes.ToString(),
+                            PostTextContent = post.Description,
+                            Comments = commentList,
+                            PfpImageBase64 = post.ProfilePictureBase64,
+                            PostId = post.PostId.ToString(),
+                            PostProducts = post.ProductsName,
+                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                            PostImagesVisible = false
+                        };
+                        collection.Add(postview);
+                    }
+                    else
+                    {
+                        var postview = new PostView()
+                        {
+                            Username = post.Username,
+                            TimeStamp = post.TimeStamp,
+                            PostLikeCount = post.Likes.ToString(),
+                            PostTextContent = post.Description,
+                            ImageSource = post.PostImagesBase64[0],
+                            Comments = commentList,
+                            ImagesBase64 = imageBase64list,
+                            PfpImageBase64 = post.ProfilePictureBase64,
+                            PostId = post.PostId.ToString(),
+                            PostProducts = post.ProductsName,
+                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                            PostImagesVisible = true
+                        };
+                        collection.Add(postview);
+                    }
+                }
+                catch (Exception e)
+                {
+                    int i = 0;
+                }
+                
                 await Task.Delay(100);
             }           
         }

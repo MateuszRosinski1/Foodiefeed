@@ -10,8 +10,6 @@ namespace Foodiefeed_api.entities
         [Key]
         public int TagId { get; set; }
 
-        public string Description { get; set; }
-
         [ForeignKey("PostId")]
         public virtual Post Post { get; set; }
 

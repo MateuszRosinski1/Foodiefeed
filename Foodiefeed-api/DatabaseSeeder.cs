@@ -276,7 +276,7 @@ namespace Foodiefeed_api
 
                         if (!tagExists)
                         {
-                            post.PostTags.Add(new PostTag { PostId = post.PostId, TagId = randomTag.Id, Description = "" });
+                            post.PostTags.Add(new PostTag { PostId = post.PostId, TagId = randomTag.Id});
                             context.SaveChanges();
                         }
                     }

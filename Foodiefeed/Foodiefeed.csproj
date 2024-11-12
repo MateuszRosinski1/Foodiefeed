@@ -153,6 +153,9 @@
 	  <MauiXaml Update="views\windows\contentview\PostView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\ProductView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="views\windows\contentview\TagView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
