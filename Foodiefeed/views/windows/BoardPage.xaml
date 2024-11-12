@@ -426,7 +426,10 @@
                                                                 PostId="{Binding PostId}"
                                                                 NewCommentContent="{Binding NewCommentContent}"
                                                                 Payload="{Binding Payload}"
-                                                                DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
+                                                                DeleteButtonVisible="{Binding DeleteButtonVisible}"
+                                                                PostProducts="{Binding PostProducts}"
+                                                                PostContentVisible="{Binding PostContentVisible}"
+                                                                PostImagesVisible="{Binding PostImagesVisible}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
@@ -770,7 +773,10 @@
                                                         PostId="{Binding PostId}"
                                                         NewCommentContent="{Binding NewCommentContent}"
                                                         Payload="{Binding Payload}"
-                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"/>
+                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"
+                                                        PostProducts="{Binding PostProducts}"
+                                                        PostContentVisible="{Binding PostContentVisible}"
+                                                        PostImagesVisible="{Binding PostImagesVisible}"/>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                         </CollectionView>
@@ -948,7 +954,7 @@
             </Grid>
             <Frame HeightRequest="475" WidthRequest="700" BackgroundColor="{DynamicResource MainBackgroundColor}">
                 <Grid>
-                    <VerticalStackLayout Spacing="10" IsVisible="{Binding TagPickerVisible,Converter={StaticResource InverseBooleanConverter}}">
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding PostContentEditorVisible}">
                         <Border Stroke="{Binding EditorBorderColor}" StrokeShape="RoundRectangle 10">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}">
                                 <Editor Text="{Binding PostContent,Mode=TwoWay}" 
@@ -958,9 +964,36 @@
                             </Grid>
                         </Border>
                         <Grid>
-                            <Button Text="Upload Images" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Start" Command="{Binding UploadPostImagesCommand}"/>
-                            <Button Text="Choose Tags" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Center" Command="{Binding ChooseTagsCommand}"/>
-                            <Button Text="Post" TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="End" Command="{Binding AddPostCommand}"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Text="Upload Images" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                    Grid.Column="0"
+                                    Command="{Binding UploadPostImagesCommand}"
+                                    Margin="5,0,5,0"/>
+                            <Button Text="Choose Tags" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="1"
+                                    Command="{Binding ChooseTagsCommand}"
+                                    Margin="5,0,5,0"/>
+                            <Button Text="Choose Products" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="2"
+                                    Command="{Binding LoadProductsCommand}"
+                                    Margin="5,0,5,0"/>
+                            <Button Text="Post" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="3"
+                                    Command="{Binding AddPostCommand}"
+                                    Margin="5,0,5,0"/>
                         </Grid>
                         <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AddPostImages}" 
                                                BackgroundColor="Transparent" 
@@ -973,6 +1006,7 @@
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </HorizontalStackLayout>
+                        
                     </VerticalStackLayout>
 
                     <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
@@ -1004,11 +1038,69 @@
                         </Border>
                         <Button TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Command="{Binding ApplyTagsCommand}" Text="Save"></Button>
                     </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ProductPickerVisible}" 
+                                         Spacing="10">
+                        <Border BackgroundColor="Gray" 
+                                StrokeShape="RoundRectangle 40">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}" 
+                                  HeightRequest="40">
+                                <Entry BackgroundColor="Transparent" 
+                                       TextColor="{DynamicResource TextColor}" 
+                                       Placeholder="Filter" 
+                                       Text="{Binding FilterParam,Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <toolkit:EventToCommandBehavior EventName="TextChanged" 
+                                                                        Command="{Binding FilterProductsCommand}"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Grid>
+                        </Border>
+                        <Border BackgroundColor="Gray" 
+                                StrokeShape="RoundRectangle 10">
+                            <ScrollView HeightRequest="200" 
+                                        VerticalScrollBarVisibility="Always" 
+                                        HorizontalScrollBarVisibility="Always"
+                                        x:Name="MyScrollView">
+                                <Grid>
+                                    <toolkit:UniformItemsLayout BindableLayout.ItemsSource="{Binding Products}"
+                                        MaxColumns="6" 
+                                        BackgroundColor="{DynamicResource EntryBackround}" 
+                                        Padding="15"
+                                        >
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:ProductView Id="{Binding Id}" 
+                                                               Name="{Binding Name}" 
+                                                               FrameBackground="{Binding FrameBackground}"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </toolkit:UniformItemsLayout>
+                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding ProductsActivityIndicatorVisible}"/>
+                                </Grid>
+                                <ScrollView.Behaviors>
+                                    <toolkit:EventToCommandBehavior EventName="Scrolled" 
+                                                                    Command="{Binding ProductsScrollCommand}"
+                                                                    CommandParameter="{Binding Source={x:Reference MyScrollView}}"/>
+                                </ScrollView.Behaviors>
+                            </ScrollView>
+                        </Border>
+                        <Button TextColor="{DynamicResource TextColor}" 
+                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                Command="{Binding ApplyProductsCommand}" Text="Save"/>
+                    </VerticalStackLayout>
+
+                    <Grid IsVisible="{Binding AddPostFormActivityIndicatorVisible}">
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <ActivityIndicator IsRunning="True" Color="{DynamicResource TextColor}"/>
+                            <Label Text="This might take a while..." TextColor="{DynamicResource TextColor}"/>
+                        </VerticalStackLayout>
+                    </Grid>
                 </Grid>
             </Frame>
-            <Border IsVisible="{Binding NoTagsPickedNotifierVisible}" HeightRequest="475" WidthRequest="700" StrokeThickness="0" StrokeShape="RoundRectangle 10">
+            <Border IsVisible="{Binding PostModelvalidationFailedNotifierVisible}" HeightRequest="475" WidthRequest="700" StrokeThickness="0" StrokeShape="RoundRectangle 10">
                 <Grid BackgroundColor="#050505" Opacity="0.6" HeightRequest="475" WidthRequest="700">
-                    <Label Text="You must pick 4 tags to post." TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Label Text="{Binding ErrMsg}" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Grid>
             </Border>
         </Grid>

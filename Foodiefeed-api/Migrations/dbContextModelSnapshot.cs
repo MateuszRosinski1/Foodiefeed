@@ -251,10 +251,6 @@ namespace Foodiefeed_api.Migrations
                     b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("PostId", "TagId");
 
                     b.HasIndex("TagId");

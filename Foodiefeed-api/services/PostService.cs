@@ -40,11 +40,38 @@ namespace Foodiefeed_api.services
             var post = _mapper.Map<Post>(dto);
 
             post.CreateTime = DateTime.Now.ToUniversalTime();
-            
-            _dbContext.Posts.Add(post);
-            await Commit();
 
-            await AzureBlobStorageService.UploadPostImagesAsync(post.UserId,post.PostId,dto.Images);
+            var tags = _dbContext.Tags.Where(t => dto.TagsId.Contains(t.Id)).ToList();
+            var products = _dbContext.Products.Where(p => dto.ProductsId.Contains(p.Id)).ToList();
+
+            List<PostTag> pTags = new();
+            List<PostProduct> pProducts = new();
+            foreach (var tag in tags)
+            {
+                pTags.Add(new PostTag() { PostId = post.PostId, TagId = tag.Id });
+            }
+
+            foreach (var product in products)
+            {
+                pProducts.Add(new PostProduct() { ProductId = product.Id, PostId = product.Id });
+            }
+            post.PostTags = pTags;
+            post.PostProducts = pProducts;
+
+            _dbContext.Posts.Add(post);
+            try
+            {
+                await Commit();
+            }catch(Exception ex)
+            {
+
+            }
+
+            if (dto.Images is not null)
+            {
+                await AzureBlobStorageService.UploadPostImagesAsync(post.UserId, post.PostId, dto.Images);
+            }
+            
         }
 
         public async Task<PopupPostDto> GetLikedPostAsync(int id)
@@ -114,6 +141,7 @@ namespace Foodiefeed_api.services
                 .ThenInclude(p => p.PostImages)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostProducts)
+                .ThenInclude(pp => pp.Product)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostCommentMembers)
             .Include(u => u.Posts)
@@ -169,8 +197,8 @@ namespace Foodiefeed_api.services
                 //postsDtos[i].ProductsName = new List<string>();
 
                 //foreach (var product in postProducts)
-                //{                    
-                //    postsDtos[i].ProductsName.Add(product.Product);
+                //{
+                //    postsDtos[i].ProductsName.Add(product.Product.Name);
                 //}
                 i++;
 
@@ -245,6 +273,8 @@ namespace Foodiefeed_api.services
                     .Include(p => p.PostCommentMembers)
                         .ThenInclude(pm => pm.Comment)
                         .ThenInclude(c => c.CommentLikes)
+                    .Include(p => p.PostProducts)
+                        .ThenInclude(pp => pp.Product)
                     .Where(p => orderedPostIds.Select(op => op.PostId).Contains(p.PostId))
                     .ToListAsync();
 

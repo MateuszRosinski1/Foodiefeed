@@ -1,5 +1,3 @@
-
-using CommunityToolkit.Mvvm.ComponentModel;
 using Foodiefeed.viewmodels;
 
 namespace Foodiefeed.views.windows.contentview;

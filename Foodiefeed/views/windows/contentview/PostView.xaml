@@ -5,9 +5,10 @@
              xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
              x:Name="PostContentView"
              MaximumWidthRequest="1000"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
 
-    <VerticalStackLayout>
+    <VerticalStackLayout >
         <Grid ZIndex="1">
             <Border
                 Margin="30,30,30,0" 
@@ -15,7 +16,7 @@
                 StrokeThickness="1" 
                 StrokeShape="RoundRectangle 40,40,40,40">
 
-                <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post"  BackgroundColor="White" >
+                <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post">
 
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -35,28 +36,42 @@
 
                     </Grid.RowDefinitions>
 
-                    <Grid  Padding="30" Grid.Row="0">
+                    <Grid  Padding="30" Grid.Row="0" >
                         <HorizontalStackLayout Spacing="10">
                             <ImageButton CornerRadius="100" HeightRequest="50" WidthRequest="50" x:Name="pfpImage" Aspect="AspectFill"/>
-                            <VerticalStackLayout>
+                            <VerticalStackLayout >
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
-                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
-                        <Button BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
-                                HorizontalOptions="End"
-                                Text="Delete"
-                                IsVisible="{Binding DeleteButtonVisible}"
-                                TextColor="{DynamicResource TextColor}"
-                                Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=DeletePostCommand}"
-                                CommandParameter="{Binding PostId}"/>
+                        
+                        <HorizontalStackLayout HorizontalOptions="End">
+                            <Button BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    HorizontalOptions="End"
+                                    Text="Delete"
+                                    IsVisible="{Binding DeleteButtonVisible}"
+                                    TextColor="{DynamicResource TextColor}"
+                                    Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=DeletePostCommand}"
+                                    CommandParameter="{Binding PostId}"/>
+                            <Button Text="Products" 
+                                    HorizontalOptions="Center"
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    Clicked="ShowProducts"/>
+                        </HorizontalStackLayout>
                     </Grid>
 
-                    <Grid Padding="30,0,20,20" Grid.Row="1" >
+                    <Grid Padding="30,0,20,20" Grid.Row="1"  >
                         <VerticalStackLayout>
                             <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                <Grid>
+                                    <Grid x:Name="PostContentGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                    <Grid x:Name="PostProductsGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                </Grid>
                             </ScrollView>
                             <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
                                 <Label.GestureRecognizers>
@@ -67,19 +82,19 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <Grid Padding="30,0,30,15" Grid.Row="2">
+                    <Grid Padding="30,0,30,15" Grid.Row="2" IsVisible="{Binding PostImagesVisible}">
                         <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
                         <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
-                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                    <Grid Padding="0,0,0,10" Grid.Row="3" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                        <HorizontalStackLayout  Grid.Column="0"   Spacing="5">
                             <Button  ImageSource="likeicon.png" 
                                      BackgroundColor="Transparent" 
                                      FontSize="20"
@@ -95,7 +110,7 @@
                                    VerticalOptions="Center"/>
                         </HorizontalStackLayout>
 
-                        <Button Grid.Column="1" 
+                        <Button Grid.Column="1"  
                                 ImageSource="commenticon.png" 
                                 HorizontalOptions="Center" 
                                 BackgroundColor="Transparent" 
@@ -105,27 +120,26 @@
                                 Text="Comment"
                                 TextColor="{DynamicResource TextColor}"/>
 
-                        <Button Grid.Column="2" 
-                                ImageSource="shareicon.png" 
-                                HorizontalOptions="EndAndExpand" 
-                                BackgroundColor="Transparent" 
-                                FontSize="20" 
-                                WidthRequest="200"
-                                HeightRequest="50" 
-                                Padding="0,0,0,0" 
-                                Text="Share"
-                                TextColor="{DynamicResource TextColor}"/>
+                        
+                        <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center">
+                            <Path Data="M 0 0 L 0 100 L 25 75 L 50 100 L 50 0 L 0 0" Fill="Gray" Scale="0.45"/>
+                            <Label Text="Save" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" FontSize="20"/>
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="ScaleButton" PointerExited="UnscaleButton"/>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=SaveRecipe}"
+                                                      CommandParameter="{Binding PostId}"/>
+                            </HorizontalStackLayout.GestureRecognizers>
+                        </HorizontalStackLayout>
 
                     </Grid>
                 </Grid>
             </Border>
         </Grid>
         
-        <Grid ZIndex="0">
+        <Grid ZIndex="0" BackgroundColor="Red">
             <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
-                    Margin="35,-40,35,0"
-                    >
+                    Margin="35,-40,35,0">
                 <Grid>
                     <ScrollView x:Name="CommentSectionScroll" 
                                 MaximumHeightRequest="300" 
@@ -136,19 +150,22 @@
                                 <Frame Margin="0,20,0,0" 
                                        HeightRequest="150" 
                                        BackgroundColor="{DynamicResource CommentViewBackground}" 
-                                       BorderColor="Transparent">
-                                    <Grid HorizontalOptions="FillAndExpand">
+                                       BorderColor="Transparent"
+                                       ZIndex="20">
+                                    <Grid HorizontalOptions="Fill" BackgroundColor="DarkCyan">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition/>
                                             <ColumnDefinition Width="50"/>
                                         </Grid.ColumnDefinitions>
-                                        <Editor BackgroundColor="{DynamicResource EntryBackround}" 
+                                        <Editor BackgroundColor="{DynamicResource EntryBackround}"
                                                 Placeholder="Share your toughts here..." 
                                                 PlaceholderColor="{DynamicResource TextColor}"
                                                 TextColor="{DynamicResource TextColor}"
                                                 HorizontalOptions="FillAndExpand"
+                                                VerticalOptions="FillAndExpand"
                                                 Grid.Column="0"
-                                                Text="{Binding NewCommentContent}"/>
+                                                Text="{Binding NewCommentContent}"
+                                                />
                                         <Button Grid.Column="1" 
                                                 Text="+"
                                                 TextColor="{DynamicResource TextColor}"

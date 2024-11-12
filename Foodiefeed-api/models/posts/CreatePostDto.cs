@@ -7,7 +7,6 @@
 
         public List<IFormFile> Images {  get; set; } 
         public List<int> TagsId { get; set; }
-
-        //public virtual ICollection<PostProduct> PostProducts { get; set; }
+        public List<int> ProductsId { get; set; }
     }
 }
