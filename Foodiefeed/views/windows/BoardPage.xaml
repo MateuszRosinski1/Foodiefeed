@@ -219,8 +219,6 @@
                     <a target="_blank" href="https://icons8.com">Icons8</a>-->
                 </Grid>
 
-
-                <!--PostGrid-->
                 <ScrollView Grid.Column="1"
                             IsVisible="{Binding PostPageVisible,Converter={StaticResource InverseBooleanConverter}}"
                             BackgroundColor="{DynamicResource MainBackgroundColor}"
@@ -730,15 +728,65 @@
                                 </Border.Shadow>
                             </Border>
                         </Grid>
+
+                        <Grid Grid.Column="1" 
+                              IsVisible="{Binding RecipePageVisible}"
+                              BackgroundColor="{DynamicResource MainBackgroundColor}"
+                              Padding="30,5,30,30"
+                              WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                   HeightRequest="50" WidthRequest="230"
+                                   BorderColor="Transparent"
+                                   Grid.Row="0"
+                                   Margin="0,-10,0,0" Padding="5" CornerRadius="30">
+
+                                <Grid ColumnSpacing="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Text="Liked" 
+                                            Grid.Column="0" 
+                                            TextColor="{DynamicResource TextColor}" 
+                                            MinimumHeightRequest="0" 
+                                            MinimumWidthRequest="0" 
+                                            HeightRequest="25" 
+                                            WidthRequest="90"
+                                            FontSize="15" 
+                                            Padding="0"
+                                            BackgroundColor="{Binding LikedRecipesButtonBackround}"
+                                            Command="{Binding ShowLikedRecipesCommand}"/>
+                                    <Button Text="Saved" 
+                                            Grid.Column="1" 
+                                            TextColor="{DynamicResource TextColor}" 
+                                            MinimumHeightRequest="0" 
+                                            MinimumWidthRequest="0" 
+                                            HeightRequest="25" 
+                                            WidthRequest="90"
+                                            FontSize="15" 
+                                            Padding="0"
+                                            BackgroundColor="{Binding SavedRecipesButtonBackround}"
+                                            Command="{Binding SavedLikedRecipesCommand}"/>
+                                </Grid>
+                            </Frame>
+                            <views:RecipeView Grid.Row="1"/>
+                            <!--<CollectionView Grid.Row="1">
+                                
+                            </CollectionView>-->
+                        </Grid>
                     </Grid>
 
                 </ScrollView>
 
-                <Grid Grid.Column="1">
-                    <VerticalStackLayout IsVisible="{Binding PostPageVisible}"
-                                         BackgroundColor="{DynamicResource MainBackgroundColor}"
-                                         WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
-
+                <Grid Grid.Column="1"
+                      IsVisible="{Binding PostPageVisible}"
+                      BackgroundColor="{DynamicResource MainBackgroundColor}"
+                      WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
+                    <VerticalStackLayout>
                         <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                                HeightRequest="60" 
                                Margin="0,5,0,0" 
@@ -762,8 +810,8 @@
                                         RemainingItemsThresholdReachedCommand="{Binding MainWallPostThresholdExceedCommand}"                                  
                                         HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource PostCollectionViewAdjustValue}}">
                             <CollectionView.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:PostView Username="{Binding Username}"
+                                <DataTemplate>
+                                    <views:PostView Username="{Binding Username}"
                                                         TimeStamp="{Binding TimeStamp}"
                                                         PostTextContent="{Binding PostTextContent}"
                                                         PostLikeCount="{Binding PostLikeCount}"
@@ -777,11 +825,11 @@
                                                         PostProducts="{Binding PostProducts}"
                                                         PostContentVisible="{Binding PostContentVisible}"
                                                         PostImagesVisible="{Binding PostImagesVisible}"/>
-                                    </DataTemplate>
-                                </CollectionView.ItemTemplate>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
                         </CollectionView>
 
-                        
+
 
                     </VerticalStackLayout>
                     <Grid VerticalOptions="End" 

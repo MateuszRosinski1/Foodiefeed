@@ -16,7 +16,6 @@ namespace Foodiefeed
             _userSession = us;
             //MainPage = new LogInPage(vm);
             MainPage = new BoardPage(new BoardViewModel(us));
-            //AppDomain.CurrentDomain.UnhandledException
 
 #if WINDOWS
             SwitchHandler.Mapper.AppendToMapping("Custom", (h, v) =>

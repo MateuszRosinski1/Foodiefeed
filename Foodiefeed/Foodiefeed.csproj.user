@@ -57,6 +57,9 @@
     <MauiXaml Update="views\windows\contentview\ProductView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\contentview\RecipeView.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\contentview\TagView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

@@ -101,6 +101,9 @@ namespace Foodiefeed.viewmodels
         bool settingsPageVisible;
 
         [ObservableProperty]
+        bool recipePageVisible;
+
+        [ObservableProperty]
         bool personalDataEditorVisible;
 
         [ObservableProperty]
@@ -173,7 +176,6 @@ namespace Foodiefeed.viewmodels
         {
             _userSession = userSession;
             _userSession.Id = 15;
-            Notifications.Add(new BasicNotofication());
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
             notifications.CollectionChanged += OnNotificationsChanged;
             //DisplaySearchResultHistory();           
@@ -184,6 +186,7 @@ namespace Foodiefeed.viewmodels
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
             this.SettingsPageVisible = false; //on init false
+            this.RecipePageVisible = false; // on init false
             this.PersonalDataEditorVisible = false; // on init false
             this.SettingsMainHubVisible = true; //on init true
             this.ChangeUsernameEntryVisible = false; //on init false
@@ -199,11 +202,14 @@ namespace Foodiefeed.viewmodels
             this.AddPostFormVisible = false; //on init false
             PostContentEditorVisible = true;
 
+            var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);
+
+            
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
 
             //Task.Run(UpdateFriendList);
-            ChangeTheme();
+            ChangeTheme();          
             Connectivity.ConnectivityChanged += ConnectivityChanged;            
         }
 
@@ -1261,6 +1267,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
+            this.RecipePageVisible = false;
         }
 
         [RelayCommand]
@@ -1269,6 +1276,8 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
             this.SettingsPageVisible = false;
+            this.RecipePageVisible = false;
+
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
             ProfileFriendsList.Clear();
@@ -1278,7 +1287,10 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ToRecipesView()
         {
-            NotifiyFailedAction("hide");
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = false;
+            this.SettingsPageVisible = false;
+            this.RecipePageVisible = true;
         }
 
         [RelayCommand]
@@ -1287,6 +1299,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = false;
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = true;
+            this.RecipePageVisible = false;
         }
 
         [RelayCommand]
@@ -1509,6 +1522,7 @@ namespace Foodiefeed.viewmodels
                     this.PostPageVisible = false;
                     this.ProfilePageVisible = true;
                     this.SettingsPageVisible = false;
+                    this.RecipePageVisible = false;
                     ProfilePosts.Clear();
                     ProfileFollowersList.Clear();
                     ProfileFriendsList.Clear();
@@ -1532,6 +1546,7 @@ namespace Foodiefeed.viewmodels
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
             this.SettingsPageVisible = false;
+            this.RecipePageVisible = false;
 
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
@@ -1915,12 +1930,14 @@ namespace Foodiefeed.viewmodels
                 mergedDictionaries.Add(new DarkTheme());
                 SwitchThemeMode = "Dark Theme";
                 ReloadProfileButtonColors(ThemeFlag);
+                ReloadRecipesButtons(ThemeFlag);
             }
             else
             {
                 mergedDictionaries.Add(new LightTheme());
                 SwitchThemeMode = "Light Theme";
                 ReloadProfileButtonColors(ThemeFlag);
+                ReloadRecipesButtons(ThemeFlag);
             }
         }
 
@@ -2047,7 +2064,6 @@ namespace Foodiefeed.viewmodels
 
         public async Task UpdateFriendList()
         {
-
             while (true)
             {
                 OnlineFriends.Clear();
@@ -2110,35 +2126,6 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        //private async Task OpenUserProfile(string id)
-        //{
-        //    var profileJson = await GetUserProfileModel(id);
-        //    var profile = await JsonToObject<UserProfileModel>(profileJson);
-
-        //    if (profile is null) { throw new Exception(); }
-
-        //    SetUserProfileModel(profile.Id,
-        //                        profile.FriendsCount + " friends",
-        //                        profile.FollowsCount + " follows",
-        //                        profile.LastName,
-        //                        profile.FirstName,
-        //                        profile.Username,
-        //                        profile.ProfilePictureBase64);          
-
-        //    var json = await GetUserProfilePosts(id);
-        //    var posts = await JsonToObject<List<PostDto>>(json);
-        //    DisplayProfilePosts(posts);
-
-        //    var json2 = await GetUserProfileFriends(id);
-        //    var friends = await JsonToObject<List<ListedFriendDto>>(json2);
-        //    DisplayProfileFriends(friends);
-
-
-        //    var json3 = await GetUserProfileFollowers(id);
-        //    var followers = await JsonToObject<List<ListedFriendDto>>(json3); //followers can be displayed using the same Dto and OnListFriewView
-        //    DisplayProfileFollowers(followers);
-        //}
-
         private async Task OpenUserProfile(string id)
         {
             try
@@ -2158,7 +2145,6 @@ namespace Foodiefeed.viewmodels
                                     profile.Username,
                                     profile.ProfilePictureBase64);
 
-                // Równoległe pobieranie danych
                 var postsTask = GetUserProfilePosts(id);
                 var friendsTask = GetUserProfileFriends(id);
                 var followersTask = GetUserProfileFollowers(id);
@@ -2176,9 +2162,7 @@ namespace Foodiefeed.viewmodels
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"An error occurred: {ex.Message}");
                 NotifiyFailedAction("Could not load user profile.");
-
             }
             finally
             {
@@ -2269,9 +2253,6 @@ namespace Foodiefeed.viewmodels
 
             if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
 
-            //var temp2 = posts.First(t => t.PostId == 2006);
-
-            //posts = [temp2];
 
             foreach (var post in posts)
             {
@@ -2458,5 +2439,48 @@ namespace Foodiefeed.viewmodels
             WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("hide"));
         }
 
+        [ObservableProperty]
+        Color likedRecipesButtonBackround;
+
+        [ObservableProperty]
+        Color savedRecipesButtonBackround;
+
+        private void ReloadRecipesButtons(bool isDarkTheme)
+        {
+            if (isDarkTheme)
+            {
+                LikedRecipesButtonBackround = darkThemeClickedButton;
+                SavedRecipesButtonBackround = darkThemeUnClickedButton;
+            }
+            else
+            {
+                LikedRecipesButtonBackround = lightThemeClickedButton;
+                SavedRecipesButtonBackround = lightThemeUnClickedButton;
+            }
+        }
+
+        [RelayCommand]
+        public void ShowLikedRecipes()
+        {
+            var resources = Application.Current.Resources.MergedDictionaries.ElementAt(2);
+
+            resources.TryGetValue("MainBackgroundColor", out var clickedButtonColor);
+            resources.TryGetValue("MainBackgroundColorContrast", out var unclickedButtonColor);
+
+            LikedRecipesButtonBackround = (Color)clickedButtonColor;
+            SavedRecipesButtonBackround = (Color)unclickedButtonColor;
+        }
+
+        [RelayCommand]
+        public void SavedLikedRecipes()
+        {
+            var resources = Application.Current.Resources.MergedDictionaries.ElementAt(2);
+
+            resources.TryGetValue("MainBackgroundColor", out var clickedButtonColor);
+            resources.TryGetValue("MainBackgroundColorContrast", out var unclickedButtonColor);
+
+            LikedRecipesButtonBackround = (Color)unclickedButtonColor;
+            SavedRecipesButtonBackround = (Color)clickedButtonColor;
+        }
     }
 }

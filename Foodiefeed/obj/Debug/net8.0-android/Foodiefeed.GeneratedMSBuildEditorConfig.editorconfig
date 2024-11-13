@@ -130,6 +130,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.c
 build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\ProductView.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\ProductView.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/contentview/RecipeView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.RecipeView.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\contentview\RecipeView.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\contentview\RecipeView.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/contentview/TagView.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.contentview.TagView.xaml
