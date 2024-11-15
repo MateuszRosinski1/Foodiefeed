@@ -27,4 +27,18 @@ public class RecipeController : ControllerBase
         await recipeService.RemoveRecipe(recipeId);
         return NoContent();
     }
+
+    [HttpGet("get-liked/{userId}")]
+    public async Task<IActionResult> GetLikedRecipes(int userId)
+    {
+        var response  =  await recipeService.GetLikedRecipes(userId);
+        return Ok(response);
+    }
+
+    [HttpGet("get-saved/{userId}")]
+    public async Task<IActionResult> GetSavedRecipes(int userId)
+    {
+        var response = await recipeService.GetSavedRecipes(userId);
+        return Ok(response);
+    }
 }

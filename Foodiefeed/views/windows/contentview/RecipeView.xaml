@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Foodiefeed.views.windows.contentview.RecipeView">
+             x:Class="Foodiefeed.views.windows.contentview.RecipeView"
+             xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview">
     <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
            BorderColor="Gray" HeightRequest="200" MaximumWidthRequest="1000">
         <Grid ColumnSpacing="5">
@@ -11,14 +12,14 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
         
-            <Image Grid.Column="0" HeightRequest="170" WidthRequest="200" BackgroundColor="Black"/>
+            <Image Grid.Column="0" HeightRequest="170" WidthRequest="200" BackgroundColor="Black" x:Name="image"/>
             <VerticalStackLayout Grid.Column="1">
-                <Label Text="Username" 
+                <Label x:Name="usernameLabel" 
                        TextColor="{DynamicResource TextColor}" 
-                       FontSize="20" 
+                       FontSize="20" Text="123"
                        FontAttributes="Bold" />
                 <ScrollView HeightRequest="180" VerticalScrollBarVisibility="Always">
-                    <Label Text="lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di lorelipsum di more to nere vs pure to me turnsto wimode moreto lorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di more to nere vs pure to me turnsto wimode moretolorelipsum di more to nere vs pure to me turnsto wimode moreto"
+                    <Label x:Name="contentLabel"
                            LineBreakMode="WordWrap"
                            HorizontalOptions="FillAndExpand"
                            TextColor="{DynamicResource TextColor}"
@@ -30,14 +31,17 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Text="Products" 
+                <Button Text="Products"
+                        x:Name="ChangeContentButton"
                         Grid.Row="0" 
                         BackgroundColor="{DynamicResource MainBackgroundColor}" 
-                        TextColor="{DynamicResource TextColor}"/>
+                        TextColor="{DynamicResource TextColor}"
+                        Clicked="SwitchContent"/>
                 <Button Text="Delete"  
                         Grid.Row="1" 
                         TextColor="White" 
-                        BackgroundColor="#e32441"/>
+                        BackgroundColor="#e32441"
+                        Clicked="DeleteButtonClicked"/>
             </Grid>
         </Grid>
     </Frame>

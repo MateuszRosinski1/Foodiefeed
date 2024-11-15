@@ -62,6 +62,25 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="M:Foodiefeed.viewmodels.BoardViewModel.DisposeRecipesPage(System.Collections.ObjectModel.ObservableCollection{Foodiefeed.views.windows.contentview.RecipeView},System.Boolean)">
+            <summary>
+            Collection a RecipieView collection and set visiblity flag to true or false<br/>
+            true: Liked recipes will be displayed<br/>
+            false: Saved recipes will be displayed
+            </summary>
+            <param name="collection"></param>
+            <param name="Value"></param>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfileId">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profileId"/>
@@ -101,6 +120,9 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SettingsPageVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.settingsPageVisible"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.RecipePageVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.recipePageVisible"/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.PersonalDataEditorVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.personalDataEditorVisible"/>
@@ -144,6 +166,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.AddPostFormVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.addPostFormVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.LikedRecipesVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.likedRecipesVisible"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.InternetAcces">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.internetAcces"/>
         </member>
@@ -177,14 +202,29 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.TagPickerVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.tagPickerVisible"/>
         </member>
-        <member name="P:Foodiefeed.viewmodels.BoardViewModel.NoTagsPickedNotifierVisible">
-            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.noTagsPickedNotifierVisible"/>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.PostContentEditorVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.postContentEditorVisible"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProductPickerVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.productPickerVisible"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.PostModelvalidationFailedNotifierVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.postModelvalidationFailedNotifierVisible"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ErrMsg">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.errMsg"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.AddPostFormActivityIndicatorVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.addPostFormActivityIndicatorVisible"/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterParam">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.filterParam"/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.TagsActivityIndicatorVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.tagsActivityIndicatorVisible"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProductsActivityIndicatorVisible">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.productsActivityIndicatorVisible"/>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SelfPostButtonColor">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel._selfPostButtonColor"/>
@@ -209,6 +249,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FailedActionMessage">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.failedActionMessage"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.LikedRecipesButtonBackround">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.likedRecipesButtonBackround"/>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SavedRecipesButtonBackround">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.savedRecipesButtonBackround"/>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.appearingCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.AppearingCommand"/>.</summary>
@@ -328,13 +374,43 @@
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterTagsCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterTags"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterTags"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.loadProductsCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.LoadProductsCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.LoadProductsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.LoadProducts"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.pickProductCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.PickProductCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.PickProductCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.PickProduct(System.String)"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.filterProductsCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.FilterProductsCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.FilterProductsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.FilterProducts"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.applyProductsCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ApplyProductsCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ApplyProductsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ApplyProducts"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.productsScrollCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ProductsScrollCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProductsScrollCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ProductsScroll(Microsoft.Maui.Controls.ScrollView)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.notificationsThresholdExceedCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceedCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceedCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceed"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.NotificationsThresholdExceed(Microsoft.Maui.Controls.ItemsViewScrolledEventArgs)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.toMainViewCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ToMainViewCommand"/>.</summary>
@@ -492,6 +568,12 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.LikePostCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.LikePost(System.String)"/>.</summary>
         </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.saveRecipeCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SaveRecipeCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SaveRecipeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SaveRecipe(System.String)"/>.</summary>
+        </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.searchCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SearchCommand"/>.</summary>
         </member>
@@ -545,6 +627,30 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.ChangeThemeCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ChangeTheme"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.showLikedRecipesCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowLikedRecipesCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ShowLikedRecipesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.ShowLikedRecipes"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.savedLikedRecipesCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SavedLikedRecipesCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.SavedLikedRecipesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SavedLikedRecipes"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.deleteSavedRecipeCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.DeleteSavedRecipeCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.DeleteSavedRecipeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.DeleteSavedRecipe(System.String)"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.deleteLikedRecipeCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.DeleteLikedRecipeCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.DeleteLikedRecipeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.DeleteLikedRecipe(System.String)"/>.</summary>
         </member>
         <member name="T:Foodiefeed.viewmodels.UserViewModel">
             <inheritdoc/>
@@ -700,6 +806,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SettingsPageVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SettingsPageVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RecipePageVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RecipePageVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PersonalDataEditorVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PersonalDataEditorVisible" generated properties.</summary>
         </member>
@@ -742,6 +851,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AddPostFormVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AddPostFormVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LikedRecipesVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LikedRecipesVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InternetAcces">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
         </member>
@@ -775,14 +887,29 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NoTagsPickedNotifierVisible">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NoTagsPickedNotifierVisible" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostContentEditorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostContentEditorVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProductPickerVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProductPickerVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PostModelvalidationFailedNotifierVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PostModelvalidationFailedNotifierVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrMsg">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrMsg" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AddPostFormActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AddPostFormActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilterParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilterParam" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TagsActivityIndicatorVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TagsActivityIndicatorVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProductsActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProductsActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
@@ -807,6 +934,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FailedActionMessage">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LikedRecipesButtonBackround">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LikedRecipesButtonBackround" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SavedRecipesButtonBackround">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SavedRecipesButtonBackround" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Firstname" generated properties.</summary>
@@ -889,6 +1022,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SettingsPageVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SettingsPageVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RecipePageVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RecipePageVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PersonalDataEditorVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PersonalDataEditorVisible" generated properties.</summary>
         </member>
@@ -931,6 +1067,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AddPostFormVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AddPostFormVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LikedRecipesVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LikedRecipesVisible" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InternetAcces">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
         </member>
@@ -964,14 +1103,29 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TagPickerVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TagPickerVisible" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NoTagsPickedNotifierVisible">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NoTagsPickedNotifierVisible" generated properties.</summary>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostContentEditorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostContentEditorVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProductPickerVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProductPickerVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PostModelvalidationFailedNotifierVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PostModelvalidationFailedNotifierVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrMsg">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrMsg" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AddPostFormActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AddPostFormActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilterParam">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilterParam" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TagsActivityIndicatorVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TagsActivityIndicatorVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProductsActivityIndicatorVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProductsActivityIndicatorVisible" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelfPostButtonColor">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelfPostButtonColor" generated properties.</summary>
@@ -996,6 +1150,12 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FailedActionMessage">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FailedActionMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LikedRecipesButtonBackround">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LikedRecipesButtonBackround" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SavedRecipesButtonBackround">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SavedRecipesButtonBackround" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Firstname">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Firstname" generated properties.</summary>

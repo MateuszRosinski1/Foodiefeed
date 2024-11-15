@@ -774,10 +774,44 @@
                                             Command="{Binding SavedLikedRecipesCommand}"/>
                                 </Grid>
                             </Frame>
-                            <views:RecipeView Grid.Row="1"/>
-                            <!--<CollectionView Grid.Row="1">
-                                
-                            </CollectionView>-->
+                            <Grid Grid.Row="1" IsVisible="{Binding LikedRecipesVisible}">
+                                <CollectionView Grid.Row="1"
+                                                ItemsSource="{Binding LikedRecipes}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:RecipeView Id="{Binding Id}"
+                                                              Username="{Binding Username}"
+                                                              Image="{Binding Image}"
+                                                              RecipeContent="{Binding RecipeContent}"
+                                                              Products="{Binding Products}"
+                                                              ContentVisible="{Binding ContentVisible}"
+                                                              DeleteCommand="{Binding DeleteCommand}"/>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Grid>
+                            <Grid Grid.Row="1" IsVisible="{Binding LikedRecipesVisible,Converter={StaticResource InverseBooleanConverter}}">
+                                <CollectionView Grid.Row="1"
+                                                ItemsSource="{Binding SavedRecipes}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:RecipeView Id="{Binding Id}"
+                                                              Username="{Binding Username}"
+                                                              Image="{Binding Image}"
+                                                              RecipeContent="{Binding RecipeContent}"
+                                                              Products="{Binding Products}"
+                                                              ContentVisible="{Binding ContentVisible}"
+                                                              DeleteCommand="{Binding DeleteCommand}"/>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Grid>
                         </Grid>
                     </Grid>
 
@@ -1141,7 +1175,7 @@
 
                     <Grid IsVisible="{Binding AddPostFormActivityIndicatorVisible}">
                         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <ActivityIndicator IsRunning="True" Color="{DynamicResource TextColor}"  Color="{DynamicResource TextColor}"/>
+                            <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
                             <Label Text="This might take a while..." TextColor="{DynamicResource TextColor}"/>
                         </VerticalStackLayout>
                     </Grid>

@@ -5,6 +5,7 @@ using Foodiefeed_api.models.friends;
 using Foodiefeed_api.models.notifications;
 using Foodiefeed_api.models.posts;
 using Foodiefeed_api.models.user;
+using Foodiefeed_api.models.recipe;
 
 namespace Foodiefeed_api
 {
@@ -28,6 +29,15 @@ namespace Foodiefeed_api
 
             CreateMap<Notification, NotificationDto>();
             CreateMap<NewCommentDto, Comment>();
+
+            CreateMap<Post, RecipeDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PostId))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.PostProducts.Select(pp => pp.Product.Name).ToList()))
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
+
+
+
         }
     }
 }
