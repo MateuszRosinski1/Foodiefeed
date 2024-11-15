@@ -174,13 +174,20 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
+            
             _userSession = userSession;
             _userSession.Id = 15;
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
             notifications.CollectionChanged += OnNotificationsChanged;
-            //DisplaySearchResultHistory();           
-            //MainWallPostThresholdExceed();
 
+            var notification = new BasicNotofication();
+            notification.IsVisible = false;
+            notification.IsEnabled = false;
+            Notifications.Add(notification);
+
+            DisplaySearchResultHistory();           
+            MainWallPostThresholdExceed();
+            UpdateFriendList();
             NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
 
             this.ProfilePageVisible = false; //on init false
@@ -210,7 +217,7 @@ namespace Foodiefeed.viewmodels
 
             //Task.Run(UpdateFriendList);
             ChangeTheme();          
-            Connectivity.ConnectivityChanged += ConnectivityChanged;            
+            Connectivity.ConnectivityChanged += ConnectivityChanged;
         }
 
         private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
@@ -227,7 +234,7 @@ namespace Foodiefeed.viewmodels
         {
             if(!windowloaded)   // appearing command invoked 2 times for some reason
             {
-                //FetchNotifications();
+                FetchNotifications();
                 windowloaded = true;
             }
                 
@@ -308,10 +315,6 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private async Task DisplayWallPosts(string json)
-        {
-
-        }
 
         private async Task HandleNotificationsUpdate(List<NotificationDto> notifications)
         {
@@ -1256,7 +1259,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void NotificationsThresholdExceed()
+        public void NotificationsThresholdExceed(ItemsViewScrolledEventArgs e)
         {
            DisplayNotifications(10, allNotifications);
         }

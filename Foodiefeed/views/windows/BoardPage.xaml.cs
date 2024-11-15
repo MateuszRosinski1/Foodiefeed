@@ -18,7 +18,7 @@ namespace Foodiefeed
 
         protected override async void OnAppearing()
         {
-            var vm = BindingContext as BoardViewModel;
+            //var vm = BindingContext as BoardViewModel;
             //vm.UpdateFriendList();
         }
 
@@ -115,6 +115,27 @@ namespace Foodiefeed
             SearchEntry.Unfocus();
             await Task.Delay(1000);
             vm.CanShowSearchPanel = true;
+        }
+
+        private void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+        {
+            if (DeviceInfo.Current.Platform != DevicePlatform.WinUI)
+            {
+                return;
+            }
+
+            //workaround on windows to fire collectionview itemthresholdreached command, because it does not work on windows
+            if (sender is CollectionView cv && cv is IElementController element)
+            {
+                var count = element.LogicalChildren.Count;
+                if (e.LastVisibleItemIndex + 1 - count + cv.RemainingItemsThreshold >= 0)
+                {
+                    if (cv.RemainingItemsThresholdReachedCommand.CanExecute(null))
+                    {
+                        cv.RemainingItemsThresholdReachedCommand.Execute(null);
+                    }
+                }
+            }
         }
     }
 }

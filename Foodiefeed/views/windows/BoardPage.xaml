@@ -176,29 +176,30 @@
                                 HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
                             <!--pages-->
                             <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
-                                <!--<CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
-                                                ItemsSource="{Binding Notifications}" 
-                                                BackgroundColor="Transparent"
-                                                VerticalScrollBarVisibility="Always"
-                                                ItemsUpdatingScrollMode="KeepScrollOffset"
-                                                RemainingItemsThreshold="10"
-                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExeedCommand}">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
-                                    </CollectionView.ItemsLayout>
-                                </CollectionView>-->
                                 <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
                                                 ItemsSource="{Binding Notifications}" 
                                                 BackgroundColor="Transparent"
                                                 VerticalScrollBarVisibility="Always"
                                                 ItemsUpdatingScrollMode="KeepScrollOffset"
-                                                RemainingItemsThreshold="10"
-                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExeedCommand}"
-                                                >
+                                                RemainingItemsThreshold="5"
+                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
+                                                Scrolled="CollectionView_Scrolled">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
                                 </CollectionView>
+                                <!--<CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
+                                                ItemsSource="{Binding Notifications}" 
+                                                BackgroundColor="Transparent"
+                                                VerticalScrollBarVisibility="Always"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                RemainingItemsThreshold="5"
+                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
+                                                >
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                    </CollectionView.ItemsLayout>
+                                </CollectionView>-->
                             </Grid>
                         </Grid>
                     </VerticalStackLayout>
@@ -462,7 +463,7 @@
                                             <Label TextColor="{DynamicResource TextColor}" 
                                                    Text="Loading..." 
                                                    IsVisible="{Binding LoadingLabelVisible}"/>
-                                            <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}"/>
+                                            <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}" Color="{DynamicResource TextColor}"/>
                                         </VerticalStackLayout>
 
                                         <Label Text="This user has not posts yet." 
@@ -836,7 +837,7 @@
                           ZIndex="100"
                           HorizontalOptions="Center" BackgroundColor="Transparent" HeightRequest="100" WidthRequest="500"
                           IsVisible="{Binding WallPostLoadingActivityIndicatorVisible}">
-                        <ActivityIndicator IsRunning="True"/>
+                        <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
                     </Grid>
                 </Grid>
 
@@ -990,7 +991,7 @@
             </Grid>
             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
                 <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>
-                <ActivityIndicator IsRunning="True"/>
+                <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
             </VerticalStackLayout>
         </Grid>
 
@@ -1080,7 +1081,7 @@
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </toolkit:UniformItemsLayout>
-                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"/>
+                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"  Color="{DynamicResource TextColor}"/>
                                 </Grid>
                             </ScrollView>
                         </Border>
@@ -1140,7 +1141,7 @@
 
                     <Grid IsVisible="{Binding AddPostFormActivityIndicatorVisible}">
                         <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <ActivityIndicator IsRunning="True" Color="{DynamicResource TextColor}"/>
+                            <ActivityIndicator IsRunning="True" Color="{DynamicResource TextColor}"  Color="{DynamicResource TextColor}"/>
                             <Label Text="This might take a while..." TextColor="{DynamicResource TextColor}"/>
                         </VerticalStackLayout>
                     </Grid>

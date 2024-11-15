@@ -136,7 +136,7 @@
             </Border>
         </Grid>
         
-        <Grid ZIndex="0" BackgroundColor="Red">
+        <Grid ZIndex="0">
             <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
                     Margin="35,-40,35,0">

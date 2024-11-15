@@ -25,7 +25,7 @@ namespace Foodiefeed
             builder.Services.AddSingleton<SignUpView>();
 
 
-            builder.Services.AddSingleton<BoardViewModel>();
+            builder.Services.AddTransient<BoardViewModel>();
             builder.Services.AddSingleton<BoardPage>();
 
 
