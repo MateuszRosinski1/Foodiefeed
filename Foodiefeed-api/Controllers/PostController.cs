@@ -59,5 +59,13 @@ namespace Foodiefeed_api.Controllers
             var response = await _postService.GenerateWallPostsAsync(userId,viewedPostsId);
             return Ok(response);
         }
+
+        [HttpDelete("delete-like/{postId}/{userId}")]
+        public async Task<IActionResult> DeletePostLike([FromRoute]int postId,[FromRoute]int userId)
+        {
+            await _postService.DeletePostLikeAsync(postId, userId);
+            return NoContent();
+        }
     }
+    
 }

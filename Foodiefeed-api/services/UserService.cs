@@ -58,7 +58,7 @@ namespace Foodiefeed_api.services
 
             var searchedUsers = users.Where(u =>
                 u.Username.StartsWith(usernameQuery, StringComparison.OrdinalIgnoreCase) 
-                || Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85);
+                || Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85).Take(20);
 
             var usersDto = _mapper.Map<List<UserDto>>(searchedUsers);
             

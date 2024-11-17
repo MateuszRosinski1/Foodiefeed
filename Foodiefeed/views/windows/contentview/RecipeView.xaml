@@ -12,7 +12,7 @@
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
         
-            <Image Grid.Column="0" HeightRequest="170" WidthRequest="200" BackgroundColor="Black" x:Name="image"/>
+            <ImageButton CornerRadius="10" Grid.Column="0" HeightRequest="170" WidthRequest="200" BackgroundColor="Black" x:Name="image" Aspect="AspectFill"/>
             <VerticalStackLayout Grid.Column="1">
                 <Label x:Name="usernameLabel" 
                        TextColor="{DynamicResource TextColor}" 

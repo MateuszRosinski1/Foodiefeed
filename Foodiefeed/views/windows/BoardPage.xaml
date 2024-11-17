@@ -21,6 +21,7 @@
         <x:Double x:Key="RightBarHeightAdjustValue">100</x:Double>
         <x:Double x:Key="BorderWidthValueAdjustment">-20</x:Double>
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
+        <x:Double x:Key="RecipeCollectionViewHeightAdjustValue">235</x:Double>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <local:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
 
@@ -734,6 +735,7 @@
                               IsVisible="{Binding RecipePageVisible}"
                               BackgroundColor="{DynamicResource MainBackgroundColor}"
                               Padding="30,5,30,30"
+                              x:Name="RecipeGrid"
                               WidthRequest="{Binding Source={x:Reference Page},Path=Width,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource MidBarWidthAdjustValue}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="100"/>
@@ -771,43 +773,60 @@
                                             FontSize="15" 
                                             Padding="0"
                                             BackgroundColor="{Binding SavedRecipesButtonBackround}"
-                                            Command="{Binding SavedLikedRecipesCommand}"/>
+                                            Command="{Binding ShowSavedRecipesCommand}"/>
                                 </Grid>
                             </Frame>
-                            <Grid Grid.Row="1" IsVisible="{Binding LikedRecipesVisible}">
+                            <Grid Grid.Row="1"  IsVisible="{Binding LikedRecipesVisible}">
                                 <CollectionView Grid.Row="1"
-                                                ItemsSource="{Binding LikedRecipes}">
+                                                ItemsSource="{Binding LikedRecipes}"
+                                                RemainingItemsThreshold="5"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}" 
+                                                RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Liked}"
+                                                WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                                                HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <views:RecipeView Id="{Binding Id}"
-                                                              Username="{Binding Username}"
-                                                              Image="{Binding Image}"
-                                                              RecipeContent="{Binding RecipeContent}"
-                                                              Products="{Binding Products}"
-                                                              ContentVisible="{Binding ContentVisible}"
-                                                              DeleteCommand="{Binding DeleteCommand}"/>
+                                            <Grid Padding="20,0,20,0">
+                                                <views:RecipeView Id="{Binding Id}"
+                                                                  Username="{Binding Username}"
+                                                                  Image="{Binding Image}"
+                                                                  RecipeContent="{Binding RecipeContent}"
+                                                                  Products="{Binding Products}"
+                                                                  ContentVisible="{Binding ContentVisible}"
+                                                                  DeleteCommand="{Binding DeleteCommand}"/>
+                                            </Grid>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
                             </Grid>
-                            <Grid Grid.Row="1" IsVisible="{Binding LikedRecipesVisible,Converter={StaticResource InverseBooleanConverter}}">
+                            <Grid Grid.Row="1"  IsVisible="{Binding SavedRecipesVisible}">
                                 <CollectionView Grid.Row="1"
-                                                ItemsSource="{Binding SavedRecipes}">
+                                                ItemsSource="{Binding SavedRecipes}"
+                                                RemainingItemsThreshold="5"
+                                                RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}"
+                                                RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Saved}"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                                                Scrolled="CollectionView_Scrolled"
+                                                HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <views:RecipeView Id="{Binding Id}"
-                                                              Username="{Binding Username}"
-                                                              Image="{Binding Image}"
-                                                              RecipeContent="{Binding RecipeContent}"
-                                                              Products="{Binding Products}"
-                                                              ContentVisible="{Binding ContentVisible}"
-                                                              DeleteCommand="{Binding DeleteCommand}"/>
+                                            <Grid Padding="20,0,20,0">
+                                                <views:RecipeView Id="{Binding Id}"
+                                                                  Username="{Binding Username}"
+                                                                  Image="{Binding Image}"
+                                                                  RecipeContent="{Binding RecipeContent}"
+                                                                  Products="{Binding Products}"
+                                                                  ContentVisible="{Binding ContentVisible}"
+                                                                  DeleteCommand="{Binding DeleteCommand}"/>
+                                            </Grid>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>

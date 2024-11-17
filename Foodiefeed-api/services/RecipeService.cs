@@ -9,10 +9,10 @@ namespace Foodiefeed_api.services;
 public interface IRecipeService
 {
     public Task SaveRecipe(int userId,int postId);
-    public Task RemoveRecipe(int recipeId);
+    public Task RemoveRecipe(int postId, int userId);
 
-    public Task<List<RecipeDto>> GetLikedRecipes(int userId);
-    public Task<List<RecipeDto>> GetSavedRecipes(int userId);
+    public Task<List<RecipeDto>> GetLikedRecipes(int userId, int lastId);
+    public Task<List<RecipeDto>> GetSavedRecipes(int userId, int lastId);
 }
 
 public class RecipeService : IRecipeService
@@ -28,9 +28,9 @@ public class RecipeService : IRecipeService
         AzureBloBStorageService = _IAzureBlobStorageSerivce;
     }
 
-    public async Task RemoveRecipe(int recipeId)
+    public async Task RemoveRecipe(int postId,int userId)
     {
-        var recipe = dbContext.Recipes.FirstOrDefault(r => r.Id == recipeId);
+        var recipe = dbContext.Recipes.FirstOrDefault(r => r.PostId == postId && r.UserId == userId);
 
         if (recipe is null) throw new BadRequestException("Recipe do not exist in current context");
 
@@ -50,31 +50,37 @@ public class RecipeService : IRecipeService
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<RecipeDto>> GetLikedRecipes(int userId)
+    public async Task<List<RecipeDto>> GetLikedRecipes(int userId,int lastId)
     {
         var likedpost = dbContext.PostLikes.Where(p => p.UserId == userId).ToList();
 
         var postsIds = likedpost.Select(p => p.PostId).ToList();
 
-        return await ExtractRecipes(postsIds);
+        return await ExtractRecipes(postsIds,lastId);
     }
 
-    public async Task<List<RecipeDto>> GetSavedRecipes(int userId)
+    public async Task<List<RecipeDto>> GetSavedRecipes(int userId,int lastId)
     {
         var savedrecipes = dbContext.Recipes.Where(r => r.UserId == userId);
 
         var postsIds = savedrecipes.Select(p => p.PostId).ToList();
 
-        return await ExtractRecipes(postsIds);
+        return await ExtractRecipes(postsIds,lastId);
     }
 
-    private async Task<List<RecipeDto>> ExtractRecipes(List<int> postIds)
+    /// <summary>
+    /// Extracts 10 recipes based on the last recipe id (keyset pagination)
+    /// </summary>
+    /// <param name="postIds"></param>
+    /// <returns>a List of with 10 or less elements</returns>
+    private async Task<List<RecipeDto>> ExtractRecipes(List<int> postIds, int lastId)
     {
         var posts = dbContext.Posts
             .Include(p => p.PostProducts)
                 .ThenInclude(pp => pp.Product)
             .Include(p => p.User)
-            .Where(p => postIds.Contains(p.PostId));
+            .OrderBy(p => p.PostId)
+            .Where(p => postIds.Contains(p.PostId) && p.PostId > lastId).Take(10);
 
         var recipes = mapper.Map<List<RecipeDto>>(posts);
 

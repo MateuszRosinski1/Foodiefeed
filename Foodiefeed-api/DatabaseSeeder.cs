@@ -441,10 +441,6 @@ namespace Foodiefeed_api
                 context.SaveChanges();
             }
 
-            //var allnotifications = context.Notifications.ToList();
-            //context.Notifications.RemoveRange(allnotifications);
-            //context.SaveChanges();
-
             if (!context.Notifications.Any()) {
                 
                 List<Notification> notifications = new List<Notification>();
@@ -530,7 +526,28 @@ namespace Foodiefeed_api
                 }
                 context.Notifications.AddRange(notifications);
                 context.SaveChanges();
-            }   
+            }
+
+            if (!context.Recipes.Any())
+            {
+                var recipeFaker = new Faker<Recipe>()
+                    .RuleFor(r => r.UserId, f => f.PickRandom(context.Users.ToList()).Id)
+                    .RuleFor(r => r.PostId, f => f.PickRandom(context.Posts.ToList()).PostId);
+
+                var recipes = recipeFaker.Generate(2000);
+
+                List<Recipe> noDupesRecipes = new List<Recipe>();       
+                
+                foreach(var recipe in recipes)
+                {
+                    if (!noDupesRecipes.Contains(recipe))
+                    {
+                        noDupesRecipes.Add(recipe);
+                    }
+                }
+                await context.Recipes.AddRangeAsync(noDupesRecipes);
+                context.SaveChanges();
+            }
         }
     }
 }
