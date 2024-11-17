@@ -16,6 +16,7 @@ namespace Foodiefeed_api.services
         public Task CreatePostAsync(CreatePostDto dto);
         public Task DeletePostAsync(int postId,int userId);
         public Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId);
+        public Task DeletePostLikeAsync(int postId,int userId);
     }
 
     public class PostService : IPostService
@@ -318,6 +319,16 @@ namespace Foodiefeed_api.services
             {
                 return null;
             }
+        }
+
+        public async Task DeletePostLikeAsync(int postId, int userId)
+        {
+            var postlike = await _dbContext.PostLikes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
+
+            if (postlike is null) throw new NotFoundException("");
+
+            _dbContext.PostLikes.Remove(postlike);
+            await Commit();
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Foodiefeed.WinUI
         {
             base.OnLaunched(args);
 
-            // Rejestracja implementacji dla Windows
             Microsoft.Maui.Controls.DependencyService.Register<ISpeechToText, SpeechToTextImplementation>();
         }
     }

@@ -6,7 +6,7 @@
              
     <Border Stroke="Gray" StrokeShape="RoundRectangle 10" WidthRequest="285" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
-            <Image x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0"/>
+            <ImageButton CornerRadius="5" x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0" BackgroundColor="Black"/>
             <VerticalStackLayout>
                 <Label x:Name="MessageLabel" 
                        TextColor="{DynamicResource TextColor}" 

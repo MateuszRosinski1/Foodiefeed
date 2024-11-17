@@ -14,6 +14,8 @@ namespace Foodiefeed_api.services
         public Task<string> ConvertStreamToBase64Async(Stream stream);
 
         public Task RemvePostImagesRangeAsync(int userId, int postId);
+
+        public Task<MemoryStream> FetchRecipeImage(int postId, int userId);
     }
 
     public class AzureBlobStorageService : IAzureBlobStorageSerivce
@@ -26,8 +28,7 @@ namespace Foodiefeed_api.services
         public AzureBlobStorageService(IConfiguration config)
         {
             _config = config;
-            string constr = _config["AZURE_FILE_STORAGE_SYSTEM_KEY"];
-            blobService = new BlobServiceClient(constr);
+            blobService = new BlobServiceClient(_config["AZURE_FILE_STORAGE_SYSTEM_KEY"]);
             container = blobService.GetBlobContainerClient("images-storage");
         }
 
@@ -87,6 +88,27 @@ namespace Foodiefeed_api.services
             return images;
         }
 
+        public async Task<MemoryStream> FetchRecipeImage(int postId, int userId)
+        {
+            var dir = $"{userId}/posts/{postId}/";
+
+            var memStream = new MemoryStream();
+
+            await foreach (var blobItem in container.GetBlobsAsync(prefix: dir))
+            {
+                if (Path.GetFileNameWithoutExtension(blobItem.Name) == "1")
+                {
+                    var blobClient = container.GetBlobClient(blobItem.Name);
+
+                    await blobClient.DownloadToAsync(memStream);
+
+                    memStream.Position = 0;
+                    break;
+                }
+            }
+            return memStream;
+        }
+
         public async Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams)
         {
             List<string> bases64 = new List<string>();
@@ -134,5 +156,7 @@ namespace Foodiefeed_api.services
                 await client.DeleteIfExistsAsync();
             }
         }
+
+        
     }
 }

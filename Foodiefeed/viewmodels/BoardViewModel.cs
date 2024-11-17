@@ -30,7 +30,7 @@ namespace Foodiefeed.viewmodels
         //https://icons8.com/icons/set/microphone icons
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
         //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
-        //Search problems need to be fixed.
+        //Search problems need to be fixed. - fixed
 
 
         private readonly UserSession _userSession;
@@ -145,6 +145,12 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool addPostFormVisible;
 
+        [ObservableProperty]
+        bool likedRecipesVisible;
+
+        [ObservableProperty]
+        bool savedRecipesVisible;
+
         #endregion
 
         [ObservableProperty]
@@ -171,6 +177,9 @@ namespace Foodiefeed.viewmodels
         public ObservableCollection<INotification> Notifications { get { return notifications; } }
         private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
 
+        public ObservableCollection<RecipeView> LikedRecipes { get; set; } = new ObservableCollection<RecipeView>();
+        public ObservableCollection<RecipeView> SavedRecipes { get; set; } = new ObservableCollection<RecipeView>();
+
 
         public BoardViewModel(UserSession userSession)
         {
@@ -181,8 +190,6 @@ namespace Foodiefeed.viewmodels
             notifications.CollectionChanged += OnNotificationsChanged;
 
             var notification = new BasicNotofication();
-            notification.IsVisible = false;
-            notification.IsEnabled = false;
             Notifications.Add(notification);
 
             DisplaySearchResultHistory();           
@@ -207,7 +214,9 @@ namespace Foodiefeed.viewmodels
             this.HubPanelVisible = false; // on init false
             this.CanShowSearchPanel = true; //on init true
             this.AddPostFormVisible = false; //on init false
-            PostContentEditorVisible = true;
+            this.PostContentEditorVisible = true; //on init true
+            this.LikedRecipesVisible = true; //on init true
+            this.SavedRecipesVisible = true; //on init false
 
             var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);
 
@@ -218,6 +227,14 @@ namespace Foodiefeed.viewmodels
             //Task.Run(UpdateFriendList);
             ChangeTheme();          
             Connectivity.ConnectivityChanged += ConnectivityChanged;
+
+            //LikedRecipes.Add(new RecipeView() {Id="1", Username = "mati",RecipeContent = "123" ,Products = new List<string>() { "2","3","4"},DeleteCommand = this.DeleteLikedRecipeCommand });
+            //LikedRecipes.Add(new RecipeView());
+            //LikedRecipes.Add(new RecipeView());
+            //LikedRecipes.Add(new RecipeView());
+            //SavedRecipes.Add(new RecipeView());
+            //SavedRecipes.Add(new RecipeView());
+            //SavedRecipes.Add(new RecipeView());
         }
 
         private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
@@ -1294,6 +1311,7 @@ namespace Foodiefeed.viewmodels
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
             this.RecipePageVisible = true;
+            ShowLikedRecipes();
         }
 
         [RelayCommand]
@@ -2462,8 +2480,9 @@ namespace Foodiefeed.viewmodels
             }
         }
 
+        int lastRecipeId;
         [RelayCommand]
-        public void ShowLikedRecipes()
+        public async Task ShowLikedRecipes()
         {
             var resources = Application.Current.Resources.MergedDictionaries.ElementAt(2);
 
@@ -2472,10 +2491,20 @@ namespace Foodiefeed.viewmodels
 
             LikedRecipesButtonBackround = (Color)clickedButtonColor;
             SavedRecipesButtonBackround = (Color)unclickedButtonColor;
+
+            await DisposeRecipesPage(SavedRecipes);
+
+            var dtos = await FetchRecipes($"api/recipes/get-liked/{_userSession.Id}/{lastRecipeId}");
+            if (dtos is null) return;
+
+            await AppendToRecipeCollection(LikedRecipes, dtos, RecipeType.Liked);
+
+            SavedRecipesVisible = false;
+            LikedRecipesVisible = true;
         }
 
         [RelayCommand]
-        public void SavedLikedRecipes()
+        public async Task ShowSavedRecipes()
         {
             var resources = Application.Current.Resources.MergedDictionaries.ElementAt(2);
 
@@ -2484,6 +2513,185 @@ namespace Foodiefeed.viewmodels
 
             LikedRecipesButtonBackround = (Color)unclickedButtonColor;
             SavedRecipesButtonBackround = (Color)clickedButtonColor;
+
+            await DisposeRecipesPage(LikedRecipes);
+
+            var dtos = await FetchRecipes($"api/recipes/get-saved/{_userSession.Id}/{lastRecipeId}");
+            if (dtos is null) return;
+
+            await AppendToRecipeCollection(SavedRecipes,dtos,RecipeType.Saved);
+
+            LikedRecipesVisible = false;
+            SavedRecipesVisible = true;
         }
+
+        /// <summary>
+        /// Fetches a list of <c>RecipeDto</c> based on the provided endpoint
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <returns>List of <c>RecipeDto</c> or <c>null</c> when exception or server error</returns>
+        private async Task<List<RecipeDto>> FetchRecipes(string endpoint)
+        {
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.GetAsync(endpoint);
+
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        NotifiyFailedAction(await response.Content.ReadAsStringAsync());
+                        return null;
+                    }
+                    var results = await response.Content.ReadAsStringAsync();
+                    var recipes = await JsonToObject<List<RecipeDto>>(results);
+                    return recipes;
+                }
+                catch
+                {
+                    NotifiyFailedAction("Cannot retrive recipes, try again later.");
+                    return null;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Clears <see cref="RecipeView"/> collection and sets <see cref="lastRecipeId"/> to 0
+        /// 
+        /// </summary>
+        /// <param name="collection">ObservableCollection to be disposed (cleared)</param>
+        /// <param name="Value">page visibility value</param>
+        private async Task DisposeRecipesPage(ObservableCollection<RecipeView> collection)
+        {
+            collection.Clear();
+            lastRecipeId = 0;
+        }
+
+        [RelayCommand]
+        public async Task DeleteSavedRecipe(string id)
+        {
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/recipes/delete-saved/{id}/{_userSession.Id}";
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode) {
+                        throw new Exception("Recipe could not be deleted at the moment");
+                    }
+
+                    var recipe = SavedRecipes.First(x => x.Id == id);
+
+                    SavedRecipes.Remove(recipe);
+                }
+                catch(Exception ex)
+                {
+                    NotifiyFailedAction(ex.Message);
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeleteLikedRecipe(string id)
+        {
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+                var endpoint = $"api/posts/delete-like/{id}/{_userSession.Id}";
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Recipe could not be deleted at the moment");
+                    }
+
+                    var recipe = LikedRecipes.First(x => x.Id == id);
+
+                    LikedRecipes.Remove(recipe);
+                }
+                catch (Exception ex)
+                {
+                    NotifiyFailedAction(ex.Message);
+                }
+            }          
+        }
+
+        [RelayCommand]
+        public async Task RecipesItemsThresholdExceed(RecipeType type)
+        {
+            var dtos = type switch
+            {
+                RecipeType.Liked => await FetchRecipes($"api/recipes/get-liked/{_userSession.Id}/{lastRecipeId}"),
+                RecipeType.Saved => await FetchRecipes($"api/recipes/get-saved/{_userSession.Id}/{lastRecipeId}"),
+                _ => null
+            };
+
+            if (dtos is null)
+            {
+                return;
+            }
+            else if (type is RecipeType.Liked)
+            {
+                await AppendToRecipeCollection(LikedRecipes, dtos, RecipeType.Liked);
+            }
+            else if (type is RecipeType.Saved)
+            {
+                await AppendToRecipeCollection(SavedRecipes, dtos, RecipeType.Saved);
+            }
+        }
+
+        private RecipeView CreateLikedRecipeView(string id,string username,string content,string imageBase64,List<string> products)
+        {
+            return new RecipeView() { 
+                Id = id, 
+                Username = username, 
+                RecipeContent = content, 
+                Image = imageBase64, 
+                Products = products,
+                DeleteCommand = DeleteLikedRecipeCommand 
+            };
+        }
+
+        private RecipeView CreateSavedRecipeView(string id, string username, string content, string imageBase64, List<string> products)
+        {
+            return new RecipeView()
+            {
+                Id = id,
+                Username = username,
+                RecipeContent = content,
+                Image = imageBase64,
+                Products = products,
+                DeleteCommand = DeleteSavedRecipeCommand
+            };
+        }
+
+        private async Task AppendToRecipeCollection(ObservableCollection<RecipeView> collection,List<RecipeDto> dtos,RecipeType type)
+        {
+            Func<RecipeDto, RecipeView> createViewFunc = type switch
+            {
+                RecipeType.Liked => dto => CreateLikedRecipeView(dto.Id.ToString(), dto.Username, dto.Content, dto.ImageBase64, dto.Products),
+                RecipeType.Saved => dto => CreateSavedRecipeView(dto.Id.ToString(), dto.Username, dto.Content, dto.ImageBase64, dto.Products),
+                _ => throw new ArgumentException("Recipe type not supported")
+            };
+
+            foreach (var dto in dtos)
+            {
+                collection.Add(createViewFunc(dto));
+                lastRecipeId = dto.Id;
+            }
+        }   
+    }
+
+    public enum RecipeType
+    {
+        Liked,
+        Saved
     }
 }

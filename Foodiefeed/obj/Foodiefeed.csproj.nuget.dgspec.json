@@ -65,7 +65,7 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.92, )"
+              "version": "[8.0.93, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
@@ -120,7 +120,7 @@
             },
             "Microsoft.Maui.Controls": {
               "target": "Package",
-              "version": "[8.0.92, )"
+              "version": "[8.0.93, )"
             },
             "Microsoft.Maui.Controls.Compatibility": {
               "target": "Package",
