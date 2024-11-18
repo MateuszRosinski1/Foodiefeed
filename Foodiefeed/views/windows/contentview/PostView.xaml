@@ -98,11 +98,14 @@
                             <Button  ImageSource="likeicon.png" 
                                      BackgroundColor="Transparent" 
                                      FontSize="20"
+                                     x:Name="LikeButton"
                                      WidthRequest="170"
                                      HeightRequest="50" 
                                      Padding="0,0,0,0" 
-                                     Text="Like It!"
-                                     TextColor="{DynamicResource TextColor}"/>
+                                     Text="{Binding LikeText}"
+                                     Command="{Binding LikingCommand}"
+                                     TextColor="{DynamicResource TextColor}"
+                                     CommandParameter="{Binding PostId}"/>
                             <Label x:Name="PostLikeCountLabel" 
                                    TextColor="{DynamicResource TextColor}" 
                                    FontSize="20" 
@@ -121,13 +124,15 @@
                                 TextColor="{DynamicResource TextColor}"/>
 
                         
-                        <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center">
-                            <Path Data="M 0 0 L 0 100 L 25 75 L 50 100 L 50 0 L 0 0" Fill="Gray" Scale="0.45"/>
-                            <Label Text="Save" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" FontSize="20"/>
+                        <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center"
+                                               x:Name="SaveHSL">
+                            <Path Data="M 0 0 L 0 100 L 25 75 L 50 100 L 50 0 L 0 0" Fill="{Binding SaveIconPathFill}" Scale="0.45" x:Name="SaveControlPath"/>
+                            <Label Text="{Binding SavingText}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" FontSize="20" x:Name="SaveButtonLabel"/>
                             <HorizontalStackLayout.GestureRecognizers>
                                 <PointerGestureRecognizer PointerEntered="ScaleButton" PointerExited="UnscaleButton"/>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=SaveRecipe}"
-                                                      CommandParameter="{Binding PostId}"/>
+                                <TapGestureRecognizer Command="{Binding SavingCommand}"
+                                                      CommandParameter="{Binding PostId}"
+                                                      x:Name="HSLGestureRecognizer"/>
                             </HorizontalStackLayout.GestureRecognizers>
                         </HorizontalStackLayout>
 
@@ -152,7 +157,7 @@
                                        BackgroundColor="{DynamicResource CommentViewBackground}" 
                                        BorderColor="Transparent"
                                        ZIndex="20">
-                                    <Grid HorizontalOptions="Fill" BackgroundColor="DarkCyan">
+                                    <Grid HorizontalOptions="Fill">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="50"/>
@@ -164,6 +169,8 @@
                                                 HorizontalOptions="FillAndExpand"
                                                 VerticalOptions="FillAndExpand"
                                                 Grid.Column="0"
+                                                HeightRequest="130"
+                                                WidthRequest="300"
                                                 Text="{Binding NewCommentContent}"
                                                 />
                                         <Button Grid.Column="1" 

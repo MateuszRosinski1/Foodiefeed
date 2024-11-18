@@ -429,7 +429,18 @@
                                                                 DeleteButtonVisible="{Binding DeleteButtonVisible}"
                                                                 PostProducts="{Binding PostProducts}"
                                                                 PostContentVisible="{Binding PostContentVisible}"
-                                                                PostImagesVisible="{Binding PostImagesVisible}"/>
+                                                                PostImagesVisible="{Binding PostImagesVisible}"
+                                                                LikePostCommand="{Binding LikePostCommand}"
+                                                                UnlikePostCommand="{Binding UnlikePostCommand}"
+                                                                SaveRecipeCommand="{Binding SaveRecipeCommand}"
+                                                                UnsaveRecipeCommand="{Binding UnsaveRecipeCommand}"
+                                                                LikingCommand="{Binding LikingCommand}"
+                                                                SavingCommand="{Binding SavingCommand}"
+                                                                LikeText="{Binding LikeText}"
+                                                                SavingText="{Binding SavingText}"
+                                                                SaveIconPathFill="{Binding SaveIconPathFill}"
+                                                                IsLiked="{Binding IsLiked}"
+                                                                IsSaved="{Binding IsSaved}"/>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </StackLayout>
@@ -878,7 +889,18 @@
                                                         DeleteButtonVisible="{Binding DeleteButtonVisible}"
                                                         PostProducts="{Binding PostProducts}"
                                                         PostContentVisible="{Binding PostContentVisible}"
-                                                        PostImagesVisible="{Binding PostImagesVisible}"/>
+                                                        PostImagesVisible="{Binding PostImagesVisible}"
+                                                        LikePostCommand="{Binding LikePostCommand}"
+                                                        UnlikePostCommand="{Binding UnlikePostCommand}"
+                                                        SaveRecipeCommand="{Binding SaveRecipeCommand}"
+                                                        UnsaveRecipeCommand="{Binding UnsaveRecipeCommand}"
+                                                        LikingCommand="{Binding LikingCommand}"
+                                                        SavingCommand="{Binding SavingCommand}"
+                                                        LikeText="{Binding LikeText}"
+                                                        SavingText="{Binding SavingText}"
+                                                        SaveIconPathFill="{Binding SaveIconPathFill}"
+                                                        IsLiked="{Binding IsLiked}"
+                                                        IsSaved="{Binding IsSaved}"/>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

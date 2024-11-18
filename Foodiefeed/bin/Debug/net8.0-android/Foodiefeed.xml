@@ -73,6 +73,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="M:Foodiefeed.viewmodels.BoardViewModel.FetchRecipes(System.String)">
             <summary>
@@ -577,6 +578,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.LikePostCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.LikePost(System.String)"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.unlikePostCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.UnlikePostCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.UnlikePostCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.UnlikePost(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.saveRecipeCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SaveRecipeCommand"/>.</summary>

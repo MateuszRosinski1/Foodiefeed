@@ -30,25 +30,25 @@
     <AppXManifest Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-11-17T17:38:45.295</Modified>
+      <Modified>2024-11-18T22:05:35.997</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2024-11-17T15:33:07.547</Modified>
+      <Modified>2024-11-18T20:13:44.505</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.runtimeconfig.json">
       <PackagePath>Foodiefeed.runtimeconfig.json</PackagePath>
-      <Modified>2024-11-17T15:33:07.374</Modified>
+      <Modified>2024-11-18T20:13:44.349</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.dll">
       <PackagePath>Foodiefeed.dll</PackagePath>
-      <Modified>2024-11-17T17:38:44.492</Modified>
+      <Modified>2024-11-18T22:02:47.375</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-windows10.0.19041.0\win10-x64\apphost.exe">
       <PackagePath>Foodiefeed.exe</PackagePath>
-      <Modified>2024-11-17T17:38:44.499</Modified>
+      <Modified>2024-11-18T22:02:47.380</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\Resources\Raw\AboutAssets.txt">
       <PackagePath>AboutAssets.txt</PackagePath>
@@ -344,7 +344,7 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="D:\PracaInzynierska\Foodiefeed\bin\Debug\net8.0-windows10.0.19041.0\win10-x64\Foodiefeed.deps.json">
       <PackagePath>Foodiefeed.deps.json</PackagePath>
-      <Modified>2024-11-17T15:33:07.345</Modified>
+      <Modified>2024-11-18T20:13:44.333</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\mateu\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\Microsoft.Windows.SDK.NET.dll">
       <PackagePath>Microsoft.Windows.SDK.NET.dll</PackagePath>

@@ -54,7 +54,7 @@ namespace Foodiefeed_api.services
             return notificationsDtos;
         }
 
-        public  async Task CreateNotification(NotificationType type, int senderId, int ReceiverId,string nickname)
+        public  async Task CreateNotification(NotificationType type, int senderId, int ReceiverId,string nickname) //Friend request , accepted friend request, gain follower
         {
             var notification = new Notification(type,nickname) { SenderId = senderId ,ReceiverId = ReceiverId};
 
@@ -63,10 +63,10 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();         
         }
 
-        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname,int Id,NotificationTarget target)
+        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname,int Id) //postlike  commentLike
         {
             Notification notification;
-            if (target == NotificationTarget.PostLike)
+            if (type == NotificationType.PostLike)
             {
                 notification = new Notification(type, nickname) { SenderId = senderId, ReceiverId = ReceiverId, PostId = Id };
             }
@@ -80,7 +80,7 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId,int commentId)
+        public async Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId,int commentId)// post comment
         {
             var notification = new Notification(type, nickname) { SenderId = senderId, ReceiverId = ReceiverId,PostId = postId,CommentId = commentId };
 

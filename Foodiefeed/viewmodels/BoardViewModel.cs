@@ -1692,8 +1692,49 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void LikePost(string id)
+        public async Task LikePost(string id)
         {
+            var endpoint = $"api/posts/like-post/{_userSession.Id}?postId={id}";
+
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.PostAsync(endpoint, null);
+
+                    if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+
+                }catch(Exception e)
+                {
+                    NotifiyFailedAction(e.Message);
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task UnlikePost(string id)
+        {
+            var endpoint = $"api/posts/unlike-post/{_userSession.Id}?postId={id}";
+
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+
+                }
+                catch (Exception e)
+                {
+                    NotifiyFailedAction(e.Message);
+                }
+            }
+
         }
 
         [RelayCommand]
@@ -2315,7 +2356,14 @@ namespace Foodiefeed.viewmodels
                             PostId = post.PostId.ToString(),
                             PostProducts = post.ProductsName,
                             DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = false
+                            PostImagesVisible = false,
+                            LikePostCommand = LikePostCommand,
+                            UnlikePostCommand = UnlikePostCommand,
+                            SaveRecipeCommand = SaveRecipeCommand,
+                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                            IsLiked = post.IsLiked,
+                            IsSaved = post.IsSaved,
+
                         };
                         collection.Add(postview);
                     }
@@ -2334,7 +2382,13 @@ namespace Foodiefeed.viewmodels
                             PostId = post.PostId.ToString(),
                             PostProducts = post.ProductsName,
                             DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = true
+                            PostImagesVisible = true,
+                            LikePostCommand = LikePostCommand,
+                            UnlikePostCommand = UnlikePostCommand,
+                            SaveRecipeCommand = SaveRecipeCommand,
+                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                            IsLiked = post.IsLiked,
+                            IsSaved = post.IsSaved,
                         };
                         collection.Add(postview);
                     }

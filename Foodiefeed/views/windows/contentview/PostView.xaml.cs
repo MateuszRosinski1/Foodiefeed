@@ -1,12 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using CommunityToolkit.Mvvm.ComponentModel;
-
-#if WINDOWS
-using Windows.Graphics.Imaging;
-using Microsoft.UI.Xaml.Media;
-#endif
-
+using System.Windows.Input;
 
 namespace Foodiefeed.views.windows.contentview;
 
@@ -14,7 +6,10 @@ public partial class PostView : ContentView
 {
 
     #region privates
+
     bool isTextContentExpanded = false;
+    int currentImageIndex;
+
     #endregion
 
     #region BindableProperties
@@ -58,54 +53,43 @@ public partial class PostView : ContentView
     public static readonly BindableProperty PostImagesVisibleProperty =
         BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(PostView), default(bool));
 
-    private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-        var view = (PostView)bindable;
-        view.PostContentGrid.IsVisible = (bool)newValue;
-        view.PostProductsGrid.IsVisible = !(bool)newValue;
+    public static readonly BindableProperty LikePostCommandProperty =
+        BindableProperty.Create(nameof(LikePostCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-    }
+    public static readonly BindableProperty UnlikePostCommandProperty =
+        BindableProperty.Create(nameof(UnlikePostCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-    private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
-    {
-       var view = (PostView)bindable;
+    public static readonly BindableProperty SaveRecipeCommandProperty =
+        BindableProperty.Create(nameof(SaveRecipeCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-       if (newValue is null) return;
+    public static readonly BindableProperty UnsaveRecipeCommandProperty =
+        BindableProperty.Create(nameof(UnsaveRecipeCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-       List<string> Products = newValue as List<string>;
+    public static readonly BindableProperty ImagesBase64Property =
+        BindableProperty.Create(nameof(ImagesBase64),typeof(List<string>),typeof(PostView), default(List<string>),propertyChanged: OnImagesBase64Changed);
 
-       string productString = string.Empty;
+    public static readonly BindableProperty LikingCommandProperty =
+        BindableProperty.Create(nameof(LikingCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-       
+    public static readonly BindableProperty SavingCommandProperty =
+        BindableProperty.Create(nameof(SavingCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
-       foreach(var product in Products)
-       {
-            productString += product + '\n';
-       }
+    public static readonly BindableProperty LikeTextProperty =
+        BindableProperty.Create(nameof(LikeText), typeof(string), typeof(PostView), default(string));
 
-        view.PostProductsContentLabel.Text = productString;
-    }
+    public static readonly BindableProperty SavingTextProperty =
+        BindableProperty.Create(nameof(SavingText), typeof(string), typeof(PostView), default(string));
 
-    public bool PostImagesVisible
-    {
-        get => (bool)GetValue(PostImagesVisibleProperty);
-        set => SetValue(PostImagesVisibleProperty, value);
-    }
+    public static readonly BindableProperty SaveIconPathFillProperty =
+        BindableProperty.Create(nameof(SaveIconPathFill), typeof(Brush), typeof(PostView), default(Brush));
 
-    public bool DeleteButtonVisible
-    {
-        get => (bool)GetValue(DeleteButtonVisibleProperty);
-        set => SetValue(DeleteButtonVisibleProperty, value);
-    }
+    public static readonly BindableProperty IsLikedProperty =
+        BindableProperty.Create(nameof(IsLiked), typeof(bool), typeof(PostView), default(bool));
 
-    public bool PostContentVisible {
-        get => (bool)GetValue(PostContentVisibleProperty);
-        set => SetValue(PostContentVisibleProperty, value);
-    }
+    public static readonly BindableProperty IsSavedProperty =
+        BindableProperty.Create(nameof(IsSaved), typeof(bool), typeof(PostView), default(bool));
 
     #endregion
-
-    int currentImageIndex;
 
     #region Properties
 
@@ -137,15 +121,7 @@ public partial class PostView : ContentView
     {
         get => (string)GetValue(PfpImageBase64Property);
         set => SetValue(PfpImageBase64Property, value);
-    }
-
-    public static readonly BindableProperty ImagesBase64Property =
-    BindableProperty.Create(
-        nameof(ImagesBase64),    
-        typeof(List<string>),    
-        typeof(PostView),default(List<string>),     
-        propertyChanged: OnImagesBase64Changed 
-    ); 
+    } 
 
     public List<string> ImagesBase64
     {
@@ -181,6 +157,123 @@ public partial class PostView : ContentView
     {
         get => (string)(GetValue(TimeStampProperty));
         set => SetValue(TimeStampProperty, value);
+    }
+
+    public bool PostImagesVisible
+    {
+        get => (bool)GetValue(PostImagesVisibleProperty);
+        set => SetValue(PostImagesVisibleProperty, value);
+    }
+
+    public bool DeleteButtonVisible
+    {
+        get => (bool)GetValue(DeleteButtonVisibleProperty);
+        set => SetValue(DeleteButtonVisibleProperty, value);
+    }
+
+    public bool PostContentVisible
+    {
+        get => (bool)GetValue(PostContentVisibleProperty);
+        set => SetValue(PostContentVisibleProperty, value);
+    }
+
+    public ICommand LikePostCommand
+    {
+        get => (ICommand)GetValue(LikePostCommandProperty);
+        set => SetValue(LikePostCommandProperty, value);
+    }
+
+    public ICommand UnlikePostCommand
+    {
+        get => (ICommand)GetValue(UnlikePostCommandProperty);
+        set => SetValue(UnlikePostCommandProperty, value);
+    }
+
+    public ICommand SaveRecipeCommand
+    {
+        get => (ICommand)GetValue(SaveRecipeCommandProperty);
+        set => SetValue(SaveRecipeCommandProperty, value);
+    }
+
+    public ICommand UnsaveRecipeCommand
+    {
+        get => (ICommand)GetValue(UnsaveRecipeCommandProperty);
+        set => SetValue(UnsaveRecipeCommandProperty, value);
+    }
+    //
+    public ICommand LikingCommand 
+    {
+        get => (ICommand)GetValue(LikingCommandProperty);
+        set => SetValue(LikingCommandProperty, value);
+        
+    }
+
+    public ICommand SavingCommand 
+    {  
+        get => (ICommand)GetValue(SavingCommandProperty);
+        set => SetValue(SavingCommandProperty, value);
+    }
+
+    public string LikeText 
+    {
+        get => (string)GetValue(LikeTextProperty);
+        set => SetValue(LikeTextProperty, value);
+    }
+    public string SavingText 
+    {
+        get => (string)GetValue(SavingTextProperty);
+        set => SetValue(SavingTextProperty, value);
+    }
+
+    public Brush SaveIconPathFill 
+    {
+        get => (Brush)GetValue(SaveIconPathFillProperty);
+        set => SetValue(SaveIconPathFillProperty, value);
+    }
+
+    public bool IsLiked { 
+        get 
+        {
+            return (bool)GetValue(IsLikedProperty);
+        } 
+        set 
+        {
+            SetValue(IsLikedProperty, value);
+            if(value is false)
+            {
+                LikeText = "Like It!";
+                LikingCommand = LikePostCommand;
+            }
+            else if(value is true)
+            {
+                LikeText = "Unlike it ;(";
+                LikingCommand = UnlikePostCommand;
+            }
+        } 
+    }
+
+
+    public bool IsSaved { 
+        get 
+        {
+            return (bool)GetValue(IsSavedProperty);
+        } 
+        set 
+        { 
+            SetValue(IsSavedProperty, value);
+            if(value is false)
+            {
+                SavingText = "Save";
+                SavingCommand = SaveRecipeCommand;
+                SaveIconPathFill = Brush.Gray;
+            }
+            else if (value is true)
+            {
+                SavingText = "Unsave";
+                SavingCommand = UnsaveRecipeCommand;
+                SaveIconPathFill = Brush.Yellow;
+            }
+        } 
     }
 
     #endregion
@@ -228,7 +321,7 @@ public partial class PostView : ContentView
     private static void OnPostLikeCountChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostView)bindable;
-        view.PostLikeCountLabel.Text = newValue as string;
+        view.PostLikeCountLabel.Text = newValue as string; 
     }
 
     private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
@@ -267,7 +360,35 @@ public partial class PostView : ContentView
         });
     }
 
-	public List<CommentView> Comments { get; set; }
+    private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+        view.PostContentGrid.IsVisible = (bool)newValue;
+        view.PostProductsGrid.IsVisible = !(bool)newValue;
+
+    }
+
+    private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+
+        if (newValue is null) return;
+
+        List<string> Products = newValue as List<string>;
+
+        string productString = string.Empty;
+
+
+
+        foreach (var product in Products)
+        {
+            productString += product + '\n';
+        }
+
+        view.PostProductsContentLabel.Text = productString;
+    }
+
+    public List<CommentView> Comments { get; set; }
 
     public PostView()
     {
@@ -371,6 +492,10 @@ public partial class PostView : ContentView
 
     private void SwipeRight(object sender, EventArgs e)
     {
+        var temp1 = IsLiked;
+        var temp2 = IsSaved;
+
+
         var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count-1);
         currentImageIndex = index;
         if(currentImageIndex >= ImagesBase64.Count-1)
