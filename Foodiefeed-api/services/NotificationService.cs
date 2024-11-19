@@ -9,7 +9,7 @@ namespace Foodiefeed_api.services
     public interface INotificationService
     {
         Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname);
-        Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int Id, NotificationTarget target);
+        Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int Id);
         Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId, int commentId);
         Task RemoveRange(List<int> ids);
 

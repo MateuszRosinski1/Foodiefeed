@@ -134,10 +134,14 @@
                     </Border.Shadow>
                 </Border>
 
-                <HorizontalStackLayout HorizontalOptions="End">
-                    <BoxView WidthRequest="200" BackgroundColor="MediumPurple" HeightRequest="30" VerticalOptions="Center" Margin="100,0,0,0"></BoxView>
-                </HorizontalStackLayout>
-
+                <Border Margin="0,0,50,0" HorizontalOptions="End" StrokeShape="RoundRectangle 40" WidthRequest="64" HeightRequest="64" Stroke="{DynamicResource TextColor}" StrokeThickness="1"> 
+                    <Image HeightRequest="60"
+                           WidthRequest="60"
+                           Source="{Binding ProfilePictureSource}" 
+                           Aspect="Fill"
+                           BackgroundColor="Black"/>
+                </Border>
+                
             </Grid>
 
             <Grid Padding="0,0,0,0"  Grid.Row="1">
@@ -1033,13 +1037,22 @@
 
                     <Button CornerRadius="5" TextColor="{DynamicResource TextColor}" Text="Settings" FontSize="20" FontAttributes="Bold" HeightRequest="50" BackgroundColor="{DynamicResource HubPanelBackground}" Command="{Binding ToSettingViewCommand}">
                         <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" PointerExited="PointerGestureRecognizer_PointerExited"/>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" 
+                                                      PointerExited="PointerGestureRecognizer_PointerExited"/>
                         </Button.GestureRecognizers>
                         <!--<Button.Shadow>
                             <Shadow Opacity="0"
                                     Radius="50"/>
-                        </Button.Shadow>-->
+                        </Button.Shadow>--> 
                     </Button>
+
+                    <Button CornerRadius="5" TextColor="{DynamicResource TextColor}" Text="Logout" FontSize="20" FontAttributes="Bold" HeightRequest="50" BackgroundColor="{DynamicResource HubPanelBackground}" Command="{Binding LogoutCommand}">
+                        <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="PointerGestureRecognizer_PointerEntered" 
+                                  PointerExited="PointerGestureRecognizer_PointerExited"/>
+                        </Button.GestureRecognizers>
+                    </Button>
+                    
                 </VerticalStackLayout>
             </Grid>
             <Grid.Shadow>

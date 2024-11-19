@@ -18,6 +18,12 @@ namespace Foodiefeed
             IsLoggedIn = true;
         }
 
+        public void Logout()
+        {
+            SetOffline();
+            UnbindId();
+        }
+
         public void UnbindId()
         {
             Id = null;

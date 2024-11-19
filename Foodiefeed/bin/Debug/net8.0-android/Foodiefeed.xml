@@ -180,6 +180,9 @@
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SavedRecipesVisible">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.savedRecipesVisible"/>
         </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.ProfilePictureSource">
+            <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.profilePictureSource"/>
+        </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.InternetAcces">
             <inheritdoc cref="F:Foodiefeed.viewmodels.BoardViewModel.internetAcces"/>
         </member>
@@ -271,7 +274,7 @@
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.AppearingCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.AppearingCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.Appearing"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.Appearing"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.mainWallPostThresholdExceedCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.MainWallPostThresholdExceedCommand"/>.</summary>
@@ -577,13 +580,13 @@
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.LikePostCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.LikePostCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.LikePost(System.String)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.LikePost(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.unlikePostCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.UnlikePostCommand"/>.</summary>
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.UnlikePostCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.UnlikePost(System.String)"/>.</summary>
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.UnlikePost(System.String)"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.saveRecipeCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.SaveRecipeCommand"/>.</summary>
@@ -880,6 +883,9 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SavedRecipesVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SavedRecipesVisible" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ProfilePictureSource">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ProfilePictureSource" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InternetAcces">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InternetAcces" generated properties.</summary>
         </member>
@@ -1098,6 +1104,9 @@
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SavedRecipesVisible">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SavedRecipesVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ProfilePictureSource">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ProfilePictureSource" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InternetAcces">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InternetAcces" generated properties.</summary>

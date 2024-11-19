@@ -95,5 +95,12 @@ namespace Foodiefeed_api.Controllers
             return NoContent();
         }
 
+        [HttpGet("get-profile-picture-base64/{userId}")]
+        public async Task<IActionResult> GetProfilePictureBase64([FromRoute]int userId)
+        {
+            var response = await _service.GetProfilePicture(userId);
+            return Ok(response);
+        }
+
     }
 }

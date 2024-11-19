@@ -36,25 +36,25 @@ namespace Foodiefeed.viewmodels
         private readonly UserSession _userSession;
         private Thread UpdateOnlineFriendListThread;
 
-        public ObservableCollection<PostView> Posts { get { return posts;} }
+        public ObservableCollection<PostView> Posts { get; set; } = new ObservableCollection<PostView>();
 
-        private ObservableCollection<PostView> posts 
-            = new ObservableCollection<PostView>();
+        //private ObservableCollection<PostView> posts 
+        //    = new ObservableCollection<PostView>();
 
-        public ObservableCollection<OnlineFreidnListElementView> OnlineFriends { get { return onlineFriends; } }
+        public ObservableCollection<OnlineFreidnListElementView> OnlineFriends { get; set; } = new ObservableCollection<OnlineFreidnListElementView>();
 
-        private ObservableCollection<OnlineFreidnListElementView> onlineFriends 
-            = new ObservableCollection<OnlineFreidnListElementView> { };
+        //private ObservableCollection<OnlineFreidnListElementView> onlineFriends 
+        //    = new ObservableCollection<OnlineFreidnListElementView> { };
 
         //public ObservableCollection<OnListFriendView> ProfilePageFriends { get { return profilePageFriends; } }
 
         //private ObservableCollection<OnListFriendView> profilePageFriends = 
         //    new ObservableCollection<OnListFriendView>();
 
-        public ObservableCollection<UserSearchResultView> SearchResults { get { return searchResults; } }
+        public ObservableCollection<UserSearchResultView> SearchResults { get; set; } = new ObservableCollection<UserSearchResultView>();
 
-        private ObservableCollection<UserSearchResultView > searchResults = 
-            new ObservableCollection<UserSearchResultView> { };
+        //private ObservableCollection<UserSearchResultView > searchResults = 
+        //    new ObservableCollection<UserSearchResultView> { };
 
         #region profilePageMemebers
         [ObservableProperty]
@@ -151,6 +151,30 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool savedRecipesVisible;
 
+        [ObservableProperty]
+        ImageSource profilePictureSource;      
+
+        public async Task SetProfilePictureFromBase64(string base64)
+        {
+            if (string.IsNullOrEmpty(base64))
+
+            if (base64.Contains("base64,"))
+                base64 = base64.Substring(base64.IndexOf("base64,") + 7);
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    byte[] imageBytes = Convert.FromBase64String(base64);
+                    ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                });
+            }
+            catch (FormatException)
+            {
+                ProfilePictureSource = null;
+            }
+        }
+
         #endregion
 
         [ObservableProperty]
@@ -174,8 +198,8 @@ namespace Foodiefeed.viewmodels
 
         #endregion
 
-        public ObservableCollection<INotification> Notifications { get { return notifications; } }
-        private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
+        public ObservableCollection<INotification> Notifications { get; set; } = new ObservableCollection<INotification>();
+        //private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
 
         public ObservableCollection<RecipeView> LikedRecipes { get; set; } = new ObservableCollection<RecipeView>();
         public ObservableCollection<RecipeView> SavedRecipes { get; set; } = new ObservableCollection<RecipeView>();
@@ -187,15 +211,13 @@ namespace Foodiefeed.viewmodels
             _userSession = userSession;
             _userSession.Id = 15;
             InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-            notifications.CollectionChanged += OnNotificationsChanged;
+            Notifications.CollectionChanged += OnNotificationsChanged;
 
             var notification = new BasicNotofication();
-            Notifications.Add(notification);
+            Notifications.Add(notification);          
+            NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
 
-            DisplaySearchResultHistory();           
-            MainWallPostThresholdExceed();
-            UpdateFriendList();
-            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
+            DisplaySearchResultHistory();
 
             this.ProfilePageVisible = false; //on init false
             this.PostPageVisible = true; //on init true
@@ -218,23 +240,14 @@ namespace Foodiefeed.viewmodels
             this.LikedRecipesVisible = true; //on init true
             this.SavedRecipesVisible = true; //on init false
 
-            var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);
+            var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);     
 
-            
             //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
             //UpdateOnlineFriendListThread.Start();
 
             //Task.Run(UpdateFriendList);
-            ChangeTheme();          
+            //ChangeTheme();          
             Connectivity.ConnectivityChanged += ConnectivityChanged;
-
-            //LikedRecipes.Add(new RecipeView() {Id="1", Username = "mati",RecipeContent = "123" ,Products = new List<string>() { "2","3","4"},DeleteCommand = this.DeleteLikedRecipeCommand });
-            //LikedRecipes.Add(new RecipeView());
-            //LikedRecipes.Add(new RecipeView());
-            //LikedRecipes.Add(new RecipeView());
-            //SavedRecipes.Add(new RecipeView());
-            //SavedRecipes.Add(new RecipeView());
-            //SavedRecipes.Add(new RecipeView());
         }
 
         private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
@@ -243,22 +256,68 @@ namespace Foodiefeed.viewmodels
             InternetAcces = !(access == NetworkAccess.Internet);
         }
 
+        [RelayCommand]
+        public async Task Logout()
+        {
+            //Posts.Clear();
+            //OnlineFriends.Clear();
+            //SearchResults.Clear();
+            //Notifications.Clear();
+            //LikedRecipes.Clear();
+            //SavedRecipes.Clear();
+
+            _userSession.SetOffline();
+            Application.Current.MainPage = new LogInPage(new UserViewModel(_userSession));
+        }
+
         private Timer notificationTimer;
         bool windowloaded;
 
         [RelayCommand]
-        async void Appearing()
+        public async Task Appearing()
         {
             if(!windowloaded)   // appearing command invoked 2 times for some reason
             {
-                FetchNotifications();
                 windowloaded = true;
+                await FetchNotifications();
+                var base64 = await FetchProfilePictureBase64();
+                if (base64 is null) return;
+                await SetProfilePictureFromBase64(base64);
+                await MainWallPostThresholdExceed();
+                await UpdateFriendList();
             }
                 
             //if(notificationTimer == null)
             //{
             //    notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
             //}
+        }
+
+        private async Task<string> FetchProfilePictureBase64()
+        {
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/user/get-profile-picture-base64/{_userSession.Id}";
+
+                try
+                {
+                    var response = await http.GetAsync(endpoint);
+
+                    if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        ProfilePictureSource = "avatar.jpg";
+                        return null;
+                    }
+                    return await response.Content.ReadAsStringAsync();
+
+                }catch(Exception ex)
+                {
+                    NotifiyFailedAction("could not retrive profile picture.");
+                    return null;
+                }
+            }
         }
 
         private async Task FetchNotifications()
@@ -772,7 +831,7 @@ namespace Foodiefeed.viewmodels
 
         private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            NoNotificationNotifierVisible = notifications.Count == 0 ? true : false;
+            NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
         }
 
         [RelayCommand]
@@ -809,8 +868,8 @@ namespace Foodiefeed.viewmodels
             alltags.Clear();
         }
 
-        ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
-        public ObservableCollection<PostImageView> AddPostImages { get { return addPostImages; } }
+        //ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
+        public ObservableCollection<PostImageView> AddPostImages { get; set; } = new ObservableCollection<PostImageView>();
 
         [RelayCommand]
         public async void UploadPostImages()
@@ -971,9 +1030,9 @@ namespace Foodiefeed.viewmodels
         }
 
 
-        ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
+        //ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
 
-        public ObservableCollection<TagView> Tags { get { return tags; } set { tags = value; } }
+        public ObservableCollection<TagView> Tags { get; set; } = new ObservableCollection<TagView>();
 
         [ObservableProperty]
         bool addPostFormActivityIndicatorVisible;
@@ -1021,10 +1080,10 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        [MaxLength(4)]
-        static ObservableCollection<TagView> pickedtags = new ObservableCollection<TagView>();
+        //static ObservableCollection<TagView> pickedtags = new ObservableCollection<TagView>();
 
-        public static ObservableCollection<TagView> PickedTags { get { return pickedtags; } }
+        [MaxLength(4)]
+        public static ObservableCollection<TagView> PickedTags { get; set; } = new ObservableCollection<TagView>();
 
         [ObservableProperty]
         string filterParam;
@@ -1094,8 +1153,7 @@ namespace Foodiefeed.viewmodels
 
         ObservableCollection<ProductView> allproducts = new ObservableCollection<ProductView>();
         public ObservableCollection<ProductView> Products { get; set; } = new ObservableCollection<ProductView>();
-        static ObservableCollection<ProductView> pickedProducts = new ObservableCollection<ProductView>();
-        public static ObservableCollection<ProductView> PickedProducts { get { return pickedProducts; } }
+        public static ObservableCollection<ProductView> PickedProducts { get; set; } = new ObservableCollection<ProductView>();
 
         [RelayCommand]
         public async Task LoadProducts()
@@ -1461,7 +1519,9 @@ namespace Foodiefeed.viewmodels
 
         private void HandleMissmatchPassword()
         {
-
+            //
+            //sadasdasd
+            //
         }
 
         private async Task UpdatePersonalData(string endpoint,StringContent contnet)
@@ -1706,9 +1766,32 @@ namespace Foodiefeed.viewmodels
 
                     if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
 
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     NotifiyFailedAction(e.Message);
+                }
+                finally
+                {
+                    var post = Posts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post is not null)
+                    {
+                        var postLikes = Convert.ToInt32(post.PostLikeCount);
+                        postLikes += 1;
+                        post.PostLikeCount = postLikes.ToString();
+                        post.IsLiked = true;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post2 is not null)
+                    {
+                        var postLikes = Convert.ToInt32(post2.PostLikeCount);
+                        postLikes += 1;
+                        post2.PostLikeCount = postLikes.ToString();
+                        post2.IsLiked = true;
+                    }
                 }
             }
         }
@@ -1716,6 +1799,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task UnlikePost(string id)
         {
+
             var endpoint = $"api/posts/unlike-post/{_userSession.Id}?postId={id}";
 
             using (var http = new HttpClient())
@@ -1733,6 +1817,28 @@ namespace Foodiefeed.viewmodels
                 {
                     NotifiyFailedAction(e.Message);
                 }
+                finally
+                {
+                    var post = Posts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post is not null)
+                    {
+                        var postLikes = Convert.ToInt32(post.PostLikeCount);
+                        postLikes -= 1;
+                        post.PostLikeCount = postLikes.ToString();
+                        post.IsLiked = false;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post2 is not null)
+                    {
+                        var postLikes = Convert.ToInt32(post2.PostLikeCount);
+                        postLikes -= 1;
+                        post2.PostLikeCount = postLikes.ToString();
+                        post2.IsLiked = false;
+                    }
+                }
             }
 
         }
@@ -1742,7 +1848,7 @@ namespace Foodiefeed.viewmodels
         {
             var endpoint = $"api/recipes/save/{_userSession.Id}/{postId}";
 
-            using(var http = new HttpClient())
+            using (var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
 
@@ -1761,6 +1867,22 @@ namespace Foodiefeed.viewmodels
                 catch
                 {
                     NotifiyFailedAction("internal server error, try again later");
+                }
+                finally
+                {
+                    var post = Posts.FirstOrDefault(p => p.PostId == postId);
+
+                    if (post is not null)
+                    {
+                        post.IsSaved = true;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == postId);
+
+                    if (post2 is not null)
+                    {
+                        post2.IsSaved = true;
+                    }
                 }
             }
         }
@@ -2266,14 +2388,14 @@ namespace Foodiefeed.viewmodels
             return obj;
         }
 
-        public ObservableCollection<OnListFriendView> ProfileFriendsList { get { return profileFriendsList; } set { profileFriendsList = value; } }
-        private ObservableCollection<OnListFriendView> profileFriendsList = new ObservableCollection<OnListFriendView>();
+        public ObservableCollection<OnListFriendView> ProfileFriendsList { get; set; } = new ObservableCollection<OnListFriendView>();
+        //private ObservableCollection<OnListFriendView> profileFriendsList = new ObservableCollection<OnListFriendView>();
 
-        public ObservableCollection<OnListFriendView> ProfileFollowersList { get { return profileFollowersList; } set { profileFollowersList = value; } }
-        private ObservableCollection<OnListFriendView> profileFollowersList = new ObservableCollection<OnListFriendView>();
+        public ObservableCollection<OnListFriendView> ProfileFollowersList { get; set; } = new ObservableCollection<OnListFriendView>();
+        //private ObservableCollection<OnListFriendView> profileFollowersList = new ObservableCollection<OnListFriendView>();
 
-        public ObservableCollection<PostView> ProfilePosts { get { return profilePosts; } set { profilePosts = value; } }
-        private ObservableCollection<PostView> profilePosts = new ObservableCollection<PostView>();
+        public ObservableCollection<PostView> ProfilePosts { get; set; } = new ObservableCollection<PostView>();
+        //private ObservableCollection<PostView> profilePosts = new ObservableCollection<PostView>();
 
         private async Task<string> GetUserProfilePosts(string id)
         {
@@ -2635,7 +2757,8 @@ namespace Foodiefeed.viewmodels
                 {
                     var response = await http.DeleteAsync(endpoint);
 
-                    if (!response.IsSuccessStatusCode) {
+                    if (!response.IsSuccessStatusCode)
+                    {
                         throw new Exception("Recipe could not be deleted at the moment");
                     }
 
@@ -2643,9 +2766,25 @@ namespace Foodiefeed.viewmodels
 
                     SavedRecipes.Remove(recipe);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     NotifiyFailedAction(ex.Message);
+                }
+                finally
+                {
+                    var post = Posts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post is not null)
+                    {
+                        post.IsSaved = false;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
+
+                    if (post2 is not null)
+                    {
+                        post2.IsSaved = false;
+                    }
                 }
             }
         }

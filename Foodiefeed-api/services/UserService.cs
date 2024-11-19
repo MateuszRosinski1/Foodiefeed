@@ -23,6 +23,8 @@ namespace Foodiefeed_api.services
         public Task ChangeUsername(int id, string value);
         public Task ChangeEmail(int id, string value);
         public Task ChangePassword(int id, string value);
+
+        public Task<string> GetProfilePicture(int userId);
     }
 
     public class UserService : IUserService
@@ -231,6 +233,17 @@ namespace Foodiefeed_api.services
 
             _context.Users.Update(user);
             _context.SaveChanges();
+        }
+
+        public async Task<string> GetProfilePicture(int userId)
+        {
+            var stream = await AzureBlobStorageService.FetchProfileImageAsync(userId);
+
+            if (stream is null) { throw new NotFoundException("user uses the deafault profile picture."); }
+
+            var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
+
+            return base64;
         }
     }
 }
