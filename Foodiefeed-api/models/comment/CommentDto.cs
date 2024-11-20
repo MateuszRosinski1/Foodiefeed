@@ -8,5 +8,6 @@
         public int UserId { get; set; }
         public string Username { get; set; }
         public string ImageBase64 { get; set; }
+        public bool IsLiked { get; set; }
     }
 }

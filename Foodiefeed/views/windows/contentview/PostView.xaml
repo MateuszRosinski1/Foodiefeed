@@ -201,7 +201,13 @@
                                                            CommentContent="{Binding CommentContent}"
                                                            LikeCount="{Binding LikeCount}"
                                                            PfpImageBase64="{Binding PfpImageBase64}"
-                                                           EditButtonVisible="{Binding EditButtonVisible}"/>
+                                                           EditButtonVisible="{Binding EditButtonVisible}"
+                                                           LikeCommentCommand="{Binding LikeCommentCommand}"
+                                                           UnlikeCommentCommand="{Binding UnlikeCommentCommand}"
+                                                           LikingCommand="{Binding LikingCommand}"
+                                                           IsLiked="{Binding IsLiked}"
+                                                           LikeText="{Binding LikeText}"
+                                                           CommentId="{Binding CommentId}"/>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </VerticalStackLayout>

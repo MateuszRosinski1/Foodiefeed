@@ -1748,7 +1748,104 @@ namespace Foodiefeed.viewmodels
             this.ProfilePostsVisible = false;
             this.ProfileFriendsVisible = false;
             await SetButtonColors(Buttons.FollowersButton);
+        }
 
+        [RelayCommand]
+        public async Task LikeComment(string commentId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var endpoint = $"api/comments/like-comment/{_userSession.Id}?commentId={commentId}";
+
+                    var response = await client.PostAsync(endpoint, null);
+
+                    if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+
+                    var idStr = await response.Content.ReadAsStringAsync();
+
+
+                    var post = Posts.FirstOrDefault(p => p.PostId == idStr);
+
+                    if (post is not null)
+                    {
+                        var comment = post.Comments.First(c => c.CommentId == commentId);
+                        var likes = Convert.ToInt32(comment.LikeCount);
+                        likes += 1;
+                        comment.LikeCount = likes.ToString();
+                        comment.IsLiked = true;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == idStr);
+
+                    if (post2 is not null)
+                    {
+                        var comment = post2.Comments.First(c => c.CommentId == commentId);
+                        var likes = Convert.ToInt32(comment.LikeCount);
+                        likes += 1;
+                        comment.LikeCount = likes.ToString();
+                        comment.IsLiked = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    NotifiyFailedAction(ex.Message);
+                    return;
+                }
+                
+            }
+        }
+
+        [RelayCommand]
+        public async Task UnlikeComment(string commentId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(API_BASE_URL);
+
+                try
+                {
+                    var endpoint = $"api/comments/unlike-comment/{_userSession.Id}?commentId={commentId}";
+
+                    var response = await client.DeleteAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+
+                    var idStr = await response.Content.ReadAsStringAsync();
+
+
+                    var post = Posts.FirstOrDefault(p => p.PostId == idStr);
+
+                    if (post is not null)
+                    {
+                        var comment = post.Comments.First(c => c.CommentId == commentId);
+                        var likes = Convert.ToInt32(comment.LikeCount);
+                        likes -= 1;
+                        comment.LikeCount = likes.ToString();
+                        comment.IsLiked = true;
+                    }
+
+                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == idStr);
+
+                    if (post2 is not null)
+                    {
+                        var comment = post2.Comments.First(c => c.CommentId == commentId);
+                        var likes = Convert.ToInt32(comment.LikeCount);
+                        likes -= 1;
+                        comment.LikeCount = likes.ToString();
+                        comment.IsLiked = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    NotifiyFailedAction(ex.Message);
+                    return;
+                }
+
+            }
         }
 
         [RelayCommand]
@@ -1770,28 +1867,27 @@ namespace Foodiefeed.viewmodels
                 catch (Exception e)
                 {
                     NotifiyFailedAction(e.Message);
+                    return;
                 }
-                finally
+
+                var post = Posts.FirstOrDefault(p => p.PostId == id);
+
+                if (post is not null)
                 {
-                    var post = Posts.FirstOrDefault(p => p.PostId == id);
+                    var postLikes = Convert.ToInt32(post.PostLikeCount);
+                    postLikes += 1;
+                    post.PostLikeCount = postLikes.ToString();
+                    post.IsLiked = true;
+                }
 
-                    if (post is not null)
-                    {
-                        var postLikes = Convert.ToInt32(post.PostLikeCount);
-                        postLikes += 1;
-                        post.PostLikeCount = postLikes.ToString();
-                        post.IsLiked = true;
-                    }
+                var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
 
-                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
-
-                    if (post2 is not null)
-                    {
-                        var postLikes = Convert.ToInt32(post2.PostLikeCount);
-                        postLikes += 1;
-                        post2.PostLikeCount = postLikes.ToString();
-                        post2.IsLiked = true;
-                    }
+                if (post2 is not null)
+                {
+                    var postLikes = Convert.ToInt32(post2.PostLikeCount);
+                    postLikes += 1;
+                    post2.PostLikeCount = postLikes.ToString();
+                    post2.IsLiked = true;
                 }
             }
         }
@@ -1816,29 +1912,29 @@ namespace Foodiefeed.viewmodels
                 catch (Exception e)
                 {
                     NotifiyFailedAction(e.Message);
+                    return;
                 }
-                finally
+                
+                var post = Posts.FirstOrDefault(p => p.PostId == id);
+
+                if (post is not null)
                 {
-                    var post = Posts.FirstOrDefault(p => p.PostId == id);
-
-                    if (post is not null)
-                    {
-                        var postLikes = Convert.ToInt32(post.PostLikeCount);
-                        postLikes -= 1;
-                        post.PostLikeCount = postLikes.ToString();
-                        post.IsLiked = false;
-                    }
-
-                    var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
-
-                    if (post2 is not null)
-                    {
-                        var postLikes = Convert.ToInt32(post2.PostLikeCount);
-                        postLikes -= 1;
-                        post2.PostLikeCount = postLikes.ToString();
-                        post2.IsLiked = false;
-                    }
+                    var postLikes = Convert.ToInt32(post.PostLikeCount);
+                    postLikes -= 1;
+                    post.PostLikeCount = postLikes.ToString();
+                    post.IsLiked = false;
                 }
+
+                var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == id);
+
+                if (post2 is not null)
+                {
+                    var postLikes = Convert.ToInt32(post2.PostLikeCount);
+                    postLikes -= 1;
+                    post2.PostLikeCount = postLikes.ToString();
+                    post2.IsLiked = false;
+                }
+                
             }
 
         }
@@ -2452,7 +2548,10 @@ namespace Foodiefeed.viewmodels
                         LikeCount = comment.Likes.ToString(),
                         UserId = comment.UserId.ToString(),
                         PfpImageBase64 = comment.ImageBase64,
-                        EditButtonVisible = temp
+                        EditButtonVisible = temp,
+                        UnlikeCommentCommand = UnlikeCommentCommand,
+                        LikeCommentCommand = LikeCommentCommand,
+                        IsLiked = comment.IsLiked,
                     };
                     commentList.Add(newcomment);
                 }

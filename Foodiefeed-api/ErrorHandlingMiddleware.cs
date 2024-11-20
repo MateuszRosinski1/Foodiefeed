@@ -20,7 +20,12 @@ namespace Foodiefeed_api
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(nfe.Message);
             }
-            catch (Exception ex)
+            catch(OperationCanceledException)
+            {
+                context.Response.StatusCode = 499;
+                await context.Response.WriteAsync("Operation was canceled.");
+            }
+            catch (Exception)
             {
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong...");

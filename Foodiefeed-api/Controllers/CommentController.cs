@@ -43,5 +43,19 @@ namespace Foodiefeed_api.Controllers
             await commentService.DeleteComment(commentId);
             return NoContent();
         }
+
+        [HttpPost("like-comment/{userId}")]
+        public async Task<IActionResult> LikeComment([FromRoute]int userId,int commentId,CancellationToken token)
+        {
+            var postId = await commentService.LikeComment(userId, commentId,token);
+            return Ok(postId);
+        }
+
+        [HttpDelete("unlike-comment/{userId}")]
+        public async Task<IActionResult> UnlikeComment([FromRoute] int userId, int commentId, CancellationToken token)
+        {
+            var postId = await commentService.UnlikeComment(userId, commentId, token);
+            return Ok(postId);
+        }
     }
 }

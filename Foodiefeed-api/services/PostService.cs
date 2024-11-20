@@ -10,7 +10,7 @@ namespace Foodiefeed_api.services
 {
     public interface IPostService
     {
-        public Task<List<PostDto>> GetProfilePostsAsync(string userId);
+        public Task<List<PostDto>> GetProfilePostsAsync(int userId);
         public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
         public Task<PopupPostDto> GetLikedPostAsync(int id);
         public Task CreatePostAsync(CreatePostDto dto);
@@ -143,7 +143,7 @@ namespace Foodiefeed_api.services
             return popupPostDto;
         }
 
-        public async Task<List<PostDto>> GetProfilePostsAsync(string userId)
+        public async Task<List<PostDto>> GetProfilePostsAsync(int userId)
         {
             var user = await _dbContext.Users
             .Include(u => u.Posts)
@@ -155,7 +155,7 @@ namespace Foodiefeed_api.services
                 .ThenInclude(p => p.PostCommentMembers)
             .Include(u => u.Posts)
                 .ThenInclude(u => u.PostLikes)
-            .FirstOrDefaultAsync(u => u.Id == Convert.ToInt32(userId));
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user is null) { throw new NotFoundException("user not found"); }
 
@@ -194,16 +194,18 @@ namespace Foodiefeed_api.services
                     var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
                     commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream);
 
+                    commentDto.IsLiked = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentDto.CommentId) is null ? false : true;
+
                     postsDtos[i].Comments.Add(commentDto);
                 }
 
                 var like = await _dbContext.PostLikes
-                    .FirstOrDefaultAsync(pl => pl.PostId == postsDtos[i].PostId && pl.UserId == Convert.ToInt32(userId));
+                    .FirstOrDefaultAsync(pl => pl.PostId == postsDtos[i].PostId && pl.UserId == userId);
 
                 postsDtos[i].IsLiked = like is null ? false : true;
 
                 var save = await _dbContext.Recipes
-                    .FirstOrDefaultAsync(r => r.PostId == postsDtos[i].PostId && r.UserId == Convert.ToInt32(userId));
+                    .FirstOrDefaultAsync(r => r.PostId == postsDtos[i].PostId && r.UserId == userId);
 
                 postsDtos[i].IsSaved = save is null ? false : true;
 
@@ -240,8 +242,6 @@ namespace Foodiefeed_api.services
 
         public async Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId)
         {
-            try
-            {
                 var userTags = await _dbContext.UserTags
                     .Where(ut => ut.UserId == userId)
                     .ToDictionaryAsync(ut => ut.TagId, ut => ut.Score);
@@ -324,16 +324,11 @@ namespace Foodiefeed_api.services
 
                         var stream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
                         comment.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
+                        var cl = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == comment.CommentId);
+                        comment.IsLiked = cl is null ? false : true;
                     }
-
                 }
-
                 return dtos;
-            }
-            catch(Exception ex)
-            {
-                return null;
-            }
         }
 
         public async Task DeletePostLikeAsync(int postId, int userId)

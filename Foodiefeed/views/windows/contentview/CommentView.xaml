@@ -57,7 +57,8 @@
                     <VerticalStackLayout.GestureRecognizers>
                         <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
-                                  CommandParameter="{Binding UserId}"/>
+                                  CommandParameter="{Binding UserId}"
+                                             />
                     </VerticalStackLayout.GestureRecognizers>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
@@ -68,9 +69,11 @@
         </Grid>
 
         <HorizontalStackLayout  Grid.Row="2">
-            <Button BackgroundColor="Red"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" Text="Like It!" 
+                <Button     BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  
+                            Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" 
+                            Text="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=LikeText}" 
                             TextColor="{DynamicResource TextColor}"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=LikePostCommand}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=LikingCommand}"
                             CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
 
             <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel"/>

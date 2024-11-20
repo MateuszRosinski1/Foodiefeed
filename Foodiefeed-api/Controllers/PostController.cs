@@ -16,7 +16,7 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("profile-posts/{userId}")]
-        public async Task<IActionResult> GetProfilePosts([FromRoute]string userId)
+        public async Task<IActionResult> GetProfilePosts([FromRoute]int userId)
         {
             var response = await _postService.GetProfilePostsAsync(userId);
 

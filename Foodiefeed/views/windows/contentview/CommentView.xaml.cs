@@ -1,11 +1,12 @@
 
 
 
+using System.Windows.Input;
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class CommentView : ContentView
 {
-    public string CommentId { get; set; }
 	public string UserId { get; set; }
 
     public static readonly BindableProperty UsernameProperty =
@@ -22,6 +23,30 @@ public partial class CommentView : ContentView
 
     public static readonly BindableProperty EditButtonVisibleProperty =
         BindableProperty.Create(nameof(EditButtonVisible), typeof(bool), typeof(CommentView), default(bool));
+
+    public static readonly BindableProperty LikeCommentCommandProperty =
+        BindableProperty.Create(nameof(LikeCommentCommand), typeof(ICommand), typeof(CommentView), default(ICommand));
+
+    public static readonly BindableProperty UnlikeCommentCommandProperty =
+        BindableProperty.Create(nameof(UnlikeCommentCommand), typeof(ICommand), typeof(CommentView), default(ICommand));
+
+    public static readonly BindableProperty LikingCommandProperty =
+        BindableProperty.Create(nameof(LikingCommand), typeof(ICommand), typeof(CommentView), default(ICommand));
+
+    public static readonly BindableProperty IsLikedProperty =
+        BindableProperty.Create(nameof(IsLiked), typeof(bool), typeof(CommentView), default(bool));
+
+    public static readonly BindableProperty LikeTextProperty =
+        BindableProperty.Create(nameof(LikeText), typeof(string), typeof(CommentView), default(string));
+
+    public static readonly BindableProperty CommentIdProperty =
+        BindableProperty.Create(nameof(CommentId), typeof(string), typeof(CommentView), default(string));
+
+    public string CommentId 
+    { 
+        get => (string)GetValue(CommentIdProperty);
+        set => SetValue(CommentIdProperty, value);
+    }
 
     public bool EditButtonVisible
     {
@@ -51,6 +76,52 @@ public partial class CommentView : ContentView
     {
         get => (string)GetValue(PfpImageBase64Property);
         set => SetValue(PfpImageBase64Property, value);
+    }
+
+    public ICommand LikeCommentCommand
+    {
+        get => (ICommand)GetValue(LikeCommentCommandProperty);
+        set => SetValue(LikeCommentCommandProperty, value);
+    }
+
+    public ICommand UnlikeCommentCommand
+    {
+        get => (ICommand)GetValue(UnlikeCommentCommandProperty);
+        set => SetValue(UnlikeCommentCommandProperty, value);
+    }
+
+    public ICommand LikingCommand
+    {
+        get => (ICommand)GetValue(LikingCommandProperty);
+        set => SetValue(LikingCommandProperty, value);
+    }
+
+    public string LikeText
+    {
+        get => (string)GetValue(LikeTextProperty);
+        set => SetValue(LikeTextProperty, value);
+    }
+
+    public bool IsLiked
+    {
+        get
+        {
+            return (bool)GetValue(IsLikedProperty);
+        }
+        set
+        {
+            SetValue(IsLikedProperty, value);
+            if (value is false)
+            {
+                LikeText = "Like It!";
+                LikingCommand = LikeCommentCommand;
+            }
+            else if (value is true)
+            {
+                LikeText = "Unlike it ;(";
+                LikingCommand = UnlikeCommentCommand;
+            }
+        }
     }
 
 
@@ -104,4 +175,5 @@ public partial class CommentView : ContentView
         await ThirdCircle.ScaleTo(1.3, 100, Easing.BounceIn);
         await ThirdCircle.ScaleTo(1, 100, Easing.BounceOut);
     }
+
 }

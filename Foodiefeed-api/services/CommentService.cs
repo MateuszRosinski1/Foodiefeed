@@ -12,6 +12,8 @@ namespace Foodiefeed_api.services
         Task AddNewComment(int postId,NewCommentDto dto);
         Task EditComment(int commentId, string newContent);
         Task DeleteComment(int commentId);
+        Task<int> LikeComment(int userId,int commentId,CancellationToken token);
+        Task<int> UnlikeComment(int userId, int commentId, CancellationToken token);
     }
 
     public class CommentService : ICommentService
@@ -85,8 +87,42 @@ namespace Foodiefeed_api.services
 
             _dbContext.Comments.Remove(comment);
             _dbContext.PostCommentMembers.Remove(member);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> LikeComment(int userId, int commentId,CancellationToken token)
+        {
+            var commentlike = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentId);
+
+            if (commentlike is not null) throw new BadRequestException($"Comment is already liked by the user with id:{userId}");
+
+            token.ThrowIfCancellationRequested();
+
+            _dbContext.CommentLikes.Add(new CommentLike { UserId = userId, CommentId = commentId });
+
             await _dbContext.SaveChangesAsync();
 
+            var commentMember = await _dbContext.PostCommentMembers.FirstAsync(c => c.CommentId == commentId);
+
+            return commentMember.PostId;
+        }
+
+        public async Task<int> UnlikeComment(int userId, int commentId, CancellationToken token)
+        {
+            var commentlike = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentId);
+
+            if (commentlike is null) throw new BadRequestException($"Comment is not liked by the user with id:{userId}");
+
+            token.ThrowIfCancellationRequested();
+
+            _dbContext.CommentLikes.Remove(commentlike);
+
+            await _dbContext.SaveChangesAsync();
+
+            var commentMember = await _dbContext.PostCommentMembers.FirstAsync(c => c.CommentId == commentId);
+
+            return commentMember.PostId;
         }
 
     }
