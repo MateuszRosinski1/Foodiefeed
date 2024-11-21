@@ -533,7 +533,7 @@ namespace Foodiefeed.viewmodels
                 post.CommentLikes.ToString())
                 {
                     Username = post.Username,
-                    TimeStamp = "10 hours ago",
+                    TimeStamp = post.TimeSpan,
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                     PostProducts = post.ProductsName,
@@ -757,7 +757,7 @@ namespace Foodiefeed.viewmodels
                 var popup = new LikedPostPopup()
                 {
                     Username = post.Username,
-                    TimeStamp = "10 hours ago",
+                    TimeStamp = post.TimeSpan,
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                 };
@@ -770,7 +770,7 @@ namespace Foodiefeed.viewmodels
                 App.Current.MainPage.ShowPopup(new LikedPostPopup()
                 {
                     Username = post.Username,
-                    TimeStamp = "10 hours ago",
+                    TimeStamp = post.TimeSpan,
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                     ImageSource = post.PostImagesBase64[0],

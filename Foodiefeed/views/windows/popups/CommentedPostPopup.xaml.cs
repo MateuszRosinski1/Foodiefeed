@@ -133,7 +133,7 @@ public partial class CommentedPostPopup : Popup
     private static void OnTimeStampChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (CommentedPostPopup)bindable;
-        view.PostTimeStampLabel.Text = newValue as string + " ago.";
+        view.PostTimeStampLabel.Text = newValue as string;
     }
 
     private static void OnUsernameTextChanged(BindableObject bindable, object oldValue, object newValue)

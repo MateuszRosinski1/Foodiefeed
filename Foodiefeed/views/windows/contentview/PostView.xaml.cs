@@ -309,7 +309,7 @@ public partial class PostView : ContentView
     private static void OnTimeStampChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostView)bindable;
-        view.PostTimeStampLabel.Text = newValue as string + " ago.";
+        view.PostTimeStampLabel.Text = newValue as string;
     }
 
     private static void OnUsernameTextChanged(BindableObject bindable, object oldValue, object newValue)

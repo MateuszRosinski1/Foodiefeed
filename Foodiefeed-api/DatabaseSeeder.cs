@@ -47,7 +47,7 @@ namespace Foodiefeed_api
                         break;
 
                     case 5: 
-                        int years = Random.Shared.Next(1, 11); 
+                        int years = Random.Shared.Next(1, 3); 
                         randomDate = randomDate.AddYears(-years);
                         break;
                 }

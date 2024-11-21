@@ -124,7 +124,7 @@ public partial class LikedPostPopup : Popup
     private static void OnTimeStampChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (LikedPostPopup)bindable;
-        view.PostTimeStampLabel.Text = newValue as string + " ago.";
+        view.PostTimeStampLabel.Text = newValue as string;
     }
 
     private static void OnUsernameTextChanged(BindableObject bindable, object oldValue, object newValue)

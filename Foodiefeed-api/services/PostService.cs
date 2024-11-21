@@ -275,7 +275,7 @@ namespace Foodiefeed_api.services
                     TagScoreSum = p.PostTags
                         .Where(tagId => userTags.ContainsKey(tagId)) 
                         .Sum(tagId => userTags[tagId]),
-                    DayScore = (p.SecondsSinceCreated)/1000000
+                     DayScore = 100 / (p.SecondsSinceCreated / 86400 + 1)
                  })
                  .Select(p => new
                  {
