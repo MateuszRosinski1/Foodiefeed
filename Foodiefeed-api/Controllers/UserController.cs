@@ -39,16 +39,14 @@ namespace Foodiefeed_api.Controllers
             return Ok(response);
         }
 
-        [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto)
+        public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto,IFormFile file)
         {
-            await _service.CreateUser(dto);
+            await _service.CreateUser(dto,file);
 
             return Ok("User Created Succesfully");
         }
 
-        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto)
         {
@@ -100,6 +98,20 @@ namespace Foodiefeed_api.Controllers
         {
             var response = await _service.GetProfilePicture(userId);
             return Ok(response);
+        }
+
+        [HttpPost("upload-new-profile-picture/{userId}")]
+        public async Task<IActionResult> UploadProfilePicture([FromRoute]int userId, [FromForm] IFormFile file)
+        {
+            await _service.ChangeProfilePicture(userId, file);
+            return NoContent();
+        }
+
+        [HttpDelete("delete-profile-picture/{userId}")]
+        public async Task<IActionResult> RemoveProfilePicture([FromRoute]int userId)
+        {
+            await _service.RemoveProfilePicture(userId);
+            return Ok();
         }
 
     }

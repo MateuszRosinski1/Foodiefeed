@@ -77,6 +77,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="M:Foodiefeed.viewmodels.BoardViewModel.FetchRecipes(System.String)">
             <summary>
@@ -524,6 +525,12 @@
         </member>
         <member name="P:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalDataCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.SaveChangedPersonalData"/>.</summary>
+        </member>
+        <member name="F:Foodiefeed.viewmodels.BoardViewModel.removeUserProfilePictureCommand">
+            <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.RemoveUserProfilePictureCommand"/>.</summary>
+        </member>
+        <member name="P:Foodiefeed.viewmodels.BoardViewModel.RemoveUserProfilePictureCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Foodiefeed.viewmodels.BoardViewModel.RemoveUserProfilePicture"/>.</summary>
         </member>
         <member name="F:Foodiefeed.viewmodels.BoardViewModel.showSearchPanelCommand">
             <summary>The backing field for <see cref="P:Foodiefeed.viewmodels.BoardViewModel.ShowSearchPanelCommand"/>.</summary>

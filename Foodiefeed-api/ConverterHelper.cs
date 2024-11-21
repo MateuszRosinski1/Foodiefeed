@@ -4,7 +4,7 @@
     {
         public static string ConvertDateTimeToTimeSpan(DateTime dateTime)
         {
-            TimeSpan timeSpan = DateTime.Now - dateTime;
+            TimeSpan timeSpan = DateTime.Now.ToUniversalTime() - dateTime.ToUniversalTime();
 
             if (timeSpan.TotalSeconds < 60)
             {

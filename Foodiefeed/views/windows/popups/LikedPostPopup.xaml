@@ -40,16 +40,23 @@
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
+                        <Button Text="Products" 
+                                HorizontalOptions="End"
+                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                TextColor="{DynamicResource TextColor}" 
+                                Clicked="ShowProducts"/>
                     </Grid>
 
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <VerticalStackLayout>
                             <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Grid x:Name="PostContentGrid">
-                                    <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
-                                </Grid>
-                                <Grid x:Name="PostProductsGrid">
-                                    <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                <Grid>
+                                    <Grid x:Name="PostContentGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                    <Grid x:Name="PostProductsGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
                                 </Grid>
                             </ScrollView>
 

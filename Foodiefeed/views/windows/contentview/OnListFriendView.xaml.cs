@@ -78,6 +78,12 @@ public partial class OnListFriendView : ContentView
 
         var newValueString = newValue as string;
 
+        if (string.IsNullOrEmpty(newValueString))
+        {
+            view.avatarImage.Source = "avatar.jpg";
+            return;
+        }
+
         var imageBytes = Convert.FromBase64String(newValueString);
 
         view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>

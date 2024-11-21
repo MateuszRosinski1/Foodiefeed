@@ -332,6 +332,12 @@ public partial class PostView : ContentView
 
         var newValueString = newValue as string;
 
+        if (string.IsNullOrEmpty(newValueString))
+        {
+            view.pfpImage.Source = "avatar.jpg";
+            return;
+        }
+
         var imageBytes = Convert.FromBase64String(newValueString);
 
         view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
@@ -525,11 +531,23 @@ public partial class PostView : ContentView
 
     private async void UnscaleButton(object sender, PointerEventArgs e)
     {
-        var hsl = (HorizontalStackLayout)sender;
-        await hsl.ScaleTo(1,250,Easing.Linear);
+        var btn = (Button)sender;
+        await btn.ScaleTo(1,250,Easing.Linear);
     }
 
     private async void ScaleButton(object sender, PointerEventArgs e)
+    {
+        var btn = (Button)sender;
+        await btn.ScaleTo(1.2, 250, Easing.Linear);
+    }
+
+    private async void UnscaleHSL(object sender, PointerEventArgs e)
+    {
+        var hsl = (HorizontalStackLayout)sender;
+        await hsl.ScaleTo(1, 250, Easing.Linear);
+    }
+
+    private async void ScaleHSL(object sender, PointerEventArgs e)
     {
         var hsl = (HorizontalStackLayout)sender;
         await hsl.ScaleTo(1.2, 250, Easing.Linear);
@@ -544,5 +562,10 @@ public partial class PostView : ContentView
     {
         var hsl = (Button)sender;
         await hsl.ScaleTo(1.2, 250, Easing.Linear);
+    }
+
+    private void FocusEditor(object sender, EventArgs e)
+    {
+        CommentEditor.Focus();
     }
 }

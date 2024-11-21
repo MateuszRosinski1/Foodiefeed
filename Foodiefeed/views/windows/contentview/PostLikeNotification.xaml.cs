@@ -41,6 +41,12 @@ public partial class PostLikeNotification : ContentView, INotification
 
         var newValueString = newValue as string;
 
+        if (string.IsNullOrEmpty(newValueString))
+        {
+            view.image.Source = "avatar.jpg";
+            return;
+        }
+
         var imageBytes = Convert.FromBase64String(newValueString);
 
         view.image.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>

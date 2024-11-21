@@ -227,4 +227,9 @@ public partial class LikedPostPopup : Popup
         }
         ImageSource = ImagesBase64[currentImageIndex];
     }
+
+    private void ShowProducts(object sender, EventArgs e)
+    {
+        PostContentVisible = !PostContentVisible;
+    }
 }

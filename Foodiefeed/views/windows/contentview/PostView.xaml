@@ -111,6 +111,10 @@
                                    FontSize="20" 
                                    LineBreakMode="TailTruncation" 
                                    VerticalOptions="Center"/>
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="ScaleHSL" 
+                                                          PointerExited="UnscaleHSL"/>
+                            </HorizontalStackLayout.GestureRecognizers>
                         </HorizontalStackLayout>
 
                         <Button Grid.Column="1"  
@@ -121,15 +125,23 @@
                                 HeightRequest="50"
                                 Padding="0,0,0,0" 
                                 Text="Comment"
-                                TextColor="{DynamicResource TextColor}"/>
+                                TextColor="{DynamicResource TextColor}"
+                                Clicked="FocusEditor">
+                            <Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="ScaleButton" 
+                                                          PointerExited="UnscaleButton"/>
+      
+                            </Button.GestureRecognizers>
+                        </Button>
 
-                        
+
                         <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center"
                                                x:Name="SaveHSL">
                             <Path Data="M 0 0 L 0 100 L 25 75 L 50 100 L 50 0 L 0 0" Fill="{Binding SaveIconPathFill}" Scale="0.45" x:Name="SaveControlPath"/>
                             <Label Text="{Binding SavingText}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" FontSize="20" x:Name="SaveButtonLabel"/>
                             <HorizontalStackLayout.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="ScaleButton" PointerExited="UnscaleButton"/>
+                                <PointerGestureRecognizer PointerEntered="ScaleHSL" 
+                                                          PointerExited="UnscaleHSL"/>
                                 <TapGestureRecognizer Command="{Binding SavingCommand}"
                                                       CommandParameter="{Binding PostId}"
                                                       x:Name="HSLGestureRecognizer"/>
@@ -170,7 +182,7 @@
                                                     HorizontalOptions="FillAndExpand"
                                                     VerticalOptions="FillAndExpand"
                                                     Text="{Binding NewCommentContent}"
-                                                    />
+                                                    x:Name="CommentEditor"/>
                                         </Border>
                                         <Button Grid.Column="1" 
                                                 Text="+"

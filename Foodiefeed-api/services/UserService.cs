@@ -12,7 +12,7 @@ namespace Foodiefeed_api.services
 {
     public interface IUserService
     {
-        public Task CreateUser(CreateUserDto dto);
+        public Task CreateUser(CreateUserDto dto,IFormFile file);
         public Task<int> LogIn(UserLogInDto dto);
         public Task SetOnlineStatus(int id);
         public Task SetOfflineStatus(int id);
@@ -23,6 +23,8 @@ namespace Foodiefeed_api.services
         public Task ChangeUsername(int id, string value);
         public Task ChangeEmail(int id, string value);
         public Task ChangePassword(int id, string value);
+        public Task ChangeProfilePicture(int id,IFormFile file);
+        public Task RemoveProfilePicture(int userId);
 
         public Task<string> GetProfilePicture(int userId);
     }
@@ -74,7 +76,7 @@ namespace Foodiefeed_api.services
             return usersDto;
         }
 
-        public async Task CreateUser(CreateUserDto dto)
+        public async Task CreateUser(CreateUserDto dto, IFormFile file)
         {
             var userCheck = _context.Users.FirstOrDefault(u => u.Username == dto.Username); 
 
@@ -90,9 +92,18 @@ namespace Foodiefeed_api.services
 
             user.PasswordHash = _hasher.HashPassword(user,user.PasswordHash);
 
+            List<UserTag> userTags = new List<UserTag>();
+
+            foreach(var tag in _context.Tags.ToList())
+            {
+                userTags.Add(new UserTag() { Score = 50, Tag = tag });
+            }
+
             _context.Users.Add(user);
 
             await _context.SaveChangesAsync();
+
+            await ChangeProfilePicture(user.Id, file);
 
         }
 
@@ -244,6 +255,16 @@ namespace Foodiefeed_api.services
             var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
 
             return base64;
+        }
+
+        public async Task ChangeProfilePicture(int id, IFormFile file)
+        {
+            await AzureBlobStorageService.UploadNewProfilePicture(id, file);
+        }
+
+        public async Task RemoveProfilePicture(int userId)
+        {
+            await AzureBlobStorageService.RemoveUserProfilePicture(userId);
         }
     }
 }

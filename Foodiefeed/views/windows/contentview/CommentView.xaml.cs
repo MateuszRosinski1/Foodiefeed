@@ -138,6 +138,12 @@ public partial class CommentView : ContentView
 
         var newValueString = newValue as string;
 
+        if (string.IsNullOrEmpty(newValueString))
+        {
+            view.pfpImage.Source = "avatar.jpg";
+            return;
+        }
+
         var imageBytes = Convert.FromBase64String(newValueString);
 
         view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>

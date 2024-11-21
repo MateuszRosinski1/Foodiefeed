@@ -4,7 +4,6 @@ using Foodiefeed_api.exceptions;
 using Foodiefeed_api.models.posts;
 using Microsoft.EntityFrameworkCore;
 using Foodiefeed_api.models.comment;
-using Windows.UI;
 
 namespace Foodiefeed_api.services
 {
@@ -16,7 +15,7 @@ namespace Foodiefeed_api.services
         public Task CreatePostAsync(CreatePostDto dto);
         public Task DeletePostAsync(int postId,int userId);
         public Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId);
-        public Task DeletePostLikeAsync(int postId,int userId);
+        //public Task DeletePostLikeAsync(int postId,int userId);
         public Task LikePost(int userId,int postId);
         public Task UnlikePost(int userId, int postId);
     }
@@ -68,19 +67,14 @@ namespace Foodiefeed_api.services
             post.PostProducts = pProducts;
 
             _dbContext.Posts.Add(post);
-            try
-            {
-                await Commit();
-            }catch(Exception ex)
-            {
 
-            }
+            await Commit();
+
 
             if (dto.Images is not null)
             {
                 await AzureBlobStorageService.UploadPostImagesAsync(post.UserId, post.PostId, dto.Images);
-            }
-            
+            }       
         }
 
         public async Task<PopupPostDto> GetLikedPostAsync(int id)
@@ -152,7 +146,6 @@ namespace Foodiefeed_api.services
             popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpImgStream);
             popupPostDto.CommentProfilePictureImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentImgStream);
 
-            //popupPostDto.TimeSpan = ConverterHelper.ConvertDateTimeToTimeSpan(post.CreateTime);
             return popupPostDto;
         }
 
@@ -347,15 +340,15 @@ namespace Foodiefeed_api.services
                 return dtos;
         }
 
-        public async Task DeletePostLikeAsync(int postId, int userId)
-        {
-            var postlike = await _dbContext.PostLikes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
+        //public async Task DeletePostLikeAsync(int postId, int userId)
+        //{
+        //    var postlike = await _dbContext.PostLikes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
 
-            if (postlike is null) throw new NotFoundException("");
+        //    if (postlike is null) throw new NotFoundException("");
 
-            _dbContext.PostLikes.Remove(postlike);
-            await Commit();
-        }
+        //    _dbContext.PostLikes.Remove(postlike);
+        //    await Commit();
+        //}
 
         public async Task LikePost(int userId, int postId)
         {
@@ -370,11 +363,39 @@ namespace Foodiefeed_api.services
 
             var post = await _dbContext.PostLikes
                 .Include(p => p.User)
+                .Include(p => p.Post)
+                    .ThenInclude(p => p.PostTags)
+                        .ThenInclude(pt => pt.Tag)
                 .FirstAsync(pl => pl.PostId == postId);
 
             if (userId == post.UserId) return;
 
             await notificationService.CreateNotification(NotificationType.PostLike,userId,post.UserId,post.User.Username);
+
+
+            var user = await _dbContext.Users
+                .Include(u => u.UserTags)
+                   .ThenInclude(ut => ut.Tag)
+                .FirstAsync(u => u.Id == userId);
+
+            var userTags = user.UserTags.OrderBy(ut => ut.Tag.Name).ToList(); 
+
+            foreach (var postTag in post.Post.PostTags)
+            {
+                var userTagIndex = userTags.FindIndex(t => t.Tag.Name == postTag.Tag.Name);
+                if (userTagIndex >= 0)
+                {
+                    userTags[userTagIndex].Score = Math.Min(100, userTags[userTagIndex].Score + 2); 
+
+                    var oppositeIndex = userTags.Count - 1 - userTagIndex;
+                    if (oppositeIndex >= 0 && oppositeIndex < userTags.Count && oppositeIndex != userTagIndex)
+                    {
+                        userTags[oppositeIndex].Score = Math.Max(1, userTags[oppositeIndex].Score - 2); 
+                    }
+                }
+            }
+
+
         }
 
         public async Task UnlikePost(int userId,int postId)
@@ -385,6 +406,33 @@ namespace Foodiefeed_api.services
 
             _dbContext.PostLikes.Remove(postLike);
             await Commit();
+
+            var user = await _dbContext.Users
+                            .Include(u => u.UserTags)
+                                .ThenInclude(ut => ut.Tag)
+                            .FirstAsync(u => u.Id == userId);
+
+            var post = await _dbContext.Posts
+                            .Include(p => p.PostTags)
+                                .ThenInclude(pt => pt.Tag)
+                            .FirstAsync(p => p.PostId == postId);
+
+            var userTags = user.UserTags.OrderBy(ut => ut.Tag.Name).ToList();
+
+            foreach (var postTag in post.PostTags)
+            {
+                var userTagIndex = userTags.FindIndex(t => t.Tag.Name == postTag.Tag.Name);
+                if (userTagIndex >= 0)
+                {
+                    userTags[userTagIndex].Score = Math.Max(1, userTags[userTagIndex].Score - 2);
+
+                    var oppositeIndex = userTags.Count - 1 - userTagIndex;
+                    if (oppositeIndex >= 0 && oppositeIndex < userTags.Count && oppositeIndex != userTagIndex)
+                    {
+                        userTags[oppositeIndex].Score = Math.Min(100, userTags[oppositeIndex].Score + 2); 
+                    }
+                }
+            }
         }
     }
 }

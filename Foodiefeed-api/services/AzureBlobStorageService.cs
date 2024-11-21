@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Foodiefeed_api.exceptions;
 using Windows.Storage;
 
 namespace Foodiefeed_api.services
@@ -12,10 +13,10 @@ namespace Foodiefeed_api.services
         public Task<Stream> FetchProfileImageAsync(int userId);
         public Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams);
         public Task<string> ConvertStreamToBase64Async(Stream stream);
-
         public Task RemvePostImagesRangeAsync(int userId, int postId);
-
         public Task<MemoryStream> FetchRecipeImage(int postId, int userId);
+        public Task UploadNewProfilePicture(int userId, IFormFile file);
+        public Task RemoveUserProfilePicture(int userId);
     }
 
     public class AzureBlobStorageService : IAzureBlobStorageSerivce
@@ -34,16 +35,19 @@ namespace Foodiefeed_api.services
 
         public async Task<Stream> FetchProfileImageAsync(int userId)
         {
-            var dir = $"{userId}/pfp.jpg";
+            var dir = $"{userId}/pfp.";
 
-            var blobCleint = container.GetBlobClient(dir);
+            await foreach (var blobItem in container.GetBlobsAsync(prefix: dir))
+            {
+                var blobClient = container.GetBlobClient(blobItem.Name);
 
-            var memStream = new MemoryStream();
+                var memStream = new MemoryStream();
+                await blobClient.DownloadToAsync(memStream);
+                memStream.Position = 0;
 
-            await blobCleint.DownloadToAsync(memStream);
-            memStream.Position = 0;
-
-            return memStream;
+                return memStream;
+            }
+            return null;
         }
 
         public async Task UploadPostImagesAsync(int userId,int postId,List<IFormFile> images)
@@ -129,7 +133,9 @@ namespace Foodiefeed_api.services
         }
 
         public async Task<string> ConvertStreamToBase64Async(Stream stream)
-        {       
+        {
+             if (stream is null) return null;
+
              using (var memStream = new MemoryStream())
              {
                  await stream.CopyToAsync(memStream);
@@ -157,6 +163,41 @@ namespace Foodiefeed_api.services
             }
         }
 
+        public async Task UploadNewProfilePicture(int userId,IFormFile file)
+        {
+            var dir = $"{userId}/";
+            var prefix = $"{dir}/pfp.";
+
+            await foreach (var blobItem in container.GetBlobsAsync(prefix: prefix))
+            {
+                var existingBlobClient = container.GetBlobClient(blobItem.Name);
+                await existingBlobClient.DeleteIfExistsAsync();
+                break;
+            }
+
+            var newBlobClient = container.GetBlobClient($"{dir}pfp{Path.GetExtension(file.FileName)}");
+
+            using (var stream = file.OpenReadStream())
+            {
+                await newBlobClient.UploadAsync(stream, overwrite: true);
+            }
+        }
+
+        public async Task RemoveUserProfilePicture(int userId)
+        {
+            var dir = $"{userId}/";
+
+            await foreach (var item in container.GetBlobsAsync(prefix: dir))
+            {
+                if (item.Name.StartsWith($"{dir}pfp."))
+                {
+                    var blobClient = container.GetBlobClient(item.Name);
+
+                    await blobClient.DeleteIfExistsAsync();
+                    return;
+                }
+            }
+        }
         
     }
 }

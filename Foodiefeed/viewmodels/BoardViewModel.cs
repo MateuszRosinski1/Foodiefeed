@@ -38,23 +38,10 @@ namespace Foodiefeed.viewmodels
 
         public ObservableCollection<PostView> Posts { get; set; } = new ObservableCollection<PostView>();
 
-        //private ObservableCollection<PostView> posts 
-        //    = new ObservableCollection<PostView>();
-
         public ObservableCollection<OnlineFreidnListElementView> OnlineFriends { get; set; } = new ObservableCollection<OnlineFreidnListElementView>();
-
-        //private ObservableCollection<OnlineFreidnListElementView> onlineFriends 
-        //    = new ObservableCollection<OnlineFreidnListElementView> { };
-
-        //public ObservableCollection<OnListFriendView> ProfilePageFriends { get { return profilePageFriends; } }
-
-        //private ObservableCollection<OnListFriendView> profilePageFriends = 
-        //    new ObservableCollection<OnListFriendView>();
 
         public ObservableCollection<UserSearchResultView> SearchResults { get; set; } = new ObservableCollection<UserSearchResultView>();
 
-        //private ObservableCollection<UserSearchResultView > searchResults = 
-        //    new ObservableCollection<UserSearchResultView> { };
 
         #region profilePageMemebers
         [ObservableProperty]
@@ -271,13 +258,6 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task Logout()
         {
-            //Posts.Clear();
-            //OnlineFriends.Clear();
-            //SearchResults.Clear();
-            //Notifications.Clear();
-            //LikedRecipes.Clear();
-            //SavedRecipes.Clear();
-
             _userSession.SetOffline();
             Application.Current.MainPage = new LogInPage(new UserViewModel(_userSession));
         }
@@ -294,17 +274,22 @@ namespace Foodiefeed.viewmodels
                 if (!windowloaded)   // appearing command invoked 2 times for some reason
                 {
                     windowloaded = true;
+
                     await FetchNotifications();
+                    
                     var base64 = await FetchProfilePictureBase64();
                     if (base64 is null) throw new Exception();
+
                     var t1 = SetProfilePictureFromBase64(base64);
                     var t2 = MainWallPostThresholdExceed();
                     var t3 = UpdateFriendList();
+
                     await Task.WhenAll(t1, t2, t3);
+
                     LoadingScreenVisible = false;
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 LoadingScreenVisible = false;
                 ErrorScreenVisible = true;
@@ -362,7 +347,7 @@ namespace Foodiefeed.viewmodels
 
                     var notifications = await JsonToObject<List<NotificationDto>>(results);
 
-                    HandleNotificationsUpdate(notifications);
+                    await HandleNotificationsUpdate(notifications);
                 }
                 catch
                 {
@@ -454,17 +439,17 @@ namespace Foodiefeed.viewmodels
                             ImageBase64 = notification.Base64
                         });
                         break;
-                    //case NotificationType.PostComment: //2
-                    //    newNotifications.Add(new PostCommentNotification()
-                    //    {
-                    //        Message = notification.Message,
-                    //        UserId = notification.SenderId.ToString(),
-                    //        CommentId = notification.CommentId.ToString(),
-                    //        PostId = notification.PostId.ToString(),
-                    //        NotifcationId = notification.Id,
-                    //        ImageBase64 = notification.Base64
-                    //    });
-                    //    break;
+                    case NotificationType.PostComment: //2
+                        newNotifications.Add(new PostCommentNotification()
+                        {
+                            Message = notification.Message,
+                            UserId = notification.SenderId.ToString(),
+                            CommentId = notification.CommentId.ToString(),
+                            PostId = notification.PostId.ToString(),
+                            NotifcationId = notification.Id,
+                            ImageBase64 = notification.Base64
+                        });
+                        break;
                     case NotificationType.CommentLike: //3
                         newNotifications.Add(new CommentLikeNotification()
                         {
@@ -760,6 +745,8 @@ namespace Foodiefeed.viewmodels
                     TimeStamp = post.TimeSpan,
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
+                    PostProducts = post.ProductsName,
+                    PostContentVisible = true
                 };
 
                 popup.SetImagesVisiblity(false);
@@ -774,7 +761,9 @@ namespace Foodiefeed.viewmodels
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                     ImageSource = post.PostImagesBase64[0],
-                    ImagesBase64 = post.PostImagesBase64
+                    ImagesBase64 = post.PostImagesBase64,
+                    PostProducts = post.ProductsName,
+                    PostContentVisible = true
                 });
             }
         }
@@ -1513,7 +1502,6 @@ namespace Foodiefeed.viewmodels
             {
                 return;
             }
-
             this.ChangedImageProfilePicturePath = fileResult.FullPath;
         }
 
@@ -1541,9 +1529,104 @@ namespace Foodiefeed.viewmodels
                 var json = JsonConvert.SerializeObject(ChangedPassword);
                 content = new StringContent(json, Encoding.UTF8, "application/json");
             }
+            else if (this.ChangeProfilePictureVisible)
+            {
+                UploadNewProfilePicture();
+                return;
+            }
 
             if(endpoint != string.Empty && content is not null)
              await UpdatePersonalData(endpoint,content);
+        }
+
+        [RelayCommand]
+        public async Task RemoveUserProfilePicture()
+        {
+            using(var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/user/delete-profile-picture/{_userSession.Id}";
+                try
+                {
+                    var filePath = Path.Combine(FileSystem.Current.AppDataDirectory, "avatar.jpg");
+
+                    if (!File.Exists(filePath))
+                    {
+                        using var resource = await FileSystem.OpenAppPackageFileAsync("avatar.jpg");
+                        using var fileStream = File.Create(filePath);
+                        await resource.CopyToAsync(fileStream);
+                    }
+
+                    using (var formContent = new MultipartFormDataContent())
+                    {
+                        using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                        {
+                            var fileContent = new StreamContent(fileStream);
+                            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                            formContent.Add(fileContent, "file", "avatar.jpg");
+                        }
+
+                        var request = new HttpRequestMessage
+                        {
+                            Method = HttpMethod.Delete,
+                            RequestUri = new Uri(API_BASE_URL + endpoint),
+                            Content = formContent
+                        };
+
+                        var response = await http.SendAsync(request);
+
+                        if (!response.IsSuccessStatusCode) throw new Exception("Could not remove profile picture at the moment");
+
+                        ProfilePictureSource = filePath;
+                    }          
+                }catch(Exception e)
+                {
+                    NotifiyFailedAction(e.Message);
+                }
+            }
+        }
+
+        private async void UploadNewProfilePicture()
+        {
+            using (var http = new HttpClient())
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/user/upload-new-profile-picture/{_userSession.Id}";
+
+                try
+                {
+                    using (var formContent = new MultipartFormDataContent())
+                    {
+                        var file = ChangedImageProfilePicturePath;
+                        if (file != null && File.Exists(file))
+                        {
+                            using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                            {
+                                var fileContent = new StreamContent(fileStream);
+                                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                                formContent.Add(fileContent, "file", Path.GetFileName(file));
+
+                                var response = await http.PostAsync(endpoint, formContent);
+
+                                if(!response.IsSuccessStatusCode)  throw new Exception(await response.Content.ReadAsStringAsync());
+
+                                var base64 = await FetchProfilePictureBase64();
+                                if (base64 is null) throw new Exception();
+                                await SetProfilePictureFromBase64(base64);
+                            }
+                        }
+                        else
+                        {
+                            NotifiyFailedAction("Provied file is not found or it is empty.");
+                        }
+                    }
+                }catch(Exception e)
+                {
+                    NotifiyFailedAction(e.Message);
+                }
+            }
         }
 
         private void HandleMissmatchPassword()
@@ -1855,7 +1938,7 @@ namespace Foodiefeed.viewmodels
                         var likes = Convert.ToInt32(comment.LikeCount);
                         likes -= 1;
                         comment.LikeCount = likes.ToString();
-                        comment.IsLiked = true;
+                        comment.IsLiked = false;
                     }
 
                     var post2 = ProfilePosts.FirstOrDefault(p => p.PostId == idStr);
@@ -1866,7 +1949,7 @@ namespace Foodiefeed.viewmodels
                         var likes = Convert.ToInt32(comment.LikeCount);
                         likes -= 1;
                         comment.LikeCount = likes.ToString();
-                        comment.IsLiked = true;
+                        comment.IsLiked = false;
                     }
                 }
                 catch (Exception ex)
@@ -2924,7 +3007,7 @@ namespace Foodiefeed.viewmodels
             using (var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
-                var endpoint = $"api/posts/delete-like/{id}/{_userSession.Id}";
+                var endpoint = $"api/posts/unlike-post/{_userSession.Id}/{id}";
                 try
                 {
                     var response = await http.DeleteAsync(endpoint);

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Foodiefeed.models.dto;
+using Newtonsoft.Json;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Foodiefeed.models.dto;
-using Microsoft.Maui.ApplicationModel.Communication;
-using Microsoft.Maui.Controls;
-using Newtonsoft.Json;
 
 namespace Foodiefeed.viewmodels
 {
@@ -196,23 +189,45 @@ namespace Foodiefeed.viewmodels
                     {
                         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        var response = client.PostAsync(endpoint, content);
+                        var filePath = Path.Combine(FileSystem.Current.AppDataDirectory, "avatar.jpg");
 
-                        if (response.Result.IsSuccessStatusCode)
+                        if (!File.Exists(filePath))
                         {
-                            var responseContent = await response.Result.Content.ReadAsStringAsync();
-
-                            await ToLogInPage();
-                        }
-                        else
-                        {
-                            //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
+                            using var resource = await FileSystem.OpenAppPackageFileAsync("avatar.jpg");
+                            using var fileStream = File.Create(filePath);
+                            await resource.CopyToAsync(fileStream);
                         }
 
+                        using (var formContent = new MultipartFormDataContent())
+                        {
+                            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                            {
+                                var fileContent = new StreamContent(fileStream);
+                                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                                formContent.Add(fileContent, "file", "avatar.jpg");
+                            }
+
+                            formContent.Add(content);
+
+                            var request = new HttpRequestMessage
+                            {
+                                Method = HttpMethod.Post,
+                                RequestUri = new Uri(apiBaseUrl + endpoint),
+                                Content = formContent
+                            };
+
+                            var response = await client.SendAsync(request);
+
+                            if(response.IsSuccessStatusCode)
+                            {
+                                await ToLogInPage();
+                            }
+
+                        }
                     }
                     catch (Exception ex)
                     {
-                        //await DisplayAlert("Response", ex.Message, "OK");
+                        //handle ?
                     }
                 }
             }

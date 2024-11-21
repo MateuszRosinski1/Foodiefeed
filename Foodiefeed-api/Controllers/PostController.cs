@@ -60,12 +60,12 @@ namespace Foodiefeed_api.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("delete-like/{postId}/{userId}")]
-        public async Task<IActionResult> DeletePostLike([FromRoute]int postId,[FromRoute]int userId)
-        {
-            await _postService.DeletePostLikeAsync(postId, userId);
-            return NoContent();
-        }
+        //[HttpDelete("delete-like/{postId}/{userId}")]
+        //public async Task<IActionResult> DeletePostLike([FromRoute]int postId,[FromRoute]int userId)
+        //{
+        //    await _postService.DeletePostLikeAsync(postId, userId);
+        //    return NoContent();
+        //}
 
         [HttpPost("like-post/{userId}")]
         public async Task<IActionResult> LikePost([FromRoute] int userId,int postId)

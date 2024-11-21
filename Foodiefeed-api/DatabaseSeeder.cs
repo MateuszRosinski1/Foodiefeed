@@ -22,7 +22,7 @@ namespace Foodiefeed_api
             {
                 int unit = Random.Shared.Next(1, 6);
 
-                DateTime randomDate = DateTime.Now;
+                DateTime randomDate = DateTime.Now.ToUniversalTime();
 
                 switch (unit)
                 {
