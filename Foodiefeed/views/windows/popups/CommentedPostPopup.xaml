@@ -38,25 +38,31 @@
 
                     <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
+                            <ImageButton CornerRadius="100" x:Name="postPfp" HeightRequest="60" WidthRequest="60"/>
                             <VerticalStackLayout>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
-                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
+                        <Button Text="Products" 
+                                HorizontalOptions="End"
+                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                TextColor="{DynamicResource TextColor}" 
+                                Clicked="ShowProducts"/>
                     </Grid>
 
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <VerticalStackLayout>
-                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                            <ScrollView MaximumHeightRequest="100" x:Name="PostTextContentScroll">
+                                <Grid>
+                                    <Grid x:Name="PostContentGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                    <Grid x:Name="PostProductsGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                </Grid>
                             </ScrollView>
-                            <!--<Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ExpandPostContentText"/>
-                                    <PointerGestureRecognizer PointerEntered="UnderlineText" PointerExited="UnUnderLineText"/>
-                                </Label.GestureRecognizers>
-                            </Label>-->
                         </VerticalStackLayout>
                     </Grid>
 
@@ -127,12 +133,12 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" BackgroundColor="Red">
+                                <Grid Grid.Row="0">
                                 
                                 <HorizontalStackLayout Spacing="5">
-                                    <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
+                                    <ImageButton CornerRadius="100" x:Name="commentPfp" HeightRequest="40" WidthRequest="40" />
                                     <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="CommentUsernameLabel"
-                                            Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentUsername}"/>
+                                           Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentUsername}"/>
                                 </HorizontalStackLayout>
                                 <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
                                     <Ellipse Fill="Gray"
@@ -156,7 +162,7 @@
                                     <VerticalStackLayout.GestureRecognizers>
                                         <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfilePopupCommand}"
-                                           CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=CommentUserId}"/>
+                                           CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentUserId}"/>
                                     </VerticalStackLayout.GestureRecognizers>
                                 </VerticalStackLayout>
                                 
@@ -170,10 +176,18 @@
                                 </ScrollView>
                             </Grid>
 
-                            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Red">
-                                <Label BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
-
-                                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel" 
+                            <HorizontalStackLayout  Grid.Row="2">
+                                <Label TextColor="{DynamicResource TextColor}" 
+                                       Padding="0" 
+                                       FontSize="15"
+                                       HeightRequest="30" 
+                                       Text="Likes:"/>
+                                <Label VerticalOptions="Center" 
+                                       Margin="5,0,0,0" 
+                                       TextColor="{DynamicResource TextColor}" 
+                                       FontSize="15" 
+                                       HeightRequest="30" 
+                                       x:Name="LikeCountLabel" 
                                        Text="{Binding Source={RelativeSource AncestorType={x:Type popup:CommentedPostPopup}},Path=CommentLikes}"/>
                             </HorizontalStackLayout>
                         </Grid>

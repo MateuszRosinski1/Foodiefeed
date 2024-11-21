@@ -365,7 +365,6 @@ public partial class PostView : ContentView
         var view = (PostView)bindable;
         view.PostContentGrid.IsVisible = (bool)newValue;
         view.PostProductsGrid.IsVisible = !(bool)newValue;
-
     }
 
     private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
@@ -492,10 +491,6 @@ public partial class PostView : ContentView
 
     private void SwipeRight(object sender, EventArgs e)
     {
-        var temp1 = IsLiked;
-        var temp2 = IsSaved;
-
-
         var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count-1);
         currentImageIndex = index;
         if(currentImageIndex >= ImagesBase64.Count-1)

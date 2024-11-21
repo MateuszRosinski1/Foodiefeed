@@ -19,5 +19,7 @@
         public required string CommentUserId { get; set; }
         public required string CommentLikes { get; set; }
 
+        public string TimeSpan { get; set; }
+
     }
 }

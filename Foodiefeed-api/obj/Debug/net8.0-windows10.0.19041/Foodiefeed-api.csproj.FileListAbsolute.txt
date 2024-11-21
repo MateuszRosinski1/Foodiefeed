@@ -378,3 +378,5 @@ D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Extensions.Logging.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Extensions.Logging.Abstractions.dll
 D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\Microsoft.Extensions.Options.dll
+D:\PracaInzynierska\Foodiefeed-api\bin\Debug\net8.0-windows10.0.19041\internalservererroricon.scale-100.png
+D:\PracaInzynierska\Foodiefeed-api\obj\Debug\net8.0-windows10.0.19041\resizetizer\r\internalservererroricon.scale-100.png

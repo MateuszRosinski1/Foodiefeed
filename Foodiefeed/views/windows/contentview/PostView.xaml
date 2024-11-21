@@ -162,17 +162,16 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition Width="50"/>
                                         </Grid.ColumnDefinitions>
-                                        <Editor BackgroundColor="{DynamicResource EntryBackround}"
-                                                Placeholder="Share your toughts here..." 
-                                                PlaceholderColor="{DynamicResource TextColor}"
-                                                TextColor="{DynamicResource TextColor}"
-                                                HorizontalOptions="FillAndExpand"
-                                                VerticalOptions="FillAndExpand"
-                                                Grid.Column="0"
-                                                HeightRequest="130"
-                                                WidthRequest="300"
-                                                Text="{Binding NewCommentContent}"
-                                                />
+                                        <Border Grid.Column="0" Stroke="Gray" StrokeThickness="1" HeightRequest="107" StrokeShape="RoundRectangle 10">
+                                            <Editor BackgroundColor="{DynamicResource EntryBackround}"
+                                                    Placeholder="Share your toughts here..." 
+                                                    PlaceholderColor="{DynamicResource TextColor}"
+                                                    TextColor="{DynamicResource TextColor}"
+                                                    HorizontalOptions="FillAndExpand"
+                                                    VerticalOptions="FillAndExpand"
+                                                    Text="{Binding NewCommentContent}"
+                                                    />
+                                        </Border>
                                         <Button Grid.Column="1" 
                                                 Text="+"
                                                 TextColor="{DynamicResource TextColor}"

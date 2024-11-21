@@ -31,7 +31,7 @@ namespace Foodiefeed.viewmodels
         //https://github.com/dotnet/maui/issues/8150  shadow resizing problem
         //https://github.com/CommunityToolkit/Maui/pull/2072 uniformgrid issue
         //Search problems need to be fixed. - fixed
-
+        //internal sever error - https://www.vecteezy.com/vector-art/23833971-500-internal-server-error-concept-illustration-flat-design-vector-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon
 
         private readonly UserSession _userSession;
         private Thread UpdateOnlineFriendListThread;
@@ -180,6 +180,12 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool internetAcces;
 
+        [ObservableProperty]
+        bool loadingScreenVisible;
+
+        [ObservableProperty]
+        bool errorScreenVisible;
+
         #region SettingsVariables
         [ObservableProperty]
         string changedUsername;
@@ -207,47 +213,53 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession)
         {
-            
-            _userSession = userSession;
-            _userSession.Id = 15;
-            InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
-            Notifications.CollectionChanged += OnNotificationsChanged;
 
-            var notification = new BasicNotofication();
-            Notifications.Add(notification);          
-            NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
+            try
+            {
+                _userSession = userSession;
+                _userSession.Id = 16;
+                InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
+                Notifications.CollectionChanged += OnNotificationsChanged;
 
-            DisplaySearchResultHistory();
+                var notification = new BasicNotofication();
+                Notifications.Add(notification);
+                NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
 
-            this.ProfilePageVisible = false; //on init false
-            this.PostPageVisible = true; //on init true
-            this.SettingsPageVisible = false; //on init false
-            this.RecipePageVisible = false; // on init false
-            this.PersonalDataEditorVisible = false; // on init false
-            this.SettingsMainHubVisible = true; //on init true
-            this.ChangeUsernameEntryVisible = false; //on init false
-            this.ChangeEmailEntryVisible = false; //on init false
-            this.ChangeProfilePictureVisible = false; // on init false
-            this.ChangePasswordEntryVisible = false; //on init false
-            this.ProfileFollowersVisible = false; //on init false
-            this.ProfilePostsVisible = true; //on init true;
-            this.ProfileFriendsVisible = false; //on init false
-            this.NoPostOnProfile = false; // on init false
-            this.HubPanelVisible = false; // on init false
-            this.CanShowSearchPanel = true; //on init true
-            this.AddPostFormVisible = false; //on init false
-            this.PostContentEditorVisible = true; //on init true
-            this.LikedRecipesVisible = true; //on init true
-            this.SavedRecipesVisible = true; //on init false
+                DisplaySearchResultHistory();
 
-            var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);     
+                this.ProfilePageVisible = false; //on init false
+                this.PostPageVisible = true; //on init true
+                this.SettingsPageVisible = false; //on init false
+                this.RecipePageVisible = false; // on init false
+                this.PersonalDataEditorVisible = false; // on init false
+                this.SettingsMainHubVisible = true; //on init true
+                this.ChangeUsernameEntryVisible = false; //on init false
+                this.ChangeEmailEntryVisible = false; //on init false
+                this.ChangeProfilePictureVisible = false; // on init false
+                this.ChangePasswordEntryVisible = false; //on init false
+                this.ProfileFollowersVisible = false; //on init false
+                this.ProfilePostsVisible = true; //on init true;
+                this.ProfileFriendsVisible = false; //on init false
+                this.NoPostOnProfile = false; // on init false
+                this.HubPanelVisible = false; // on init false
+                this.CanShowSearchPanel = true; //on init true
+                this.AddPostFormVisible = false; //on init false
+                this.PostContentEditorVisible = true; //on init true
+                this.LikedRecipesVisible = true; //on init true
+                this.SavedRecipesVisible = true; //on init false
 
-            //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
-            //UpdateOnlineFriendListThread.Start();
+                var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);
 
-            //Task.Run(UpdateFriendList);
-            //ChangeTheme();          
-            Connectivity.ConnectivityChanged += ConnectivityChanged;
+                //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
+                //UpdateOnlineFriendListThread.Start();
+
+                //Task.Run(UpdateFriendList);
+                //ChangeTheme();          
+                Connectivity.ConnectivityChanged += ConnectivityChanged;
+            }
+            catch {
+                ErrorScreenVisible = true;
+            }
         }
 
         private void ConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
@@ -276,17 +288,28 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task Appearing()
         {
-            if(!windowloaded)   // appearing command invoked 2 times for some reason
+            LoadingScreenVisible = true;
+            try
             {
-                windowloaded = true;
-                await FetchNotifications();
-                var base64 = await FetchProfilePictureBase64();
-                if (base64 is null) return;
-                await SetProfilePictureFromBase64(base64);
-                await MainWallPostThresholdExceed();
-                await UpdateFriendList();
+                if (!windowloaded)   // appearing command invoked 2 times for some reason
+                {
+                    windowloaded = true;
+                    await FetchNotifications();
+                    var base64 = await FetchProfilePictureBase64();
+                    if (base64 is null) throw new Exception();
+                    var t1 = SetProfilePictureFromBase64(base64);
+                    var t2 = MainWallPostThresholdExceed();
+                    var t3 = UpdateFriendList();
+                    await Task.WhenAll(t1, t2, t3);
+                    LoadingScreenVisible = false;
+                }
             }
-                
+            catch(Exception e)
+            {
+                LoadingScreenVisible = false;
+                ErrorScreenVisible = true;
+            }
+
             //if(notificationTimer == null)
             //{
             //    notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
@@ -431,17 +454,17 @@ namespace Foodiefeed.viewmodels
                             ImageBase64 = notification.Base64
                         });
                         break;
-                    case NotificationType.PostComment: //2
-                        newNotifications.Add(new PostCommentNotification()
-                        {
-                            Message = notification.Message,
-                            UserId = notification.SenderId.ToString(),
-                            CommentId = notification.CommentId.ToString(),
-                            PostId = notification.PostId.ToString(),
-                            NotifcationId = notification.Id,
-                            ImageBase64 = notification.Base64
-                        });
-                        break;
+                    //case NotificationType.PostComment: //2
+                    //    newNotifications.Add(new PostCommentNotification()
+                    //    {
+                    //        Message = notification.Message,
+                    //        UserId = notification.SenderId.ToString(),
+                    //        CommentId = notification.CommentId.ToString(),
+                    //        PostId = notification.PostId.ToString(),
+                    //        NotifcationId = notification.Id,
+                    //        ImageBase64 = notification.Base64
+                    //    });
+                    //    break;
                     case NotificationType.CommentLike: //3
                         newNotifications.Add(new CommentLikeNotification()
                         {
@@ -502,7 +525,8 @@ namespace Foodiefeed.viewmodels
 
             if(post.PostImagesBase64 is null)
             {
-                var popup = new CommentedPostPopup(post.CommentUserId,
+                var popup = new CommentedPostPopup(post.CommentUserId, 
+                post.PosterProfilePictureBase64,
                 post.CommentProfilePictureImageBase64,
                 post.CommentUsername,
                 post.CommentContent,
@@ -512,6 +536,8 @@ namespace Foodiefeed.viewmodels
                     TimeStamp = "10 hours ago",
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
+                    PostProducts = post.ProductsName,
+                    PostContentVisible = true
                 };
 
                 popup.SetImagesVisiblity(false);
@@ -520,6 +546,7 @@ namespace Foodiefeed.viewmodels
             else
             {
                 App.Current.MainPage.ShowPopup(new CommentedPostPopup(post.CommentUserId,
+                post.PosterProfilePictureBase64,
                 post.CommentProfilePictureImageBase64,
                 post.CommentUsername,
                 post.CommentContent,
@@ -530,7 +557,9 @@ namespace Foodiefeed.viewmodels
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                     ImageSource = post.PostImagesBase64[0],
-                    ImagesBase64 = post.PostImagesBase64
+                    ImagesBase64 = post.PostImagesBase64,
+                    PostProducts = post.ProductsName,
+                    PostContentVisible = true
                 });
             }
             
@@ -1671,7 +1700,7 @@ namespace Foodiefeed.viewmodels
             FollowersButton
         }
 
-        private async void ReloadProfileButtonColors(bool isDarkTheme)
+        private async Task ReloadProfileButtonColors(bool isDarkTheme)
         {
             if(isDarkTheme)
             {
@@ -1698,6 +1727,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task SetButtonColors(Buttons button)
         {
+            if (CurrentClickedButtonColor is null && CurrentUnclickedButtonColor is null) ReloadProfileButtonColors(themeFlag);
 
             switch (button)
             {
@@ -2342,10 +2372,10 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        public async Task UpdateFriendList()
+        public async Task UpdateFriendList() //quit while(true) and use timer
         {
-            while (true)
-            {
+            //while (true)
+            //{
                 OnlineFriends.Clear();
                 using (var httpClient = new HttpClient())
                 {
@@ -2402,8 +2432,8 @@ namespace Foodiefeed.viewmodels
                         NotifiyFailedAction("Something went wrong...");
                     }
                 }
-                await Task.Delay(60000);
-            }
+                //await Task.Delay(60000);
+            //}
         }
 
         private async Task OpenUserProfile(string id)
@@ -2569,7 +2599,7 @@ namespace Foodiefeed.viewmodels
                         var postview = new PostView()
                         {
                             Username = post.Username,
-                            TimeStamp = post.TimeStamp,
+                            TimeStamp = post.TimeSpan,
                             PostLikeCount = post.Likes.ToString(),
                             PostTextContent = post.Description,
                             Comments = commentList,
@@ -2593,7 +2623,7 @@ namespace Foodiefeed.viewmodels
                         var postview = new PostView()
                         {
                             Username = post.Username,
-                            TimeStamp = post.TimeStamp,
+                            TimeStamp = post.TimeSpan,
                             PostLikeCount = post.Likes.ToString(),
                             PostTextContent = post.Description,
                             ImageSource = post.PostImagesBase64[0],

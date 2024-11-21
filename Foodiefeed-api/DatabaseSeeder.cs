@@ -1,4 +1,4 @@
-using Azure.Core;
+﻿using Azure.Core;
 using Bogus;
 using Bogus.DataSets;
 using Foodiefeed_api.entities;
@@ -18,9 +18,45 @@ namespace Foodiefeed_api
         //https://www.kaggle.com/datasets/kaggle/recipe-ingredients-dataset?resource=download products dataset
         public static async void SeedData(dbContext context)
         {
+            foreach (var post in context.Posts.ToList())
+            {
+                int unit = Random.Shared.Next(1, 6);
 
-            
+                DateTime randomDate = DateTime.Now;
 
+                switch (unit)
+                {
+                    case 1: 
+                        int seconds = Random.Shared.Next(1, 60); 
+                        randomDate = randomDate.AddSeconds(-seconds);
+                        break;
+
+                    case 2: 
+                        int minutes = Random.Shared.Next(1, 60); 
+                        randomDate = randomDate.AddMinutes(-minutes);
+                        break;
+
+                    case 3: 
+                        int hours = Random.Shared.Next(1, 24);
+                        randomDate = randomDate.AddHours(-hours);
+                        break;
+
+                    case 4: 
+                        int months = Random.Shared.Next(1, 12);
+                        randomDate = randomDate.AddMonths(-months);
+                        break;
+
+                    case 5: 
+                        int years = Random.Shared.Next(1, 11); 
+                        randomDate = randomDate.AddYears(-years);
+                        break;
+                }
+
+                // Przypisujemy losową datę do CreateTime
+                post.CreateTime = randomDate;
+            }
+
+            await context.SaveChangesAsync();
 
             if (!context.Users.Any())
             {

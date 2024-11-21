@@ -17,11 +17,18 @@ namespace Foodiefeed_api
             CreateMap<User, ListedFriendDto>();
             CreateMap<User,UserDto>();
             CreateMap<User, UserProfileModel>();
+
+
             CreateMap<Post, PostDto>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.PostCommentMembers.Select(pm => pm.Comment)))
-                .ForMember(dest => dest.ProductsName, opt => opt.MapFrom(src => src.PostProducts.Select(pp => pp.Product.Name).ToList()));
-            CreateMap<Post, PopupPostDto>();
+                .ForMember(dest => dest.ProductsName, opt => opt.MapFrom(src => src.PostProducts.Select(pp => pp.Product.Name).ToList()))
+                .ForMember(dest => dest.TimeSpan, opt => opt.MapFrom(src => ConverterHelper.ConvertDateTimeToTimeSpan(src.CreateTime)));
+
+            CreateMap<Post, PopupPostDto>()
+                .ForMember(dest => dest.ProductsName, opt => opt.MapFrom(src => src.PostProducts.Select(pp => pp.Product.Name).ToList()))
+                .ForMember(dest => dest.TimeSpan, opt => opt.MapFrom(src => ConverterHelper.ConvertDateTimeToTimeSpan(src.CreateTime)));
+
             CreateMap<CreatePostDto, Post>();
             CreateMap<Comment, CommentDto>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username))

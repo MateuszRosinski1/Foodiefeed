@@ -18,9 +18,4 @@ public class PostDto
 
     public bool IsLiked { get; set; }
     public bool IsSaved { get; set; }
-
-    public void ConvertDateTimeToTimeSpan(DateTime dateTime) {
-
-        TimeSpan = string.Empty;
-    }
 }

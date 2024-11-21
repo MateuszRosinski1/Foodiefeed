@@ -5,7 +5,7 @@ namespace Foodiefeed.views.windows.popups;
 public partial class LikedPostPopup : Popup
 {
     #region privates
-    bool isTextContentExpanded = false;
+    int currentImageIndex;
     #endregion
 
     #region BindableProperties
@@ -25,11 +25,11 @@ public partial class LikedPostPopup : Popup
     public static readonly BindableProperty ImageSourceProperty =
         BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(LikedPostPopup), default(string), propertyChanged: OnImageSourceChanged);
 
-    #endregion
+    public static readonly BindableProperty PostProductsProperty =
+        BindableProperty.Create(nameof(PostProducts), typeof(List<string>), typeof(CommentedPostPopup), default(List<string>), propertyChanged: OnProductsChanged);
 
-    int currentImageIndex;
-
-    #region Properties
+    public static readonly BindableProperty PostContentVisibleProperty =
+        BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(CommentedPostPopup), default(bool), propertyChanged: OnContentVisiblityChanged);
 
     public static readonly BindableProperty ImagesBase64Property =
     BindableProperty.Create(
@@ -40,6 +40,11 @@ public partial class LikedPostPopup : Popup
         propertyChanged: OnImagesBase64Changed
     );
 
+    #endregion
+
+
+    #region Properties
+
     public void SetImagesVisiblity(bool visiblity)
     {
         this.ImagesGrid.IsVisible = visiblity;
@@ -47,7 +52,7 @@ public partial class LikedPostPopup : Popup
 
     private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
     {
-        var control = (CommentedPostPopup)bindable;
+        var control = (LikedPostPopup)bindable;
         var newImagesList = newValue as List<string>;
 
         if (newImagesList != null)
@@ -96,6 +101,18 @@ public partial class LikedPostPopup : Popup
         get => (string)(GetValue(TimeStampProperty));
         set => SetValue(TimeStampProperty, value);
     }
+
+    public List<string> PostProducts
+    {
+        get => (List<string>)GetValue(PostProductsProperty);
+        set => SetValue(PostProductsProperty, value);
+    }
+
+    public bool PostContentVisible
+    {
+        get => (bool)GetValue(PostContentVisibleProperty);
+        set => SetValue(PostContentVisibleProperty, value);
+    }
     #endregion
 
     private static void OnPostTextContentChanged(BindableObject bindable, object oldValue, object newValue)
@@ -140,6 +157,32 @@ public partial class LikedPostPopup : Popup
         });
     }
 
+    private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (LikedPostPopup)bindable;
+
+        if (newValue is null) return;
+
+        List<string> Products = newValue as List<string>;
+
+        string productString = string.Empty;
+
+
+
+        foreach (var product in Products)
+        {
+            productString += product + '\n';
+        }
+
+        view.PostProductsContentLabel.Text = productString;
+    }
+
+    private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (LikedPostPopup)bindable;
+        view.PostContentGrid.IsVisible = (bool)newValue;
+        view.PostProductsGrid.IsVisible = !(bool)newValue;
+    }
 
     public LikedPostPopup()
     {

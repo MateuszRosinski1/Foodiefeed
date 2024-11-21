@@ -1241,6 +1241,16 @@
                 </Grid>
             </Border>
         </Grid>
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding LoadingScreenVisible}">
+            <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="{DynamicResource TextColor}" IsRunning="True" Scale="1.5"/>
+        </Grid>
+        
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding ErrorScreenVisible}">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <Image Source="internalservererroricon.png" HeightRequest="100" WidthRequest="200"/>
+                <Label Text="Internal server error, try again later." TextColor="{DynamicResource TextColor}" FontSize="20"/>
+            </VerticalStackLayout>
+        </Grid>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
         </Grid.GestureRecognizers>

@@ -40,20 +40,19 @@
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
-                        <!--<ImageButton HorizontalOptions="End" HeightRequest="10"  Source="threedotfivexfive.png" />-->
                     </Grid>
 
                     <Grid Padding="30,0,20,20" Grid.Row="1" >
                         <VerticalStackLayout>
                             <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
-                                <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                <Grid x:Name="PostContentGrid">
+                                    <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                </Grid>
+                                <Grid x:Name="PostProductsGrid">
+                                    <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                </Grid>
                             </ScrollView>
-                            <!--<Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="ExpandPostContentText"/>
-                                <PointerGestureRecognizer PointerEntered="UnderlineText" PointerExited="UnUnderLineText"/>
-                            </Label.GestureRecognizers>
-                        </Label>-->
+
                         </VerticalStackLayout>
                     </Grid>
 

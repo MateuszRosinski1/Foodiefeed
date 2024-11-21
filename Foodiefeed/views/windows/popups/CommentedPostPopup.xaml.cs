@@ -4,9 +4,10 @@ namespace Foodiefeed.views.windows.popups;
 
 public partial class CommentedPostPopup : Popup
 {
-    #region privates
+    #region privates variables
     bool isTextContentExpanded = false;
-    #endregion
+    int currentImageIndex;
+    #endregion 
 
     #region BindableProperties
 
@@ -25,9 +26,13 @@ public partial class CommentedPostPopup : Popup
     public static readonly BindableProperty ImageSourceProperty =
         BindableProperty.Create(nameof(ImageSource), typeof(string), typeof(CommentedPostPopup), default(string), propertyChanged: OnImageSourceChanged);
 
-    #endregion
+    public static readonly BindableProperty PostProductsProperty =
+        BindableProperty.Create(nameof(PostProducts), typeof(List<string>), typeof(CommentedPostPopup), default(List<string>), propertyChanged: OnProductsChanged);
 
-    int currentImageIndex;
+    public static readonly BindableProperty PostContentVisibleProperty =
+        BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(CommentedPostPopup), default(bool), propertyChanged: OnContentVisiblityChanged);
+
+    #endregion
 
     #region Properties
 
@@ -45,20 +50,16 @@ public partial class CommentedPostPopup : Popup
         this.ImagesGrid.IsVisible = visiblity;
     }
 
-    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
+    public List<string> PostProducts
     {
-        var control = (CommentedPostPopup)bindable;
-        var newImagesList = newValue as List<string>;
+        get => (List<string>)GetValue(PostProductsProperty);
+        set => SetValue(PostProductsProperty, value);
+    }
 
-        if (newImagesList != null)
-        {
-            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
-
-            if (newImagesList.Count > 0)
-            {
-                control.ImageSource = newImagesList[0];
-            }
-        }
+    public bool PostContentVisible
+    {
+        get => (bool)GetValue(PostContentVisibleProperty);
+        set => SetValue(PostContentVisibleProperty, value);
     }
 
     public List<string> ImagesBase64
@@ -105,6 +106,24 @@ public partial class CommentedPostPopup : Popup
 
     #endregion
 
+    #region events
+
+    private static void OnImagesBase64Changed(BindableObject bindable, object oldValue, object newValue)
+    {
+        var control = (CommentedPostPopup)bindable;
+        var newImagesList = newValue as List<string>;
+
+        if (newImagesList != null)
+        {
+            Console.WriteLine($"ImagesBase64 has been updated. New count: {newImagesList.Count}");
+
+            if (newImagesList.Count > 0)
+            {
+                control.ImageSource = newImagesList[0];
+            }
+        }
+    }
+
     private static void OnPostTextContentChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (CommentedPostPopup)bindable;
@@ -147,51 +166,72 @@ public partial class CommentedPostPopup : Popup
         });
     }
 
+    private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (CommentedPostPopup)bindable;
 
-    public CommentedPostPopup(string _UserId, string base64, string username, string content, string likes)
+        if (newValue is null) return;
+
+        List<string> Products = newValue as List<string>;
+
+        string productString = string.Empty;
+
+
+
+        foreach (var product in Products)
+        {
+            productString += product + '\n';
+        }
+
+        view.PostProductsContentLabel.Text = productString;
+    }
+
+    private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (CommentedPostPopup)bindable;
+        view.PostContentGrid.IsVisible = (bool)newValue;
+        view.PostProductsGrid.IsVisible = !(bool)newValue;
+    }
+    #endregion
+
+    public CommentedPostPopup(string _UserId,string postPfpBase64 ,string commentPfpBase64, string username, string content, string likes)
     {
         InitializeComponent();
-        //PostTextContentLabel.SizeChanged += OnPostTextContentLabelSizeChanged;
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
         CommentUserId = _UserId;
         CommentUsername = username;
-        CommentProfilePictureImageBase64 = base64;
         CommentContent = content;
         CommentLikes = likes;
+
+        if (string.IsNullOrEmpty(postPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
+        else
+        {
+            var imageBytes = Convert.FromBase64String(postPfpBase64);
+
+            postPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+            {
+                var stream = new MemoryStream(imageBytes);
+                stream.Position = 0;
+                return stream;
+            });
+        }
+
+        if (string.IsNullOrEmpty(commentPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
+        else
+        {
+            var imageBytes = Convert.FromBase64String(commentPfpBase64);
+
+            commentPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+            {
+                var stream = new MemoryStream(imageBytes);
+                stream.Position = 0;
+                return stream;
+            });
+        } 
     }
 
     #region animations 
-
-    //private void ExpandPostContentText(object sender, TappedEventArgs e)
-    //{
-    //    if (isTextContentExpanded)
-    //    {
-    //        PostTextContentScroll.MaximumHeightRequest = 150;
-    //        isTextContentExpanded = false;
-    //        ExpandOrCollapseLabel.Text = "Collapse...";
-    //        ExpandOrCollapseLabel.Text = "Expand...";
-    //    }
-    //    else
-    //    {
-    //        PostTextContentScroll.MaximumHeightRequest = 400;
-    //        isTextContentExpanded = true;
-    //        ExpandOrCollapseLabel.Text = "Collapse...";
-    //    }
-    //}
-
-    //private void UnderlineText(object sender, PointerEventArgs e)
-    //{
-    //    var label = sender as Label;
-    //    label.TextDecorations = TextDecorations.Underline;
-
-    //}
-
-    //private void UnUnderLineText(object sender, PointerEventArgs e)
-    //{
-    //    var label = sender as Label;
-    //    label.TextDecorations = TextDecorations.None;
-    //}
 
     private async void AnimateOptionDots(object sender, PointerEventArgs e)
     {
@@ -204,14 +244,6 @@ public partial class CommentedPostPopup : Popup
     }
 
     #endregion
-
-    //private void OnPostTextContentLabelSizeChanged(object sender, EventArgs e)
-    //{
-    //    if (PostTextContentLabel.Height > 0 && PostTextContentLabel.Height <= 400)
-    //    {
-    //        ExpandOrCollapseLabel.IsVisible = false;
-    //    }
-    //}
 
     private int Clamp(int value, int min, int max)
     {
@@ -248,5 +280,10 @@ public partial class CommentedPostPopup : Popup
             swipeLeftButton.IsVisible = true;
         }
         ImageSource = ImagesBase64[currentImageIndex];
+    }
+
+    private void ShowProducts(object sender, EventArgs e)
+    {
+        PostContentVisible = !PostContentVisible;
     }
 }

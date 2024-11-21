@@ -88,6 +88,7 @@ namespace Foodiefeed_api.services
             var post = await _dbContext.Posts
                  .Include(p => p.PostLikes)
                  .Include(p => p.PostProducts)
+                    .ThenInclude(p => p.Product)
                  .Include(p => p.PostLikes)
                  .FirstOrDefaultAsync(p => p.PostId == id);
 
@@ -105,6 +106,9 @@ namespace Foodiefeed_api.services
             var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId);
             popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream);
 
+            var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId);
+
+            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams);
 
             return popupPostDto;
         }
@@ -114,6 +118,7 @@ namespace Foodiefeed_api.services
             var post = await _dbContext.Posts
                 .Include(p => p.PostLikes)
                 .Include(p => p.PostProducts)
+                    .ThenInclude(p => p.Product)
                 .Include(p => p.PostLikes) // ?? check
                 .FirstOrDefaultAsync(p => p.PostId == id);
 
@@ -135,11 +140,19 @@ namespace Foodiefeed_api.services
             popupPostDto.CommentContent = comment.CommentContent;
             popupPostDto.CommentUserId = commentUser.Id.ToString();
 
+            var pfpstream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId);
+            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpstream);
+
+            var imgsStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId);
+            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgsStreams);
+
             var pfpImgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId);
             var commentImgStream = await AzureBlobStorageService.FetchProfileImageAsync(Convert.ToInt32(popupPostDto.CommentUserId));
+
             popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpImgStream);
             popupPostDto.CommentProfilePictureImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentImgStream);
 
+            //popupPostDto.TimeSpan = ConverterHelper.ConvertDateTimeToTimeSpan(post.CreateTime);
             return popupPostDto;
         }
 
@@ -165,7 +178,7 @@ namespace Foodiefeed_api.services
             int i = 0;
             foreach (var post in posts)
             {
-                postsDtos[i].ConvertDateTimeToTimeSpan(post.CreateTime);
+                postsDtos[i].TimeSpan = ConverterHelper.ConvertDateTimeToTimeSpan(post.CreateTime);
                 postsDtos[i].Username = user.Username;
                 postsDtos[i].Likes = post.PostLikes.Count();
 
@@ -242,35 +255,36 @@ namespace Foodiefeed_api.services
 
         public async Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId)
         {
-                var userTags = await _dbContext.UserTags
+                 var userTags = await _dbContext.UserTags
                     .Where(ut => ut.UserId == userId)
                     .ToDictionaryAsync(ut => ut.TagId, ut => ut.Score);
 
-                var posts = _dbContext.Posts
-                    .Where(p => !viewedPostsId.Contains(p.PostId))
-                    .Select(p => new
-                    {
-                        Post = p,
-                        PostTags = p.PostTags.Select(pt => pt.TagId).ToList(),
-                        DaysSinceCreated = (DateTime.Now - p.CreateTime).TotalDays
-                    })
-                    .AsEnumerable() 
-                    .Select(p => new
-                    {
-                        Post = p.Post,
-                        TagScoreSum = p.PostTags
-                            .Where(tagId => userTags.ContainsKey(tagId)) 
-                            .Sum(tagId => userTags[tagId]),
-                        DaysSinceCreated = p.DaysSinceCreated
-                    })
-                    .Select(p => new
-                    {
-                        Post = p.Post,
-                        PostScore = p.TagScoreSum + (100 / (1 + p.DaysSinceCreated)) //+ likes per day * 30
-                    })
-                    .OrderByDescending(p => p.PostScore)
-                    .Take(15)
-                    .ToList();
+                 var postsEnumerable = _dbContext.Posts
+                 .Where(p => !viewedPostsId.Contains(p.PostId))
+                 .Select(p => new
+                 {
+                    Post = p,
+                    PostTags = p.PostTags.Select(pt => pt.TagId).ToList(),
+                    SecondsSinceCreated = (DateTime.Now - p.CreateTime).TotalSeconds
+                 })
+                 .AsEnumerable();
+
+                 var posts = postsEnumerable.Select(p => new
+                 {
+                    Post = p.Post,
+                    TagScoreSum = p.PostTags
+                        .Where(tagId => userTags.ContainsKey(tagId)) 
+                        .Sum(tagId => userTags[tagId]),
+                    DayScore = (p.SecondsSinceCreated)/1000000
+                 })
+                 .Select(p => new
+                 {
+                     Post = p.Post,
+                     PostScore = p.TagScoreSum + (p.DayScore)
+                 })
+                .OrderByDescending(p => p.PostScore)
+                .Take(15)
+                .ToList();
 
                 //create a anonymous type list containg id and index for post
                 var orderedPostIds = posts.Select((p, index) => new { p.Post.PostId, Index = index }).ToList();
@@ -302,6 +316,8 @@ namespace Foodiefeed_api.services
                 {
                     var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(dto.UserId, dto.PostId);
                     dto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams);
+
+                    //dto.TimeSpan = ConverterHelper.ConvertDateTimeToTimeSpan(post.CreateTime);
 
                     var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.UserId);
                     dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);

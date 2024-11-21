@@ -14,6 +14,7 @@ namespace Foodiefeed.models.dto
         public required string Username { get; set; }
         public required string Description { get; set; }
         public int Likes { get; set; }
+        public string PosterProfilePictureBase64 { get; set; }
 
         public required List<string> PostImagesBase64 { get; set; }
         public required List<string> ProductsName { get; set; }
@@ -24,5 +25,6 @@ namespace Foodiefeed.models.dto
         public required string CommentUserId { get; set; }
         public required string CommentLikes { get; set; }
 
+        public string TimeSpan { get; set; }
     }
 }

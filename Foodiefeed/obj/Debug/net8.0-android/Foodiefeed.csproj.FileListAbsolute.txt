@@ -1097,3 +1097,4 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ConvertResourcesC
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GenerateJavaStubs.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GeneratePackageManagerJava.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\resizetizer\r\drawable\internalservererroricon.png
