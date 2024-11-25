@@ -69,7 +69,9 @@ namespace Foodiefeed_api.services
             foreach (var userDto in usersDto)
             {
                 userDto.FriendsCount = await GetUserFriendsCount(userDto.Id);
-                userDto.FollowersCount = await GetUserFollowersCount(userDto.Id);
+                userDto.FollowersCount = await GetUserFollowersCount(userDto.Id);              
+                userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
+                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id));
             }
 
 
@@ -205,6 +207,9 @@ namespace Foodiefeed_api.services
             var userDto = _mapper.Map<UserDto>(user);
             userDto.FollowersCount = await GetUserFollowersCount(user.Id);
             userDto.FriendsCount = await GetUserFriendsCount(user.Id);
+            userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
+                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id));
+
 
             return userDto;
 

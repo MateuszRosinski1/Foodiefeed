@@ -61,6 +61,13 @@ namespace Foodiefeed.viewmodels
         #endregion
 
 
+        //#if WINDOWS
+        //       private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
+        //#endif
+        //#if ANDROID
+        //        private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
+        //#endif
+
 #if WINDOWS
        private const string API_BASE_URL = "http://localhost:5000";
 #endif
@@ -204,7 +211,7 @@ namespace Foodiefeed.viewmodels
             try
             {
                 _userSession = userSession;
-                _userSession.Id = 16;
+                _userSession.Id = 17;
                 InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
                 Notifications.CollectionChanged += OnNotificationsChanged;
 
@@ -212,7 +219,7 @@ namespace Foodiefeed.viewmodels
                 Notifications.Add(notification);
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
 
-                DisplaySearchResultHistory();
+                //DisplaySearchResultHistory();
 
                 this.ProfilePageVisible = false; //on init false
                 this.PostPageVisible = true; //on init true
@@ -256,6 +263,21 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
+        public async Task ShowOnlinefriends()
+        {
+            OnlineFriends.Clear();          
+            await UpdateFriendList();
+        }
+
+
+        [RelayCommand]
+        public async Task ShowNotifications()
+        {
+            Notifications.Clear();
+            await FetchNotifications();
+        }
+
+        [RelayCommand]
         public async Task Logout()
         {
             _userSession.SetOffline();
@@ -275,16 +297,16 @@ namespace Foodiefeed.viewmodels
                 {
                     windowloaded = true;
 
-                    await FetchNotifications();
+                    //await FetchNotifications();
                     
-                    var base64 = await FetchProfilePictureBase64();
-                    if (base64 is null) throw new Exception();
+                    //var base64 = await FetchProfilePictureBase64();
+                    //if (base64 is null) throw new Exception();
 
-                    var t1 = SetProfilePictureFromBase64(base64);
-                    var t2 = MainWallPostThresholdExceed();
-                    var t3 = UpdateFriendList();
+                    //var t1 = SetProfilePictureFromBase64(base64);
+                    //var t2 = MainWallPostThresholdExceed();
+                    //var t3 = UpdateFriendList();
 
-                    await Task.WhenAll(t1, t2, t3);
+                    //await Task.WhenAll(t1, t2, t3);
 
                     LoadingScreenVisible = false;
                 }
@@ -369,26 +391,28 @@ namespace Foodiefeed.viewmodels
             {              
                 try
                 {
-                    var endpoint = $"/api/posts/generate-wall-posts?userId={_userSession.Id}";
+                    var endpoint = $"api/posts/generate-wall-posts?userId={_userSession.Id}";
                     var content = new StringContent(JsonConvert.SerializeObject(seenPostId), Encoding.UTF8, "application/json");
+                    http.Timeout = TimeSpan.FromSeconds(180);
+                    http.BaseAddress = new Uri(API_BASE_URL);
 
-                    var request = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Get,
-                        RequestUri = new Uri(API_BASE_URL + endpoint),
-                        Content = content
-                    };
+                    //var request = new HttpRequestMessage
+                    //{
+                    //    Method = HttpMethod.Post,
+                    //    RequestUri = new Uri(API_BASE_URL + endpoint),
+                    //    Content = content
+                    //};
 
-                    var response = await http.SendAsync(request);
+                    var response = await http.PostAsync(endpoint,content);
 
-                    if(!response.IsSuccessStatusCode) { throw new Exception(); }
+                    if(!response.IsSuccessStatusCode) { throw new Exception(await response.Content.ReadAsStringAsync()); }
 
                     var results = await response.Content.ReadAsStringAsync();
                     var dtos = await JsonToObject<List<PostDto>>(results);
                     seenPostId.AddRange(dtos.Select(dtos => dtos.PostId));
                     await DisplayPosts(dtos,Posts);
                 }
-                catch
+                catch(Exception e)
                 {
                     NotifiyFailedAction("Could not load new post at the moment, try again later.");
                 }
@@ -2117,14 +2141,16 @@ namespace Foodiefeed.viewmodels
                     if (response.IsSuccessStatusCode)
                     {
                         var json = await response.Content.ReadAsStringAsync();
-                        DisplaySearchResults(await JsonToObject<ObservableCollection<UserSearchResult>>(json));
+                        var searchResults = await JsonToObject<ObservableCollection<UserSearchResult>>(json);
+                        DisplaySearchResults(searchResults
+                            .Reverse()
+                            .ToObservableCollection());
 
                     }
                 }
                 catch(Exception ex)
                 {
                     NotifiyFailedAction("Could not load search results due to service maintance. Try again later");
-                    //code to show Something went wrong on search panel.
                 }
             }
 
@@ -2351,7 +2377,8 @@ namespace Foodiefeed.viewmodels
                     UserId = user.Id.ToString(),
                     Username = user.Username,
                     Follows = user.FollowersCount.ToString(),
-                    Friends = user.FriendsCount.ToString()
+                    Friends = user.FriendsCount.ToString(),
+                    PfpImageBase64 = user.ProfilePictureBase64
                 });
             }
         }
@@ -2412,7 +2439,7 @@ namespace Foodiefeed.viewmodels
                 SearchHistory.Remove(existingUser);
 
                 SearchHistory.Insert(0, existingUser);
-
+                
             }
             else
             {
@@ -2434,7 +2461,6 @@ namespace Foodiefeed.viewmodels
             {
                 httpclient.BaseAddress = new Uri(API_BASE_URL);
                 var endpoint = $"api/user/{id}";
-
                 try
                 {
                     var response = await httpclient.GetAsync(endpoint);

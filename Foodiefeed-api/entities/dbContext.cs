@@ -6,7 +6,13 @@ namespace Foodiefeed_api.entities
 {
     public class dbContext : DbContext
     {
-        private string _connectionString = "Server=DESKTOP-LN6DFJ3;Database=FoodiefeedDb;Trusted_Connection=True;Encrypt=False";
+        private readonly IConfiguration _configuration;
+
+        public dbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Post> Posts { get; set; }
@@ -182,7 +188,8 @@ namespace Foodiefeed_api.entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            var conStr = _configuration["AZURE_DATABASE_CONSTR"];
+            optionsBuilder.UseSqlServer(conStr,opt => opt.CommandTimeout(180));
             optionsBuilder.EnableSensitiveDataLogging();
         }
     }

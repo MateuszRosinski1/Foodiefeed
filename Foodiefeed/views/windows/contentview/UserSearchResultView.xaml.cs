@@ -1,4 +1,5 @@
 
+
 namespace Foodiefeed.views.windows.contentview;
 
 public partial class UserSearchResultView : ContentView
@@ -14,10 +15,43 @@ public partial class UserSearchResultView : ContentView
     public static readonly BindableProperty FriendsProperty =
         BindableProperty.Create(nameof(Friends), typeof(string), typeof(UserSearchResultView), default(string), propertyChanged: OnFriendsChanged);
 
+    public static readonly BindableProperty PfpImageBase64Property =
+        BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(UserSearchResultView), default(string), propertyChanged: OnImageChanged);
+
+    private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (UserSearchResultView)bindable;
+
+        if (newValue is null) return;
+
+        var newValueString = newValue as string;
+
+        if (string.IsNullOrEmpty(newValueString))
+        {
+            view.pfpImage.Source = "avatar.jpg";
+            return;
+        }
+
+        var imageBytes = Convert.FromBase64String(newValueString);
+
+        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        {
+            var stream = new MemoryStream(imageBytes);
+            stream.Position = 0;
+            return stream;
+        });
+    }
+
     public UserSearchResultView()
 	{
 		InitializeComponent();
 	}
+
+    public string PfpImageBase64
+    {
+        get => (string)GetValue(PfpImageBase64Property);
+        set => SetValue(PfpImageBase64Property, value);
+    }
 
     public string Username
     {

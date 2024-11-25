@@ -21,11 +21,11 @@ builder.Services.AddScoped<IFollowerService, FollowerService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
-builder.Services.AddScoped<IAzureBlobStorageSerivce, AzureBlobStorageService>();
+builder.Services.AddSingleton<IAzureBlobStorageSerivce, AzureBlobStorageService>();
 builder.Services.AddScoped<IPasswordHasher<User> , PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped(typeof(IEntityRepository<>), typeof(EntityRepository<>));
-
+builder.Configuration.AddUserSecrets<Program>();
 
 var app = builder.Build();
 
@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    DatabaseSeeder.SeedData(new dbContext());
+    DatabaseSeeder.SeedData(serviceProvider: app.Services);
 }
 
 app.MapGet("/get-all-tags", async (dbContext context) =>
