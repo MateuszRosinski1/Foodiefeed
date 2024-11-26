@@ -7,21 +7,21 @@
              x:DataType="viewmodel:UserViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
-             Background="White">
+             Background="White"
+             Padding="{OnPlatform 20}">
 
     <ContentPage.Resources>
         <local:BooleanConverter x:Key="BooleanConverter" />
     </ContentPage.Resources>
 
-    <ScrollView>
-        <VerticalStackLayout>
-            <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
+    <VerticalStackLayout>
+        <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
 
-            <Border Stroke="Gray" 
+        <Border Stroke="Gray" 
                     StrokeThickness="1.5" 
                     StrokeShape="RoundRectangle 20,20,20,20" 
                     HeightRequest="60" WidthRequest="370">
-                <Entry Text="{Binding Username,Mode=TwoWay}" 
+            <Entry Text="{Binding Username,Mode=TwoWay}" 
                        TextColor="Black" 
                        FontSize="18"
                        Placeholder="Username" 
@@ -30,37 +30,37 @@
                        HeightRequest="50" 
                        WidthRequest="350" 
                        Background="White">
-                    <Entry.Behaviors>
-                        <toolkit:EventToCommandBehavior
+                <Entry.Behaviors>
+                    <toolkit:EventToCommandBehavior
                                   EventName="TextChanged"
                                   Command="{Binding UsernameValidateCommand}" />
-                    </Entry.Behaviors>
-                </Entry>
+                </Entry.Behaviors>
+            </Entry>
 
-                <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="true">
-                        <Setter Property="Stroke" 
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="true">
+                    <Setter Property="Stroke" 
                                 Value="Gray"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="Border" 
+                </DataTrigger>
+                <DataTrigger TargetType="Border" 
                                  Binding="{Binding ValidateUsername}" 
                                  Value="false">
-                        <Setter Property="Stroke" Value="#e32441"/>
-                    </DataTrigger>
-                </Border.Triggers>
-            
+                    <Setter Property="Stroke" Value="#e32441"/>
+                </DataTrigger>
+            </Border.Triggers>
 
-            </Border>
 
-            <Border Margin="0,30,0,0" 
+        </Border>
+
+        <Border Margin="0,30,0,0" 
                     Stroke="Gray" 
                     StrokeThickness="1.5" 
                     StrokeShape="RoundRectangle 20,20,20,20" 
                     HeightRequest="60" 
                     WidthRequest="370">
 
-                <Grid>
-                    <Entry  Text="{Binding Password,Mode=TwoWay}"  
+            <Grid>
+                <Entry  Text="{Binding Password,Mode=TwoWay}"  
                             
                             IsPassword="{Binding Source={x:Reference ShowPasswordButton},Path=IsPressed, Converter={StaticResource BooleanConverter}}"
                             
@@ -73,14 +73,14 @@
                             Margin="10,0,0,0"
                             Background="White">
 
-                        <Entry.Behaviors>
-                            <toolkit:EventToCommandBehavior
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior
                           EventName="TextChanged"
                           Command="{Binding ValidatePasswordFunCommand}" />
-                        </Entry.Behaviors>
-                    </Entry>
+                    </Entry.Behaviors>
+                </Entry>
 
-                    <ImageButton x:Name="ShowPasswordButton" 
+                <ImageButton x:Name="ShowPasswordButton" 
                                  HorizontalOptions="End" 
                                  Margin="0,0,5,0"
                                  Grid.Column="1" 
@@ -88,21 +88,21 @@
                                  Scale="0.4"
                                  Clicked="ImageClickAnimation"/>
 
-                </Grid>
-                
+            </Grid>
 
-                <Border.Triggers>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="true">
-                        <Setter Property="Stroke" Value="Gray"/>
-                    </DataTrigger>
-                    <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="false">
-                        <Setter Property="Stroke" Value="#e32441"/>
-                    </DataTrigger>
-                </Border.Triggers>
 
-            </Border>
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="true">
+                    <Setter Property="Stroke" Value="Gray"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="false">
+                    <Setter Property="Stroke" Value="#e32441"/>
+                </DataTrigger>
+            </Border.Triggers>
 
-            <Button  Clicked="ClickAnimation" 
+        </Border>
+
+        <Button  Clicked="ClickAnimation" 
                      Command="{Binding LogInCommand}" 
                      Margin="0,70,0,30" 
                      Text="Log In" 
@@ -112,39 +112,30 @@
                      Background="Black"  
                      WidthRequest="370" 
                      CornerRadius="20" >
-                <Button.Shadow>
-                    <Shadow Offset="0,5"
+            <Button.Shadow>
+                <Shadow Offset="0,5"
                             Opacity="1" />
-                </Button.Shadow>
-            </Button>
+            </Button.Shadow>
+        </Button>
 
-            <Rectangle Background="Black" WidthRequest="500" HeightRequest="4" />
+        <Rectangle Background="Black" WidthRequest="{OnPlatform WinUI=500,Android=350}" HeightRequest="4" />
 
-            <HorizontalStackLayout HorizontalOptions="Center">
-                <Label Margin="0,0,10,0" 
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Margin="0,0,10,0" 
                        FontSize="17" 
                        TextColor="Black" 
                        Text="Don't have an account yet ?"/>
-                
-                <Label FontSize="17" 
+
+            <Label FontSize="17" 
                        TextColor="Black" 
                        Text="Click here to Sign Up" 
                        FontAttributes="Bold">
-                    
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToSignUpPageCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                
-            </HorizontalStackLayout>
-            
 
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToSignUpPageCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
 
-
-        </VerticalStackLayout>
-        
-        
-        
-    </ScrollView>
-
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
 </ContentPage>

@@ -29,4 +29,4 @@ typemapkind=strings-asm
 androidsupportedabis=armeabi-v7a;arm64-v8a;x86;x86_64
 androidmanifestplaceholders=
 projectfullpath=d:\pracainzynierska\foodiefeed\foodiefeed.csproj
-android
+androidusedesignerassembly=true

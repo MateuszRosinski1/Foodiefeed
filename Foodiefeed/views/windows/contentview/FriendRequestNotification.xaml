@@ -4,7 +4,7 @@
              x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification"
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
              
-    <Border Stroke="Gray" StrokeShape="RoundRectangle 10" WidthRequest="285" StrokeThickness="0.5">
+    <Border Stroke="Gray" StrokeShape="RoundRectangle 10" WidthRequest="{OnPlatform WinUI=285}" StrokeThickness="0.5">
         <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
             <ImageButton CornerRadius="5" x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0" BackgroundColor="Black"/>
             <VerticalStackLayout>
@@ -49,8 +49,5 @@
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </HorizontalStackLayout>
-        <!--<Border.Shadow>
-            <Shadow Opacity="0.5" Brush="Gray"/>
-        </Border.Shadow>-->
     </Border>
 </ContentView>

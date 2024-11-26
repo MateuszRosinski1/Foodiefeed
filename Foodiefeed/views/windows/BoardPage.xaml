@@ -79,6 +79,7 @@
                                      HorizontalOptions="Start" 
                                      BackgroundColor="Transparent"
                                      Margin="0,10"/>
+                        
                         <Border Margin="0,15" 
                                 VerticalOptions="Start" 
                                 Stroke="Gray" 
@@ -108,6 +109,10 @@
                             </Grid>
                         </Border>
 
+                        <!--<SearchBar>
+                            
+                        </SearchBar>-->
+
                         <Border Margin="0,5,5,0" HorizontalOptions="End" VerticalOptions="Start" StrokeShape="RoundRectangle 40" WidthRequest="54" 
                                 HeightRequest="54" 
                                 Stroke="{DynamicResource TextColor}" StrokeThickness="1">
@@ -128,8 +133,8 @@
                             <Button Text="Recipes" Command="{Binding ToRecipesViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                             <Button Text="Settings" Command="{Binding ToSettingViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                             <Button Text="LogOut" Command="{Binding LogoutCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                            <Button Text="Notifications" Command="{Binding ShowNotificationsCommand}" WidthRequest="110" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                             <Button Text="Friends" Command="{Binding ShowOnlinefriendsCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Notifications" Command="{Binding ShowNotificationsCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                         </HorizontalStackLayout>
                     </ScrollView>
                 </VerticalStackLayout>
@@ -469,68 +474,66 @@
                 </Grid>
                 <Grid x:Name="Recipes"></Grid>
                 <Grid x:Name="Settings"></Grid>
-                <Grid x:Name="OnlineFriends"></Grid>
-                <Grid x:Name="Notifications" >
+                <Grid x:Name="OnlineFriends">
+                    <VerticalStackLayout Padding="10" Spacing="5"
+                                         BindableLayout.ItemsSource="{Binding OnlineFriends}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <views:OnlineFreidnListElementView Username="{Binding Username}"
+                                           UserId="{Binding UserId}"
+                                           AvatarImageSource="{Binding AvatarImageSource}"
+                                           IsOnline="{Binding IsOnline}"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid x:Name="Notifications" IsVisible="False">
                     <VerticalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
-                                         IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}"
-                                         >
-                        <Grid BackgroundColor="Red"
-                              x:Name="ClearButtonGrid_Android">
-                            <Button Text="Clear" 
-                                    Background="{DynamicResource MainBackgroundColor}" 
-                                    TextColor="{DynamicResource TextColor}" 
-                                    Scale="0.7" 
-                                    FontSize="15"
-                                    Command="{Binding ClearNotificationsCommand}"
-                                    Margin="0,15,0,0"
-                                    WidthRequest="{Binding Source={x:Reference ClearButtonGrid_Android},Path=Width}">
-                                <Button.Shadow>
-                                    <Shadow Opacity="0.3" Brush="{DynamicResource TextColor}"/>
-                                </Button.Shadow>
-                            </Button>
+                                         IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}">
+                        <Grid Padding="10">
+                            <Grid x:Name="ClearButtonGrid_Android">
+                                <Button Text="Clear" 
+                                        Background="{DynamicResource MainBackgroundColor}" 
+                                        TextColor="{DynamicResource TextColor}" 
+                                        FontSize="15"
+                                        Command="{Binding ClearNotificationsCommand}"
+                                        WidthRequest="{Binding Source={x:Reference ClearButtonGrid_Android},Path=Width}">
+                                    <Button.Shadow>
+                                        <Shadow Opacity="0.3" 
+                                                Brush="{DynamicResource TextColor}"/>
+                                    </Button.Shadow>
+                                </Button>
+                            </Grid>
                         </Grid>
                         <Grid   HorizontalOptions="Start" 
-        VerticalOptions="Start" 
-        BackgroundColor="Transparent"
-        WidthRequest="{Binding Source={x:Reference Page},Path=Width}"
-        HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
-                            <!--pages-->
-                            <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
+                                VerticalOptions="Start" 
+                                BackgroundColor="Transparent"
+                                WidthRequest="{Binding Source={x:Reference Page},Path=Width}"
+                                HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
+                            <Grid BackgroundColor="Transparent" 
+                                  Padding="0,10,0,10">
                                 <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
-                        ItemsSource="{Binding Notifications}" 
-                        BackgroundColor="Transparent"
-                        VerticalScrollBarVisibility="Always"
-                        ItemsUpdatingScrollMode="KeepScrollOffset"
-                        RemainingItemsThreshold="5"
-                        RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
-                        Scrolled="CollectionView_Scrolled">
+                                                ItemsSource="{Binding Notifications}" 
+                                                BackgroundColor="Transparent"
+                                                VerticalScrollBarVisibility="Always"
+                                                ItemsUpdatingScrollMode="KeepScrollOffset"
+                                                RemainingItemsThreshold="5"
+                                                RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
+                                                Scrolled="CollectionView_Scrolled"
+                                                Margin="10,0,10,0">
                                     <CollectionView.ItemsLayout>
                                         <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                     </CollectionView.ItemsLayout>
                                 </CollectionView>
-                                <!--<CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
-                        ItemsSource="{Binding Notifications}" 
-                        BackgroundColor="Transparent"
-                        VerticalScrollBarVisibility="Always"
-                        ItemsUpdatingScrollMode="KeepScrollOffset"
-                        RemainingItemsThreshold="5"
-                        RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
-                        >
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
-            </CollectionView.ItemsLayout>
-        </CollectionView>-->
                             </Grid>
                         </Grid>
                     </VerticalStackLayout>
 
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
-  HorizontalOptions="Start" 
-  VerticalOptions="Start"
-  BackgroundColor="{DynamicResource SideBackgroundColor}"
-  WidthRequest="300"
-  Margin="0,0,0,0"
-  HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource NoNotificationsHeightAdjustValue}}" >
+                          HorizontalOptions="FillAndExpand" 
+                          VerticalOptions="Start"
+                          BackgroundColor="{DynamicResource SideBackgroundColor}"
+                          HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource NoNotificationsHeightAdjustValue}}" >
                         <VerticalStackLayout VerticalOptions="Center" >
                             <Image Source="notificationicon.png" HeightRequest="40" WidthRequest="40" HorizontalOptions="Center"/>
                             <Label TextColor="#afafaf" Text="No notification yet" HorizontalOptions="Center"/>
