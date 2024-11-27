@@ -36,16 +36,18 @@
 
                     </Grid.RowDefinitions>
 
-                    <Grid  Padding="30" Grid.Row="0" >
-                        <HorizontalStackLayout Spacing="10">
-                            <ImageButton CornerRadius="100" HeightRequest="50" WidthRequest="50" x:Name="pfpImage" Aspect="AspectFill"/>
+                    <Grid  Padding="{OnPlatform Android='10,30,10,10',WinUI=30}" Grid.Row="0" >
+                        <HorizontalStackLayout Spacing="10" Scale="{OnPlatform Android=0.7}" HorizontalOptions="Start">
+                            <Border StrokeShape="RoundRectangle 100" Stroke="Transparent">
+                                <Image HeightRequest="50" WidthRequest="50" x:Name="pfpImage" Aspect="AspectFill"/>
+                            </Border>
                             <VerticalStackLayout >
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
-                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="{OnPlatform WinUI=10,Android=15}" x:Name="PostTimeStampLabel"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
-                        
-                        <HorizontalStackLayout HorizontalOptions="End">
+
+                        <HorizontalStackLayout HorizontalOptions="End" Scale="{OnPlatform Android=0.7}">
                             <Button BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                                     HorizontalOptions="End"
                                     Text="Delete"
@@ -63,7 +65,7 @@
 
                     <Grid Padding="30,0,20,20" Grid.Row="1"  >
                         <VerticalStackLayout>
-                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
+                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll" InputTransparent="False">
                                 <Grid>
                                     <Grid x:Name="PostContentGrid">
                                         <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
@@ -82,33 +84,34 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <Grid Padding="30,0,30,15" Grid.Row="2" IsVisible="{Binding PostImagesVisible}">
+                    <Grid Padding="{OnPlatform Android='10,0,10,0',WinUI='30,0,30,15'}" Grid.Row="2" IsVisible="{Binding PostImagesVisible}">
                         <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
                         <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
-                    <Grid Padding="0,0,0,10" Grid.Row="3" >
+                    <Grid Padding="0,0,0,0" Grid.Row="3" Scale="{OnPlatform Android=1.1}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout  Grid.Column="0"   Spacing="5">
+                        <HorizontalStackLayout  Grid.Column="0" HorizontalOptions="End" Spacing="5" Scale="{OnPlatform Android=0.7}">
                             <Button  ImageSource="likeicon.png" 
                                      BackgroundColor="Transparent" 
-                                     FontSize="20"
+                                     FontSize="15"
                                      x:Name="LikeButton"
-                                     WidthRequest="170"
+                                     WidthRequest="{OnPlatform Android=100,WinUI=170}"
                                      HeightRequest="50" 
                                      Padding="0,0,0,0" 
                                      Text="{Binding LikeText}"
                                      Command="{Binding LikingCommand}"
                                      TextColor="{DynamicResource TextColor}"
                                      CommandParameter="{Binding PostId}"/>
+                            
                             <Label x:Name="PostLikeCountLabel" 
                                    TextColor="{DynamicResource TextColor}" 
-                                   FontSize="20" 
+                                   FontSize="{OnPlatform Android=15,WinUI=20}" 
                                    LineBreakMode="TailTruncation" 
                                    VerticalOptions="Center"/>
                             <HorizontalStackLayout.GestureRecognizers>
@@ -119,24 +122,24 @@
 
                         <Button Grid.Column="1"  
                                 ImageSource="commenticon.png" 
-                                HorizontalOptions="Center" 
-                                BackgroundColor="Transparent" 
+                                BackgroundColor="Red"
                                 FontSize="20" WidthRequest="200" 
                                 HeightRequest="50"
                                 Padding="0,0,0,0" 
                                 Text="Comment"
                                 TextColor="{DynamicResource TextColor}"
-                                Clicked="FocusEditor">
-                            <Button.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="ScaleButton" 
-                                                          PointerExited="UnscaleButton"/>
+                                Clicked="FocusEditor" Scale="{OnPlatform Android=0.5}"
+                                x:Name="CommentButton">
+                            <!--<Button.GestureRecognizers>
+                                <PointerGestureRecognizer PointerEntered="{OnPlatform WinUI=ScaleButton}" 
+                                                          PointerExited="{OnPlatform WinUI=UnscaleButton}"/>
       
-                            </Button.GestureRecognizers>
+                            </Button.GestureRecognizers>-->
                         </Button>
 
 
-                        <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center"
-                                               x:Name="SaveHSL">
+                        <HorizontalStackLayout BackgroundColor="Transparent" Grid.Column="2" Spacing="3" HorizontalOptions="Center" Margin="0,0,20,0"
+                                               x:Name="SaveHSL" Scale="{OnPlatform Android=0.5}">
                             <Path Data="M 0 0 L 0 100 L 25 75 L 50 100 L 50 0 L 0 0" Fill="{Binding SaveIconPathFill}" Scale="0.45" x:Name="SaveControlPath"/>
                             <Label Text="{Binding SavingText}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" FontSize="20" x:Name="SaveButtonLabel"/>
                             <HorizontalStackLayout.GestureRecognizers>
@@ -153,28 +156,30 @@
             </Border>
         </Grid>
         
-        <Grid ZIndex="0">
+        <Grid ZIndex="0" IsVisible="{OnIdiom Desktop=True,Phone=False}">
             <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
                     Margin="35,-40,35,0">
                 <Grid>
                     <ScrollView x:Name="CommentSectionScroll" 
                                 MaximumHeightRequest="300" 
-                                Margin="0,15,0,0" 
-                                MinimumHeightRequest="200">
+                                Margin="0,15,0,0"
+                                HeightRequest="300"
+                                MinimumHeightRequest="200"
+                                VerticalScrollBarVisibility="Always">
                         <VerticalStackLayout>
                             <Grid Padding="20,0,20,0">
                                 <Frame Margin="0,20,0,0" 
-                                       HeightRequest="150" 
+                                       HeightRequest="{OnPlatform Android=100,WinUI=150}" 
                                        BackgroundColor="{DynamicResource CommentViewBackground}" 
                                        BorderColor="Transparent"
                                        ZIndex="20">
                                     <Grid HorizontalOptions="Fill">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
-                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="{OnPlatform Android=30,WinUI=50}"/>
                                         </Grid.ColumnDefinitions>
-                                        <Border Grid.Column="0" Stroke="Gray" StrokeThickness="1" HeightRequest="107" StrokeShape="RoundRectangle 10">
+                                        <Border Grid.Column="0" Stroke="Gray" StrokeThickness="1" HeightRequest="{OnPlatform Android=57,WinUI=107}" StrokeShape="RoundRectangle 10">
                                             <Editor BackgroundColor="{DynamicResource EntryBackround}"
                                                     Placeholder="Share your toughts here..." 
                                                     PlaceholderColor="{DynamicResource TextColor}"
@@ -186,11 +191,12 @@
                                         </Border>
                                         <Button Grid.Column="1" 
                                                 Text="+"
+                                                Padding="{OnPlatform Android='0,0,0,0'}"
                                                 TextColor="{DynamicResource TextColor}"
                                                 FontSize="15" 
                                                 FontAttributes="Bold" 
-                                                WidthRequest="20" 
-                                                HeightRequest="120" 
+                                                WidthRequest="{OnPlatform Android=25,WinUI=20}" 
+                                                HeightRequest="{OnPlatform Android=60,WinUI=120}" 
                                                 BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                                                 HorizontalOptions="End"
                                                 Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=AddNewCommentCommand}"
@@ -230,7 +236,7 @@
         </Grid>
         
         <Grid Margin="0,-20,0,0" 
-              ZIndex="1"  >
+              ZIndex="1"  IsVisible="{OnIdiom Desktop=True,Phone=False}">
                 <Button WidthRequest="100" 
                         BackgroundColor="White" 
                         Clicked="ExpandCommentSection">

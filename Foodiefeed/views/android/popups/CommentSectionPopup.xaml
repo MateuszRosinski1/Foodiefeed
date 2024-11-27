@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.android.popups.CommentSectionPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             Color="Transparent"
+             xmlns:this="clr-namespace:Foodiefeed.views.android.popups">
+    
+    <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Margin="10,0,10,0">
+        <ScrollView x:Name="CommentSectionScroll" 
+             MaximumHeightRequest="300" 
+             Margin="0,15,0,0"
+             HeightRequest="300"
+             MinimumHeightRequest="200"
+             VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout>
+                <Grid Padding="20,0,20,0">
+                    <Frame Margin="0,20,0,0" 
+                    HeightRequest="{OnPlatform Android=100,WinUI=150}" 
+                    BackgroundColor="{DynamicResource CommentViewBackground}" 
+                    BorderColor="Transparent"
+                   >
+                        <Grid HorizontalOptions="Fill">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="{OnPlatform Android=30,WinUI=50}"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Stroke="Gray" StrokeThickness="1" HeightRequest="{OnPlatform Android=57,WinUI=107}" StrokeShape="RoundRectangle 10">
+                                <Editor BackgroundColor="{DynamicResource EntryBackround}"
+                                 Placeholder="Share your toughts here..." 
+                                 PlaceholderColor="{DynamicResource TextColor}"
+                                 TextColor="{DynamicResource TextColor}"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalOptions="FillAndExpand"
+                                 Text="{Binding Source={RelativeSource AncestorType={Type this:CommentSectionPopup}},Path=NewCommentContent,Mode=TwoWay}"
+                                 x:Name="CommentEditor"
+                                 />
+                            </Border>
+                            <Button Grid.Column="1" 
+                                    Text="+"
+                                    Padding="{OnPlatform Android='0,0,0,0'}"
+                                    TextColor="{DynamicResource TextColor}"
+                                    FontSize="15" 
+                                    FontAttributes="Bold" 
+                                    WidthRequest="{OnPlatform Android=25,WinUI=20}" 
+                                    HeightRequest="{OnPlatform Android=60,WinUI=120}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                    HorizontalOptions="End"
+                                    Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=AddNewCommentCommand}"
+                                    CommandParameter="{Binding Source={RelativeSource AncestorType={Type this:CommentSectionPopup}},Path=Payload}">
+                            </Button>
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <VerticalStackLayout Padding="20,10,20,20" 
+                                     Spacing="10" x:Name="CommentSection" 
+                                     BindableLayout.ItemsSource="{Binding Source={RelativeSource AncestorType={Type this:CommentSectionPopup}},Path=Comments}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <local:CommentView Username="{Binding Username}" 
+                                        CommentContent="{Binding CommentContent}"
+                                        LikeCount="{Binding LikeCount}"
+                                        PfpImageBase64="{Binding PfpImageBase64}"
+                                        EditButtonVisible="{Binding EditButtonVisible}"
+                                        LikeCommentCommand="{Binding LikeCommentCommand}"
+                                        UnlikeCommentCommand="{Binding UnlikeCommentCommand}"
+                                        LikingCommand="{Binding LikingCommand}"
+                                        IsLiked="{Binding IsLiked}"
+                                        LikeText="{Binding LikeText}"
+                                        CommentId="{Binding CommentId}"/>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Frame>
+</toolkit:Popup>

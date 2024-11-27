@@ -18,9 +18,11 @@
         <Grid BackgroundColor="Transparent" Grid.Row="0">
 
             
-            <HorizontalStackLayout Spacing="5">
-                <ImageButton x:Name="pfpImage" CornerRadius="5" HeightRequest="40" WidthRequest="40"/>
-                <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"/>
+            <HorizontalStackLayout Spacing="0">
+                    <Border StrokeShape="RoundRectangle 5">
+                        <Image x:Name="pfpImage" HeightRequest="30" WidthRequest="30" Aspect="AspectFill"/>
+                    </Border>
+                    <Label FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel" Scale="{OnPlatform Android=0.7}"/>
             </HorizontalStackLayout>
              <HorizontalStackLayout HorizontalOptions="End">
                     <Button Text="Edit"
@@ -28,14 +30,16 @@
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=OpenCommentEditorCommand}"
                             CommandParameter="{Binding CommentId}"
                             BackgroundColor="{DynamicResource EntryBackround}"
-                            IsVisible="{Binding EditButtonVisible}"/>
+                            IsVisible="{Binding EditButtonVisible}"
+                            Scale="{OnPlatform Android=0.7}"/>
                     <Button Text="Delete"
                             TextColor="{DynamicResource TextColor}" 
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=DeleteCommentCommand}"
                             CommandParameter="{Binding CommentId}"
                             BackgroundColor="{DynamicResource EntryBackround}"
-                            IsVisible="{Binding EditButtonVisible}"/>           
-                    <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30"  Scale="0.75" IsVisible="{Binding EditButtonVisible,Converter={converter:InverseBooleanConverter}}">
+                            IsVisible="{Binding EditButtonVisible}"
+                            Scale="{OnPlatform Android=0.7}"/>
+                    <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30"  Scale="{OnPlatform Android=0.55,WinUI=0.75}" IsVisible="{Binding EditButtonVisible,Converter={converter:InverseBooleanConverter}}">
                         <Ellipse Fill="Gray"
                                  StrokeThickness="0"
                                  WidthRequest="7.5"
@@ -57,26 +61,25 @@
                     <VerticalStackLayout.GestureRecognizers>
                         <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowPopupCommand}"
-                                  CommandParameter="{Binding UserId}"
-                                             />
+                                  CommandParameter="{Binding UserId}"/>
                     </VerticalStackLayout.GestureRecognizers>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
         </Grid>
 
         <Grid  Grid.Row="1" Margin="0,5">
-            <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap"/>
+            <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap" FontSize="{OnPlatform Android=10}"/>
         </Grid>
 
         <HorizontalStackLayout  Grid.Row="2">
                 <Button     BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  
-                            Padding="0" FontSize="15" WidthRequest="100" HeightRequest="10" 
+                            Padding="0" FontSize="{OnPlatform Android=10,WinUI=15}" WidthRequest="{OnPlatform Android=70,WinUI=100}" HeightRequest="{OnPlatform Android=20,WinUI=10}" 
                             Text="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=LikeText}" 
                             TextColor="{DynamicResource TextColor}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=LikingCommand}"
                             CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:CommentView}}, Path=CommentId}"/>
 
-            <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel"/>
+                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="{OnPlatform Android=10,WinUI=15}" x:Name="LikeCountLabel"/>
         </HorizontalStackLayout>
     </Grid>
     </Frame>

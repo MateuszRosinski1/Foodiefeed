@@ -369,16 +369,16 @@
                         </Border>
 
                         <VerticalStackLayout x:Name="ProfileSection_Android">
+
                             <Border IsVisible="{Binding ProfileFriendsVisible}" 
                                     x:Name="FriendsUniformGridBorder_Android"
                                     Margin="0,50,0,0" 
                                     BackgroundColor="{DynamicResource ProfileOptionsSection}" 
                                     StrokeShape="RoundRectangle 40,40,40,40" 
                                     MaximumWidthRequest="1200">
-
-                                <toolkit:UniformItemsLayout MaxColumns="3"
+                                <ScrollView HeightRequest="300">
+                                    <toolkit:UniformItemsLayout MaxColumns="3"
                                          BackgroundColor="Transparent" 
-                                         HeightRequest="1000" 
                                          Padding="20" 
                                          BindableLayout.ItemsSource="{Binding ProfileFriendsList}" 
                                          x:Name="FriendsUniformGrid_Android">
@@ -391,69 +391,78 @@
                                         </DataTemplate>
                                     </BindableLayout.ItemTemplate>
                                 </toolkit:UniformItemsLayout>
-                                <Border.Shadow>
+                            </ScrollView>
+
+                            <Border.Shadow>
                                     <Shadow Opacity="0.4" Brush="Black"/>
                                 </Border.Shadow>
                             </Border>
 
-                            <StackLayout Orientation="Vertical" 
-                                         x:Name="ProfilePostGrid_Android" 
-                                         IsVisible="{Binding ProfilePostsVisible}" 
-                                         BindableLayout.ItemsSource="{Binding ProfilePosts}">
-                                <BindableLayout.ItemTemplate>
+                            <CollectionView ItemsSource="{Binding ProfilePosts}"
+                                            IsVisible="{Binding ProfilePostsVisible}"
+                                            x:Name="ProfilePostsCollection_Android"
+                                            RemainingItemsThreshold="2"
+                                            RemainingItemsThresholdReachedCommand="{Binding ProfilePostThresholdReachedCommand}"
+                                            BackgroundColor="Transparent" 
+                                            HeightRequest="369"
+                                            >
+                                <CollectionView.ItemTemplate>
                                     <DataTemplate>
                                         <views:PostView Username="{Binding Username}"
-                                         TimeStamp="{Binding TimeStamp}"
-                                         PostTextContent="{Binding PostTextContent}"
-                                         PostLikeCount="{Binding PostLikeCount}"
-                                         ImageSource="{Binding ImageSource}"
-                                         ImagesBase64="{Binding ImagesBase64}"
-                                         PfpImageBase64="{Binding PfpImageBase64}"
-                                         PostId="{Binding PostId}"
-                                         NewCommentContent="{Binding NewCommentContent}"
-                                         Payload="{Binding Payload}"
-                                         DeleteButtonVisible="{Binding DeleteButtonVisible}"
-                                         PostProducts="{Binding PostProducts}"
-                                         PostContentVisible="{Binding PostContentVisible}"
-                                         PostImagesVisible="{Binding PostImagesVisible}"
-                                         LikePostCommand="{Binding LikePostCommand}"
-                                         UnlikePostCommand="{Binding UnlikePostCommand}"
-                                         SaveRecipeCommand="{Binding SaveRecipeCommand}"
-                                         UnsaveRecipeCommand="{Binding UnsaveRecipeCommand}"
-                                         LikingCommand="{Binding LikingCommand}"
-                                         SavingCommand="{Binding SavingCommand}"
-                                         LikeText="{Binding LikeText}"
-                                         SavingText="{Binding SavingText}"
-                                         SaveIconPathFill="{Binding SaveIconPathFill}"
-                                         IsLiked="{Binding IsLiked}"
-                                         IsSaved="{Binding IsSaved}"/>
+                                                        TimeStamp="{Binding TimeStamp}"
+                                                        PostTextContent="{Binding PostTextContent}"
+                                                        PostLikeCount="{Binding PostLikeCount}"
+                                                        ImageSource="{Binding ImageSource}"
+                                                        ImagesBase64="{Binding ImagesBase64}"
+                                                        PfpImageBase64="{Binding PfpImageBase64}"
+                                                        PostId="{Binding PostId}"
+                                                        NewCommentContent="{Binding NewCommentContent}"
+                                                        Payload="{Binding Payload}"
+                                                        DeleteButtonVisible="{Binding DeleteButtonVisible}"
+                                                        PostProducts="{Binding PostProducts}"
+                                                        PostContentVisible="{Binding PostContentVisible}"
+                                                        PostImagesVisible="{Binding PostImagesVisible}"
+                                                        LikePostCommand="{Binding LikePostCommand}"
+                                                        UnlikePostCommand="{Binding UnlikePostCommand}"
+                                                        SaveRecipeCommand="{Binding SaveRecipeCommand}"
+                                                        UnsaveRecipeCommand="{Binding UnsaveRecipeCommand}"
+                                                        LikingCommand="{Binding LikingCommand}"
+                                                        SavingCommand="{Binding SavingCommand}"
+                                                        LikeText="{Binding LikeText}"
+                                                        SavingText="{Binding SavingText}"
+                                                        SaveIconPathFill="{Binding SaveIconPathFill}"
+                                                        IsLiked="{Binding IsLiked}"
+                                                        IsSaved="{Binding IsSaved}"
+                                                        Comments="{Binding Comments}"/>
                                     </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </StackLayout>
+                                </CollectionView.ItemTemplate>
 
-                            <Border IsVisible="{Binding ProfileFollowersVisible}" 
+                            </CollectionView>
+
+                                <Border  
                                     Margin="0,50,0,0" 
                                     BackgroundColor="{DynamicResource ProfileOptionsSection}" 
-                                    StrokeShape="RoundRectangle 40,40,40,40" 
-                                    MaximumWidthRequest="1200">
-                                <toolkit:UniformItemsLayout MaxColumns="3" 
-                                         BackgroundColor="Transparent" 
-                                         HeightRequest="1000"
-                                         Padding="20" 
-                                         BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
-                                    <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
-                                            <views:OnListFriendView Username="{Binding Username}"
-                                                 AvatarImageSource="{Binding AvatarImageSource}"
-                                                 UserId="{Binding UserId}"
-                                                 Margin="0,5"/>
-                                        </DataTemplate>
-                                    </BindableLayout.ItemTemplate>
+                                    StrokeShape="RoundRectangle 40,40,40,40">
+                                <ScrollView>
+                                    <toolkit:UniformItemsLayout MaxColumns="3" 
+                                             BackgroundColor="Transparent" 
+                                             Padding="20" 
+                                             BindableLayout.ItemsSource="{Binding ProfileFollowersList}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:OnListFriendView Username="{Binding Username}"
+                                                     AvatarImageSource="{Binding AvatarImageSource}"
+                                                     UserId="{Binding UserId}"
+                                                     Margin="0,5"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
                                 </toolkit:UniformItemsLayout>
+                                </ScrollView>
                                 <Border.Shadow>
                                     <Shadow Opacity="0.4" Brush="Black"/>
                                 </Border.Shadow>
                             </Border>
+                            
 
                             <Grid VerticalOptions="Center" HorizontalOptions="Center">
 
@@ -465,7 +474,8 @@
                                 </VerticalStackLayout>
 
                                 <Label Text="This user has not posts yet." 
-                                       FontSize="30" 
+                                       FontSize="20"
+                                       Margin="0,150,0,0"
                                        TextColor="{DynamicResource TextColor}"
                                        IsVisible="{Binding NoPostOnProfile}"/>
                             </Grid>

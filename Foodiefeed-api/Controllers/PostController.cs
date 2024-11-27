@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Foodiefeed_api.Controllers
 {
-    //[ApiController]
+    [ApiController]
     [Route("api/posts")]
     public class PostController : Controller
     {
@@ -16,9 +16,9 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("profile-posts/{userId}")]
-        public async Task<IActionResult> GetProfilePosts([FromRoute]int userId)
+        public async Task<IActionResult> GetProfilePosts([FromRoute]int userId,int pageNumber)
         {
-            var response = await _postService.GetProfilePostsAsync(userId);
+            var response = await _postService.GetProfilePostsAsync(userId,pageNumber);
 
             return Ok(response);
         }

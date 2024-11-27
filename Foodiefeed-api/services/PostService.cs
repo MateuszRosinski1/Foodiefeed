@@ -9,7 +9,7 @@ namespace Foodiefeed_api.services
 {
     public interface IPostService
     {
-        public Task<List<PostDto>> GetProfilePostsAsync(int userId);
+        public Task<List<PostDto>> GetProfilePostsAsync(int userId, int pageNumber);
         public Task<PopupPostDto> GetPopupPostAsync(int id, int commentId);
         public Task<PopupPostDto> GetLikedPostAsync(int id);
         public Task CreatePostAsync(CreatePostDto dto);
@@ -149,8 +149,10 @@ namespace Foodiefeed_api.services
             return popupPostDto;
         }
 
-        public async Task<List<PostDto>> GetProfilePostsAsync(int userId)
+        public async Task<List<PostDto>> GetProfilePostsAsync(int userId,int pageNumber)
         {
+            const int PAGE_SIZE = 3;
+
             var user = await _dbContext.Users
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostImages)
@@ -165,7 +167,7 @@ namespace Foodiefeed_api.services
 
             if (user is null) { throw new NotFoundException("user not found"); }
 
-            var posts = user.Posts.ToList();
+            var posts = user.Posts.ToList().Skip(pageNumber * PAGE_SIZE).Take(PAGE_SIZE);
             var postsDtos = _mapper.Map<List<PostDto>>(posts);
                   
             int i = 0;

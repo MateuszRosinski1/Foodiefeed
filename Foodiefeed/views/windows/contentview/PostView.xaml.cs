@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using Foodiefeed.views.android.popups;
 using System.Windows.Input;
 
 namespace Foodiefeed.views.windows.contentview;
@@ -88,6 +90,28 @@ public partial class PostView : ContentView
 
     public static readonly BindableProperty IsSavedProperty =
         BindableProperty.Create(nameof(IsSaved), typeof(bool), typeof(PostView), default(bool));
+
+    public static readonly BindableProperty CommentsProperty =
+        BindableProperty.Create(nameof(Comments), typeof(List<CommentView>), typeof(PostView), default(List<CommentView>),propertyChanged: OnCommentsChanged);
+
+    private static void OnCommentsChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (PostView)bindable;
+        view.CommentsVariable = (List<CommentView>)newValue;
+    }
+
+    public List<CommentView> Comments
+    {
+        get => (List<CommentView>)GetValue(CommentsProperty);
+        set => SetValue(CommentsProperty, value);
+    }
+
+    public List<CommentView> CommentsVariable
+    {
+        get { return commentsVariable; }
+        set { commentsVariable = value;}
+    }
+    private List<CommentView> commentsVariable;
 
     #endregion
 
@@ -393,7 +417,7 @@ public partial class PostView : ContentView
         view.PostProductsContentLabel.Text = productString;
     }
 
-    public List<CommentView> Comments { get; set; }
+    //public List<CommentView> Comments { get; set; }
 
     public PostView()
     {
@@ -402,6 +426,12 @@ public partial class PostView : ContentView
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
         PostContentVisible = true;
+#if WINDOWS
+PointerGestureRecognizer pgr = new PointerGestureRecognizer();
+        pgr.PointerEntered += ScaleButton;
+        pgr.PointerExited += UnscaleButton;
+        CommentButton.GestureRecognizers.Add(pgr);
+#endif
     }
 
     #region animations
@@ -566,6 +596,14 @@ public partial class PostView : ContentView
 
     private void FocusEditor(object sender, EventArgs e)
     {
+#if WINDOWS
         CommentEditor.Focus();
+#endif
+#if ANDROID
+        var popup = new CommentSectionPopup();
+        popup.Comments = this.Comments;
+        popup.PostId = PostId;
+        App.Current.MainPage.ShowPopup(popup);
+#endif
     }
 }

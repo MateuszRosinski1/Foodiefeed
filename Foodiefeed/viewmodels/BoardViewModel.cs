@@ -1,9 +1,3 @@
-#if ANDROID
-//using Android.App;
-#endif
-#if WINDOWS
-using Windows.Media.SpeechRecognition;
-#endif
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -293,20 +287,28 @@ namespace Foodiefeed.viewmodels
             LoadingScreenVisible = true;
             try
             {
-                if (!windowloaded)   // appearing command invoked 2 times for some reason
+                if (!windowloaded)   // appearing command is invoked 2 times for some reason
                 {
                     windowloaded = true;
+#if ANDROID
+                    var base64 = await FetchProfilePictureBase64();
+                    if (base64 is null) throw new Exception();
 
-                    //await FetchNotifications();
-                    
-                    //var base64 = await FetchProfilePictureBase64();
-                    //if (base64 is null) throw new Exception();
+                    await SetProfilePictureFromBase64(base64);
+#endif
+#if WINDOWS
+                    await FetchNotifications();
 
-                    //var t1 = SetProfilePictureFromBase64(base64);
-                    //var t2 = MainWallPostThresholdExceed();
-                    //var t3 = UpdateFriendList();
+                    var base64 = await FetchProfilePictureBase64();
+                    if (base64 is null) throw new Exception();
 
-                    //await Task.WhenAll(t1, t2, t3);
+                    var t1 = SetProfilePictureFromBase64(base64);
+                    var t2 = MainWallPostThresholdExceed();
+                    var t3 = UpdateFriendList();
+
+                    await Task.WhenAll(t1, t2, t3);
+#endif
+
 
                     LoadingScreenVisible = false;
                 }
@@ -505,7 +507,7 @@ namespace Foodiefeed.viewmodels
         private ObservableCollection<INotification> allNotifications = new ObservableCollection<INotification>();
         private int currentNotificationsDisplayCount = 0;
 
-        private async void DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
+        private async Task DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
         {
             var temp = currentNotificationsDisplayCount;
             for (int i = currentNotificationsDisplayCount; i <= temp+displayCount; i++)
@@ -528,7 +530,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowCommentedPost((string post,string comment) id)
+        public async Task ShowCommentedPost((string post,string comment) id)
         {
             var post = await GetPopupPost(id.post,id.comment);
 
@@ -604,7 +606,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void OpenCommentEditor(string commentId)
+        public async Task OpenCommentEditor(string commentId)
         {
             var popup = new EditCommentPopup(commentId);
             popup.Closed += DisposeEditCommentPopup;
@@ -612,7 +614,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void DeleteComment(string commentId)
+        public async Task DeleteComment(string commentId)
         {
             using(var http = new HttpClient())
             {
@@ -643,7 +645,7 @@ namespace Foodiefeed.viewmodels
         string editedCommentContent;
 
         [RelayCommand]
-        public async void EditComment(string commentId)
+        public async Task EditComment(string commentId)
         {
             if(EditedCommentContent == string.Empty)
             {
@@ -676,7 +678,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void AddNewComment((string postId,string commentContent) payload)
+        public async Task AddNewComment((string postId,string commentContent) payload)
         {
             var newComment = new NewCommentDto()
             {
@@ -721,7 +723,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowLikedComment(string commentId)
+        public async Task ShowLikedComment(string commentId)
         {
             var comment = await GetCommentById(commentId);
             App.Current.MainPage.ShowPopup(new LikedCommendPopup(
@@ -758,7 +760,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowLikedPost(string postId)
+        public async Task ShowLikedPost(string postId)
         {
             var post = await GetPopupLikedPost(postId);
             if (post.PostImagesBase64 is null)
@@ -821,7 +823,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        private async void ClearNotifications()
+        private async Task ClearNotifications()
         {
             List<int> NotificationsId = new List<int>();
             for (int i = 0; i <= currentNotificationsDisplayCount - 1; i++)
@@ -914,7 +916,7 @@ namespace Foodiefeed.viewmodels
         public ObservableCollection<PostImageView> AddPostImages { get; set; } = new ObservableCollection<PostImageView>();
 
         [RelayCommand]
-        public async void UploadPostImages()
+        public async Task UploadPostImages()
         {
             var fileResult = await FilePicker.Default.PickMultipleAsync(new PickOptions
                 {
@@ -969,14 +971,36 @@ namespace Foodiefeed.viewmodels
         string errMsg;
 
         [RelayCommand]
-        public async void DeletePost(string postId)
+        public async Task DeletePost(string postId)
         {
-            //var endpoint = $""
-            int i = 0;
+            using(var http = new HttpClient())
+            {
+
+                var endpoint = $"api/posts/delete?postId={postId}&userId={_userSession.Id}";
+
+                try
+                {
+                    var response = await http.DeleteAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode) { throw new Exception(await response.Content.ReadAsStringAsync()); } 
+
+                }catch(Exception e)
+                {
+                    await NotifiyFailedAction(e.Message);
+                    return;
+                }
+            }
+
+            var post = Posts.FirstOrDefault(p => p.PostId == postId);
+            if(post is not null) Posts.Remove(post);
+
+            var postProfile = ProfilePosts.FirstOrDefault(p => p.PostId == postId);
+            if (postProfile is not null) Posts.Remove(postProfile);
+
         }
 
         [RelayCommand]
-        public async void AddPost()
+        public async Task AddPost()
         {
             if(string.IsNullOrEmpty(PostContent))
             {
@@ -1080,7 +1104,7 @@ namespace Foodiefeed.viewmodels
         bool addPostFormActivityIndicatorVisible;
 
         [RelayCommand]
-        public async void ChooseTags()
+        public async Task ChooseTags()
         {
             AddPostFormActivityIndicatorVisible = true;
             Tags.Clear();
@@ -1131,7 +1155,7 @@ namespace Foodiefeed.viewmodels
         string filterParam;
 
         [RelayCommand]
-        public async void PickTag(string id)
+        public async Task PickTag(string id)
         {
             var tag = PickedTags.FirstOrDefault(t => t.Id == id);
             if (tag is not null)
@@ -1391,7 +1415,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ToProfileView()
+        public async Task ToProfileView()
         {
             this.PostPageVisible = false;
             this.ProfilePageVisible = true;
@@ -1401,11 +1425,11 @@ namespace Foodiefeed.viewmodels
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
             ProfileFriendsList.Clear();
-            ShowUserProfile(_userSession.Id.ToString());
+            await ShowUserProfile(_userSession.Id.ToString());
         }
 
         [RelayCommand]
-        public void ToRecipesView()
+        public async Task ToRecipesView()
         {
             this.PostPageVisible = false;
             this.ProfilePageVisible = false;
@@ -1424,7 +1448,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowPopup(string id)
+        public async Task ShowPopup(string id)
         {
             var profileJson = await GetUserProfileModel(id);
             var user = await JsonToObject<UserProfileModel>(profileJson);
@@ -1441,7 +1465,7 @@ namespace Foodiefeed.viewmodels
 
 
         [RelayCommand]
-        public async void OpenPersonalDataEditor()
+        public async Task OpenPersonalDataEditor()
         {
             await Task.Delay(100);
             this.PersonalDataEditorVisible = true;
@@ -1514,7 +1538,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ChooseNewProfilePicture()
+        public async Task ChooseNewProfilePicture()
         {
             var fileResult = await FilePicker.Default.PickAsync(new PickOptions
             {
@@ -1530,7 +1554,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void SaveChangedPersonalData()
+        public async Task SaveChangedPersonalData()
         {
             string endpoint = "";
             StringContent content = null;
@@ -1611,7 +1635,7 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private async void UploadNewProfilePicture()
+        private async Task UploadNewProfilePicture()
         {
             using (var http = new HttpClient())
             {
@@ -1724,18 +1748,19 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowUserProfile(string id)
+        public async Task ShowUserProfile(string id)
         {
+            pageNumber = 0;
             ProfileAddFriendAndFollowButtonsVisible = false;
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
-            SetButtonColors(Buttons.PostButton);
+            await SetButtonColors(Buttons.PostButton);
             try
             {
                 if (id != _userSession.Id.ToString())
                 {
-                    CreateSearchResultHistory(id);
+                    await CreateSearchResultHistory(id);
                     this.PostPageVisible = false;
                     this.ProfilePageVisible = true;
                     this.SettingsPageVisible = false;
@@ -1746,7 +1771,7 @@ namespace Foodiefeed.viewmodels
                     ProfileAddFriendAndFollowButtonsVisible = true;
                 }
 
-                OpenUserProfile(id);
+                await OpenUserProfile(id);
             }catch (Exception ex)
             {
                 Console.Write(ex.ToString());
@@ -1754,7 +1779,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void ShowUserProfilePopup(string id)
+        public async Task ShowUserProfilePopup(string id)
         {
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
@@ -1768,11 +1793,11 @@ namespace Foodiefeed.viewmodels
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
-            SetButtonColors(Buttons.PostButton);
+            await SetButtonColors(Buttons.PostButton);
             try
             {
                 ProfileAddFriendAndFollowButtonsVisible = true;
-                OpenUserProfile(id);
+                await OpenUserProfile(id);
             }
             catch (Exception ex)
             {
@@ -1859,32 +1884,54 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void ShowProfilePosts()
+        public async Task ShowProfilePosts()
         {
+            pageNumber = 0;
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
             await SetButtonColors(Buttons.PostButton);
 
+            var posts = await GetUserProfilePosts(ProfileId.ToString());
+
+            var postsDto = await JsonToObject<List<PostDto>>(posts);
+            await DisplayPosts(postsDto, ProfilePosts);
         }
 
         [RelayCommand]
-        public async void ShowProfileFriends()
+        public async Task ShowProfileFriends()
         {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = false;
             this.ProfileFriendsVisible = true;
             await SetButtonColors(Buttons.FriendsButton);
 
+            var friends = await GetUserProfileFriends(ProfileId.ToString());
+            var dtos = await JsonToObject<List<ListedFriendDto>>(friends);
+            await DisplayProfileFriends(dtos);
         }
 
         [RelayCommand]
-        public async void ShowProfileFollowers()
+        public async Task ShowProfileFollowers()
         {
+            ProfilePosts.Clear();
+            ProfileFollowersList.Clear();
+            ProfileFriendsList.Clear();
             this.ProfileFollowersVisible = true;
             this.ProfilePostsVisible = false;
             this.ProfileFriendsVisible = false;
             await SetButtonColors(Buttons.FollowersButton);
+
+            var followers = await GetUserProfileFollowers(ProfileId.ToString());
+
+            var dtos = await JsonToObject<List<ListedFriendDto>>(followers);
+            await DisplayProfileFollowers(dtos);
         }
 
         [RelayCommand]
@@ -2077,7 +2124,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void SaveRecipe(string postId)
+        public async Task SaveRecipe(string postId)
         {
             var endpoint = $"api/recipes/save/{_userSession.Id}/{postId}";
 
@@ -2121,7 +2168,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void Search()
+        public async Task Search()
         {
 
             SearchResults.Clear();
@@ -2157,7 +2204,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void DeclineFriendRequest((string senderId, int notificationId) ids)
+        public async Task DeclineFriendRequest((string senderId, int notificationId) ids)
         {
             var endpoint = $"api/friends/request/delete/{ids.senderId}/{_userSession.Id}";
 
@@ -2184,7 +2231,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void AcceptFriendRequest((string senderId,int notificationId) ids)
+        public async Task AcceptFriendRequest((string senderId,int notificationId) ids)
         {
             var endpoint = $"api/friends/request/accept/{ids.senderId}/{_userSession.Id}";
 
@@ -2211,7 +2258,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void AddToFriends(string id)
+        public async Task AddToFriends(string id)
         {
             var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
 
@@ -2239,7 +2286,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void UnfriendUser(string id)
+        public async Task UnfriendUser(string id)
         {
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
 
@@ -2263,7 +2310,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void FollowUser(string id)
+        public async Task FollowUser(string id)
         {
             var endpoint = $"api/followers/follow/{_userSession.Id}/{id}";
 
@@ -2284,7 +2331,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void UnfollowUser(string id)
+        public async Task UnfollowUser(string id)
         {
             var endpoint = $"api/followers/unfollow/{_userSession.Id}/{id}";
 
@@ -2307,7 +2354,7 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public async void CancelFriendRequest(string id)
+        public async Task CancelFriendRequest(string id)
         {
             var endpoint = $"api/friends/request/cancel/{_userSession.Id}/{id}";
 
@@ -2333,7 +2380,7 @@ namespace Foodiefeed.viewmodels
         string switchThemeMode = "Light Theme";
 
         [RelayCommand]
-        public void ChangeTheme()
+        public async Task ChangeTheme()
         {
             ThemeFlag = !ThemeFlag;
 
@@ -2348,19 +2395,19 @@ namespace Foodiefeed.viewmodels
             {
                 mergedDictionaries.Add(new DarkTheme());
                 SwitchThemeMode = "Dark Theme";
-                ReloadProfileButtonColors(ThemeFlag);
+                await ReloadProfileButtonColors(ThemeFlag);
                 ReloadRecipesButtons(ThemeFlag);
             }
             else
             {
                 mergedDictionaries.Add(new LightTheme());
                 SwitchThemeMode = "Light Theme";
-                ReloadProfileButtonColors(ThemeFlag);
+                await ReloadProfileButtonColors(ThemeFlag);
                 ReloadRecipesButtons(ThemeFlag);
             }
         }
 
-        private void DisplaySearchResults(ObservableCollection<UserSearchResult> users)
+        private async Task DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {
             SearchResults.Clear();
 
@@ -2383,7 +2430,7 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private async void DisplaySearchResultHistory()
+        private async Task DisplaySearchResultHistory()
         {
 
             string ApplicationDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Foodiefeed");
@@ -2401,12 +2448,12 @@ namespace Foodiefeed.viewmodels
 
             var json = await File.ReadAllTextAsync(SearchHistoryJsonPath);
 
-            DisplaySearchResults(await JsonToObject<ObservableCollection<UserSearchResult>>(json)); 
+            await DisplaySearchResults(await JsonToObject<ObservableCollection<UserSearchResult>>(json)); 
             //add a block of code that displays that there are not search results.
 
         }
 
-        private async void CreateSearchResultHistory(string userId)
+        private async Task CreateSearchResultHistory(string userId)
         {
             const int MAX_HISTORY_SIZE = 6;
 
@@ -2564,20 +2611,20 @@ namespace Foodiefeed.viewmodels
                                     profile.Username,
                                     profile.ProfilePictureBase64);
 
-                var postsTask = GetUserProfilePosts(id);
-                var friendsTask = GetUserProfileFriends(id);
-                var followersTask = GetUserProfileFollowers(id);
+                var postsTask = await GetUserProfilePosts(id);
+                //var friendsTask = GetUserProfileFriends(id);
+                //var followersTask = GetUserProfileFollowers(id);
 
-                await Task.WhenAll(postsTask, friendsTask, followersTask);
+                //await Task.WhenAll(postsTask, friendsTask, followersTask);
 
-                var posts = await JsonToObject<List<PostDto>>(await postsTask);
-                DisplayPosts(posts,ProfilePosts);
+                var posts = await JsonToObject<List<PostDto>>(postsTask);
+                await DisplayPosts(posts,ProfilePosts);
 
-                var friends = await JsonToObject<List<ListedFriendDto>>(await friendsTask);
-                DisplayProfileFriends(friends);
+                //var friends = await JsonToObject<List<ListedFriendDto>>(await friendsTask);
+                //await DisplayProfileFriends(friends);
 
-                var followers = await JsonToObject<List<ListedFriendDto>>(await followersTask);
-                DisplayProfileFollowers(followers);
+                //var followers = await JsonToObject<List<ListedFriendDto>>(await followersTask);
+                //await DisplayProfileFollowers(followers);
             }
             catch (Exception ex)
             {
@@ -2589,7 +2636,14 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private async void DisplayProfileFollowers(List<ListedFriendDto> followers)
+        [RelayCommand]
+        public async Task ProfilePostThresholdReached() //android exclusive command
+        {
+            var postsJson = await GetUserProfilePosts(ProfileId.ToString());
+            await DisplayPosts(await JsonToObject<List<PostDto>>(postsJson), ProfilePosts); 
+        }
+
+        private async Task DisplayProfileFollowers(List<ListedFriendDto> followers)
         {
             //ProfileFollowersList.Clear();
             foreach (var follower in followers)
@@ -2603,7 +2657,7 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        private async void DisplayProfileFriends(List<ListedFriendDto> friends) 
+        private async Task DisplayProfileFriends(List<ListedFriendDto> friends) 
         {
             foreach (var friend in friends)
             {
@@ -2624,17 +2678,16 @@ namespace Foodiefeed.viewmodels
         }
 
         public ObservableCollection<OnListFriendView> ProfileFriendsList { get; set; } = new ObservableCollection<OnListFriendView>();
-        //private ObservableCollection<OnListFriendView> profileFriendsList = new ObservableCollection<OnListFriendView>();
 
         public ObservableCollection<OnListFriendView> ProfileFollowersList { get; set; } = new ObservableCollection<OnListFriendView>();
-        //private ObservableCollection<OnListFriendView> profileFollowersList = new ObservableCollection<OnListFriendView>();
 
         public ObservableCollection<PostView> ProfilePosts { get; set; } = new ObservableCollection<PostView>();
-        //private ObservableCollection<PostView> profilePosts = new ObservableCollection<PostView>();
 
+
+        private int pageNumber = 0;
         private async Task<string> GetUserProfilePosts(string id)
         {
-            var endpoint = $"api/posts/profile-posts/{id}";
+            var endpoint = $"api/posts/profile-posts/{id}?pageNumber={pageNumber}";
 
             using(var httpClient = new HttpClient())
             {
@@ -2648,7 +2701,7 @@ namespace Foodiefeed.viewmodels
                     {
                         throw new Exception();
                     }
-
+                    pageNumber += 1;
                     return await response.Content.ReadAsStringAsync();                   
                 }
                 catch
@@ -2670,7 +2723,7 @@ namespace Foodiefeed.viewmodels
             }
 
 
-            if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
+            //if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
 
 
             foreach (var post in posts)
@@ -2711,7 +2764,7 @@ namespace Foodiefeed.viewmodels
                             TimeStamp = post.TimeSpan,
                             PostLikeCount = post.Likes.ToString(),
                             PostTextContent = post.Description,
-                            Comments = commentList,
+                            Comments = new List<CommentView>(commentList),
                             PfpImageBase64 = post.ProfilePictureBase64,
                             PostId = post.PostId.ToString(),
                             PostProducts = post.ProductsName,
@@ -2866,7 +2919,7 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         string failedActionMessage;
 
-        private async void NotifiyFailedAction(string message)
+        private async Task NotifiyFailedAction(string message)
         {
             FailedActionMessage = message;
             WeakReferenceMessenger.Default.Send(new FailedActionAnimationMessage("show"));
