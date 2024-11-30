@@ -193,8 +193,6 @@ namespace Foodiefeed.viewmodels
         #endregion
 
         public ObservableCollection<INotification> Notifications { get; set; } = new ObservableCollection<INotification>();
-        //private ObservableCollection<INotification> notifications = new ObservableCollection<INotification>();
-
         public ObservableCollection<RecipeView> LikedRecipes { get; set; } = new ObservableCollection<RecipeView>();
         public ObservableCollection<RecipeView> SavedRecipes { get; set; } = new ObservableCollection<RecipeView>();
 
@@ -295,6 +293,7 @@ namespace Foodiefeed.viewmodels
                     if (base64 is null) throw new Exception();
 
                     await SetProfilePictureFromBase64(base64);
+                    await MainWallPostThresholdExceed();
 #endif
 #if WINDOWS
                     await FetchNotifications();
@@ -330,6 +329,7 @@ namespace Foodiefeed.viewmodels
             using(var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
+                http.Timeout = TimeSpan.FromSeconds(10);
 
                 var endpoint = $"api/user/get-profile-picture-base64/{_userSession.Id}";
 
@@ -337,7 +337,7 @@ namespace Foodiefeed.viewmodels
                 {
                     var response = await http.GetAsync(endpoint);
 
-                    if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    if(!response.IsSuccessStatusCode)
                     {
                         ProfilePictureSource = "avatar.jpg";
                         return null;
@@ -346,7 +346,7 @@ namespace Foodiefeed.viewmodels
 
                 }catch(Exception ex)
                 {
-                    NotifiyFailedAction("could not retrive profile picture.");
+                    //NotifiyFailedAction("could not retrive profile picture.");
                     return null;
                 }
             }
@@ -628,6 +628,35 @@ namespace Foodiefeed.viewmodels
                     {
                         NotifiyFailedAction("Could not delete comment at the moment, try again later");
                     }
+
+                    await Task.Run(() =>
+                    {
+                        if (PostPageVisible)
+                        {
+                            foreach (var post in Posts)
+                            {
+                                var comment = post.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                                if (comment is not null)
+                                {
+                                    post.Comments.Remove(comment);
+                                    return;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var post in ProfilePosts)
+                            {
+                                var comment = post.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                                if (comment is not null)
+                                {
+                                    post.Comments.Remove(comment);
+                                    return;
+                                }
+                            }
+                        }
+                    });
+
                 }
                 catch
                 {
@@ -666,6 +695,33 @@ namespace Foodiefeed.viewmodels
                     if(response.IsSuccessStatusCode)
                     {
                         NotifiyFailedAction("Comment edited succesfuly");
+                        await Task.Run(() =>
+                        {
+                            if (PostPageVisible)
+                            {
+                                foreach (var post in Posts)
+                                {
+                                    var comment = post.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                                    if(comment is not null)
+                                    {
+                                       comment.CommentContent = EditedCommentContent;
+                                       return;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (var post in ProfilePosts)
+                                {
+                                    var comment = post.Comments.FirstOrDefault(c => c.CommentId == commentId);
+                                    if (comment is not null)
+                                    {
+                                        comment.CommentContent = EditedCommentContent;
+                                        return;
+                                    }
+                                }
+                            }
+                        });
                         return;
                     }
                 }
@@ -692,6 +748,7 @@ namespace Foodiefeed.viewmodels
                 return;
             }
 
+            CommentView comment = new CommentView();
             using (var httpclient = new HttpClient())
             {
                 httpclient.BaseAddress = new Uri(API_BASE_URL);
@@ -703,22 +760,42 @@ namespace Foodiefeed.viewmodels
                 try
                 {
                     var response = await httpclient.PostAsync(endpoint, content);
-                }
-                catch
-                {
 
+                    if(!response.IsSuccessStatusCode) throw new Exception(await response.Content.ReadAsStringAsync());
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var dto = JsonConvert.DeserializeObject<CommentDto>(json);
+
+                    var temp = dto.UserId == _userSession.Id ? true : false;
+
+
+                    comment.Username = dto.Username;
+                    comment.CommentContent = dto.CommentContent;
+                    comment.CommentId = dto.CommentId.ToString();
+                    comment.LikeCount = dto.Likes.ToString();
+                    comment.UserId = dto.UserId.ToString();
+                    comment.PfpImageBase64 = dto.ImageBase64;
+                    comment.EditButtonVisible = temp;
+                    comment.UnlikeCommentCommand = UnlikeCommentCommand;
+                    comment.LikeCommentCommand = LikeCommentCommand;
+                    comment.IsLiked = dto.IsLiked;
+                }
+                catch(Exception e)
+                {
+                    NotifiyFailedAction(e.Message);
+                    return;
                 }
             }
 
             var post = Posts.FirstOrDefault(p => p.PostId == payload.postId);
             if (post != null)
             {
-                //post.Comments.Add(new CommentView() { });
-                //UPDATE CURRENT UI/ HTTP GET FOR SINGLE COMMENT REQUIRED
+                post.Comments.Add(comment);
             }
             var profilepost = ProfilePosts.FirstOrDefault(p => p.PostId == payload.postId);
             if(profilepost != null)
             {
+                profilepost.Comments.Add(comment);
             }
         }
 
@@ -2282,7 +2359,7 @@ namespace Foodiefeed.viewmodels
                 }
             }
 
-            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
+            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -2304,14 +2381,12 @@ namespace Foodiefeed.viewmodels
                     // code to handle unsuccsesful unfriend action.
                 }
             }
-
-            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
-
         }
 
         [RelayCommand]
         public async Task FollowUser(string id)
         {
+            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
             var endpoint = $"api/followers/follow/{_userSession.Id}/{id}";
 
             using (var httpClient = new HttpClient())
@@ -2327,7 +2402,6 @@ namespace Foodiefeed.viewmodels
                     NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
             }
-            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -2350,7 +2424,7 @@ namespace Foodiefeed.viewmodels
                 }
             }
 
-            WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
+            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -2789,7 +2863,7 @@ namespace Foodiefeed.viewmodels
                             PostLikeCount = post.Likes.ToString(),
                             PostTextContent = post.Description,
                             ImageSource = post.PostImagesBase64[0],
-                            Comments = commentList,
+                            Comments = new List<CommentView>(commentList),
                             ImagesBase64 = imageBase64list,
                             PfpImageBase64 = post.ProfilePictureBase64,
                             PostId = post.PostId.ToString(),

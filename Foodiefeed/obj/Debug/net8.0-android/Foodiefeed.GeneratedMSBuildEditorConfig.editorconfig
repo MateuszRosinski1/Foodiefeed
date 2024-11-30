@@ -190,6 +190,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.p
 build_metadata.AdditionalFiles.TargetPath = views\windows\popups\LikedPostPopup.xaml
 build_metadata.AdditionalFiles.RelativePath = views\windows\popups\LikedPostPopup.xaml
 
+[D:/PracaInzynierska/Foodiefeed/views/windows/popups/TextPopup.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.TextPopup.xaml
+build_metadata.AdditionalFiles.TargetPath = views\windows\popups\TextPopup.xaml
+build_metadata.AdditionalFiles.RelativePath = views\windows\popups\TextPopup.xaml
+
 [D:/PracaInzynierska/Foodiefeed/views/windows/popups/UserOptionPopup.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Foodiefeed.views.windows.popups.UserOptionPopup.xaml

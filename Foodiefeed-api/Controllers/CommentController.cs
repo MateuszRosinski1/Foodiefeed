@@ -26,8 +26,8 @@ namespace Foodiefeed_api.Controllers
         [HttpPost("add-new-comment-{postId}")]
         public async Task<IActionResult> AddNewComment([FromBody] NewCommentDto dto, [FromRoute] int postId)
         {
-            await commentService.AddNewComment(postId, dto);
-            return NoContent();
+            var response = await commentService.AddNewComment(postId, dto);
+            return Ok(response);
         }
 
         [HttpPut("edit-comment-{commentId}")]

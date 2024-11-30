@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using Foodiefeed.views.android.popups;
+using Foodiefeed.views.windows.popups;
 using System.Windows.Input;
 
 namespace Foodiefeed.views.windows.contentview;
@@ -20,7 +21,7 @@ public partial class PostView : ContentView
         BindableProperty.Create(nameof(Payload), typeof((string, string)), typeof(PostView), default((string, string)));
 
     public static readonly BindableProperty NewCommentContentProperty =
-        BindableProperty.Create(nameof(NewCommentContent), typeof(string), typeof(PostView), default(string),propertyChanged: OnCommentContentChanged);
+        BindableProperty.Create(nameof(NewCommentContent), typeof(string), typeof(PostView), default(string), propertyChanged: OnCommentContentChanged);
 
     public static readonly BindableProperty PostIdProperty =
         BindableProperty.Create(nameof(PostId), typeof(string), typeof(PostView), default(string));
@@ -31,11 +32,11 @@ public partial class PostView : ContentView
     public static BindableProperty PfpImageBase64Property =
         BindableProperty.Create(nameof(PfpImageBase64), typeof(string), typeof(PostView), default(string), propertyChanged: OnImageChanged);
 
-    public static readonly BindableProperty TimeStampProperty = 
-        BindableProperty.Create(nameof(TimeStamp),typeof(string),typeof(PostView),default(string),propertyChanged: OnTimeStampChanged);
+    public static readonly BindableProperty TimeStampProperty =
+        BindableProperty.Create(nameof(TimeStamp), typeof(string), typeof(PostView), default(string), propertyChanged: OnTimeStampChanged);
 
     public static readonly BindableProperty PostTextContentProperty =
-        BindableProperty.Create(nameof(PostTextContent), typeof(string), typeof(PostView), default(string),propertyChanged: OnPostTextContentChanged);
+        BindableProperty.Create(nameof(PostTextContent), typeof(string), typeof(PostView), default(string), propertyChanged: OnPostTextContentChanged);
 
     public static readonly BindableProperty PostLikeCountProperty =
         BindableProperty.Create(nameof(PostLikeCount), typeof(string), typeof(PostView), default(string), propertyChanged: OnPostLikeCountChanged);
@@ -47,10 +48,10 @@ public partial class PostView : ContentView
         BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(PostView), default(bool));
 
     public static readonly BindableProperty PostProductsProperty =
-        BindableProperty.Create(nameof(PostProducts), typeof(List<string>), typeof(PostView), default(List<string>),propertyChanged: OnProductsChanged);
+        BindableProperty.Create(nameof(PostProducts), typeof(List<string>), typeof(PostView), default(List<string>), propertyChanged: OnProductsChanged);
 
     public static readonly BindableProperty PostContentVisibleProperty =
-        BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(PostView), default(bool),propertyChanged: OnContentVisiblityChanged);
+        BindableProperty.Create(nameof(PostContentVisible), typeof(bool), typeof(PostView), default(bool), propertyChanged: OnContentVisiblityChanged);
 
     public static readonly BindableProperty PostImagesVisibleProperty =
         BindableProperty.Create(nameof(DeleteButtonVisible), typeof(bool), typeof(PostView), default(bool));
@@ -68,7 +69,7 @@ public partial class PostView : ContentView
         BindableProperty.Create(nameof(UnsaveRecipeCommand), typeof(ICommand), typeof(PostView), default(ICommand));
 
     public static readonly BindableProperty ImagesBase64Property =
-        BindableProperty.Create(nameof(ImagesBase64),typeof(List<string>),typeof(PostView), default(List<string>),propertyChanged: OnImagesBase64Changed);
+        BindableProperty.Create(nameof(ImagesBase64), typeof(List<string>), typeof(PostView), default(List<string>), propertyChanged: OnImagesBase64Changed);
 
     public static readonly BindableProperty LikingCommandProperty =
         BindableProperty.Create(nameof(LikingCommand), typeof(ICommand), typeof(PostView), default(ICommand));
@@ -92,7 +93,7 @@ public partial class PostView : ContentView
         BindableProperty.Create(nameof(IsSaved), typeof(bool), typeof(PostView), default(bool));
 
     public static readonly BindableProperty CommentsProperty =
-        BindableProperty.Create(nameof(Comments), typeof(List<CommentView>), typeof(PostView), default(List<CommentView>),propertyChanged: OnCommentsChanged);
+        BindableProperty.Create(nameof(Comments), typeof(List<CommentView>), typeof(PostView), default(List<CommentView>), propertyChanged: OnCommentsChanged);
 
     private static void OnCommentsChanged(BindableObject bindable, object oldValue, object newValue)
     {
@@ -109,7 +110,7 @@ public partial class PostView : ContentView
     public List<CommentView> CommentsVariable
     {
         get { return commentsVariable; }
-        set { commentsVariable = value;}
+        set { commentsVariable = value; }
     }
     private List<CommentView> commentsVariable;
 
@@ -123,9 +124,9 @@ public partial class PostView : ContentView
         set => SetValue(PostProductsProperty, value);
     }
 
-    public (string,string) Payload
+    public (string, string) Payload
     {
-        get => ((string,string))GetValue(PayloadProperty);
+        get => ((string, string))GetValue(PayloadProperty);
         set => SetValue(PayloadProperty, value);
     }
 
@@ -145,7 +146,7 @@ public partial class PostView : ContentView
     {
         get => (string)GetValue(PfpImageBase64Property);
         set => SetValue(PfpImageBase64Property, value);
-    } 
+    }
 
     public List<string> ImagesBase64
     {
@@ -225,67 +226,67 @@ public partial class PostView : ContentView
         set => SetValue(UnsaveRecipeCommandProperty, value);
     }
     //
-    public ICommand LikingCommand 
+    public ICommand LikingCommand
     {
         get => (ICommand)GetValue(LikingCommandProperty);
         set => SetValue(LikingCommandProperty, value);
-        
+
     }
 
-    public ICommand SavingCommand 
-    {  
+    public ICommand SavingCommand
+    {
         get => (ICommand)GetValue(SavingCommandProperty);
         set => SetValue(SavingCommandProperty, value);
     }
 
-    public string LikeText 
+    public string LikeText
     {
         get => (string)GetValue(LikeTextProperty);
         set => SetValue(LikeTextProperty, value);
     }
-    public string SavingText 
+    public string SavingText
     {
         get => (string)GetValue(SavingTextProperty);
         set => SetValue(SavingTextProperty, value);
     }
 
-    public Brush SaveIconPathFill 
+    public Brush SaveIconPathFill
     {
         get => (Brush)GetValue(SaveIconPathFillProperty);
         set => SetValue(SaveIconPathFillProperty, value);
     }
 
-    public bool IsLiked { 
-        get 
+    public bool IsLiked {
+        get
         {
             return (bool)GetValue(IsLikedProperty);
-        } 
-        set 
+        }
+        set
         {
             SetValue(IsLikedProperty, value);
-            if(value is false)
+            if (value is false)
             {
                 LikeText = "Like It!";
                 LikingCommand = LikePostCommand;
             }
-            else if(value is true)
+            else if (value is true)
             {
                 LikeText = "Unlike it ;(";
                 LikingCommand = UnlikePostCommand;
             }
-        } 
+        }
     }
 
 
-    public bool IsSaved { 
-        get 
+    public bool IsSaved {
+        get
         {
             return (bool)GetValue(IsSavedProperty);
-        } 
-        set 
-        { 
+        }
+        set
+        {
             SetValue(IsSavedProperty, value);
-            if(value is false)
+            if (value is false)
             {
                 SavingText = "Save";
                 SavingCommand = SaveRecipeCommand;
@@ -297,7 +298,7 @@ public partial class PostView : ContentView
                 SavingCommand = UnsaveRecipeCommand;
                 SaveIconPathFill = Brush.Yellow;
             }
-        } 
+        }
     }
 
     #endregion
@@ -345,7 +346,7 @@ public partial class PostView : ContentView
     private static void OnPostLikeCountChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (PostView)bindable;
-        view.PostLikeCountLabel.Text = newValue as string; 
+        view.PostLikeCountLabel.Text = newValue as string;
     }
 
     private static void OnImageChanged(BindableObject bindable, object oldValue, object newValue)
@@ -405,14 +406,7 @@ public partial class PostView : ContentView
 
         List<string> Products = newValue as List<string>;
 
-        string productString = string.Empty;
-
-
-
-        foreach (var product in Products)
-        {
-            productString += product + '\n';
-        }
+        string productString = view.ProductsToString(products: Products);
 
         view.PostProductsContentLabel.Text = productString;
     }
@@ -426,8 +420,12 @@ public partial class PostView : ContentView
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
         PostContentVisible = true;
+#if ANDROID
+ExpandOrCollapseLabel.IsVisible = false;
+#endif
 #if WINDOWS
-PointerGestureRecognizer pgr = new PointerGestureRecognizer();
+        ShowMoreLabel.IsVisible = false;
+        PointerGestureRecognizer pgr = new PointerGestureRecognizer();
         pgr.PointerEntered += ScaleButton;
         pgr.PointerExited += UnscaleButton;
         CommentButton.GestureRecognizers.Add(pgr);
@@ -498,9 +496,16 @@ PointerGestureRecognizer pgr = new PointerGestureRecognizer();
 
     private void OnPostTextContentLabelSizeChanged(object sender, EventArgs e)
     {
-        if (PostTextContentLabel.Height > 0 && PostTextContentLabel.Height <= 400)
+#if WINDOWS
+        const int HEIGHT_LIMIT_VALUE = 400;
+#endif
+#if ANDROID
+        const int HEIGHT_LIMIT_VALUE = 150;
+#endif
+        if (PostTextContentLabel.Height > 0 && PostTextContentLabel.Height <= HEIGHT_LIMIT_VALUE)
         {
             ExpandOrCollapseLabel.IsVisible = false;
+            ShowMoreLabel.IsVisible = false;
         }
     }
 
@@ -511,14 +516,14 @@ PointerGestureRecognizer pgr = new PointerGestureRecognizer();
 
     private void SwipeLeft(object sender, EventArgs e)
     {
-        var index = Clamp(currentImageIndex-1, 0, ImagesBase64.Count-1);
+        var index = Clamp(currentImageIndex - 1, 0, ImagesBase64.Count - 1);
         currentImageIndex = index;
         if (currentImageIndex >= 0)
         {
             swipeLeftButton.IsVisible = false;
         }
 
-        if (currentImageIndex < ImagesBase64.Count-1)
+        if (currentImageIndex < ImagesBase64.Count - 1)
         {
             swipeRightButton.IsVisible = true;
         }
@@ -527,14 +532,14 @@ PointerGestureRecognizer pgr = new PointerGestureRecognizer();
 
     private void SwipeRight(object sender, EventArgs e)
     {
-        var index = Clamp(currentImageIndex+1, 0, ImagesBase64.Count-1);
+        var index = Clamp(currentImageIndex + 1, 0, ImagesBase64.Count - 1);
         currentImageIndex = index;
-        if(currentImageIndex >= ImagesBase64.Count-1)
+        if (currentImageIndex >= ImagesBase64.Count - 1)
         {
             swipeRightButton.IsVisible = false;
         }
 
-        if(currentImageIndex > 0)
+        if (currentImageIndex > 0)
         {
             swipeLeftButton.IsVisible = true;
         }
@@ -562,7 +567,7 @@ PointerGestureRecognizer pgr = new PointerGestureRecognizer();
     private async void UnscaleButton(object sender, PointerEventArgs e)
     {
         var btn = (Button)sender;
-        await btn.ScaleTo(1,250,Easing.Linear);
+        await btn.ScaleTo(1, 250, Easing.Linear);
     }
 
     private async void ScaleButton(object sender, PointerEventArgs e)
@@ -605,5 +610,31 @@ PointerGestureRecognizer pgr = new PointerGestureRecognizer();
         popup.PostId = PostId;
         App.Current.MainPage.ShowPopup(popup);
 #endif
+    }
+
+    private void ShowMoreContentClicked(object sender, TappedEventArgs e)
+    {
+        var popup = new TextPopup();
+        if (PostContentVisible)
+        {
+            popup.TextContent = PostTextContent;
+        }
+        else
+        {
+            popup.TextContent = ProductsToString(PostProducts);
+        }
+        Application.Current.MainPage.ShowPopup(popup);
+    }
+
+    private string ProductsToString(List<string> products)
+    {
+        if (products is null ) return string.Empty;
+
+        string str = string.Empty;
+        foreach (var product in products)
+        {
+            str += product + '\n';
+        }
+        return str;
     }
 }

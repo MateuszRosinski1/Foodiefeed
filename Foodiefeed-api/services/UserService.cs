@@ -89,8 +89,6 @@ namespace Foodiefeed_api.services
             if (emailCheck is not null) { throw new BadRequestException("this email is taken"); }
 
             var user = _mapper.Map<User>(dto);
-            user.ProfilePicturePath = "default";
-
 
             user.PasswordHash = _hasher.HashPassword(user,user.PasswordHash);
 
@@ -111,7 +109,7 @@ namespace Foodiefeed_api.services
 
         public async Task<int> LogIn(UserLogInDto dto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
 
             if (user is null) { throw new BadRequestException("User with that username do not exist"); }
 

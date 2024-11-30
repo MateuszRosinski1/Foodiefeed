@@ -49,7 +49,8 @@
                                     BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                                     HorizontalOptions="End"
                                     Command="{Binding Source={RelativeSource AncestorType={Type viewmodel:BoardViewModel}}, Path=AddNewCommentCommand}"
-                                    CommandParameter="{Binding Source={RelativeSource AncestorType={Type this:CommentSectionPopup}},Path=Payload}">
+                                    CommandParameter="{Binding Source={RelativeSource AncestorType={Type this:CommentSectionPopup}},Path=Payload}"
+                                    Clicked="AddNewComment">
                             </Button>
                         </Grid>
                     </Frame>

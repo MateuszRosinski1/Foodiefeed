@@ -90,6 +90,9 @@
     <MauiXaml Update="views\windows\popups\LikedPostPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="views\windows\popups\TextPopup.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="views\windows\popups\UserOptionPopup.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

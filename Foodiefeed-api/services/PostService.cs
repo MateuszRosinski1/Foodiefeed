@@ -154,8 +154,8 @@ namespace Foodiefeed_api.services
             const int PAGE_SIZE = 3;
 
             var user = await _dbContext.Users
-            .Include(u => u.Posts)
-                .ThenInclude(p => p.PostImages)
+            //.Include(u => u.Posts)
+            //    .ThenInclude(p => p.PostImages)
             .Include(u => u.Posts)
                 .ThenInclude(p => p.PostProducts)
                 .ThenInclude(pp => pp.Product)
@@ -254,8 +254,6 @@ namespace Foodiefeed_api.services
                     .Where(ut => ut.UserId == userId)
                     .ToDictionaryAsync(ut => ut.TagId, ut => ut.Score);
 
-                 Console.WriteLine("USER TAGS RETRIVED");
-
                  var postsEnumerable = _dbContext.Posts
                  .Where(p => !viewedPostsId.Contains(p.PostId))
                  .Select(p => new
@@ -265,9 +263,6 @@ namespace Foodiefeed_api.services
                     SecondsSinceCreated = (DateTime.Now - p.CreateTime).TotalSeconds
                  })
                  .AsEnumerable();
-
-                 Console.WriteLine("POST AS ENUMERABLE RETRIVED");
-
 
                  var posts = postsEnumerable.Select(p => new
                  {
@@ -286,15 +281,9 @@ namespace Foodiefeed_api.services
                 .Take(15)
                 .ToList();
 
-                Console.WriteLine("15 POST TO LIST RETRIVED");
+                var orderedPostIds = posts.Select((p, index) => 
+                                new { p.Post.PostId, Index = index }).ToList();
 
-
-                //create a anonymous type list containg id and index for post
-                var orderedPostIds = posts.Select((p, index) => new { p.Post.PostId, Index = index }).ToList();
-
-                Console.WriteLine("ANONYMOUS POSTS LIST CREATED");
-
-                //retrive post entity from anonymous types
                 var postEntities = await _dbContext.Posts
                     .Include(p => p.User)
                     .Include(p => p.PostLikes)
@@ -306,8 +295,6 @@ namespace Foodiefeed_api.services
                     .Where(p => orderedPostIds.Select(op => op.PostId).Contains(p.PostId))
                     .ToListAsync();
 
-                        Console.WriteLine("POST ENTITIES RETRIVED FROM ANYNOMOUS TYPES");
-
                 var sortedPosts = orderedPostIds
                     .Join(postEntities,
                           op => op.PostId,
@@ -317,26 +304,28 @@ namespace Foodiefeed_api.services
                     .Select(x => x.Post)
                     .ToList();
 
-                        Console.WriteLine("");
-
                 var dtos = _mapper.Map<List<PostDto>>(sortedPosts);
 
                 foreach(var dto in dtos)
                 {
-                    var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(dto.UserId, dto.PostId);
-                    dto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams);
+                    var imgStreams = await AzureBlobStorageService
+                                    .FetchPostImagesAsync(dto.UserId, dto.PostId);
+                    dto.PostImagesBase64 = await AzureBlobStorageService
+                                    .ConvertStreamToBase64Async(imgStreams);
+                    var pfpStream = await AzureBlobStorageService
+                                    .FetchProfileImageAsync(dto.UserId);
+                    dto.ProfilePictureBase64 = await AzureBlobStorageService
+                                    .ConvertStreamToBase64Async(pfpStream);
 
-                    //dto.TimeSpan = ConverterHelper.ConvertDateTimeToTimeSpan(post.CreateTime);
-
-                    var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.UserId);
-                    dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);
                     dto.Likes = postEntities.First(p => p.PostId == dto.PostId).PostLikes.Count;
 
                     dto.IsLiked = await _dbContext.PostLikes
-                    .FirstOrDefaultAsync(pl => pl.PostId == dto.PostId && pl.UserId == userId) is null ? false : true;
+                        .FirstOrDefaultAsync(pl => pl.PostId == dto.PostId && pl.UserId == userId) 
+                        is null ? false : true;
 
                     dto.IsSaved = await _dbContext.Recipes
-                        .FirstOrDefaultAsync(r => r.PostId == dto.PostId && r.UserId == userId) is null ? false : true;
+                        .FirstOrDefaultAsync(r => r.PostId == dto.PostId && r.UserId == userId) 
+                        is null ? false : true;
 
                     foreach (var comment in dto.Comments)
                     {
@@ -347,9 +336,13 @@ namespace Foodiefeed_api.services
                         comment.Likes = entity.CommentLikes.ToList().Count;
                         comment.Username = entity.User.Username;
 
-                        var stream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
-                        comment.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
-                        var cl = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == comment.CommentId);
+                        var stream = await AzureBlobStorageService
+                                    .FetchProfileImageAsync(comment.UserId);
+                        comment.ImageBase64 = await AzureBlobStorageService
+                                    .ConvertStreamToBase64Async(stream);
+                        var cl = await _dbContext.CommentLikes
+                                .FirstOrDefaultAsync
+                                (c => c.UserId == userId && c.CommentId == comment.CommentId);
                         comment.IsLiked = cl is null ? false : true;
                     }
                 }

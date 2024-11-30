@@ -13,7 +13,6 @@ namespace Foodiefeed_api.entities
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public virtual ICollection<PostCommentMember> PostCommentMembers { get; set; }
-        public virtual ICollection<PostImage> PostImages { get; set; }
         public virtual ICollection<PostProduct> PostProducts { get; set; }
         public virtual ICollection<PostTag> PostTags { get; set; }
         public virtual ICollection<PostLike> PostLikes { get; set; }

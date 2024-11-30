@@ -18,7 +18,6 @@ namespace Foodiefeed_api.entities
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<PostCommentMember> PostCommentMembers { get; set; }
-        public DbSet<PostImage> PostImages { get; set; }
         public DbSet<PostProduct> PostProducts { get; set; }
         public DbSet<PostTag> PostTags { get; set; }
         public DbSet<UserTag> UserTags { get; set; }

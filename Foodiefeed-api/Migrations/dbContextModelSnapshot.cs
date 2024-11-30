@@ -183,28 +183,6 @@ namespace Foodiefeed_api.Migrations
                     b.ToTable("PostCommentMembers");
                 });
 
-            modelBuilder.Entity("Foodiefeed_api.entities.PostImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PostImages");
-                });
-
             modelBuilder.Entity("Foodiefeed_api.entities.PostLike", b =>
                 {
                     b.Property<int>("PostId")
@@ -339,10 +317,6 @@ namespace Foodiefeed_api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProfilePicturePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -509,17 +483,6 @@ namespace Foodiefeed_api.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("Foodiefeed_api.entities.PostImage", b =>
-                {
-                    b.HasOne("Foodiefeed_api.entities.Post", "Post")
-                        .WithMany("PostImages")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("Foodiefeed_api.entities.PostLike", b =>
                 {
                     b.HasOne("Foodiefeed_api.entities.Post", "Post")
@@ -621,8 +584,6 @@ namespace Foodiefeed_api.Migrations
             modelBuilder.Entity("Foodiefeed_api.entities.Post", b =>
                 {
                     b.Navigation("PostCommentMembers");
-
-                    b.Navigation("PostImages");
 
                     b.Navigation("PostLikes");
 

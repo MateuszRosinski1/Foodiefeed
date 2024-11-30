@@ -58,7 +58,7 @@
     </ContentPage.Behaviors>
 
     <Grid>
-        <Grid BackgroundColor="Red" IsVisible="{OnPlatform WinUI=False}">
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{OnPlatform WinUI=False}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="114"/>
                 <RowDefinition Height="*"/>
@@ -126,21 +126,23 @@
                             <Shadow Opacity="0.8"/>
                         </Grid.Shadow>
                     </Grid>
-                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always" BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
-                        <HorizontalStackLayout>
-                            <Button Text="Posts" Command="{Binding ToMainViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Profile" Command="{Binding ToProfileViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Recipes" Command="{Binding ToRecipesViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Settings" Command="{Binding ToSettingViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="LogOut" Command="{Binding LogoutCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Notifications" Command="{Binding ShowNotificationsCommand}" WidthRequest="110" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                            <Button Text="Friends" Command="{Binding ShowOnlinefriendsCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                        </HorizontalStackLayout>
-                    </ScrollView>
+                    <Border StrokeShape="RoundRectangle 0,0,10,10" Stroke="Transparent" Margin="0" BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always" BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
+                            <HorizontalStackLayout>
+                                <Button Text="Posts" Command="{Binding ToMainViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="Profile" Command="{Binding ToProfileViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="Recipes" Command="{Binding ToRecipesViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="Settings" Command="{Binding ToSettingViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="LogOut" Command="{Binding LogoutCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="Notifications" Command="{Binding ShowNotificationsCommand}" WidthRequest="110" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="Friends" Command="{Binding ShowOnlinefriendsCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </Border>
                 </VerticalStackLayout>
             </Grid>
             <Grid Grid.Row="1" BackgroundColor="{DynamicResource MainBackgroundColor}">
-                <Grid x:Name="Main" IsVisible="False">
+                <Grid x:Name="Main" IsVisible="{Binding PostPageVisible}">
                     <VerticalStackLayout>
                         <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                                HeightRequest="40" 
@@ -188,7 +190,8 @@
                                                     SavingText="{Binding SavingText}"
                                                     SaveIconPathFill="{Binding SaveIconPathFill}"
                                                     IsLiked="{Binding IsLiked}"
-                                                    IsSaved="{Binding IsSaved}"/>
+                                                    IsSaved="{Binding IsSaved}"
+                                                    Comments="{Binding Comments}"/>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
@@ -198,9 +201,9 @@
                     </VerticalStackLayout>
                     <Grid VerticalOptions="End" 
                           ZIndex="100"
-                          HorizontalOptions="Center" BackgroundColor="Transparent" HeightRequest="100" WidthRequest="500"
+                          HorizontalOptions="Center" BackgroundColor="Transparent" HeightRequest="50" WidthRequest="500"
                           IsVisible="{Binding WallPostLoadingActivityIndicatorVisible}">
-                        <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
+                        <ActivityIndicator IsRunning="True"  Color="Gray"/>
                     </Grid>
                 </Grid>
                 <Grid x:Name="Profile" Padding="10" IsVisible="{Binding ProfilePageVisible}">
@@ -439,11 +442,11 @@
 
                             </CollectionView>
 
-                                <Border  
+                            <Border  IsVisible="{Binding ProfileFollowersVisible}"
                                     Margin="0,50,0,0" 
                                     BackgroundColor="{DynamicResource ProfileOptionsSection}" 
                                     StrokeShape="RoundRectangle 40,40,40,40">
-                                <ScrollView>
+                                <ScrollView HeightRequest="300">
                                     <toolkit:UniformItemsLayout MaxColumns="3" 
                                              BackgroundColor="Transparent" 
                                              Padding="20" 
@@ -482,7 +485,104 @@
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Grid>
-                <Grid x:Name="Recipes"></Grid>
+                <Grid x:Name="Recipes" IsVisible="{Binding RecipePageVisible}"   
+                      BackgroundColor="{DynamicResource MainBackgroundColor}"
+                      Padding="10,5,30,30">
+                    <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+       HeightRequest="50" WidthRequest="230"
+       BorderColor="Transparent"
+       Grid.Row="0"
+       Margin="0,-10,0,0" Padding="5" CornerRadius="30">
+
+                            <Grid ColumnSpacing="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Button Text="Liked" 
+                Grid.Column="0" 
+                TextColor="{DynamicResource TextColor}" 
+                MinimumHeightRequest="0" 
+                MinimumWidthRequest="0" 
+                HeightRequest="25" 
+                WidthRequest="90"
+                FontSize="15" 
+                Padding="0"
+                BackgroundColor="{Binding LikedRecipesButtonBackround}"
+                Command="{Binding ShowLikedRecipesCommand}"/>
+                                <Button Text="Saved" 
+                Grid.Column="1" 
+                TextColor="{DynamicResource TextColor}" 
+                MinimumHeightRequest="0" 
+                MinimumWidthRequest="0" 
+                HeightRequest="25" 
+                WidthRequest="90"
+                FontSize="15" 
+                Padding="0"
+                BackgroundColor="{Binding SavedRecipesButtonBackround}"
+                Command="{Binding ShowSavedRecipesCommand}"/>
+                            </Grid>
+                        </Frame>
+                        <Grid Grid.Row="1"  IsVisible="{Binding LikedRecipesVisible}">
+                            <CollectionView Grid.Row="1"
+                    ItemsSource="{Binding LikedRecipes}"
+                    RemainingItemsThreshold="5"
+                    ItemsUpdatingScrollMode="KeepScrollOffset"
+                    RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}" 
+                    RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Liked}"
+                    WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                    HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="5,0,5,0">
+                                            <views:RecipeView Id="{Binding Id}"
+                                      Username="{Binding Username}"
+                                      Image="{Binding Image}"
+                                      RecipeContent="{Binding RecipeContent}"
+                                      Products="{Binding Products}"
+                                      ContentVisible="{Binding ContentVisible}"
+                                      DeleteCommand="{Binding DeleteCommand}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                        <Grid Grid.Row="1"  IsVisible="{Binding SavedRecipesVisible}">
+                            <CollectionView Grid.Row="1"
+                    ItemsSource="{Binding SavedRecipes}"
+                    RemainingItemsThreshold="5"
+                    RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}"
+                    RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Saved}"
+                    ItemsUpdatingScrollMode="KeepScrollOffset"
+                    WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                    Scrolled="CollectionView_Scrolled"
+                    HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="5,0,5,0">
+                                            <views:RecipeView Id="{Binding Id}"
+                                      Username="{Binding Username}"
+                                      Image="{Binding Image}"
+                                      RecipeContent="{Binding RecipeContent}"
+                                      Products="{Binding Products}"
+                                      ContentVisible="{Binding ContentVisible}"
+                                      DeleteCommand="{Binding DeleteCommand}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
+                </Grid>
                 <Grid x:Name="Settings"></Grid>
                 <Grid x:Name="OnlineFriends">
                     <VerticalStackLayout Padding="10" Spacing="5"
@@ -553,7 +653,7 @@
             </Grid>
         </Grid>
     
-    <Grid IsVisible="{OnPlatform Android=False}">
+        <Grid IsVisible="{OnPlatform Android=False}">
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
@@ -1570,7 +1670,7 @@
             <popup:FailedActionNotificationPopup />
         </Grid>
 
-        <Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
+        <!--<Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
             <Grid BackgroundColor="Black" Opacity="0.4">
 
             </Grid>
@@ -1578,9 +1678,9 @@
                 <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>
                 <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
             </VerticalStackLayout>
-        </Grid>
+        </Grid>-->
 
-        <Grid IsVisible="{Binding AddPostFormVisible}">
+        <!--<Grid IsVisible="{Binding AddPostFormVisible}">
             <Grid BackgroundColor="Black" Opacity="0.5">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding HideAddPostFormCommand}"/>
@@ -1737,20 +1837,205 @@
                     <Label Text="{Binding ErrMsg}" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Grid>
             </Border>
-        </Grid>
-        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding LoadingScreenVisible}">
+        </Grid>-->
+        <!--<Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding LoadingScreenVisible}">
             <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="{DynamicResource TextColor}" IsRunning="True" Scale="1.5"/>
-        </Grid>
+        </Grid>-->
         
-        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding ErrorScreenVisible}">
+        <!--<Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding ErrorScreenVisible}">
             <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
                 <Image Source="internalservererroricon.png" HeightRequest="100" WidthRequest="200"/>
                 <Label Text="Internal server error, try again later." TextColor="{DynamicResource TextColor}" FontSize="20"/>
             </VerticalStackLayout>
-        </Grid>
+        </Grid>-->
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding HideHubPanelCommand}" />
         </Grid.GestureRecognizers>
     </Grid>
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding LoadingScreenVisible}">
+            <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="{DynamicResource TextColor}" IsRunning="True" Scale="1.5"/>
+        </Grid>
+
+        <Grid BackgroundColor="Transparent" IsVisible="{Binding InternetAcces}">
+            <Grid BackgroundColor="Black" Opacity="0.4">
+
+            </Grid>
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>
+                <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" IsVisible="{Binding ErrorScreenVisible}">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="10">
+                <Image Source="internalservererroricon.png" HeightRequest="100" WidthRequest="200"/>
+                <Label Text="Internal server error, try again later." HorizontalOptions="Center" TextColor="{DynamicResource TextColor}" FontSize="20"/>
+            </VerticalStackLayout>
+        </Grid>
+        
+        <Grid IsVisible="{Binding AddPostFormVisible}">
+            <Grid BackgroundColor="Black" Opacity="0.5">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding HideAddPostFormCommand}"/>
+                </Grid.GestureRecognizers>
+            </Grid>
+            <Frame HeightRequest="475" WidthRequest="{OnPlatform WinUI=700}" BackgroundColor="{DynamicResource MainBackgroundColor}">
+                <Grid>
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding PostContentEditorVisible}">
+                        <Border Stroke="{Binding EditorBorderColor}" StrokeShape="RoundRectangle 10">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}">
+                                <Editor Text="{Binding PostContent,Mode=TwoWay}" 
+                                        TextColor="{DynamicResource TextColor}" 
+                                        HeightRequest="300" 
+                                        Placeholder="Share your recipe here..." />
+                            </Grid>
+                        </Border>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Text="Upload Images" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                    Grid.Column="0"
+                                    Command="{Binding UploadPostImagesCommand}"
+                                    Margin="5,0,5,0"
+                                    FontSize="{OnPlatform Android=9}"/>
+                            <Button Text="Choose Tags" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="1"
+                                    Command="{Binding ChooseTagsCommand}"
+                                    Margin="5,0,5,0"
+                                    FontSize="{OnPlatform Android=9}"
+                                    Padding="{OnPlatform Android=0}"/>
+                            <Button Text="Choose Products" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="2"
+                                    Command="{Binding LoadProductsCommand}"
+                                    Margin="5,0,5,0"
+                                    FontSize="{OnPlatform Android=9}"
+                                    Padding="{OnPlatform Android=0}"/>
+                            <Button Text="Post" 
+                                    TextColor="{DynamicResource TextColor}" 
+                                    BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                    Grid.Column="3"
+                                    Command="{Binding AddPostCommand}"
+                                    Margin="5,0,5,0" 
+                                    FontSize="{OnPlatform Android=9}"/>
+                        </Grid>
+                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AddPostImages}" 
+                                               BackgroundColor="Transparent" 
+                                               WidthRequest="650" 
+                                               HeightRequest="60"
+                                               VerticalOptions="Center">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <views:PostImageView ImageSource="{Binding ImageSource}"/>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding TagPickerVisible}" Spacing="10">
+                        <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 40">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}" HeightRequest="40">
+                                <Entry BackgroundColor="Transparent" TextColor="{DynamicResource TextColor}" Placeholder="Filter" Text="{Binding FilterParam,Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding FilterTagsCommand}"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Grid>
+                        </Border>
+                        <Border BackgroundColor="Gray" StrokeShape="RoundRectangle 10">
+                            <ScrollView HeightRequest="200" VerticalScrollBarVisibility="Always" HorizontalScrollBarVisibility="Always">
+                                <Grid>
+                                    <toolkit:UniformItemsLayout BindableLayout.ItemsSource="{Binding Tags}"
+                                                            MaxColumns="6" 
+                                                            BackgroundColor="{DynamicResource EntryBackround}" 
+                                                            Padding="15">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:TagView Id="{Binding Id}" Name="{Binding Name}" FrameBackground="{Binding FrameBackground}"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </toolkit:UniformItemsLayout>
+                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding TagsActivityIndicatorVisible}"  Color="{DynamicResource TextColor}"/>
+                                </Grid>
+                            </ScrollView>
+                        </Border>
+                        <Button TextColor="{DynamicResource TextColor}" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Command="{Binding ApplyTagsCommand}" Text="Save"></Button>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout IsVisible="{Binding ProductPickerVisible}" 
+                                         Spacing="10">
+                        <Border BackgroundColor="Gray" 
+                                StrokeShape="RoundRectangle 40">
+                            <Grid BackgroundColor="{DynamicResource EntryBackround}" 
+                                  HeightRequest="40">
+                                <Entry BackgroundColor="Transparent" 
+                                       TextColor="{DynamicResource TextColor}" 
+                                       Placeholder="Filter" 
+                                       Text="{Binding FilterParam,Mode=TwoWay}">
+                                    <Entry.Behaviors>
+                                        <toolkit:EventToCommandBehavior EventName="TextChanged" 
+                                                                        Command="{Binding FilterProductsCommand}"/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Grid>
+                        </Border>
+                        <Border BackgroundColor="Gray" 
+                                StrokeShape="RoundRectangle 10">
+                            <ScrollView HeightRequest="200" 
+                                        VerticalScrollBarVisibility="Always" 
+                                        HorizontalScrollBarVisibility="Always"
+                                        x:Name="MyScrollView">
+                                <Grid>
+                                    <toolkit:UniformItemsLayout BindableLayout.ItemsSource="{Binding Products}"
+                                        MaxColumns="6" 
+                                        BackgroundColor="{DynamicResource EntryBackround}" 
+                                        Padding="15"
+                                        >
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <views:ProductView Id="{Binding Id}" 
+                                                               Name="{Binding Name}" 
+                                                               FrameBackground="{Binding FrameBackground}"/>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </toolkit:UniformItemsLayout>
+                                    <ActivityIndicator IsRunning="True" IsVisible="{Binding ProductsActivityIndicatorVisible}"/>
+                                </Grid>
+                                <ScrollView.Behaviors>
+                                    <toolkit:EventToCommandBehavior EventName="Scrolled" 
+                                                                    Command="{Binding ProductsScrollCommand}"
+                                                                    CommandParameter="{Binding Source={x:Reference MyScrollView}}"/>
+                                </ScrollView.Behaviors>
+                            </ScrollView>
+                        </Border>
+                        <Button TextColor="{DynamicResource TextColor}" 
+                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                Command="{Binding ApplyProductsCommand}" Text="Save"/>
+                    </VerticalStackLayout>
+
+                    <Grid IsVisible="{Binding AddPostFormActivityIndicatorVisible}">
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
+                            <Label Text="This might take a while..." TextColor="{DynamicResource TextColor}"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </Frame>
+            <Border IsVisible="{Binding PostModelvalidationFailedNotifierVisible}" HeightRequest="475" WidthRequest="700" StrokeThickness="0" StrokeShape="RoundRectangle 10">
+                <Grid BackgroundColor="#050505" Opacity="0.6" HeightRequest="475" WidthRequest="700">
+                    <Label Text="{Binding ErrMsg}" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

@@ -9,7 +9,7 @@ namespace Foodiefeed_api.services
     public interface ICommentService
     {
         Task<CommentDto> GetCommentById(int id);
-        Task AddNewComment(int postId,NewCommentDto dto);
+        Task<CommentDto> AddNewComment(int postId,NewCommentDto dto);
         Task EditComment(int commentId, string newContent);
         Task DeleteComment(int commentId);
         Task<int> LikeComment(int userId,int commentId,CancellationToken token);
@@ -33,7 +33,7 @@ namespace Foodiefeed_api.services
             _entityRepository = entityRepository;
         }
 
-        public async Task AddNewComment(int postId, NewCommentDto dto)
+        public async Task<CommentDto> AddNewComment(int postId, NewCommentDto dto)
         {
             var comment = _mapper.Map<Comment>(dto);
 
@@ -50,6 +50,7 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
 
             await _notificationService.CreateNotification(NotificationType.PostComment, comment.UserId, post.UserId, nickname, post.PostId, comment.CommentId);
+            return _mapper.Map<CommentDto>(comment);
         }
 
         public async Task EditComment(int commentId,string newContent)

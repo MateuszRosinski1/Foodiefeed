@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using Foodiefeed.views.windows.popups;
 using System.Windows.Input;
 
 namespace Foodiefeed.views.windows.contentview;
@@ -113,17 +115,7 @@ public partial class RecipeView : ContentView
         else
         {
             ChangeContentButton.Text = "Recipe";
-            string productString = string.Empty;
-            foreach(var product in Products)
-            {
-                productString += product + ",";               
-            }
-
-            if (!string.IsNullOrEmpty(productString))
-            {
-                productString.TrimEnd(',');
-            }
-            contentLabel.Text = productString;
+            contentLabel.Text = ProductsToString();
         }
     }
 
@@ -133,5 +125,34 @@ public partial class RecipeView : ContentView
         {
             DeleteCommand.Execute(Id);
         }
+    }
+
+    private void ShowMoreButtonClicked(object sender, EventArgs e)
+    {
+        var popup = new TextPopup();
+        if(ContentVisible)
+        {
+            popup.TextContent = RecipeContent;
+        }
+        else
+        {
+            popup.TextContent = ProductsToString();
+        }
+        App.Current.MainPage.ShowPopup(popup);    
+    }
+
+    private string ProductsToString()
+    {
+        string productString = string.Empty;
+        foreach (var product in Products)
+        {
+            productString += product + ",";
+        }
+
+        if (!string.IsNullOrEmpty(productString))
+        {
+            productString.TrimEnd(',');
+        }
+        return productString;
     }
 }

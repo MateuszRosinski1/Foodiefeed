@@ -26,7 +26,6 @@ namespace Foodiefeed_api
                         .RuleFor(u => u.Username, (f, u) => $"{u.FirstName}.{u.LastName}".ToLower())
                         .RuleFor(u => u.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
                         .RuleFor(u => u.PasswordHash, f => f.Internet.Password())
-                        .RuleFor(u => u.ProfilePicturePath, (f, u) => $"images/profilePicture/{u.Id}/default.png")
                         .RuleFor(u => u.IsOnline, f => f.Random.Bool());
 
                     var users = userFaker.Generate(100);
@@ -196,16 +195,16 @@ namespace Foodiefeed_api
                     }
                 }
 
-                if (!context.PostImages.Any())
-                {
-                    var postImageFaker = new Faker<PostImage>()
-                        .RuleFor(pi => pi.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-                        .RuleFor(pi => pi.ImagePath, f => $"images/posts/{f.Random.Int(1, 1000)}.jpg");
+                //if (!context.PostImages.Any())
+                //{
+                //    var postImageFaker = new Faker<PostImage>()
+                //        .RuleFor(pi => pi.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
+                //        .RuleFor(pi => pi.ImagePath, f => $"images/posts/{f.Random.Int(1, 1000)}.jpg");
 
-                    var postImages = postImageFaker.Generate(8000);
-                    context.PostImages.AddRange(postImages);
-                    context.SaveChanges();
-                }
+                //    var postImages = postImageFaker.Generate(8000);
+                //    context.PostImages.AddRange(postImages);
+                //    context.SaveChanges();
+                //}
 
                 if (!context.Products.Any())
                 {

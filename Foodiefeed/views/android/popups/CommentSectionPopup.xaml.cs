@@ -46,4 +46,9 @@ public partial class CommentSectionPopup : Popup
 	{
 		InitializeComponent();
 	}
+
+    private void AddNewComment(object sender, EventArgs e)
+    {
+        this.Close();
+    } 
 }

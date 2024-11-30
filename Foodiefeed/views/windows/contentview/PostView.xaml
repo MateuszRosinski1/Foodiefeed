@@ -65,7 +65,7 @@
 
                     <Grid Padding="30,0,20,20" Grid.Row="1"  >
                         <VerticalStackLayout>
-                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll" InputTransparent="False">
+                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll" InputTransparent="False" VerticalScrollBarVisibility="{OnPlatform Android=Never}">
                                 <Grid>
                                     <Grid x:Name="PostContentGrid">
                                         <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
@@ -75,10 +75,15 @@
                                     </Grid>
                                 </Grid>
                             </ScrollView>
-                            <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15">
+                            <Label TextColor="Grey" x:Name="ExpandOrCollapseLabel" Text="Expand..." FontSize="15" >
                                 <Label.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="ExpandPostContentText"/>
                                     <PointerGestureRecognizer PointerEntered="UnderlineText" PointerExited="UnUnderLineText"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label TextColor="Grey" x:Name="ShowMoreLabel" Text="Show more..." FontSize="15" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ShowMoreContentClicked"/>
                                 </Label.GestureRecognizers>
                             </Label>
                         </VerticalStackLayout>
@@ -122,7 +127,7 @@
 
                         <Button Grid.Column="1"  
                                 ImageSource="commenticon.png" 
-                                BackgroundColor="Red"
+                                BackgroundColor="Transparent"
                                 FontSize="20" WidthRequest="200" 
                                 HeightRequest="50"
                                 Padding="0,0,0,0" 
