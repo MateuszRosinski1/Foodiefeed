@@ -211,7 +211,7 @@ namespace Foodiefeed.viewmodels
                 Notifications.CollectionChanged += OnNotificationsChanged;
 
                 var notification = new BasicNotofication();
-                Notifications.Add(notification);
+                //Notifications.Add(notification);
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
 
                 //DisplaySearchResultHistory();
@@ -243,7 +243,7 @@ namespace Foodiefeed.viewmodels
                 //UpdateOnlineFriendListThread.Start();
 
                 //Task.Run(UpdateFriendList);
-                //ChangeTheme();          
+                ChangeTheme();          
                 Connectivity.ConnectivityChanged += ConnectivityChanged;
             }
             catch {
@@ -294,7 +294,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task Logout()
         {
-            _userSession.SetOffline();
+            _userSession.SetOnline();
             Application.Current.MainPage = new LogInPage(new UserViewModel(_userSession));
         }
 
@@ -315,7 +315,7 @@ namespace Foodiefeed.viewmodels
                     if (base64 is null) throw new Exception();
 
                     await SetProfilePictureFromBase64(base64);
-                    //await MainWallPostThresholdExceed();
+                    await MainWallPostThresholdExceed();
 #endif
 #if WINDOWS
                     await FetchNotifications();
@@ -1789,11 +1789,18 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public void ShowSearchPanel()
         {
+#if WINDOWS
             if (CanShowSearchPanel)
             {
                 this.SearchPanelVisible = true;
                 DisplaySearchResultHistory();
             }
+#endif
+#if ANDROID
+            this.SearchPanelVisible = true;
+            DisplaySearchResultHistory();
+#endif 
+
         }
 
         [RelayCommand]

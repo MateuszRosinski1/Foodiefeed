@@ -79,7 +79,7 @@
                                      HorizontalOptions="Start" 
                                      BackgroundColor="Transparent"
                                      Margin="0,10"/>
-                        
+                        <Entry HeightRequest="0" WidthRequest="0"/>
                         <Border Margin="0,15" 
                                 VerticalOptions="Start" 
                                 Stroke="Gray" 
@@ -94,6 +94,7 @@
                                        Margin="0" 
                                        HeightRequest="40" 
                                        WidthRequest="180" 
+                                       x:Name="Android_search_entry"
                                        Text="{Binding SearchParam,Mode=TwoWay}"
                                        BackgroundColor="Transparent">
                                     <Entry.Behaviors>
@@ -101,17 +102,9 @@
                                         <toolkit:EventToCommandBehavior EventName="Unfocused" Command="{Binding HideSearchPanelCommand}"/>
                                         <toolkit:EventToCommandBehavior EventName="TextChanged" Command="{Binding SearchCommand}"/>
                                     </Entry.Behaviors>
-                                    <Entry.GestureRecognizers>
-                                        <PointerGestureRecognizer PointerEnteredCommand="{Binding SetSearchPanelVisibilityToTrueCommand}"
-                                                                  PointerExitedCommand="{Binding SetSearchPanelVisibilityToFalseCommand}"/>
-                                    </Entry.GestureRecognizers>
                                 </Entry>
                             </Grid>
                         </Border>
-
-                        <!--<SearchBar>
-                            
-                        </SearchBar>-->
 
                         <Border Margin="0,5,5,0" HorizontalOptions="End" VerticalOptions="Start" StrokeShape="RoundRectangle 40" WidthRequest="54" 
                                 HeightRequest="54" 
@@ -133,9 +126,9 @@
                                 <Button Text="Profile" Command="{Binding ToProfileViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                                 <Button Text="Recipes" Command="{Binding ToRecipesViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                                 <Button Text="Settings" Command="{Binding ToSettingViewCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
-                                <Button Text="LogOut" Command="{Binding LogoutCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                                 <Button Text="Notifications" Command="{Binding ShowNotificationsCommand}" WidthRequest="110" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                                 <Button Text="Friends" Command="{Binding ShowOnlinefriendsCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
+                                <Button Text="LogOut" Command="{Binding LogoutCommand}" WidthRequest="100" Background="Transparent" TextColor="{DynamicResource TextColor}" FontAttributes="Bold"/>
                             </HorizontalStackLayout>
                         </ScrollView>
                     </Border>
@@ -921,6 +914,31 @@
                     </Grid>
                 </Grid>
             </Grid>
+
+            <Grid IsVisible="{Binding SearchPanelVisible}" Grid.Row="1">
+                <ScrollView BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Margin="0,0,0,0">
+                    <VerticalStackLayout>
+                        <Button Text="Back" 
+                                TextColor="{DynamicResource TextColor}" 
+                                HeightRequest="40"
+                                Padding="0"
+                                FontSize="20"
+                                BackgroundColor="{DynamicResource MainBackgroundColor}" Margin="10"
+                                Clicked="Android_search_entry_unfocus"/>
+                        <VerticalStackLayout Spacing="20" Padding="10" BindableLayout.ItemsSource="{Binding SearchResults}">
+                        
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <views:UserSearchResultView Username="{Binding Username}"
+                                                 Follows="{Binding Follows}"
+                                                 Friends="{Binding Friends}"
+                                                 PfpImageBase64="{Binding PfpImageBase64}"/>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
         </Grid>
     
         <Grid IsVisible="{OnPlatform Android=False}">
@@ -1018,27 +1036,27 @@
                                          IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}">
 
                             <HorizontalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
-                                               Spacing="5" 
-                                               Padding="10"
-                                               HeightRequest="70">
+                                                   Spacing="5" 
+                                                   Padding="10"
+                                                   HeightRequest="70">
                                 <Label Text="Notfications" TextColor="{DynamicResource TextColor}" FontAttributes="Bold" FontSize="30" />
                                 <Button Text="Clear" Background="{DynamicResource MainBackgroundColor}" 
-                                    TextColor="{DynamicResource TextColor}" 
-                                    Scale="0.7" 
-                                    WidthRequest="100"
-                                    FontSize="15"
-                                    Command="{Binding ClearNotificationsCommand}">
+                                        TextColor="{DynamicResource TextColor}" 
+                                        Scale="0.7" 
+                                        WidthRequest="100"
+                                        FontSize="15"
+                                        Command="{Binding ClearNotificationsCommand}">
                                     <Button.Shadow>
                                         <Shadow Opacity="0.3" Brush="{DynamicResource TextColor}"/>
                                     </Button.Shadow>
                                 </Button>
                             </HorizontalStackLayout>
                             <Grid   HorizontalOptions="Start" 
-                                VerticalOptions="Start" 
-                                x:Name="hubScroll" 
-                                BackgroundColor="Transparent"
-                                WidthRequest="300" 
-                                HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
+                                    VerticalOptions="Start" 
+                                    x:Name="hubScroll" 
+                                    BackgroundColor="Transparent"
+                                    WidthRequest="300" 
+                                    HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
                                 <!--pages-->
                                 <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
                                     <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
@@ -1365,7 +1383,7 @@
 
 
                                             <VerticalStackLayout Grid.Column="0" Spacing="10">
-                                                <Button Text="Change personal data" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Center" Clicked="Button_Clicked" Command="{Binding OpenPersonalDataEditorCommand}"/>
+                                                <Button TextColor="{DynamicResource TextColor}" Text="Change personal data" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" HorizontalOptions="Center" Clicked="Button_Clicked" Command="{Binding OpenPersonalDataEditorCommand}"/>
                                                 <Label Text="Change Theme" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
                                             </VerticalStackLayout>
                                             <VerticalStackLayout Grid.Column="1" Spacing="10" Margin="0,10,0,0">

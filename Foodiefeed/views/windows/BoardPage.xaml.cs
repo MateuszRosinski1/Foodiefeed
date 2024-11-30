@@ -4,6 +4,11 @@ using Microsoft.Maui.Controls;
 using System.Windows.Input;
 using Foodiefeed.extension;
 using Microsoft.Maui.Controls.Shapes;
+#if ANDROID
+using Android.Content;
+using Android.Views.InputMethods;
+#endif
+
 
 
 namespace Foodiefeed
@@ -136,6 +141,19 @@ namespace Foodiefeed
                     }
                 }
             }
+        }
+
+        private void Android_search_entry_unfocus(object sender, EventArgs e)
+        {
+            Android_search_entry?.Unfocus();
+
+#if ANDROID
+            if (Android_search_entry.Handler?.PlatformView is Android.Views.View view)
+            {
+                var inputMethodManager = (InputMethodManager)view.Context.GetSystemService(Context.InputMethodService);
+                inputMethodManager?.HideSoftInputFromWindow(view.WindowToken, HideSoftInputFlags.None);
+            }
+#endif
         }
     }
 }

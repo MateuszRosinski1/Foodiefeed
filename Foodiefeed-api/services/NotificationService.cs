@@ -41,7 +41,7 @@ namespace Foodiefeed_api.services
         {
             const int PAGE_SIZE = 15;
             var notifications = await _dbContext.Notifications
-                .Where(n => n.ReceiverId == id).Reverse()
+                .Where(n => n.ReceiverId == id).OrderByDescending(n => n.Id)
                 .Skip(PAGE_SIZE * pageNumber)
                 .Take(PAGE_SIZE)
                 .ToListAsync();
