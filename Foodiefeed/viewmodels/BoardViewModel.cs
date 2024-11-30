@@ -140,7 +140,10 @@ namespace Foodiefeed.viewmodels
         bool savedRecipesVisible;
 
         [ObservableProperty]
-        ImageSource profilePictureSource;      
+        ImageSource profilePictureSource;
+
+        [ObservableProperty]
+        bool onlineFriendsVisible;
 
         public async Task SetProfilePictureFromBase64(string base64)
         {
@@ -257,17 +260,36 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task ShowOnlinefriends()
         {
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = false;
+            this.SettingsPageVisible = false;
+            this.RecipePageVisible = false;
+#if ANDROID
+            NotificationsPageVisible = false;
+            OnlineFriendsVisible = true;
+#endif
             OnlineFriends.Clear();          
             await UpdateFriendList();
         }
 
+        [ObservableProperty]
+        bool notificationsPageVisible;
 
         [RelayCommand]
         public async Task ShowNotifications()
         {
+            notificationsPageNumber = 0;
+            this.PostPageVisible = false;
+            this.ProfilePageVisible = false;
+            this.SettingsPageVisible = false;
+            this.RecipePageVisible = false;
+#if ANDROID
+            NotificationsPageVisible = true;
+            OnlineFriendsVisible = false;
+#endif
             Notifications.Clear();
             await FetchNotifications();
-        }
+        }   
 
         [RelayCommand]
         public async Task Logout()
@@ -282,7 +304,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task Appearing()
         {
-            LoadingScreenVisible = true;
+             LoadingScreenVisible = true;
             try
             {
                 if (!windowloaded)   // appearing command is invoked 2 times for some reason
@@ -293,7 +315,7 @@ namespace Foodiefeed.viewmodels
                     if (base64 is null) throw new Exception();
 
                     await SetProfilePictureFromBase64(base64);
-                    await MainWallPostThresholdExceed();
+                    //await MainWallPostThresholdExceed();
 #endif
 #if WINDOWS
                     await FetchNotifications();
@@ -346,20 +368,23 @@ namespace Foodiefeed.viewmodels
 
                 }catch(Exception ex)
                 {
-                    //NotifiyFailedAction("could not retrive profile picture.");
                     return null;
                 }
             }
         }
 
+        bool FetchNotificationsCanExecute = true;
+        private int notificationsPageNumber = 0;
         private async Task FetchNotifications()
         {
-            using(var httpClient = new HttpClient()) {
+            if (!FetchNotificationsCanExecute) return;
+
+            using (var httpClient = new HttpClient()) {
 
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
                 try
                 {
-                    var endpoint = $"api/notifications/get-all-for-user/{_userSession.Id}";
+                    var endpoint = $"api/notifications/get-15/{_userSession.Id}?pageNumber={notificationsPageNumber}";
                     var response = await httpClient.GetAsync(endpoint);
 
                     if(!response.IsSuccessStatusCode)
@@ -378,6 +403,7 @@ namespace Foodiefeed.viewmodels
                     NotifiyFailedAction("Something went wrong...");
                 }
             }
+            notificationsPageNumber += 1;
         }
 
         List<int> seenPostId = new List<int>();
@@ -430,14 +456,13 @@ namespace Foodiefeed.viewmodels
         {
             notifications.Sort((x,y) => y.CreatedAt.CompareTo(x.CreatedAt));
 
-            ObservableCollection<INotification> newNotifications = new ObservableCollection<INotification>();
 
             foreach(var notification in notifications)
             {
                 switch(notification.Type)
                 {
                     case NotificationType.FriendRequest: //0
-                        newNotifications.Add(new FriendRequestNotification()
+                        Notifications.Add(new FriendRequestNotification()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
@@ -446,7 +471,7 @@ namespace Foodiefeed.viewmodels
                         });
                         break;
                     case NotificationType.AcceptedFriendRequest: //5
-                        newNotifications.Add(new BasicNotofication()
+                        Notifications.Add(new BasicNotofication()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
@@ -456,7 +481,7 @@ namespace Foodiefeed.viewmodels
                         });
                         break;
                     case NotificationType.PostLike: //1
-                        newNotifications.Add(new PostLikeNotification()
+                        Notifications.Add(new PostLikeNotification()
                         {
                             Message = notification.Message,
                             PostId = notification.PostId.ToString(),
@@ -466,7 +491,7 @@ namespace Foodiefeed.viewmodels
                         });
                         break;
                     case NotificationType.PostComment: //2
-                        newNotifications.Add(new PostCommentNotification()
+                        Notifications.Add(new PostCommentNotification()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
@@ -477,7 +502,7 @@ namespace Foodiefeed.viewmodels
                         });
                         break;
                     case NotificationType.CommentLike: //3
-                        newNotifications.Add(new CommentLikeNotification()
+                        Notifications.Add(new CommentLikeNotification()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
@@ -487,7 +512,7 @@ namespace Foodiefeed.viewmodels
                         });
                         break;
                     case NotificationType.GainFollower: //4
-                        newNotifications.Add(new BasicNotofication()
+                        Notifications.Add(new BasicNotofication()
                         {
                             Message = notification.Message,
                             UserId = notification.SenderId.ToString(),
@@ -498,31 +523,9 @@ namespace Foodiefeed.viewmodels
                         break;
                 }
             }
-            Notifications.Clear();
-            allNotifications.Clear();
-            allNotifications = newNotifications;
-            DisplayNotifications(20, newNotifications);        
+       
         }
 
-        private ObservableCollection<INotification> allNotifications = new ObservableCollection<INotification>();
-        private int currentNotificationsDisplayCount = 0;
-
-        private async Task DisplayNotifications(int displayCount,ObservableCollection<INotification> notifications)
-        {
-            var temp = currentNotificationsDisplayCount;
-            for (int i = currentNotificationsDisplayCount; i <= temp+displayCount; i++)
-            {
-                try
-                {
-                    Notifications.Add(notifications[i]);
-                    currentNotificationsDisplayCount++;
-
-                }catch(ArgumentOutOfRangeException e)
-                {                   
-                    break;
-                }
-            }
-        }
 
         public void Dispose()
         {
@@ -902,24 +905,21 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         private async Task ClearNotifications()
         {
+            FetchNotificationsCanExecute = false;
             List<int> NotificationsId = new List<int>();
-            for (int i = 0; i <= currentNotificationsDisplayCount - 1; i++)
+            for (int i = 0; i <= Notifications.Count() - 1; i++)
             {
-                var notification = Notifications[0];
-                if (notification is not FriendRequestNotification)
+                if (Notifications[i] is not FriendRequestNotification)
                 {
-                    //await notification.HideAnimation(300, 150);
-                    NotificationsId.Add(notification.NotifcationId);
-                    allNotifications.Remove(notification);
-                    Notifications.Remove(notification);
-                    //i = i - 1;
+                    await Notifications[i].HideAnimation(300, 150);
+                    NotificationsId.Add(Notifications[i].NotifcationId);
+                    Notifications.Remove(Notifications[i]);
+                    i = i - 1;
                 }
             }
 
             using(var httpclient = new HttpClient())
             {
-                //httpclient.BaseAddress = new Uri(API_BASE_URL);
-
                 try
                 {
                     var endpoint = $"/api/notifications/remove-range-notifications/{_userSession.Id}";
@@ -935,19 +935,19 @@ namespace Foodiefeed.viewmodels
 
                     var response = await httpclient.SendAsync(request);
 
+                    if (!response.IsSuccessStatusCode) throw new Exception();
 
-                    currentNotificationsDisplayCount = 0;
-                    DisplayNotifications(10, allNotifications);
+                    notificationsPageNumber = 0;
+                    FetchNotificationsCanExecute = true;
+                    await FetchNotifications();
                 }
-                catch
+                catch(Exception e)
                 {
 
                 }
-            }
-
-
+            } 
             
-            //code to clear notification in database
+            FetchNotificationsCanExecute = true;
         }
 
         private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -989,7 +989,6 @@ namespace Foodiefeed.viewmodels
             alltags.Clear();
         }
 
-        //ObservableCollection<PostImageView> addPostImages = new ObservableCollection<PostImageView>();
         public ObservableCollection<PostImageView> AddPostImages { get; set; } = new ObservableCollection<PostImageView>();
 
         [RelayCommand]
@@ -1052,9 +1051,7 @@ namespace Foodiefeed.viewmodels
         {
             using(var http = new HttpClient())
             {
-
                 var endpoint = $"api/posts/delete?postId={postId}&userId={_userSession.Id}";
-
                 try
                 {
                     var response = await http.DeleteAsync(endpoint);
@@ -1073,7 +1070,6 @@ namespace Foodiefeed.viewmodels
 
             var postProfile = ProfilePosts.FirstOrDefault(p => p.PostId == postId);
             if (postProfile is not null) Posts.Remove(postProfile);
-
         }
 
         [RelayCommand]
@@ -1172,9 +1168,6 @@ namespace Foodiefeed.viewmodels
 
         }
 
-
-        //ObservableCollection<TagView> tags = new ObservableCollection<TagView>();
-
         public ObservableCollection<TagView> Tags { get; set; } = new ObservableCollection<TagView>();
 
         [ObservableProperty]
@@ -1222,8 +1215,6 @@ namespace Foodiefeed.viewmodels
                 }
             }
         }
-
-        //static ObservableCollection<TagView> pickedtags = new ObservableCollection<TagView>();
 
         [MaxLength(4)]
         public static ObservableCollection<TagView> PickedTags { get; set; } = new ObservableCollection<TagView>();
@@ -1477,9 +1468,10 @@ namespace Foodiefeed.viewmodels
         }
 
         [RelayCommand]
-        public void NotificationsThresholdExceed(ItemsViewScrolledEventArgs e)
+        public async Task NotificationsThresholdExceed(ItemsViewScrolledEventArgs e)
         {
-           DisplayNotifications(10, allNotifications);
+            await FetchNotifications();
+           //DisplayNotifications(10, allNotifications);
         }
 
         [RelayCommand]
@@ -1489,6 +1481,10 @@ namespace Foodiefeed.viewmodels
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = false;
             this.RecipePageVisible = false;
+#if ANDROID
+            NotificationsPageVisible = false;
+            OnlineFriendsVisible = false;
+#endif
         }
 
         [RelayCommand]
@@ -1498,6 +1494,11 @@ namespace Foodiefeed.viewmodels
             this.ProfilePageVisible = true;
             this.SettingsPageVisible = false;
             this.RecipePageVisible = false;
+
+#if ANDROID
+            NotificationsPageVisible = false;
+            OnlineFriendsVisible = false;
+#endif
 
             ProfilePosts.Clear();
             ProfileFollowersList.Clear();
@@ -1522,6 +1523,11 @@ namespace Foodiefeed.viewmodels
             this.ProfilePageVisible = false;
             this.SettingsPageVisible = true;
             this.RecipePageVisible = false;
+
+#if ANDROID
+            NotificationsPageVisible = false;
+            OnlineFriendsVisible = false;
+#endif
         }
 
         [RelayCommand]

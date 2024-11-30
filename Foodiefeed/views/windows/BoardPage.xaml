@@ -583,8 +583,279 @@
                             </CollectionView>
                         </Grid>
                 </Grid>
-                <Grid x:Name="Settings"></Grid>
-                <Grid x:Name="OnlineFriends">
+                <Grid x:Name="Settings" IsVisible="{Binding SettingsPageVisible}" Padding="20">
+                    <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" >
+
+                        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="0,20,0,0">
+
+                            <Grid IsVisible="{Binding SettingsMainHubVisible}" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <VerticalStackLayout Grid.Column="0" Spacing="30">
+                                    <Button Text="Change personal data" FontSize="12"
+                                            BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                            HorizontalOptions="Center" Clicked="Button_Clicked" 
+                                            Command="{Binding OpenPersonalDataEditorCommand}"
+                                            TextColor="{DynamicResource TextColor}"/>
+                                    <Label Text="Change Theme" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="10" Margin="0,10,0,0">
+                                    <Label Text="Click to change your personal data" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center"/>
+                                    <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                                        <Switch Scale="1.3" Margin="0,0,20,0">
+                                            <Switch.Behaviors>
+                                                <toolkit:EventToCommandBehavior 
+                                                        EventName="Toggled"
+                                                        Command="{Binding ChangeThemeCommand}"/>
+                                            </Switch.Behaviors>
+                                        </Switch>
+                                        <Label TextColor="{DynamicResource TextColor}" Text="{Binding SwitchThemeMode,Mode=TwoWay}" VerticalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid IsVisible="{Binding PersonalDataEditorVisible}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="200" />
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0"
+                                        StrokeShape="RoundRectangle 30" 
+                                        BackgroundColor="{DynamicResource MainBackgroundColor}" 
+                                        StrokeThickness="2" WidthRequest="300" HorizontalOptions="Center" Stroke="Gray">
+                                    <HorizontalStackLayout>
+                                        <VerticalStackLayout Spacing="40"
+                                                             BackgroundColor="Transparent" 
+                                                             Padding="15">
+
+                                            <Button Text="Change Username" 
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextColor}"
+                                                    FontAttributes="Bold"  FontSize="10"
+                                                    Command="{Binding ShowChangeUsernameEntryCommand}">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"
+                                                            Brush="{DynamicResource TextColor}"/>
+                                                </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" 
+                                                                              PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
+                                            </Button>
+
+                                            <Button Text="Change Email" 
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextColor}"
+                                                    FontAttributes="Bold" FontSize="10"
+                                                    Command="{Binding ShowChangeEmialEntryCommand}">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"
+                                                            Brush="{DynamicResource TextColor}"/>
+                                                </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" 
+                                                                              PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
+                                            </Button>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Spacing="40"
+                                                             BackgroundColor="Transparent" 
+                                                             Padding="10">
+                                            <Button Text="Change Password" 
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{DynamicResource TextColor}"
+                                                    FontAttributes="Bold"
+                                                    FontSize="10" Margin="0,5,0,0"
+                                                    Command="{Binding ShowChangePasswordEntryCommand}">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"
+                                                            Brush="{DynamicResource TextColor}"/>
+                                                </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" 
+                                                                              PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
+                                            </Button>
+
+                                            <Button Text="Change Profile &#10;Picture"  
+                                                    BackgroundColor="Transparent" 
+                                                    HorizontalOptions="CenterAndExpand"
+                                                    TextColor="{DynamicResource TextColor}"
+                                                    FontAttributes="Bold"  FontSize="10"
+                                                    LineBreakMode="WordWrap"
+                                                    Command="{Binding ChangeProfilePictureCommand}">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"
+                                                            Brush="{DynamicResource TextColor}"/>
+                                                </Button.Shadow>
+                                                <Button.GestureRecognizers>
+                                                    <PointerGestureRecognizer PointerEntered="OptionButtonScaleAnimation" 
+                                                                              PointerExited="OptionButtonDescendAnimation"/>
+                                                </Button.GestureRecognizers>
+                                            </Button>
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                                <Grid Grid.Row="1" BackgroundColor="{DynamicResource MainBackgroundColor}" Padding="20">
+                                    <Border Stroke="Gray" 
+                                            StrokeThickness="1.5" 
+                                            StrokeShape="RoundRectangle 20,20,20,20" 
+                                            HeightRequest="60" WidthRequest="370"
+                                            IsVisible="{Binding ChangeUsernameEntryVisible}"
+                                            BackgroundColor="{DynamicResource EntryBackround}"
+                                            Scale="0.7">
+
+                                        <Entry TextColor="{DynamicResource NotificationButtonTextColor}" 
+                                               FontSize="18"
+                                               Placeholder="Username" 
+                                               Margin="0" 
+                                               HeightRequest="50" 
+                                               WidthRequest="350" 
+                                               BackgroundColor="Transparent"
+                                               PlaceholderColor="Gray"
+                                               Text="{Binding ChangedUsername}">
+                                        </Entry>
+                                    </Border>
+
+                                    <Border Stroke="Gray" 
+                                             StrokeThickness="1.5" 
+                                             StrokeShape="RoundRectangle 20,20,20,20" 
+                                             HeightRequest="60" WidthRequest="370"
+                                             IsVisible="{Binding ChangeEmailEntryVisible}"
+                                             BackgroundColor="{DynamicResource EntryBackround}"
+                                             Scale="0.7">
+                                        <Entry  TextColor="{DynamicResource NotificationButtonTextColor}" 
+                                                FontSize="18"
+                                                Placeholder="E-mial" 
+                                                Margin="0" 
+                                                HeightRequest="50" 
+                                                WidthRequest="350" 
+                                                BackgroundColor="Transparent"
+                                                PlaceholderColor="Gray"
+                                                Text="{Binding ChangedEmail}">
+                                        </Entry>
+                                    </Border>
+                                    <VerticalStackLayout Spacing="10" BackgroundColor="Transparent"
+                                                         VerticalOptions="Center"
+                                                         Scale="0.7">
+
+
+                                        <Border Stroke="Gray" 
+                                                StrokeThickness="1.5" 
+                                                StrokeShape="RoundRectangle 20,20,20,20" 
+                                                HeightRequest="60" WidthRequest="370"
+                                                IsVisible="{Binding ChangePasswordEntryVisible}"
+                                                BackgroundColor="{DynamicResource EntryBackround}">
+
+                                            <Entry TextColor="{DynamicResource NotificationButtonTextColor}" 
+                                                   FontSize="18"
+                                                   Placeholder="Password" 
+                                                   IsPassword="True"
+                                                   Margin="0" 
+                                                   HeightRequest="50" 
+                                                   WidthRequest="350" 
+                                                   BackgroundColor="Transparent"
+                                                   PlaceholderColor="Gray"
+                                                   Text="{Binding ChangedPassword}">
+                                            </Entry>
+                                        </Border>
+
+                                        <Border Stroke="Gray" 
+                                                StrokeThickness="1.5" 
+                                                StrokeShape="RoundRectangle 20,20,20,20" 
+                                                HeightRequest="60" WidthRequest="370"
+                                                IsVisible="{Binding ChangePasswordEntryVisible}"
+                                                BackgroundColor="{DynamicResource EntryBackround}"
+                                                >
+                                            <Entry TextColor="{DynamicResource NotificationButtonTextColor}" 
+                                                   FontSize="18"
+                                                   Placeholder="Retype Password" 
+                                                   IsPassword="True"
+                                                   Margin="0" 
+                                                   HeightRequest="50" 
+                                                   WidthRequest="350" 
+                                                   BackgroundColor="Transparent"
+                                                   PlaceholderColor="Gray"
+                                                   Text="{Binding ChangedRePassword}">
+                                            </Entry>
+                                        </Border>
+                                    </VerticalStackLayout>
+
+                                    <Grid IsVisible="{Binding ChangeProfilePictureVisible}" Padding="0" BackgroundColor="Blue">
+                                        <Border  Stroke="Gray" 
+                                                 StrokeThickness="0.5" WidthRequest="300" HeightRequest="300" Margin="0,-60,0,0"
+                                                 StrokeShape="RoundRectangle 20"                                                                                       
+                                                 BackgroundColor="{DynamicResource EntryBackround}">
+
+                                            <VerticalStackLayout VerticalOptions="Center" 
+                                                                 Spacing="10">
+                                                <Border StrokeThickness="0" 
+                                                        StrokeShape="RoundRectangle 150" 
+                                                        HeightRequest="150"  
+                                                        WidthRequest="150" 
+                                                        BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
+                                                    <Image Source="{Binding ChangedImageProfilePicturePath}" 
+                                                           HeightRequest="250"  
+                                                           WidthRequest="250" 
+                                                           Aspect="AspectFill"/>
+                                                </Border>
+                                                <VerticalStackLayout Spacing="5">
+                                                    <Button Command="{Binding ChooseNewProfilePictureCommand}" 
+                                                            Text="Choose image..."
+                                                            BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
+                                                            TextColor="{DynamicResource TextColor}"
+                                                            Margin="5,0,5,0"/>
+                                                    <Button Command="{Binding RemoveUserProfilePictureCommand}"
+                                                            Text="Remove Current Profile Picture"
+                                                            BackgroundColor="#e32441"
+                                                            TextColor="White"
+                                                            Margin="5,0,5,0"/>
+                                                </VerticalStackLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+
+                                    </Grid>
+
+                                    <HorizontalStackLayout HorizontalOptions="End" 
+                                                           VerticalOptions="End" 
+                                                           Spacing="10"
+                                                           Margin="100,0,0,0">
+                                        <Button Text="Save Changes" 
+                                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                                VerticalOptions="Center" TextColor="{DynamicResource TextColor}"
+                                                Command="{Binding SaveChangedPersonalDataCommand}">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </HorizontalStackLayout>
+                                    <Button Text="←"
+                                            Clicked="Button_Clicked" 
+                                            TextColor="{DynamicResource TextColor}" 
+                                            Margin="0,0,0,0" 
+                                            FontSize="30" 
+                                            VerticalOptions="End" 
+                                            HorizontalOptions="Start"
+                                            BackgroundColor="Transparent"
+                                            Command="{Binding OpenSettingsLandingPageCommand}" ZIndex="200"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Border.Shadow>
+                            <Shadow Opacity="0.5"
+                                    Radius="5"/>
+                        </Border.Shadow>
+                    </Border>
+                </Grid>
+                <Grid x:Name="OnlineFriends" IsVisible="{Binding OnlineFriendsVisible}">
                     <VerticalStackLayout Padding="10" Spacing="5"
                                          BindableLayout.ItemsSource="{Binding OnlineFriends}">
                         <BindableLayout.ItemTemplate>
@@ -597,7 +868,7 @@
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
                 </Grid>
-                <Grid x:Name="Notifications" IsVisible="False">
+                <Grid x:Name="Notifications" IsVisible="{Binding NotificationsPageVisible}">
                     <VerticalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
                                          IsVisible="{Binding NoNotificationNotifierVisible,Converter={StaticResource InverseBooleanConverter}}">
                         <Grid Padding="10">
@@ -638,7 +909,6 @@
                             </Grid>
                         </Grid>
                     </VerticalStackLayout>
-
                     <Grid IsVisible="{Binding NoNotificationNotifierVisible}"
                           HorizontalOptions="FillAndExpand" 
                           VerticalOptions="Start"
@@ -1861,7 +2131,7 @@
 
             </Grid>
             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                <Label Text="No interntet connection" TextColor="{DynamicResource TextColor}"/>
+                <Label Text="No interntet connection" FontSize="{OnPlatform Android=15}" TextColor="{DynamicResource TextColor}"/>
                 <ActivityIndicator IsRunning="True"  Color="{DynamicResource TextColor}"/>
             </VerticalStackLayout>
         </Grid>

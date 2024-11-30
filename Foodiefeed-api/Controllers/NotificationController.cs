@@ -14,10 +14,10 @@ namespace Foodiefeed_api.Controllers
             _notificationService = notificationService;
         }
 
-        [HttpGet("get-all-for-user/{userId}")]
-        public async Task<IActionResult> GetNotoficationForuserById([FromRoute]int userID)
+        [HttpGet("get-15/{userId}")]
+        public async Task<IActionResult> GetNotoficationForuserById([FromRoute]int userID,int pageNumber)
         {
-            var response = await _notificationService.GetNotificationByUserId(userID);
+            var response = await _notificationService.GetNotificationByUserId(userID,pageNumber);
 
             return Ok(response);
         }

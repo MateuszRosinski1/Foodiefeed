@@ -13,7 +13,7 @@ namespace Foodiefeed_api.services
         Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId, int commentId);
         Task RemoveRange(List<int> ids);
 
-        Task<List<NotificationDto>> GetNotificationByUserId(int id);
+        Task<List<NotificationDto>> GetNotificationByUserId(int id, int pageNumber);
     }
 
     public class NotificationService : INotificationService
@@ -37,9 +37,14 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<NotificationDto>> GetNotificationByUserId(int id)
+        public async Task<List<NotificationDto>> GetNotificationByUserId(int id,int pageNumber)
         {
-            var notifications = await _dbContext.Notifications.Where(n => n.ReceiverId == id).ToListAsync();
+            const int PAGE_SIZE = 15;
+            var notifications = await _dbContext.Notifications
+                .Where(n => n.ReceiverId == id).Reverse()
+                .Skip(PAGE_SIZE * pageNumber)
+                .Take(PAGE_SIZE)
+                .ToListAsync();
 
             if (notifications is null) { throw new NotFoundException("No Notifications found."); }
 

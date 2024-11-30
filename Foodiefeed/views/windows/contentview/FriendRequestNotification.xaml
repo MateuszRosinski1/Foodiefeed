@@ -11,7 +11,7 @@
                 <Label x:Name="MessageLabel" 
                        TextColor="{DynamicResource TextColor}" 
                        HeightRequest="50" 
-                       WidthRequest="200" 
+                       WidthRequest="{OnPlatform WinUI=200,Android=250}" 
                        HorizontalTextAlignment="Center"
                        LineBreakMode="WordWrap" 
                        Margin="0,5,0,0"/>

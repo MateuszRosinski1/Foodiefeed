@@ -13,7 +13,7 @@
                 TextColor="{DynamicResource TextColor}" 
                 FontSize="15" 
                 HeightRequest="50" 
-                WidthRequest="200" 
+                WidthRequest="{OnPlatform WinUI=200,Android=250}"  
                 LineBreakMode="TailTruncation" 
                 BackgroundColor="Transparent" 
                 MaxLines="2" 
@@ -39,7 +39,8 @@
                         StrokeShape="RoundRectangle 40">
                         <Label BackgroundColor="Black" 
                             FontSize="12" 
-                            Text="Show post" 
+                            Text="Show post"
+                            TextColor="White"
                             HeightRequest="20" 
                             HorizontalTextAlignment="Center" 
                             WidthRequest="80"/>

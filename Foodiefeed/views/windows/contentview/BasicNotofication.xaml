@@ -13,7 +13,7 @@
                        TextColor="{DynamicResource TextColor}" 
                        FontSize="15" 
                        HeightRequest="50" 
-                       WidthRequest="200" 
+                       WidthRequest="{OnPlatform WinUI=200,Android=250}" 
                        LineBreakMode="TailTruncation" 
                        BackgroundColor="Transparent" 
                        MaxLines="2" 
