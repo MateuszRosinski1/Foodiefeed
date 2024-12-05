@@ -86,7 +86,8 @@
                                 StrokeThickness="1.5" 
                                 StrokeShape="RoundRectangle 20,20,20,20" 
                                 HeightRequest="35"
-                                WidthRequest="200">
+                                WidthRequest="200"
+                                BackgroundColor="{DynamicResource EntryBackround}">
                             <Grid BackgroundColor="{DynamicResource EntryBackround}">
                                 <Entry TextColor="{DynamicResource TextColor}" 
                                        FontSize="18" 
@@ -469,7 +470,7 @@
                                     <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}" Color="{DynamicResource TextColor}"/>
                                 </VerticalStackLayout>
 
-                                <Label Text="This user has not posts yet." 
+                                <Label Text="This user has no posts yet." 
                                        FontSize="20"
                                        Margin="0,150,0,0"
                                        TextColor="{DynamicResource TextColor}"
@@ -522,13 +523,13 @@
                         </Frame>
                         <Grid Grid.Row="1"  IsVisible="{Binding LikedRecipesVisible}">
                             <CollectionView Grid.Row="1"
-                    ItemsSource="{Binding LikedRecipes}"
-                    RemainingItemsThreshold="5"
-                    ItemsUpdatingScrollMode="KeepScrollOffset"
-                    RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}" 
-                    RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Liked}"
-                    WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
-                    HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
+                                            ItemsSource="{Binding LikedRecipes}" IsVisible="{Binding NoLikedRecipes,Converter={StaticResource InverseBooleanConverter}}"
+                                            RemainingItemsThreshold="5"
+                                            ItemsUpdatingScrollMode="KeepScrollOffset"
+                                            RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}" 
+                                            RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Liked}"
+                                            WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                                            HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
                                 <CollectionView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                 </CollectionView.ItemsLayout>
@@ -546,17 +547,18 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
-                        </Grid>
+                        <Label Text="You have no liked recipes." TextColor="#afafaf" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15" IsVisible="{Binding NoLikedRecipes}"/>
+                    </Grid>
                         <Grid Grid.Row="1"  IsVisible="{Binding SavedRecipesVisible}">
                             <CollectionView Grid.Row="1"
-                    ItemsSource="{Binding SavedRecipes}"
-                    RemainingItemsThreshold="5"
-                    RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}"
-                    RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Saved}"
-                    ItemsUpdatingScrollMode="KeepScrollOffset"
-                    WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
-                    Scrolled="CollectionView_Scrolled"
-                    HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
+                                            ItemsSource="{Binding SavedRecipes}" IsVisible="{Binding NoSavedRecipes,Converter={StaticResource InverseBooleanConverter}}"
+                                            RemainingItemsThreshold="5"
+                                            RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}"
+                                            RemainingItemsThresholdReachedCommandParameter="{x:Static viewmodel:RecipeType.Saved}"
+                                            ItemsUpdatingScrollMode="KeepScrollOffset"
+                                            WidthRequest="{Binding Source={x:Reference RecipeGrid},Path=Width}"
+                                            Scrolled="CollectionView_Scrolled"
+                                            HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RecipeCollectionViewHeightAdjustValue}}">
                                 <CollectionView.ItemsLayout>
                                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                 </CollectionView.ItemsLayout>
@@ -574,7 +576,8 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
-                        </Grid>
+                            <Label Text="You have no saved recipes." TextColor="#afafaf" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15" IsVisible="{Binding NoSavedRecipes}"/>
+                    </Grid>
                 </Grid>
                 <Grid x:Name="Settings" IsVisible="{Binding SettingsPageVisible}" Padding="20">
                     <Border BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeShape="RoundRectangle 40" >
@@ -850,7 +853,8 @@
                 </Grid>
                 <Grid x:Name="OnlineFriends" IsVisible="{Binding OnlineFriendsVisible}">
                     <VerticalStackLayout Padding="10" Spacing="5"
-                                         BindableLayout.ItemsSource="{Binding OnlineFriends}">
+                                         BindableLayout.ItemsSource="{Binding OnlineFriends}"
+                                         IsVisible="{Binding NoOnlineFriendsVisible,Converter={StaticResource InverseBooleanConverter}}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <views:OnlineFreidnListElementView Username="{Binding Username}"
@@ -860,6 +864,13 @@
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
+                    <Grid HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding NoOnlineFriendsVisible}">
+                        <VerticalStackLayout>
+                            <Path Data="M 24.15 21.624 c 2.716 -1.706 4.484 -5.014 4.484 -8.074 c 0 -4.362 -3.59 -9.236 -8.396 -9.236 S 11.842 9.188 11.842 13.55 c 0 3.06 1.768 6.37 4.484 8.074 c -6.444 1.73 -11.2 7.614 -11.2 14.596 c 0 0.46 0.378 0.84 0.84 0.84 h 28.546 c 0.46 0 0.84 -0.378 0.84 -0.84 C 35.352 29.238 30.594 23.354 24.15 21.624 M 6.83 35.38 z"
+                                  Fill="#afafaf" HorizontalOptions="Center" HeightRequest="200"/>
+                            <Label Text="No Friends yet" TextColor="#afafaf" FontSize="15"/>
+                        </VerticalStackLayout>
+                    </Grid>
                 </Grid>
                 <Grid x:Name="Notifications" IsVisible="{Binding NotificationsPageVisible}">
                     <VerticalStackLayout BackgroundColor="{DynamicResource SideBackgroundColor}" 
@@ -1058,7 +1069,7 @@
                                     WidthRequest="300" 
                                     HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource LeftBarHeightAdjustValue}}" >
                                 <!--pages-->
-                                <Grid BackgroundColor="Transparent" Padding="0,10,0,10">
+                                <Grid BackgroundColor="Transparent" Padding="0,10,0,10" x:Name="NotificationsGrid">
                                     <CollectionView ItemTemplate="{StaticResource NotificationTemplateSelector}" 
                                                 ItemsSource="{Binding Notifications}" 
                                                 BackgroundColor="Transparent"
@@ -1066,7 +1077,8 @@
                                                 ItemsUpdatingScrollMode="KeepScrollOffset"
                                                 RemainingItemsThreshold="5"
                                                 RemainingItemsThresholdReachedCommand="{Binding NotificationsThresholdExceedCommand}"
-                                                Scrolled="CollectionView_Scrolled">
+                                                Scrolled="CollectionView_Scrolled"
+                                                HeightRequest="{Binding Source={x:Reference NotificationsGrid},Path=Height}">
                                         <CollectionView.ItemsLayout>
                                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"/>
                                         </CollectionView.ItemsLayout>
@@ -1360,10 +1372,10 @@
                                                 <ActivityIndicator IsRunning="True" IsVisible="{Binding LoadingLabelVisible}" Color="{DynamicResource TextColor}"/>
                                             </VerticalStackLayout>
 
-                                            <Label Text="This user has not posts yet." 
+                                            <Label Text="This user has no posts yet." Margin="0,200,0,0"
                                                FontSize="30" 
                                                TextColor="{DynamicResource TextColor}"
-                                               IsVisible="{Binding NoPostOnProfile}"/>
+                                               IsVisible="{Binding NoPostOnProfile}" VerticalOptions="Center"/>
                                         </Grid>
                                     </VerticalStackLayout>
                                 </VerticalStackLayout>
@@ -1680,7 +1692,7 @@
                                 </Frame>
                                 <Grid Grid.Row="1"  IsVisible="{Binding LikedRecipesVisible}">
                                     <CollectionView Grid.Row="1"
-                                                ItemsSource="{Binding LikedRecipes}"
+                                                ItemsSource="{Binding LikedRecipes}" IsVisible="{Binding NoLikedRecipes,Converter={StaticResource InverseBooleanConverter}}"
                                                 RemainingItemsThreshold="5"
                                                 ItemsUpdatingScrollMode="KeepScrollOffset"
                                                 RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}" 
@@ -1704,9 +1716,10 @@
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
+                                    <Label Text="You have no liked recipes." TextColor="#afafaf" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15" IsVisible="{Binding NoLikedRecipes}"/>
                                 </Grid>
                                 <Grid Grid.Row="1"  IsVisible="{Binding SavedRecipesVisible}">
-                                    <CollectionView Grid.Row="1"
+                                    <CollectionView Grid.Row="1" IsVisible="{Binding NoSavedRecipes,Converter={StaticResource InverseBooleanConverter}}"
                                                 ItemsSource="{Binding SavedRecipes}"
                                                 RemainingItemsThreshold="5"
                                                 RemainingItemsThresholdReachedCommand="{Binding RecipesItemsThresholdExceedCommand}"
@@ -1732,6 +1745,7 @@
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
+                                    <Label Text="You have no saved recipes." TextColor="#afafaf" HorizontalOptions="Center" VerticalOptions="Center" FontSize="15" IsVisible="{Binding NoSavedRecipes}"/>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -1745,8 +1759,8 @@
                         <VerticalStackLayout>
                             <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                                HeightRequest="60" 
-                               Margin="0,5,0,0" 
-                               BorderColor="Transparent" 
+                               Margin="15,5,0,0" 
+                               BorderColor="Transparent" HorizontalOptions="Start" 
                                HasShadow="True" Padding="5">
                                 <HorizontalStackLayout>
                                     <Frame Padding="0" 
@@ -1815,18 +1829,28 @@
                             HeightRequest="{Binding Source={x:Reference Page},Path=Height,Converter={StaticResource AdjustPostSpace},ConverterParameter={StaticResource RightBarHeightAdjustValue}}" 
                             Grid.Column="2">
                         <!--friends-->
-                        <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" 
-                                         BindableLayout.ItemsSource="{Binding OnlineFriends}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <views:OnlineFreidnListElementView Username="{Binding Username}"
-                                                                   UserId="{Binding UserId}"
-                                                                   AvatarImageSource="{Binding AvatarImageSource}"
-                                                                   IsOnline="{Binding IsOnline}"/>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </VerticalStackLayout>
-                    </ScrollView>
+                        <Grid>
+                            <VerticalStackLayout Padding="10" Spacing="5" x:Name="OnlineFriendList" 
+                                             BindableLayout.ItemsSource="{Binding OnlineFriends}"
+                                             IsVisible="{Binding NoOnlineFriendsVisible,Converter={StaticResource InverseBooleanConverter}}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:OnlineFreidnListElementView Username="{Binding Username}"
+                                                                       UserId="{Binding UserId}"
+                                                                       AvatarImageSource="{Binding AvatarImageSource}"
+                                                                       IsOnline="{Binding IsOnline}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                            <Grid HorizontalOptions="Center" VerticalOptions="Center" IsVisible="{Binding NoOnlineFriendsVisible}">
+                                <VerticalStackLayout > 
+                                    <Path Data="M 24.15 21.624 c 2.716 -1.706 4.484 -5.014 4.484 -8.074 c 0 -4.362 -3.59 -9.236 -8.396 -9.236 S 11.842 9.188 11.842 13.55 c 0 3.06 1.768 6.37 4.484 8.074 c -6.444 1.73 -11.2 7.614 -11.2 14.596 c 0 0.46 0.378 0.84 0.84 0.84 h 28.546 c 0.46 0 0.84 -0.378 0.84 -0.84 C 35.352 29.238 30.594 23.354 24.15 21.624 M 6.83 35.38 z"
+                                          Fill="#afafaf" HorizontalOptions="Center" HeightRequest="200"/>
+                                    <Label Text="No Friends yet" TextColor="#afafaf" FontSize="15"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Grid>
+                </ScrollView>
                 </Grid>
             </Grid>
         

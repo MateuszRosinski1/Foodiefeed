@@ -3096,11 +3096,12 @@ int drawable splash 0x7f0700f0
 int drawable test_level_drawable 0x7f0700f1
 int drawable testback 0x7f0700f2
 int drawable textlogo 0x7f0700f3
-int drawable threedotfivexfive 0x7f0700f4
-int drawable threedotfivexfived 0x7f0700f5
-int drawable threedotmenu 0x7f0700f6
-int drawable tooltip_frame_dark 0x7f0700f7
-int drawable tooltip_frame_light 0x7f0700f8
+int drawable textlogodarktheme 0x7f0700f4
+int drawable threedotfivexfive 0x7f0700f5
+int drawable threedotfivexfived 0x7f0700f6
+int drawable threedotmenu 0x7f0700f7
+int drawable tooltip_frame_dark 0x7f0700f8
+int drawable tooltip_frame_light 0x7f0700f9
 int id ALT 0x7f080000
 int id BOTTOM_END 0x7f080001
 int id BOTTOM_START 0x7f080002

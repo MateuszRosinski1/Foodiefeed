@@ -2929,8 +2929,8 @@ public final class R {
 		public static final int notification_tile_bg = 0x7f0700e9;
 		public static final int notify_panel_notification_icon_bg = 0x7f0700eb;
 		public static final int test_level_drawable = 0x7f0700f1;
-		public static final int tooltip_frame_dark = 0x7f0700f7;
-		public static final int tooltip_frame_light = 0x7f0700f8;
+		public static final int tooltip_frame_dark = 0x7f0700f8;
+		public static final int tooltip_frame_light = 0x7f0700f9;
 	}
 	public static final class id {
 		public static final int BOTTOM_END = 0x7f080001;

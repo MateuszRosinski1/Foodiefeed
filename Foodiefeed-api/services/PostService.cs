@@ -403,8 +403,7 @@ namespace Foodiefeed_api.services
                     }
                 }
             }
-
-
+            await Commit();
         }
 
         public async Task UnlikePost(int userId,int postId)
@@ -442,6 +441,7 @@ namespace Foodiefeed_api.services
                     }
                 }
             }
+            await Commit();
         }
     }
 }

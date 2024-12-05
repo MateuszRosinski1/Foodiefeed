@@ -15,6 +15,7 @@ using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
+using Foodiefeed.services;
 
 
 namespace Foodiefeed.viewmodels
@@ -28,8 +29,9 @@ namespace Foodiefeed.viewmodels
         //internal sever error - https://www.vecteezy.com/vector-art/23833971-500-internal-server-error-concept-illustration-flat-design-vector-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon
 
         private readonly UserSession _userSession;
-        private Thread UpdateOnlineFriendListThread;
-
+        private readonly IThemeHandler _themeHandler;
+        private readonly IFoodiefeedApiService _foodiefeedApiServce;
+        private readonly IServiceProvider _serviceProvider;
         public ObservableCollection<PostView> Posts { get; set; } = new ObservableCollection<PostView>();
 
         public ObservableCollection<OnlineFreidnListElementView> OnlineFriends { get; set; } = new ObservableCollection<OnlineFreidnListElementView>();
@@ -143,7 +145,13 @@ namespace Foodiefeed.viewmodels
         ImageSource profilePictureSource;
 
         [ObservableProperty]
-        bool onlineFriendsVisible;
+        bool noOnlineFriendsVisible;
+
+        [ObservableProperty]
+        bool noSavedRecipes;
+
+        [ObservableProperty]
+        bool noLikedRecipes;
 
         public async Task SetProfilePictureFromBase64(string base64)
         {
@@ -177,6 +185,9 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool errorScreenVisible;
 
+        [ObservableProperty]
+        bool onlineFriendsVisible;
+
         #region SettingsVariables
         [ObservableProperty]
         string changedUsername;
@@ -199,23 +210,25 @@ namespace Foodiefeed.viewmodels
         public ObservableCollection<RecipeView> LikedRecipes { get; set; } = new ObservableCollection<RecipeView>();
         public ObservableCollection<RecipeView> SavedRecipes { get; set; } = new ObservableCollection<RecipeView>();
 
+        private Timer onlineFriendsTimer;
 
-        public BoardViewModel(UserSession userSession)
+        public BoardViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
-
+            _serviceProvider = serviceProvider;
+            _themeHandler = _serviceProvider.GetService<IThemeHandler>();
+            _foodiefeedApiServce = _serviceProvider.GetService<IFoodiefeedApiService>();
+            _userSession = userSession;
             try
             {
-                _userSession = userSession;
-                _userSession.Id = 17;
                 InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
                 Notifications.CollectionChanged += OnNotificationsChanged;
 
-                var notification = new BasicNotofication();
-                //Notifications.Add(notification);
+                FetchNotifications(); // required for RemaningItemThresholdCommand to work.
+
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
-
-                //DisplaySearchResultHistory();
-
+                OnlineFriends.CollectionChanged += OnOnlineFriendsChanged;
+                LikedRecipes.CollectionChanged += OnLikedRecipesChanged;
+                SavedRecipes.CollectionChanged += OnSavedRecipesChanged;
                 this.ProfilePageVisible = false; //on init false
                 this.PostPageVisible = true; //on init true
                 this.SettingsPageVisible = false; //on init false
@@ -237,16 +250,74 @@ namespace Foodiefeed.viewmodels
                 this.LikedRecipesVisible = true; //on init true
                 this.SavedRecipesVisible = true; //on init false
 
-                var mrgDict = Application.Current.Resources.MergedDictionaries.ElementAt(2);
-
-                //UpdateOnlineFriendListThread = new Thread(UpdateFriendList);
-                //UpdateOnlineFriendListThread.Start();
-
-                //Task.Run(UpdateFriendList);
-                ChangeTheme();          
                 Connectivity.ConnectivityChanged += ConnectivityChanged;
+
+                ReloadProfileButtonColors(_themeHandler.ThemeFlag);
+                ReloadRecipesButtons(_themeHandler.ThemeFlag);
             }
             catch {
+                ErrorScreenVisible = true;
+            }
+        }
+
+        private void OnSavedRecipesChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoSavedRecipes = SavedRecipes.Count == 0 ? true : false;
+
+
+        private void OnLikedRecipesChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoLikedRecipes = LikedRecipes.Count == 0 ? true : false;
+
+        private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
+
+
+        private void OnOnlineFriendsChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoOnlineFriendsVisible = OnlineFriends.Count == 0 ? true : false;
+
+
+
+        private Timer notificationTimer;
+        bool windowloaded;
+
+        [RelayCommand]
+        public async Task Appearing()
+        {
+            try
+            {
+                if (!windowloaded)   // appearing command is invoked 2 times for some reason
+                {
+                    windowloaded = true;
+                    LoadingScreenVisible = true;
+
+#if ANDROID
+                    var base64 = await FetchProfilePictureBase64();
+                    if (base64 is null) throw new Exception();
+
+                    await SetProfilePictureFromBase64(base64);
+                    await MainWallPostThresholdExceed();
+#endif
+#if WINDOWS
+                    var base64 = await FetchProfilePictureBase64();
+                    if (base64 is null) throw new Exception();
+
+                    var t1 = SetProfilePictureFromBase64(base64);
+                    var t2 = MainWallPostThresholdExceed();
+                    await Task.WhenAll(t1, t2);
+
+                    if (onlineFriendsTimer == null)
+                    {
+                        onlineFriendsTimer = new Timer(async _ => await UpdateFriendList(), null, TimeSpan.Zero, TimeSpan.FromMinutes(2));
+                    }
+
+                    if (notificationTimer == null)
+                    {
+                        notificationTimer = new Timer(async _ => await FetchNotifications(true), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+                    }
+#endif
+
+
+                    LoadingScreenVisible = false;
+                }
+            }
+            catch (Exception)
+            {
+                LoadingScreenVisible = false;
                 ErrorScreenVisible = true;
             }
         }
@@ -295,55 +366,11 @@ namespace Foodiefeed.viewmodels
         public async Task Logout()
         {
             _userSession.SetOnline();
-            Application.Current.MainPage = new LogInPage(new UserViewModel(_userSession));
-        }
+            Dispose();
+            var loginPage = _serviceProvider.GetRequiredService<LogInPage>();
+            await _themeHandler.SaveThemeState();
+            Application.Current.MainPage = loginPage;
 
-        private Timer notificationTimer;
-        bool windowloaded;
-
-        [RelayCommand]
-        public async Task Appearing()
-        {
-             LoadingScreenVisible = true;
-            try
-            {
-                if (!windowloaded)   // appearing command is invoked 2 times for some reason
-                {
-                    windowloaded = true;
-#if ANDROID
-                    var base64 = await FetchProfilePictureBase64();
-                    if (base64 is null) throw new Exception();
-
-                    await SetProfilePictureFromBase64(base64);
-                    await MainWallPostThresholdExceed();
-#endif
-#if WINDOWS
-                    await FetchNotifications();
-
-                    var base64 = await FetchProfilePictureBase64();
-                    if (base64 is null) throw new Exception();
-
-                    var t1 = SetProfilePictureFromBase64(base64);
-                    var t2 = MainWallPostThresholdExceed();
-                    var t3 = UpdateFriendList();
-
-                    await Task.WhenAll(t1, t2, t3);
-#endif
-
-
-                    LoadingScreenVisible = false;
-                }
-            }
-            catch(Exception)
-            {
-                LoadingScreenVisible = false;
-                ErrorScreenVisible = true;
-            }
-
-            //if(notificationTimer == null)
-            //{
-            //    notificationTimer = new Timer(async _ => await FetchNotifications(), null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
-            //}
         }
 
         private async Task<string> FetchProfilePictureBase64()
@@ -375,9 +402,15 @@ namespace Foodiefeed.viewmodels
 
         bool FetchNotificationsCanExecute = true;
         private int notificationsPageNumber = 0;
-        private async Task FetchNotifications()
+        private async Task FetchNotifications(bool IsCalledByitmer = false)
         {
             if (!FetchNotificationsCanExecute) return;
+
+            if (IsCalledByitmer)
+            {
+                Notifications.Clear();
+                notificationsPageNumber = 0;
+            }
 
             using (var httpClient = new HttpClient()) {
 
@@ -422,14 +455,7 @@ namespace Foodiefeed.viewmodels
                     var endpoint = $"api/posts/generate-wall-posts?userId={_userSession.Id}";
                     var content = new StringContent(JsonConvert.SerializeObject(seenPostId), Encoding.UTF8, "application/json");
                     http.Timeout = TimeSpan.FromSeconds(180);
-                    http.BaseAddress = new Uri(API_BASE_URL);
-
-                    //var request = new HttpRequestMessage
-                    //{
-                    //    Method = HttpMethod.Post,
-                    //    RequestUri = new Uri(API_BASE_URL + endpoint),
-                    //    Content = content
-                    //};
+                    http.BaseAddress = new Uri(API_BASE_URL);;
 
                     var response = await http.PostAsync(endpoint,content);
 
@@ -530,6 +556,7 @@ namespace Foodiefeed.viewmodels
         public void Dispose()
         {
             notificationTimer?.Dispose();
+            onlineFriendsTimer?.Dispose();
         }
 
         [RelayCommand]
@@ -948,12 +975,7 @@ namespace Foodiefeed.viewmodels
             } 
             
             FetchNotificationsCanExecute = true;
-        }
-
-        private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
-        }
+        }       
 
         [RelayCommand]
         public void ShowAddPostForm()
@@ -1471,7 +1493,6 @@ namespace Foodiefeed.viewmodels
         public async Task NotificationsThresholdExceed(ItemsViewScrolledEventArgs e)
         {
             await FetchNotifications();
-           //DisplayNotifications(10, allNotifications);
         }
 
         [RelayCommand]
@@ -1662,7 +1683,7 @@ namespace Foodiefeed.viewmodels
             }
             else if (this.ChangeProfilePictureVisible)
             {
-                UploadNewProfilePicture();
+                await UploadNewProfilePicture();
                 return;
             }
 
@@ -2462,39 +2483,31 @@ namespace Foodiefeed.viewmodels
         }
 
         [ObservableProperty]
-        bool themeFlag; //true - darktheme | true - lighttheme
+        bool themeFlag;  //true - darktheme | true - lighttheme
         [ObservableProperty]
         string switchThemeMode = "Light Theme";
 
         [RelayCommand]
         public async Task ChangeTheme()
         {
-            ThemeFlag = !ThemeFlag;
+            _themeHandler.ThemeFlag = !_themeHandler.ThemeFlag;
 
-            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
-
-            if (mergedDictionaries.Count > 2)
-            {
-                mergedDictionaries.Remove(mergedDictionaries.ElementAt(2));
-            }
-
-            if (ThemeFlag)
-            {
-                mergedDictionaries.Add(new DarkTheme());
+            if (_themeHandler.ThemeFlag)
+            {             
                 SwitchThemeMode = "Dark Theme";
-                await ReloadProfileButtonColors(ThemeFlag);
-                ReloadRecipesButtons(ThemeFlag);
             }
             else
             {
-                mergedDictionaries.Add(new LightTheme());
                 SwitchThemeMode = "Light Theme";
-                await ReloadProfileButtonColors(ThemeFlag);
-                ReloadRecipesButtons(ThemeFlag);
             }
+
+            await _themeHandler.ChangeTheme();
+            await ReloadProfileButtonColors(_themeHandler.ThemeFlag);
+            ReloadRecipesButtons(_themeHandler.ThemeFlag);
         }
 
-        private async Task DisplaySearchResults(ObservableCollection<UserSearchResult> users)
+
+    private async Task DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {
             SearchResults.Clear();
 
@@ -2615,68 +2628,68 @@ namespace Foodiefeed.viewmodels
             }
         }
 
-        public async Task UpdateFriendList() //quit while(true) and use timer
+        public async Task UpdateFriendList() 
         {
-            //while (true)
-            //{
-                OnlineFriends.Clear();
-                using (var httpClient = new HttpClient())
+            OnlineFriends.Clear();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
+
+                try
                 {
-                    httpClient.BaseAddress = new Uri(API_BASE_URL);
+                    var endpoint = $"api/friends/online/{_userSession.Id}";
 
-                    try
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    var onlineFriends = await JsonToObject<List<ListedFriendDto>>(json);
+
+                    foreach(var friend in onlineFriends)
                     {
-                        var endpoint = $"api/friends/online/{_userSession.Id}";
-
-                        var response = httpClient.GetAsync(endpoint).Result;
-                        Console.WriteLine("2");
-                        var json = response.Content.ReadAsStringAsync().Result;
-
-                        var onlineFriends = JsonToObject<List<ListedFriendDto>>(json).Result;
-
-                        foreach(var friend in onlineFriends)
+                        var view = new OnlineFreidnListElementView()
                         {
-                            OnlineFriends.Add(new OnlineFreidnListElementView()
-                            {
-                                UserId = friend.Id.ToString(),
-                                Username = friend.Username,
-                                AvatarImageSource = friend.ProfilePictureBase64,
-                                IsOnline = true
-                            });
-                        }
-                    }
-                    catch(Exception ex)
-                    {
-                        NotifiyFailedAction("Something went wrong...");
-                    }
+                            UserId = friend.Id.ToString(),
+                            Username = friend.Username,
+                            AvatarImageSource = friend.ProfilePictureBase64,
+                            IsOnline = true
+                        };
 
-                    try
-                    {
-                        var endpoint = $"api/friends/offline/{_userSession.Id}";
-
-                        var response = httpClient.GetAsync(endpoint).Result;
-
-                        var json = response.Content.ReadAsStringAsync().Result;
-                        var offlineFriends = JsonToObject<List<ListedFriendDto>>(json).Result;
-
-                        foreach (var friend in offlineFriends)
-                        {
-                            OnlineFriends.Add(new OnlineFreidnListElementView()
-                            {
-                                UserId = friend.Id.ToString(),
-                                Username = friend.Username,
-                                AvatarImageSource = friend.ProfilePictureBase64,
-                                IsOnline = false
-                            });
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        NotifiyFailedAction("Something went wrong...");
+                        await Application.Current.Dispatcher.DispatchAsync(() => { OnlineFriends.Add(view); });
                     }
                 }
-                //await Task.Delay(60000);
-            //}
+                catch(Exception ex)
+                {
+                    NotifiyFailedAction("Something went wrong...");
+                }
+
+                try
+                {
+                    var endpoint = $"api/friends/offline/{_userSession.Id}";
+
+                    var response = await httpClient.GetAsync(endpoint);
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var offlineFriends = await JsonToObject<List<ListedFriendDto>>(json);
+
+                    foreach (var friend in offlineFriends)
+                    {
+                        var view = new OnlineFreidnListElementView()
+                        {
+                            UserId = friend.Id.ToString(),
+                            Username = friend.Username,
+                            AvatarImageSource = friend.ProfilePictureBase64,
+                            IsOnline = false
+                        };
+
+                        await Application.Current.Dispatcher.DispatchAsync(() => { OnlineFriends.Add(view); });
+                    }
+                }
+                catch (Exception e)
+                {
+                    NotifiyFailedAction("Something went wrong...");
+                }
+            }
         }
 
         private async Task OpenUserProfile(string id)
@@ -3173,7 +3186,7 @@ namespace Foodiefeed.viewmodels
             using (var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
-                var endpoint = $"api/posts/unlike-post/{_userSession.Id}/{id}";
+                var endpoint = $"api/posts/unlike-post/{_userSession.Id}?postId={id}";
                 try
                 {
                     var response = await http.DeleteAsync(endpoint);

@@ -7,7 +7,7 @@
              x:DataType="viewmodel:UserViewModel"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
-             Background="White"
+             Background="{DynamicResource MainBackgroundColor}"
              Padding="{OnPlatform 20}">
 
     <ContentPage.Resources>
@@ -15,21 +15,21 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout>
-        <Image  Source="textlogo.png" HeightRequest="200" WidthRequest="300"/>
+        <Image  Source="{DynamicResource TextLogoPath}" HeightRequest="200" WidthRequest="300"/>
 
         <Border Stroke="Gray" 
                     StrokeThickness="1.5" 
                     StrokeShape="RoundRectangle 20,20,20,20" 
-                    HeightRequest="60" WidthRequest="370">
+                    HeightRequest="60" WidthRequest="370" Background="{DynamicResource EntryBackround}">
             <Entry Text="{Binding Username,Mode=TwoWay}" 
-                       TextColor="Black" 
+                       TextColor="{DynamicResource TextColor}" 
                        FontSize="18"
                        Placeholder="Username" 
                        Margin="0" 
                        x:Name="usernameEntry" 
                        HeightRequest="50" 
                        WidthRequest="350" 
-                       Background="White">
+                       Background="{DynamicResource EntryBackround}">
                 <Entry.Behaviors>
                     <toolkit:EventToCommandBehavior
                                   EventName="TextChanged"
@@ -57,21 +57,19 @@
                     StrokeThickness="1.5" 
                     StrokeShape="RoundRectangle 20,20,20,20" 
                     HeightRequest="60" 
-                    WidthRequest="370">
+                    WidthRequest="370" Background="{DynamicResource EntryBackround}">
 
             <Grid>
                 <Entry  Text="{Binding Password,Mode=TwoWay}"  
-                            
-                            IsPassword="{Binding Source={x:Reference ShowPasswordButton},Path=IsPressed, Converter={StaticResource BooleanConverter}}"
-                            
-                            TextColor="Black" 
-                            FontSize="18" 
-                            Placeholder="Password" 
-                            HeightRequest="50" 
-                            WidthRequest="300" 
-                            HorizontalOptions="Start"
-                            Margin="10,0,0,0"
-                            Background="White">
+                        IsPassword="{Binding Source={x:Reference ShowPasswordButton},Path=IsPressed, Converter={StaticResource BooleanConverter}}"                          
+                        TextColor="{DynamicResource TextColor}" 
+                        FontSize="18" 
+                        Placeholder="Password" 
+                        HeightRequest="50" 
+                        WidthRequest="300" 
+                        HorizontalOptions="Start"
+                        Margin="10,0,0,0"
+                        Background="{DynamicResource EntryBackround}">
 
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
@@ -81,12 +79,12 @@
                 </Entry>
 
                 <ImageButton x:Name="ShowPasswordButton" 
-                                 HorizontalOptions="End" 
-                                 Margin="0,0,5,0"
-                                 Grid.Column="1" 
-                                 Source="showpasswordicon.png"
-                                 Scale="0.4"
-                                 Clicked="ImageClickAnimation"/>
+                             HorizontalOptions="End" 
+                             Margin="0,0,5,0"
+                             Grid.Column="1" 
+                             Source="showpasswordicon.png"
+                             Scale="0.4"
+                             Clicked="ImageClickAnimation" BackgroundColor="Transparent"/>
 
             </Grid>
 
@@ -103,31 +101,31 @@
         </Border>
 
         <Button  Clicked="ClickAnimation" 
-                     Command="{Binding LogInCommand}" 
-                     Margin="0,70,0,30" 
-                     Text="Log In" 
-                     FontSize="25" 
-                     FontAttributes="Bold" 
-                     TextColor="White" 
-                     Background="Black"  
-                     WidthRequest="370" 
-                     CornerRadius="20" >
+                 Command="{Binding LogInCommand}" 
+                 Margin="0,70,0,30" 
+                 Text="Log In" 
+                 FontSize="25" 
+                 FontAttributes="Bold" 
+                 TextColor="White" 
+                 Background="Black"  
+                 WidthRequest="370" 
+                 CornerRadius="20" >
             <Button.Shadow>
                 <Shadow Offset="0,5"
                             Opacity="1" />
             </Button.Shadow>
         </Button>
 
-        <Rectangle Background="Black" WidthRequest="{OnPlatform WinUI=500,Android=350}" HeightRequest="4" />
+        <Rectangle Background="{DynamicResource TextColor}" WidthRequest="{OnPlatform WinUI=500,Android=350}" HeightRequest="4" />
 
         <HorizontalStackLayout HorizontalOptions="Center">
             <Label Margin="0,0,10,0" 
-                       FontSize="17" 
-                       TextColor="Black" 
+                       FontSize="{OnPlatform WinUI=17,Android=15}" 
+                       TextColor="{DynamicResource TextColor}" 
                        Text="Don't have an account yet ?"/>
 
-            <Label FontSize="17" 
-                       TextColor="Black" 
+            <Label FontSize="{OnPlatform WinUI=17,Android=15}" 
+                       TextColor="{DynamicResource TextColor}" 
                        Text="Click here to Sign Up" 
                        FontAttributes="Bold">
 

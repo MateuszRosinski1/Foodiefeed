@@ -17,4 +17,5 @@
     <Color x:Key="HubPanelBackground">#f0f0f0</Color>
     <Color x:Key="TagViewFrameBackground">#e0e0e0</Color>
     <x:String x:Key="LogoPath">logolighttheme.png</x:String>
+    <x:String x:Key="TextLogoPath">textlogo.png</x:String>
 </ResourceDictionary>

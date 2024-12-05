@@ -5,12 +5,12 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodel:UserViewModel"
              x:Class="Foodiefeed.SignUpView"
-             Background="White"
+             Background="{DynamicResource MainBackgroundColor}"
              NavigationPage.HasBackButton="False">
 
     <ScrollView>
         <VerticalStackLayout>
-            <Image  Source="textlogo.png" 
+            <Image  Source="{DynamicResource TextLogoPath}" 
                     HeightRequest="150" 
                     WidthRequest="225"/>
 
@@ -20,16 +20,16 @@
                         StrokeThickness="1.5" 
                         StrokeShape="RoundRectangle 20,20,20,20" 
                         HeightRequest="60" 
-                        WidthRequest="180">
-                    <Entry  Text="{Binding Firstname,Mode=TwoWay}" 
-                            TextColor="Black" 
+                        WidthRequest="180" Background="{DynamicResource EntryBackround}">
+                    <Entry  Text="{Binding Firstname,Mode=TwoWay}"                            
                             FontSize="18" 
                             Placeholder="First Name" 
                             Margin="0" 
                             x:Name="FirstNameEntry" 
                             HeightRequest="50" 
-                            WidthRequest="175" 
-                            Background="White">
+                            WidthRequest="175"
+                            TextColor="{DynamicResource TextColor}"
+                            Background="{DynamicResource EntryBackround}"> 
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior
                                       EventName="TextChanged"
@@ -58,17 +58,17 @@
                         StrokeThickness="1.5" 
                         StrokeShape="RoundRectangle 20,20,20,20" 
                         HeightRequest="60" 
-                        WidthRequest="180">
+                        WidthRequest="180" Background="{DynamicResource EntryBackround}">
                     
                     <Entry Text="{Binding Lastname,Mode=TwoWay}" 
-                           TextColor="Black" 
                            FontSize="18" 
                            Placeholder="Last Name" 
                            Margin="0" 
                            x:Name="LastNameEntry" 
                            HeightRequest="50" 
                            WidthRequest="175" 
-                           Background="White">
+                           TextColor="{DynamicResource TextColor}"
+                           Background="{DynamicResource EntryBackround}">
                         
                         <Entry.Behaviors>
                             <toolkit:EventToCommandBehavior
@@ -100,16 +100,16 @@
                     StrokeThickness="1.5"
                     StrokeShape="RoundRectangle 20,20,20,20" 
                     HeightRequest="60" 
-                    WidthRequest="370">
+                    WidthRequest="370" Background="{DynamicResource EntryBackround}">
                 <Entry Text="{Binding Username,Mode=TwoWay}" 
-                       TextColor="Black" 
                        FontSize="18" 
                        Placeholder="Username" 
                        Margin="0" 
                        x:Name="usernameEntry" 
                        HeightRequest="50" 
                        WidthRequest="350" 
-                       Background="White">
+                       TextColor="{DynamicResource TextColor}"
+                       Background="{DynamicResource EntryBackround}">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                                   EventName="TextChanged"
@@ -136,16 +136,16 @@
             <Border Margin="0,0,0,20" 
                     StrokeThickness="1.5" 
                     StrokeShape="RoundRectangle 20,20,20,20" 
-                    HeightRequest="60" WidthRequest="370">
+                    HeightRequest="60" WidthRequest="370" Background="{DynamicResource EntryBackround}">
                 <Entry Text="{Binding Email,Mode=TwoWay}" 
-                       TextColor="Black" 
+                       TextColor="{DynamicResource TextColor}"
+                       Background="{DynamicResource EntryBackround}"
                        FontSize="18" 
                        Placeholder="E-mail" 
                        Margin="0" 
                        x:Name="emailEntry" 
                        HeightRequest="50" 
-                       WidthRequest="350" 
-                       Background="White">
+                       WidthRequest="350">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -173,18 +173,17 @@
                      StrokeThickness="1.5" 
                      StrokeShape="RoundRectangle 20,20,20,20" 
                      HeightRequest="60" 
-                     WidthRequest="370">
-                <Entry IsPassword="True" 
-                       
+                     WidthRequest="370" Background="{DynamicResource EntryBackround}">
+                <Entry IsPassword="True"                      
                        Text="{Binding Password,Mode=TwoWay}" 
-                       TextColor="Black" 
                        FontSize="18" 
                        Placeholder="Password" 
                        Margin="0" 
                        x:Name="passwordEntry" 
                        HeightRequest="50" 
                        WidthRequest="350" 
-                       Background="White">
+                       TextColor="{DynamicResource TextColor}"
+                       Background="{DynamicResource EntryBackround}">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -214,15 +213,15 @@
                      StrokeThickness="1.5" 
                      StrokeShape="RoundRectangle 20,20,20,20" 
                      HeightRequest="60" 
-                     WidthRequest="370">
+                     WidthRequest="370" Background="{DynamicResource EntryBackround}">
                 <Entry IsPassword="True" 
                        Text="{Binding PasswordRepeat,Mode=TwoWay}" 
-                       TextColor="Black" 
                        FontSize="18" Placeholder="Password" 
                        Margin="0" x:Name="rePasswordEntry" 
                        HeightRequest="50" 
                        WidthRequest="350" 
-                       Background="White">
+                       TextColor="{DynamicResource TextColor}"
+                       Background="{DynamicResource EntryBackround}">
                     <Entry.Behaviors>
                         <toolkit:EventToCommandBehavior
                               EventName="TextChanged"
@@ -244,17 +243,17 @@
                 </Border.Triggers>
             </Border>
 
-            <Rectangle Background="Black" 
-                       WidthRequest="500" 
+            <Rectangle Background="{DynamicResource TextColor}" 
+                       WidthRequest="{OnPlatform WinUI=500,Android=350}" 
                        HeightRequest="4" />
 
             <HorizontalStackLayout HorizontalOptions="Center">
                 <Label Margin="0,0,10,0" 
                        FontSize="17" 
-                       TextColor="Black" 
+                       TextColor="{DynamicResource TextColor}" 
                        Text="Already have an account ?"/>
                 <Label FontSize="17" 
-                       TextColor="Black" 
+                       TextColor="{DynamicResource TextColor}" 
                        Text="Log In" 
                        FontAttributes="Bold">
                     <Label.GestureRecognizers>

@@ -1,22 +1,20 @@
-﻿
-using Foodiefeed.Resources.Styles;
-using Foodiefeed.viewmodels;
+﻿using Foodiefeed.viewmodels;
 using Microsoft.Maui.Handlers;
-using Microsoft.Maui.Platform;
 
 namespace Foodiefeed
 {
     public partial class App : Application
     {
         private readonly UserSession _userSession;
+        private readonly IThemeHandler _themeHandler;
 
-        public App(UserViewModel vm,UserSession us)
+        public App(UserViewModel vm,UserSession us, IThemeHandler themeHandler)
         {
             InitializeComponent();
             _userSession = us;
-            //MainPage = new LogInPage(vm);
-            MainPage = new BoardPage(new BoardViewModel(us));
+            _themeHandler = themeHandler;
 
+            MainPage = new LogInPage(vm);
 #if WINDOWS
             SwitchHandler.Mapper.AppendToMapping("Custom", (h, v) =>
             {
@@ -27,13 +25,14 @@ namespace Foodiefeed
                 h.PlatformView.MinWidth = 0;
             });
 #endif
+
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
             var window  = base.CreateWindow(activationState);
 
-            //window.Destroying += Window_Destroying;
+            window.Destroying += Window_Destroying;
 
 #if WINDOWS
             window.MinimumHeight = 800;
@@ -42,17 +41,18 @@ namespace Foodiefeed
             return window;
         }
 
-        private void Window_Destroying(object sender, EventArgs e)
+        private async void Window_Destroying(object sender, EventArgs e)
         {
+            await _userSession.SetOffline();
+            await _themeHandler.SaveThemeState();
+            Application.Current.Quit();          
+        }
 
-            if (_userSession.IsLoggedIn)
-            {
-                _userSession.SetOffline();
-                _userSession.UnbindId();
-            }
-            
+        protected override void OnStart()
+        {
+           base.OnStart();
 
-            Application.Current.Quit();            
+            _themeHandler.LoadTheme();
         }
 
 

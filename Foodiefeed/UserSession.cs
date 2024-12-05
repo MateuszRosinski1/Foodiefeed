@@ -10,12 +10,9 @@ namespace Foodiefeed
     {
         public int? Id { get; set; }
 
-        public bool IsLoggedIn { get; set; } =  false;
-
         public void InitializeSession(int userId)
         {
             Id = userId;
-            IsLoggedIn = true;
         }
 
         public void Logout()
@@ -27,10 +24,9 @@ namespace Foodiefeed
         public void UnbindId()
         {
             Id = null;
-            IsLoggedIn = false;
         }
 
-        public void SetOnline() {
+        public async Task SetOnline() {
 
 #if WINDOWS
             var apiBaseUrl = "http://localhost:5000";
@@ -47,7 +43,9 @@ namespace Foodiefeed
 
                 try
                 {
-                    var response = httpClient.PutAsync(endpoint, null);
+                    var response = await httpClient.PutAsync(endpoint, null);
+
+                    if (!response.IsSuccessStatusCode) { throw new Exception(); }
 
                 }catch (Exception ex)
                 {
@@ -56,7 +54,7 @@ namespace Foodiefeed
             }
         }
 
-        public void SetOffline() {
+        public async Task SetOffline() {
 
 #if WINDOWS
             var apiBaseUrl = "http://localhost:5000";
@@ -73,7 +71,7 @@ namespace Foodiefeed
 
                 try
                 {
-                    var response = httpClient.PutAsync(endpoint, null);
+                    var response = await httpClient.PutAsync(endpoint, null);
 
                 }
                 catch (Exception ex)

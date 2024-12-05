@@ -40,7 +40,7 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> UserSignUp([FromBody]CreateUserDto dto,IFormFile file)
+        public async Task<ActionResult> UserSignUp([FromForm]CreateUserDto dto, [FromForm] IFormFile file)
         {
             await _service.CreateUser(dto,file);
 

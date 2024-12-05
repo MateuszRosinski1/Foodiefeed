@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Foodiefeed.models.dto;
+using Foodiefeed.services;
 using Newtonsoft.Json;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,7 +11,10 @@ namespace Foodiefeed.viewmodels
     {
         private readonly UserSession _userSession;
 
-        public UserViewModel(UserSession userSession)
+        private readonly IFoodiefeedApiService _foodiefeedApiServce;
+        private readonly IServiceProvider _serviceProvider;
+
+        public UserViewModel(UserSession userSession,IFoodiefeedApiService foodiefeedApiServce,IServiceProvider serviceProvider)
         {
             ValidateFirstname = true;
             ValidateLastname = true;
@@ -20,6 +23,8 @@ namespace Foodiefeed.viewmodels
             ValidatePasswordRepeat = true;
             ValidatePassword = true;
             _userSession = userSession;
+            _foodiefeedApiServce = foodiefeedApiServce;
+            _serviceProvider = serviceProvider;
         }
 
         #region Login Logic
@@ -69,7 +74,7 @@ namespace Foodiefeed.viewmodels
                             var StringId = await response.Content.ReadAsStringAsync();
                             var id = Convert.ToInt32(StringId);
                             _userSession.InitializeSession(id);
-                            _userSession.SetOnline();
+                            await _userSession.SetOnline();
                             await ToBoardPage();
                         }
                         else
@@ -84,14 +89,14 @@ namespace Foodiefeed.viewmodels
                     }
                 }
             }
-            await Task.Delay(2000);  
-            //remove on release
-            await ToBoardPage();
+            await Task.Delay(2000);
         }
 
         private async Task ToBoardPage()
         {
-            App.Current.MainPage = new AppShell();
+
+            var boardPage = _serviceProvider.GetRequiredService<BoardPage>();
+            App.Current.MainPage = boardPage;
         }
 
         private bool LoginCanProceed()
@@ -158,24 +163,11 @@ namespace Foodiefeed.viewmodels
         {
             if (CanProceed())
             {
-
-                CreateUserDto dto = new CreateUserDto();
-                {
-                    dto.FirstName = Firstname;
-                    dto.LastName = Lastname;
-                    dto.Username = Username;
-                    dto.Email = Email;
-                    dto.PasswordHash = Password;
-                }
-
-
-                var json = JsonConvert.SerializeObject(dto);
-
 #if WINDOWS
-                var apiBaseUrl = "http://localhost:5073";
+                var apiBaseUrl = "http://localhost:5000";
 #endif
 #if ANDROID
-                           var apiBaseUrl = "http://10.0.2.2:5000";
+                var apiBaseUrl = "http://10.0.2.2:5000";
 #endif
 
                 var endpoint = "api/user/register";
@@ -187,42 +179,33 @@ namespace Foodiefeed.viewmodels
 
                     try
                     {
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                        var filePath = Path.Combine(FileSystem.Current.AppDataDirectory, "avatar.jpg");
-
-                        if (!File.Exists(filePath))
-                        {
-                            using var resource = await FileSystem.OpenAppPackageFileAsync("avatar.jpg");
-                            using var fileStream = File.Create(filePath);
-                            await resource.CopyToAsync(fileStream);
-                        }
-
                         using (var formContent = new MultipartFormDataContent())
                         {
+                            formContent.Add(new StringContent(Firstname), "FirstName"); 
+                            formContent.Add(new StringContent(Lastname), "LastName"); 
+                            formContent.Add(new StringContent(Username), "Username"); 
+                            formContent.Add(new StringContent(Email), "Email"); 
+                            formContent.Add(new StringContent(Password), "PasswordHash");
+
+                            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+                            var files = Directory.GetFiles(basePath, "avatar*.jpg");
+                            var filePath = files.FirstOrDefault();
+
                             using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                             {
                                 var fileContent = new StreamContent(fileStream);
                                 fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
                                 formContent.Add(fileContent, "file", "avatar.jpg");
-                            }
 
-                            formContent.Add(content);
+                                var response = await client.PostAsync(endpoint, formContent);
 
-                            var request = new HttpRequestMessage
-                            {
-                                Method = HttpMethod.Post,
-                                RequestUri = new Uri(apiBaseUrl + endpoint),
-                                Content = formContent
-                            };
-
-                            var response = await client.SendAsync(request);
-
-                            if(response.IsSuccessStatusCode)
-                            {
+                                if (!response.IsSuccessStatusCode)
+                                {
+                                    throw new Exception(await response.Content.ReadAsStringAsync());
+                                }
                                 await ToLogInPage();
-                            }
-
+                            }                        
                         }
                     }
                     catch (Exception ex)

@@ -98,7 +98,7 @@ namespace Foodiefeed_api.services
             {
                 userTags.Add(new UserTag() { Score = 50, Tag = tag });
             }
-
+            user.UserTags = userTags;
             _context.Users.Add(user);
 
             await _context.SaveChangesAsync();

@@ -21,27 +21,6 @@
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="End"  Spacing="5" VerticalOptions="Center" Padding="10">
-                    <!--<Button FontAttributes="Bold" Text="Send friend request" BackgroundColor="{DynamicResource MainBackgroundColorContrast}" Margin="0,0,10,0" VerticalOptions="Center" 
-                            >
-                        <Button.Shadow>
-                            <Shadow Opacity="0.4"
-                                    Radius="10"/>
-                        </Button.Shadow>
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
-                        </Button.GestureRecognizers>
-                    </Button>
-
-                <Button FontAttributes="Bold" Text="Follow" BackgroundColor="#e32441" Margin="0,0,10,0" VerticalOptions="Center">
-                        <Button.Shadow>
-                            <Shadow Opacity="0.4"
-                                    Radius="10"/>
-                        </Button.Shadow>
-                        <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
-                        </Button.GestureRecognizers>
-                    </Button>-->
-
                 <Button FontAttributes="Bold" 
                         Text="Profile"
                         BackgroundColor="Black" 
@@ -52,11 +31,7 @@
                         CommandParameter="{Binding UserId}"
                         BorderWidth="0.5"
                         BorderColor="DimGray">
-                        <!--<Button.Shadow>
-                            <Shadow Opacity="0.4"
-                                    Radius="10"/>
-                        </Button.Shadow>-->
-                        <Button.GestureRecognizers>
+                    <Button.GestureRecognizers>
                             <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
                         </Button.GestureRecognizers>
                     </Button>
