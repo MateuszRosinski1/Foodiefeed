@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.RecipeView"
+             xmlns:views="clr-namespace:Foodiefeed.views.windows.contentview">
+    <Grid>
+        <Frame BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+               BorderColor="Gray" 
+               HeightRequest="{OnPlatform WinUI=200,Android=150}" 
+               MaximumWidthRequest="1000" >
+            <Grid ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{OnPlatform WinUI=200,Android=120}"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="{OnPlatform WinUI=100,Android=50}"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Stroke="Transparent" 
+                        StrokeShape="RoundRectangle 10">
+                    <Image  Grid.Column="0"
+                            HeightRequest="{OnPlatform WinUI=170,Android=130}" 
+                            WidthRequest="{OnPlatform WinUI=200,Android=120}" 
+                            BackgroundColor="Black" 
+                            x:Name="image" 
+                            Aspect="AspectFill"/>
+                </Border>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label x:Name="usernameLabel" 
+                           TextColor="{DynamicResource TextColor}" 
+                           FontSize="{OnPlatform WinUI=20,Android=10}"
+                           FontAttributes="Bold" />
+                    <ScrollView HeightRequest="180" 
+                                VerticalScrollBarVisibility="{OnPlatform WinUI=Always,Android=Never}">
+                        <Label x:Name="contentLabel"
+                               LineBreakMode="WordWrap"
+                               HorizontalOptions="FillAndExpand"
+                               TextColor="{DynamicResource TextColor}"
+                               FontSize="{OnPlatform WinUI=15,Android=8}"/>
+                    </ScrollView>
+                </VerticalStackLayout>
+                <Grid WidthRequest="100" 
+                      Grid.Column="2" 
+                      RowSpacing="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="{OnPlatform WinUI=0,Android=*}"/>
+                    </Grid.RowDefinitions>
+                    <Button Text="Products"
+                            x:Name="ChangeContentButton"
+                            Grid.Row="0"
+                            Padding="{OnPlatform Android='0,0,0,0'}"
+                            BackgroundColor="{DynamicResource MainBackgroundColor}" 
+                            TextColor="{DynamicResource TextColor}"
+                            FontSize="{OnPlatform Android=10}"
+                            WidthRequest="{OnPlatform Android=50}"
+                            HeightRequest="{OnPlatform Android=30}"
+                            Clicked="SwitchContent"/>
+                    <Button Text="Delete"  
+                            Grid.Row="1"
+                            Padding="{OnPlatform Android='0,0,0,0'}"
+                            FontSize="{OnPlatform Android=10}"
+                            WidthRequest="{OnPlatform Android=50}"
+                            HeightRequest="{OnPlatform Android=30}"
+                            TextColor="White" 
+                            BackgroundColor="#e32441"
+                            Clicked="DeleteButtonClicked"/>
+                    <Button Text="Show more"  
+                            Grid.Row="2"
+                            IsVisible="{OnPlatform WinUI=False,Android=True}"
+                            Padding="{OnPlatform Android='0,0,0,0'}"
+                            FontSize="{OnPlatform Android=8}"
+                            WidthRequest="{OnPlatform Android=50}"
+                            HeightRequest="{OnPlatform Android=30}"
+                            TextColor="White"
+                            BackgroundColor="Black"
+                            Clicked="ShowMoreButtonClicked"/>
+                </Grid>
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentView>

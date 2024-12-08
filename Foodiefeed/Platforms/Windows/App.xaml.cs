@@ -1,4 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿using CommunityToolkit.Maui.Media;
+using Microsoft.UI.Xaml;
+using static Microsoft.Maui.ApplicationModel.Permissions;
+using uiMedia = Microsoft.UI.Xaml.Media;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,6 +23,13 @@ namespace Foodiefeed.WinUI
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
+        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        {
+            base.OnLaunched(args);
+
+            Microsoft.Maui.Controls.DependencyService.Register<ISpeechToText, SpeechToTextImplementation>();
+        }
     }
 
 }

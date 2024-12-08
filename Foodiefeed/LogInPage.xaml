@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.LogInPage"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
+             x:DataType="viewmodel:UserViewModel"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:Foodiefeed;assembly=Foodiefeed"
+             Background="{DynamicResource MainBackgroundColor}"
+             Padding="{OnPlatform 20}">
+
+    <ContentPage.Resources>
+        <local:BooleanConverter x:Key="BooleanConverter" />
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+        <Image  Source="{DynamicResource TextLogoPath}" HeightRequest="200" WidthRequest="300"/>
+
+        <Border Stroke="Gray" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" WidthRequest="370" Background="{DynamicResource EntryBackround}">
+            <Entry Text="{Binding Username,Mode=TwoWay}" 
+                       TextColor="{DynamicResource TextColor}" 
+                       FontSize="18"
+                       Placeholder="Username" 
+                       Margin="0" 
+                       x:Name="usernameEntry" 
+                       HeightRequest="50" 
+                       WidthRequest="350" 
+                       Background="{DynamicResource EntryBackround}">
+                <Entry.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                                  EventName="TextChanged"
+                                  Command="{Binding UsernameValidateCommand}" />
+                </Entry.Behaviors>
+            </Entry>
+
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidateUsername}" Value="true">
+                    <Setter Property="Stroke" 
+                                Value="Gray"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Border" 
+                                 Binding="{Binding ValidateUsername}" 
+                                 Value="false">
+                    <Setter Property="Stroke" Value="#e32441"/>
+                </DataTrigger>
+            </Border.Triggers>
+
+
+        </Border>
+
+        <Border Margin="0,30,0,0" 
+                    Stroke="Gray" 
+                    StrokeThickness="1.5" 
+                    StrokeShape="RoundRectangle 20,20,20,20" 
+                    HeightRequest="60" 
+                    WidthRequest="370" Background="{DynamicResource EntryBackround}">
+
+            <Grid>
+                <Entry  Text="{Binding Password,Mode=TwoWay}"  
+                        IsPassword="{Binding Source={x:Reference ShowPasswordButton},Path=IsPressed, Converter={StaticResource BooleanConverter}}"                          
+                        TextColor="{DynamicResource TextColor}" 
+                        FontSize="18" 
+                        Placeholder="Password" 
+                        HeightRequest="50" 
+                        WidthRequest="300" 
+                        HorizontalOptions="Start"
+                        Margin="10,0,0,0"
+                        Background="{DynamicResource EntryBackround}">
+
+                    <Entry.Behaviors>
+                        <toolkit:EventToCommandBehavior
+                          EventName="TextChanged"
+                          Command="{Binding ValidatePasswordFunCommand}" />
+                    </Entry.Behaviors>
+                </Entry>
+
+                <ImageButton x:Name="ShowPasswordButton" 
+                             HorizontalOptions="End" 
+                             Margin="0,0,5,0"
+                             Grid.Column="1" 
+                             Source="showpasswordicon.png"
+                             Scale="0.4"
+                             Clicked="ImageClickAnimation" BackgroundColor="Transparent"/>
+
+            </Grid>
+
+
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="true">
+                    <Setter Property="Stroke" Value="Gray"/>
+                </DataTrigger>
+                <DataTrigger TargetType="Border" Binding="{Binding ValidatePassword}" Value="false">
+                    <Setter Property="Stroke" Value="#e32441"/>
+                </DataTrigger>
+            </Border.Triggers>
+
+        </Border>
+
+        <Button  Clicked="ClickAnimation" 
+                 Command="{Binding LogInCommand}" 
+                 Margin="0,70,0,30" 
+                 Text="Log In" 
+                 FontSize="25" 
+                 FontAttributes="Bold" 
+                 TextColor="White" 
+                 Background="Black"  
+                 WidthRequest="370" 
+                 CornerRadius="20" >
+            <Button.Shadow>
+                <Shadow Offset="0,5"
+                            Opacity="1" />
+            </Button.Shadow>
+        </Button>
+
+        <Rectangle Background="{DynamicResource TextColor}" WidthRequest="{OnPlatform WinUI=500,Android=350}" HeightRequest="4" />
+
+        <HorizontalStackLayout HorizontalOptions="Center">
+            <Label Margin="0,0,10,0" 
+                       FontSize="{OnPlatform WinUI=17,Android=15}" 
+                       TextColor="{DynamicResource TextColor}" 
+                       Text="Don't have an account yet ?"/>
+
+            <Label FontSize="{OnPlatform WinUI=17,Android=15}" 
+                       TextColor="{DynamicResource TextColor}" 
+                       Text="Click here to Sign Up" 
+                       FontAttributes="Bold">
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToSignUpPageCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

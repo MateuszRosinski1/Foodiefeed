@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.Resources.Styles.DarkTheme">
+    <Color x:Key="MainBackgroundColor">#1c1c1c</Color>
+    <Color x:Key="TextColor">#adadad</Color>
+    <Color x:Key="NotificationButtonTextColor">White</Color>
+    <Color x:Key="SideBackgroundColor">#1f1f1f</Color>
+    <Color x:Key="EntryBackround">#333333</Color>
+    <Color x:Key="MainBackgroundColorContrast">#2e2e2e</Color>
+    <Color x:Key="NotificationGrayButtonBackground">#707070</Color>
+    <Color x:Key="ProfileOptionsSection">#333333</Color>
+    <Color x:Key="PostBorderColor">#333333</Color>
+    <Color x:Key="PostBackgroundColor">#1c1c1c</Color>
+    <Color x:Key="CommentViewBackground">#404040</Color>
+    <Color x:Key="OnListFriendViewBackground">#1f1f1f</Color>
+    <Color x:Key="HubPanelBackground">#1f1f1f</Color>
+    <Color x:Key="TagViewFrameBackground">#1c1c1c</Color>
+    <x:String x:Key="LogoPath">logodarktheme.png</x:String>
+    <x:String x:Key="TextLogoPath">textlogodarktheme.png</x:String>
+</ResourceDictionary>

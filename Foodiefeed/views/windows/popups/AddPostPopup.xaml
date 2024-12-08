@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.popups.AddPostPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Color="Transparent"
+             x:Name="popup">
+    <Frame HeightRequest="450" WidthRequest="700" BackgroundColor="{DynamicResource MainBackgroundColor}">
+        <VerticalStackLayout>
+            <Border Stroke="Gray" StrokeShape="RoundRectangle 10">
+                <Grid BackgroundColor="{DynamicResource EntryBackround}">
+                    <Editor TextColor="{DynamicResource TextColor}" HeightRequest="300" Placeholder="Share your recipe here..." >
+
+                    </Editor>
+                </Grid>
+            </Border>
+            <Grid>
+                <Button Text="Upload Images" HorizontalOptions="Start" Clicked="Button_Clicked"/>
+                <Button Text="Choose Tags" HorizontalOptions="Center"/>
+                <Button Text="Post" HorizontalOptions="End"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Frame>
+</toolkit:Popup>

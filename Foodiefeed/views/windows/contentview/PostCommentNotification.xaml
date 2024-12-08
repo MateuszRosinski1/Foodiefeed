@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.PostCommentNotification"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview">
+    <Border Stroke="Gray" StrokeShape="RoundRectangle 10"  WidthRequest="{OnPlatform WinUI=285}" StrokeThickness="0.5">
+        <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}" Spacing="5" WidthRequest="{OnPlatform WinUI=280}">
+            <ImageButton CornerRadius="5" x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0" BackgroundColor="Black"/>
+            <VerticalStackLayout Spacing="5">
+                <Label x:Name="MessageLabel"
+                       TextColor="{DynamicResource TextColor}" 
+                       FontSize="15" 
+                       HeightRequest="50" 
+                       WidthRequest="{OnPlatform WinUI=200,Android=250}"  
+                       LineBreakMode="TailTruncation" 
+                       BackgroundColor="Transparent" 
+                       MaxLines="2" 
+                       HorizontalTextAlignment="Center"
+                       Margin="0,10,0,0"/>
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5"  Margin="0,0,0,5">
+                    <Border BackgroundColor="{DynamicResource NotificationGrayButtonBackground}" WidthRequest="81" StrokeShape="RoundRectangle 40">
+                        <Label Text="Profile" 
+                                FontSize="12" 
+                                WidthRequest="80" 
+                                HeightRequest="20" 
+                                BackgroundColor="Transparent" 
+                                TextColor="{DynamicResource NotificationButtonTextColor}" 
+                                HorizontalTextAlignment="Center" 
+                                VerticalTextAlignment="Center"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path= ShowUserProfilePopupCommand}"
+                                       CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:PostCommentNotification}}, Path=UserId}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border BackgroundColor="Black" 
+                            WidthRequest="81" 
+                            StrokeShape="RoundRectangle 40">
+                        <Label BackgroundColor="Black" 
+                                FontSize="12" 
+                                Text="Show post"
+                                TextColor="White"
+                                HeightRequest="20" 
+                                HorizontalTextAlignment="Center" 
+                                WidthRequest="80"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path= ShowCommentedPostCommand}"
+                                          CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:PostCommentNotification}}, Path=Ids}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </Border>
+</ContentView>

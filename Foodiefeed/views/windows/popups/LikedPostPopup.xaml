@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.popups.LikedPostPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
+             Color="Transparent">
+    <VerticalStackLayout WidthRequest="800">
+
+        <Grid ZIndex="1">
+            <Border
+         Margin="30,30,30,0" 
+         BackgroundColor="{DynamicResource PostBorderColor}" 
+         StrokeThickness="1" 
+         StrokeShape="RoundRectangle 40,40,40,40">
+
+                <Grid Background="{DynamicResource PostBackgroundColor}" x:Name="Post"  BackgroundColor="White" >
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <!--0 username follow | 3 dots to go to profile-->
+
+                        <RowDefinition/>
+                        <!--1 post text content-->
+
+                        <RowDefinition/>
+                        <!--2 images-->
+
+                        <RowDefinition/>
+                        <!--3 like comments share-->
+
+                        <RowDefinition/>
+                        <!--4 comment section-->
+
+                    </Grid.RowDefinitions>
+
+                    <Grid  Padding="30" Grid.Row="0">
+                        <HorizontalStackLayout Spacing="10">
+                            <VerticalStackLayout>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
+                                <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        <Button Text="Products" 
+                                HorizontalOptions="End"
+                                BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                TextColor="{DynamicResource TextColor}" 
+                                Clicked="ShowProducts"/>
+                    </Grid>
+
+                    <Grid Padding="30,0,20,20" Grid.Row="1" >
+                        <VerticalStackLayout>
+                            <ScrollView MaximumHeightRequest="150" x:Name="PostTextContentScroll">
+                                <Grid>
+                                    <Grid x:Name="PostContentGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostTextContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                    <Grid x:Name="PostProductsGrid">
+                                        <Label TextColor="{DynamicResource TextColor}" x:Name="PostProductsContentLabel" LineBreakMode="WordWrap"/>
+                                    </Grid>
+                                </Grid>
+                            </ScrollView>
+
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid Padding="30,0,30,15" Grid.Row="2" x:Name="ImagesGrid">
+                        <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
+                        <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
+                        <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
+                    </Grid>
+
+                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                            <Button  ImageSource="likeicon.png" 
+                              BackgroundColor="Transparent" 
+                              FontSize="20"
+                              WidthRequest="170"
+                              HeightRequest="50" 
+                              Padding="0,0,0,0" 
+                              Text="Like It!"
+                              TextColor="{DynamicResource TextColor}"/>
+                            <Label x:Name="PostLikeCountLabel" 
+                            TextColor="{DynamicResource TextColor}" 
+                            FontSize="20" 
+                            LineBreakMode="TailTruncation" 
+                            VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+
+                        <Button Grid.Column="1" 
+                         ImageSource="commenticon.png" 
+                         HorizontalOptions="Center" 
+                         BackgroundColor="Transparent" 
+                         FontSize="20" WidthRequest="200" 
+                         HeightRequest="50"
+                         Padding="0,0,0,0" 
+                         Text="Comment"
+                         TextColor="{DynamicResource TextColor}"/>
+
+                        <Button Grid.Column="2" 
+                         ImageSource="shareicon.png" 
+                         HorizontalOptions="EndAndExpand" 
+                         BackgroundColor="Transparent" 
+                         FontSize="20" 
+                         WidthRequest="200"
+                         HeightRequest="50" 
+                         Padding="0,0,0,0" 
+                         Text="Share"
+                         TextColor="{DynamicResource TextColor}"/>
+
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </VerticalStackLayout>
+</toolkit:Popup>

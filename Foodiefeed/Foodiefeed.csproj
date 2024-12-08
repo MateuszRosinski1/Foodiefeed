@@ -1,17 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<BaseOutputPath>$(SolutionDir)bin\Foodiefeed\</BaseOutputPath>
 		<TargetFrameworks>net8.0-android</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-
-		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
-		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
-		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
+		<MauiImageHandlerFastRenderer>true</MauiImageHandlerFastRenderer>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Foodiefeed</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -72,32 +64,138 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\avatar.jpg" />
+	  <None Remove="Resources\Images\commenticon.png" />
+	  <None Remove="Resources\Images\doubleleft.png" />
+	  <None Remove="Resources\Images\doubleright.png" />
+	  <None Remove="Resources\Images\hearthIcon.png" />
+	  <None Remove="Resources\Images\internalservererroricon.png" />
+	  <None Remove="Resources\Images\likeicon.png" />
+	  <None Remove="Resources\Images\logodarktheme.png" />
+	  <None Remove="Resources\Images\logolighttheme.png" />
+	  <None Remove="Resources\Images\microphone.png" />
+	  <None Remove="Resources\Images\notificationicon.png" />
+	  <None Remove="Resources\Images\pfpreal.jpg" />
+	  <None Remove="Resources\Images\profileicon.png" />
+	  <None Remove="Resources\Images\shareicon.png" />
+	  <None Remove="Resources\Images\showpasswordicon.png" />
 	  <None Remove="Resources\Images\textlogo.png" />
+	  <None Remove="Resources\Images\textlogodarktheme.png" />
+	  <None Remove="Resources\Images\threedotfivexfive.png" />
+	  <None Remove="Resources\Images\threedotfivexfived.png" />
+	  <None Remove="Resources\Images\threedotmenu.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.93" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="views\SingUpView.xaml.cs">
+	  <Compile Update="LogInPage.xaml.cs">
+	    <DependentUpon>LogInPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="views\windows\contentview\PostView.xaml.cs">
+	    <DependentUpon>PostView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="views\windows\SingUpView.xaml.cs">
 	    <DependentUpon>SingUpView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="views\BoardView.xaml.cs">
-	    <DependentUpon>BoardView.xaml</DependentUpon>
+	  <Compile Update="views\windows\BoardPage.xaml.cs">
+	    <DependentUpon>BoardPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="views\SingUpView.xaml">
+	  <MauiXaml Update="Resources\Styles\DarkTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="views\BoardView.xaml">
+	  <MauiXaml Update="Resources\Styles\LightTheme.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="views\android\popups\CommentSectionPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\BasicNotofication.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\CommentLikeNotification.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\CommentView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\FriendRequestNotification.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\OnlineFreidnListElementView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\OnListFriendView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\PostCommentNotification.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\PostImageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\PostLikeNotification.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\PostView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\ProductView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\RecipeView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\TagView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\contentview\UserSearchResultView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\AddPostPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\CommentedPostPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\EditCommentPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\FailedActionNotificationPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\LikedCommendPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\LikedPostPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\TextPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\popups\UserOptionPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\SingUpView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="views\windows\BoardPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Platforms\Windows\effects\" />
 	</ItemGroup>
 
 </Project>

@@ -1,15 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foodiefeed_api.entities
 {
     public class PostTag
     {
-        public int Id { get; set; }
+        [Key]
         public int PostId { get; set; }
-        public string TagName { get; set; }
-        public string Description { get; set; }
+        [Key]
+        public int TagId { get; set; }
 
         [ForeignKey("PostId")]
         public virtual Post Post { get; set; }
+
+        [ForeignKey("TagId")]
+        public virtual Tag Tag { get; set; }
     }
 }

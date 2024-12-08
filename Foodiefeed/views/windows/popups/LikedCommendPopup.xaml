@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.popups.LikedCommendPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups"
+             Color="Transparent">
+    <Frame CornerRadius="10" BorderColor="Black" BackgroundColor="{DynamicResource CommentViewBackground}" HeightRequest="300" WidthRequest="700">
+        <Grid  BackgroundColor="Transparent" x:Name="CommentContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" BackgroundColor="Transparent">
+                <HorizontalStackLayout Spacing="5">
+                    <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
+                    <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"
+                           Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Username}"/>
+                </HorizontalStackLayout>
+                <VerticalStackLayout x:Name="ThreeDotStack" VerticalOptions="Center" WidthRequest="30" HorizontalOptions="End" Scale="0.75">
+                    <Ellipse Fill="Gray"
+                         StrokeThickness="0"
+                         WidthRequest="7.5"
+                         HeightRequest="7.5"
+                         Margin="0,1.5"
+                         x:Name="FirstCircle"/>
+                    <Ellipse Fill="Gray"
+                         StrokeThickness="0"
+                         WidthRequest="7.5"
+                         HeightRequest="7.5"
+                         Margin="0,1.5"
+                         x:Name="SecondCircle"/>
+                    <Ellipse Fill="Gray"
+                         StrokeThickness="0"
+                         WidthRequest="7.5"
+                         HeightRequest="7.5"
+                         Margin="0,1.5"
+                         x:Name="ThirdCircle"/>
+                    <VerticalStackLayout.GestureRecognizers>
+                        <PointerGestureRecognizer PointerEntered="AnimateOptionDots"/>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfilePopupCommand}"
+                                              CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=UserId}"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid  Grid.Row="1" Margin="0,5" BackgroundColor="Transparent">
+                <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap" 
+                       Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=CommentContent}"/>
+            </Grid>
+
+            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Transparent">
+                <Label BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
+
+                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel" Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Likes}"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Frame>
+</toolkit:Popup>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.UserSearchResultView"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.contentview"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
+
+    <Border StrokeShape="RoundRectangle 20" BackgroundColor="{DynamicResource MainBackgroundColor}" StrokeThickness="0.5">
+        <Grid BackgroundColor="{DynamicResource MainBackgroundColor}" WidthRequest="{OnPlatform WinUI=650}" HeightRequest="90" Padding="{OnPlatform Android=5}">
+            <HorizontalStackLayout  Spacing="10">
+                <Border StrokeShape="RoundRectangle 20" Stroke="Transparent">
+                    <Image x:Name="pfpImage" WidthRequest="70" HeightRequest="70" Aspect="Fill"/>
+                </Border>                
+                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                    <Label x:Name="UsernameLabel" FontSize="20" FontAttributes="Bold" TextColor="{DynamicResource TextColor}"/>
+                    <HorizontalStackLayout Spacing="4">
+                        <Label x:Name="FollowsLabel" FontSize="15"  TextColor="{DynamicResource TextColor}"/>
+                        <Label x:Name="FriendsLabel" FontSize="15" TextColor="{DynamicResource TextColor}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout HorizontalOptions="End"  Spacing="5" VerticalOptions="Center" Padding="10">
+                <Button FontAttributes="Bold" 
+                        Text="Profile"
+                        BackgroundColor="Black" 
+                        TextColor="White" 
+                        Margin="0,-10,0,0" 
+                        VerticalOptions="Center"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=ShowUserProfileCommand}"
+                        CommandParameter="{Binding UserId}"
+                        BorderWidth="0.5"
+                        BorderColor="DimGray">
+                    <Button.GestureRecognizers>
+                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
+                        </Button.GestureRecognizers>
+                    </Button>
+            </HorizontalStackLayout>
+        </Grid>
+        
+        <Border.Shadow>
+            <Shadow Opacity="0.4" 
+                    Brush="Black"/>
+        </Border.Shadow>
+    </Border>
+</ContentView>

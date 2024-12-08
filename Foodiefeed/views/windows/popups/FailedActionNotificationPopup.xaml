@@ -1,0 +1,22 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.popups.FailedActionNotificationPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:local="clr-namespace:Foodiefeed.views.windows.popups"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
+             >
+
+    <Frame HeightRequest="140" 
+           WidthRequest="250" 
+           BackgroundColor="{DynamicResource MainBackgroundColorContrast}">
+        
+        <Label TextColor="{DynamicResource TextColor}"
+               Text="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}},Path=FailedActionMessage}"
+               LineBreakMode="WordWrap" 
+               VerticalOptions="Start" 
+               HorizontalOptions="Start" 
+               HeightRequest="140" 
+               WidthRequest="200"
+               x:Name="label"/>
+    </Frame>
+</ContentView>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.Resources.Styles.LightTheme">
+    <Color x:Key="MainBackgroundColor">White</Color>
+    <Color x:Key="TextColor">#000000</Color>
+    <Color x:Key="NotificationButtonTextColor">#000000</Color>
+    <Color x:Key="SideBackgroundColor">#f0f0f0</Color>
+    <Color x:Key="EntryBackround">White</Color>
+    <Color x:Key="MainBackgroundColorContrast">#e0e0e0</Color>
+    <Color x:Key="NotificationGrayButtonBackground">#e0e0e0</Color>
+    <Color x:Key="ProfileOptionsSection">#e8e8e8</Color>
+    <Color x:Key="PostBorderColor">Gray</Color>
+    <Color x:Key="PostBackgroundColor">White</Color>
+    <Color x:Key="CommentViewBackground">WhiteSmoke</Color>
+    <Color x:Key="OnListFriendViewBackground">White</Color>
+    <Color x:Key="HubPanelBackground">#f0f0f0</Color>
+    <Color x:Key="TagViewFrameBackground">#e0e0e0</Color>
+    <x:String x:Key="LogoPath">logolighttheme.png</x:String>
+    <x:String x:Key="TextLogoPath">textlogo.png</x:String>
+</ResourceDictionary>

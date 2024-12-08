@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Foodiefeed.views.windows.contentview.FriendRequestNotification"
+             xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels">
+             
+    <Border Stroke="Gray" StrokeShape="RoundRectangle 10" WidthRequest="{OnPlatform WinUI=285}" StrokeThickness="0.5">
+        <HorizontalStackLayout BackgroundColor="{DynamicResource MainBackgroundColor}">
+            <ImageButton CornerRadius="5" x:Name="image" HeightRequest="70" WidthRequest="70"  Aspect="AspectFill" Margin="10,0,0,0" BackgroundColor="Black"/>
+            <VerticalStackLayout>
+                <Label x:Name="MessageLabel" 
+                       TextColor="{DynamicResource TextColor}" 
+                       HeightRequest="50" 
+                       WidthRequest="{OnPlatform WinUI=200,Android=250}" 
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" 
+                       Margin="0,5,0,0"/>
+                <HorizontalStackLayout Spacing="10" 
+                                       HorizontalOptions="Center" 
+                                       Margin="0,0,0,5">
+                    <Border BackgroundColor="#e32441" 
+                            StrokeShape="RoundRectangle 5">
+                        <Label Text="Accept" 
+                               TextColor="White" 
+                               BackgroundColor="#e32441" 
+                               HeightRequest="25" 
+                               WidthRequest="60" 
+                               HorizontalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=AcceptFriendRequestCommand}"
+                                                      CommandParameter="{Binding Ids}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                    <Border  BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                             StrokeShape="RoundRectangle 5">
+                        <Label Text="Decline" 
+                               TextColor="{DynamicResource NotificationButtonTextColor}" 
+                               BackgroundColor="{DynamicResource NotificationGrayButtonBackground}" 
+                               HeightRequest="25" 
+                               WidthRequest="60" 
+                               HorizontalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:BoardViewModel}}, Path=DeclineFriendRequestCommand}"
+                                                      CommandParameter="{Binding Ids}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Border>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </HorizontalStackLayout>
+    </Border>
+</ContentView>
