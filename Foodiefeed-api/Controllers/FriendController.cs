@@ -16,25 +16,25 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("profile-friends/{userId}")]
-        public async Task<IActionResult> GetProfileFriends([FromRoute]int userId)
+        public async Task<IActionResult> GetProfileFriends([FromRoute]int userId, CancellationToken token)
         {
-            var response = await _friendService.GetUserFriends(userId);
+            var response = await _friendService.GetUserFriends(userId, token);
 
             return Ok(response);
         }
 
         [HttpGet("online/{userId}")]
-        public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends([FromRoute] int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOnlineFriends([FromRoute] int userId, CancellationToken token)
         {
-            var onlineFriends = await _friendService.GetOnlineFriends(userId);
+            var onlineFriends = await _friendService.GetOnlineFriends(userId, token);
 
             return Ok(onlineFriends);
         }
 
         [HttpGet("offline/{userId}")]
-        public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends([FromRoute] int userId)
+        public async Task<ActionResult<List<ListedFriendDto>>> GetOfflineFriends([FromRoute] int userId, CancellationToken token)
         {
-            var offlineFriends = await _friendService.GetOfflineFriends(userId);
+            var offlineFriends = await _friendService.GetOfflineFriends(userId, token);
             return Ok(offlineFriends);
         }
 
@@ -74,7 +74,7 @@ namespace Foodiefeed_api.Controllers
         {
             await _friendService.Unfriend(userId, friendId);
 
-            return Ok("");
+            return NoContent();
         }
     }
 }

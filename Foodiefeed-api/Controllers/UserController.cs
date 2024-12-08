@@ -17,40 +17,40 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetById([FromRoute]string userId) {
-            var response = await _service.GetById(userId);
+        public async Task<IActionResult> GetById([FromRoute]string userId,CancellationToken token) {
+            var response = await _service.GetById(userId,token);
 
             return Ok(response);
         }
 
         [HttpGet("user-profile/{id}/{askerId}")]
-        public async Task<IActionResult> GetUserProfileModel([FromRoute]string id, [FromRoute]string askerId)
+        public async Task<IActionResult> GetUserProfileModel([FromRoute]string id, [FromRoute]string askerId, CancellationToken token)
         {
-            var response = await _service.GetUserProfileModelAsync(id,askerId);
+            var response = await _service.GetUserProfileModelAsync(id,askerId,token);
 
             return Ok(response);
         }
 
         [HttpGet("search-users/{query}/{userId}")]
-        public async Task<IActionResult> SearchUsers([FromRoute]string query,[FromRoute] string userId)
+        public async Task<IActionResult> SearchUsers([FromRoute]string query,[FromRoute] string userId, CancellationToken token)
         {
-            var response = await _service.SearchUsers(query,userId);
+            var response = await _service.SearchUsers(query,userId,token);
 
             return Ok(response);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> UserSignUp([FromForm]CreateUserDto dto, [FromForm] IFormFile file)
+        public async Task<ActionResult> UserSignUp([FromForm]CreateUserDto dto, [FromForm] IFormFile file, CancellationToken token)
         {
-            await _service.CreateUser(dto,file);
+            await _service.CreateUser(dto,file,token);
 
             return Ok("User Created Succesfully");
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto)
+        public async Task<ActionResult> userLogIn([FromBody]UserLogInDto dto, CancellationToken token)
         {
-            var userId = await _service.LogIn(dto);
+            var userId = await _service.LogIn(dto, token);
 
             return Ok(userId);
         }
@@ -94,9 +94,9 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("get-profile-picture-base64/{userId}")]
-        public async Task<IActionResult> GetProfilePictureBase64([FromRoute]int userId)
+        public async Task<IActionResult> GetProfilePictureBase64([FromRoute]int userId, CancellationToken token)
         {
-            var response = await _service.GetProfilePicture(userId);
+            var response = await _service.GetProfilePicture(userId, token);
             return Ok(response);
         }
 

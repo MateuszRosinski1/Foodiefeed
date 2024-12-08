@@ -8,12 +8,12 @@ namespace Foodiefeed_api.services
 {
     public interface ICommentService
     {
-        Task<CommentDto> GetCommentById(int id);
+        Task<CommentDto> GetCommentById(int id, CancellationToken token);
         Task<CommentDto> AddNewComment(int postId,NewCommentDto dto);
         Task EditComment(int commentId, string newContent);
         Task DeleteComment(int commentId);
-        Task<int> LikeComment(int userId,int commentId,CancellationToken token);
-        Task<int> UnlikeComment(int userId, int commentId, CancellationToken token);
+        Task<int> LikeComment(int userId,int commentId);
+        Task<int> UnlikeComment(int userId, int commentId);
     }
 
     public class CommentService : ICommentService
@@ -63,7 +63,7 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<CommentDto> GetCommentById(int id)
+        public async Task<CommentDto> GetCommentById(int id, CancellationToken token)
         {
             var comment = _dbContext.Comments.Include(c => c.CommentLikes).FirstOrDefault(c => c.CommentId == id);
 
@@ -71,13 +71,15 @@ namespace Foodiefeed_api.services
 
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == comment.UserId);
 
-            if(user is null)  throw new NotFoundException("user does not exist in current context."); 
+            if(user is null)  throw new NotFoundException("user does not exist in current context.");
+
+            token.ThrowIfCancellationRequested();
 
             var commentDto = _mapper.Map<CommentDto>(comment);
             commentDto.Likes = comment.CommentLikes.ToList().Count();
             commentDto.Username = user.Username;
-            var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId);
-            commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream);
+            var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId,token);
+            commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream,token);
             return commentDto; 
         }
 
@@ -92,13 +94,11 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> LikeComment(int userId, int commentId,CancellationToken token)
+        public async Task<int> LikeComment(int userId, int commentId)
         {
             var commentlike = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentId);
 
             if (commentlike is not null) throw new BadRequestException($"Comment is already liked by the user with id:{userId}");
-
-            token.ThrowIfCancellationRequested();
 
             _dbContext.CommentLikes.Add(new CommentLike { UserId = userId, CommentId = commentId });
 
@@ -109,13 +109,11 @@ namespace Foodiefeed_api.services
             return commentMember.PostId;
         }
 
-        public async Task<int> UnlikeComment(int userId, int commentId, CancellationToken token)
+        public async Task<int> UnlikeComment(int userId, int commentId)
         {
             var commentlike = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentId);
 
             if (commentlike is null) throw new BadRequestException($"Comment is not liked by the user with id:{userId}");
-
-            token.ThrowIfCancellationRequested();
 
             _dbContext.CommentLikes.Remove(commentlike);
 

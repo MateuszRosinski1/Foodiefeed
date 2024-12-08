@@ -17,9 +17,9 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("get-comment-{commentId}")]
-        public async Task<IActionResult> GetCommentById([FromRoute]int commentId)
+        public async Task<IActionResult> GetCommentById([FromRoute]int commentId, CancellationToken token)
         {
-            var response  = await commentService.GetCommentById(commentId);
+            var response  = await commentService.GetCommentById(commentId, token);
             return Ok(response);
         }
 
@@ -45,16 +45,16 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpPost("like-comment/{userId}")]
-        public async Task<IActionResult> LikeComment([FromRoute]int userId,int commentId,CancellationToken token)
+        public async Task<IActionResult> LikeComment([FromRoute]int userId,int commentId)
         {
-            var postId = await commentService.LikeComment(userId, commentId,token);
+            var postId = await commentService.LikeComment(userId, commentId);
             return Ok(postId);
         }
 
         [HttpDelete("unlike-comment/{userId}")]
-        public async Task<IActionResult> UnlikeComment([FromRoute] int userId, int commentId, CancellationToken token)
+        public async Task<IActionResult> UnlikeComment([FromRoute] int userId, int commentId)
         {
-            var postId = await commentService.UnlikeComment(userId, commentId, token);
+            var postId = await commentService.UnlikeComment(userId, commentId);
             return Ok(postId);
         }
     }

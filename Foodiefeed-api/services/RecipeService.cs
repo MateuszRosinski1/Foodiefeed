@@ -11,8 +11,8 @@ public interface IRecipeService
     public Task SaveRecipe(int userId,int postId);
     public Task RemoveRecipe(int postId, int userId);
 
-    public Task<List<RecipeDto>> GetLikedRecipes(int userId, int lastId);
-    public Task<List<RecipeDto>> GetSavedRecipes(int userId, int lastId);
+    public Task<List<RecipeDto>> GetLikedRecipes(int userId, int lastId, CancellationToken token);
+    public Task<List<RecipeDto>> GetSavedRecipes(int userId, int lastId, CancellationToken token);
 }
 
 public class RecipeService : IRecipeService
@@ -50,22 +50,22 @@ public class RecipeService : IRecipeService
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<RecipeDto>> GetLikedRecipes(int userId,int lastId)
+    public async Task<List<RecipeDto>> GetLikedRecipes(int userId,int lastId, CancellationToken token)
     {
         var likedpost = dbContext.PostLikes.Where(p => p.UserId == userId).ToList();
 
         var postsIds = likedpost.Select(p => p.PostId).ToList();
 
-        return await ExtractRecipes(postsIds,lastId);
+        return await ExtractRecipes(postsIds,lastId, token);
     }
 
-    public async Task<List<RecipeDto>> GetSavedRecipes(int userId,int lastId)
+    public async Task<List<RecipeDto>> GetSavedRecipes(int userId,int lastId, CancellationToken token)
     {
         var savedrecipes = dbContext.Recipes.Where(r => r.UserId == userId);
 
         var postsIds = savedrecipes.Select(p => p.PostId).ToList();
 
-        return await ExtractRecipes(postsIds,lastId);
+        return await ExtractRecipes(postsIds,lastId, token);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class RecipeService : IRecipeService
     /// </summary>
     /// <param name="postIds"></param>
     /// <returns>a List of with 10 or less elements</returns>
-    private async Task<List<RecipeDto>> ExtractRecipes(List<int> postIds, int lastId)
+    private async Task<List<RecipeDto>> ExtractRecipes(List<int> postIds, int lastId, CancellationToken token)
     {
         var posts = dbContext.Posts
             .Include(p => p.PostProducts)
@@ -82,12 +82,14 @@ public class RecipeService : IRecipeService
             .OrderBy(p => p.PostId)
             .Where(p => postIds.Contains(p.PostId) && p.PostId > lastId).Take(10);
 
+        token.ThrowIfCancellationRequested();
+
         var recipes = mapper.Map<List<RecipeDto>>(posts);
 
         foreach(var recipe in recipes)
         {
-            var stream = await AzureBloBStorageService.FetchRecipeImage(recipe.Id,recipe.UserId);
-            recipe.ImageBase64 = await AzureBloBStorageService.ConvertStreamToBase64Async(stream);
+            var stream = await AzureBloBStorageService.FetchRecipeImage(recipe.Id,recipe.UserId,token);
+            recipe.ImageBase64 = await AzureBloBStorageService.ConvertStreamToBase64Async(stream, token);
         }
 
         return recipes;

@@ -13,7 +13,7 @@ namespace Foodiefeed_api.services
         Task CreateNotification(NotificationType type, int senderId, int ReceiverId, string nickname, int postId, int commentId);
         Task RemoveRange(List<int> ids);
 
-        Task<List<NotificationDto>> GetNotificationByUserId(int id, int pageNumber);
+        Task<List<NotificationDto>> GetNotificationByUserId(int id, int pageNumber, CancellationToken token);
     }
 
     public class NotificationService : INotificationService
@@ -37,7 +37,7 @@ namespace Foodiefeed_api.services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<NotificationDto>> GetNotificationByUserId(int id,int pageNumber)
+        public async Task<List<NotificationDto>> GetNotificationByUserId(int id,int pageNumber, CancellationToken token)
         {
             const int PAGE_SIZE = 15;
             var notifications = await _dbContext.Notifications
@@ -46,14 +46,18 @@ namespace Foodiefeed_api.services
                 .Take(PAGE_SIZE)
                 .ToListAsync();
 
+            token.ThrowIfCancellationRequested();
+
             if (notifications is null) { throw new NotFoundException("No Notifications found."); }
 
             var notificationsDtos = _mapper.Map<List<NotificationDto>>(notifications);
 
+            token.ThrowIfCancellationRequested();
+
             foreach (var dto in notificationsDtos)
             {
-                var imgStream = await AzureBlobStorageSerivce.FetchProfileImageAsync(dto.SenderId);
-                dto.Base64 = await AzureBlobStorageSerivce.ConvertStreamToBase64Async(imgStream);
+                var imgStream = await AzureBlobStorageSerivce.FetchProfileImageAsync(dto.SenderId,token);
+                dto.Base64 = await AzureBlobStorageSerivce.ConvertStreamToBase64Async(imgStream, token);
             }
 
             return notificationsDtos;

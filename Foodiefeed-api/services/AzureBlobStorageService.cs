@@ -8,13 +8,13 @@ namespace Foodiefeed_api.services
 
     public interface IAzureBlobStorageSerivce
     {
-        public Task UploadPostImagesAsync(int userId, int postId, List<IFormFile> images);
-        public Task<List<Stream>> FetchPostImagesAsync(int userId, int postId);
-        public Task<Stream> FetchProfileImageAsync(int userId);
-        public Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams);
-        public Task<string> ConvertStreamToBase64Async(Stream stream);
+        public Task UploadPostImagesAsync(int userId, int postId, List<IFormFile> images, CancellationToken token);
+        public Task<List<Stream>> FetchPostImagesAsync(int userId, int postId, CancellationToken token);
+        public Task<Stream> FetchProfileImageAsync(int userId, CancellationToken token);
+        public Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams, CancellationToken token);
+        public Task<string> ConvertStreamToBase64Async(Stream stream, CancellationToken token);
         public Task RemvePostImagesRangeAsync(int userId, int postId);
-        public Task<MemoryStream> FetchRecipeImage(int postId, int userId);
+        public Task<MemoryStream> FetchRecipeImage(int postId, int userId, CancellationToken token);
         public Task UploadNewProfilePicture(int userId, IFormFile file);
         public Task RemoveUserProfilePicture(int userId);
     }
@@ -33,9 +33,11 @@ namespace Foodiefeed_api.services
             container = blobService.GetBlobContainerClient("images-storage");
         }
 
-        public async Task<Stream> FetchProfileImageAsync(int userId)
+        public async Task<Stream> FetchProfileImageAsync(int userId, CancellationToken token)
         {
             var dir = $"{userId}/pfp.";
+
+            token.ThrowIfCancellationRequested();
 
             await foreach (var blobItem in container.GetBlobsAsync(prefix: dir))
             {
@@ -50,11 +52,13 @@ namespace Foodiefeed_api.services
             return null;
         }
 
-        public async Task UploadPostImagesAsync(int userId,int postId,List<IFormFile> images)
+        public async Task UploadPostImagesAsync(int userId,int postId,List<IFormFile> images, CancellationToken token)
         {
             var dir = $"{userId}/posts/{postId}/";
 
             int i = 1;
+
+            token.ThrowIfCancellationRequested();
 
             foreach (var image in images)
             {
@@ -71,11 +75,13 @@ namespace Foodiefeed_api.services
             }
         }
 
-        public async Task<List<Stream>> FetchPostImagesAsync(int userId, int postId)
+        public async Task<List<Stream>> FetchPostImagesAsync(int userId, int postId, CancellationToken token)
         {
             var dir = $"{userId}/posts/{postId}/";
 
             var images = new List<Stream>();
+
+            token.ThrowIfCancellationRequested();
 
             await foreach (var item in container.GetBlobsAsync(prefix: dir))
             {
@@ -92,33 +98,39 @@ namespace Foodiefeed_api.services
             return images;
         }
 
-        public async Task<MemoryStream> FetchRecipeImage(int postId, int userId)
+        public async Task<MemoryStream> FetchRecipeImage(int postId, int userId, CancellationToken token)
         {
             var dir = $"{userId}/posts/{postId}/";
 
-            var memStream = new MemoryStream();
+            token.ThrowIfCancellationRequested();
 
-            await foreach (var blobItem in container.GetBlobsAsync(prefix: dir))
+            using (var memStream = new MemoryStream())
             {
-                if (Path.GetFileNameWithoutExtension(blobItem.Name) == "1")
+                await foreach (var blobItem in container.GetBlobsAsync(prefix: dir))
                 {
-                    var blobClient = container.GetBlobClient(blobItem.Name);
+                    if (Path.GetFileNameWithoutExtension(blobItem.Name) == "1")
+                    {
+                        var blobClient = container.GetBlobClient(blobItem.Name);
 
-                    await blobClient.DownloadToAsync(memStream);
+                        await blobClient.DownloadToAsync(memStream);
 
-                    memStream.Position = 0;
-                    break;
+                        memStream.Position = 0;
+                        break;
+                    }
                 }
+                return memStream;
             }
-            return memStream;
         }
 
-        public async Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams)
+        public async Task<List<string>> ConvertStreamToBase64Async(List<Stream> streams, CancellationToken token)
         {
             List<string> bases64 = new List<string>();
+
             foreach(var stream in streams)
             {
-                using(var memStream = new MemoryStream())
+                token.ThrowIfCancellationRequested();
+
+                using (var memStream = new MemoryStream())
                 {
                     await stream.CopyToAsync(memStream);
                     byte[] bytes = memStream.ToArray();
@@ -132,11 +144,13 @@ namespace Foodiefeed_api.services
             return bases64;
         }
 
-        public async Task<string> ConvertStreamToBase64Async(Stream stream)
+        public async Task<string> ConvertStreamToBase64Async(Stream stream, CancellationToken token)
         {
              if (stream is null) return null;
 
-             using (var memStream = new MemoryStream())
+            token.ThrowIfCancellationRequested();
+
+            using (var memStream = new MemoryStream())
              {
                  await stream.CopyToAsync(memStream);
                  byte[] bytes = memStream.ToArray();

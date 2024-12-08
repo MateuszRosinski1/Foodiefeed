@@ -15,9 +15,9 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpGet("get-15/{userId}")]
-        public async Task<IActionResult> GetNotoficationForuserById([FromRoute]int userID,int pageNumber)
+        public async Task<IActionResult> GetNotoficationForuserById([FromRoute]int userID,int pageNumber, CancellationToken token)
         {
-            var response = await _notificationService.GetNotificationByUserId(userID,pageNumber);
+            var response = await _notificationService.GetNotificationByUserId(userID,pageNumber, token);
 
             return Ok(response);
         }

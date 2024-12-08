@@ -10,14 +10,14 @@ namespace Foodiefeed_api.services
 {
     public interface IFriendService
     {
-        public Task<List<ListedFriendDto>> GetOnlineFriends(int id);
-        public Task<List<ListedFriendDto>> GetOfflineFriends(int id);
+        public Task<List<ListedFriendDto>> GetOnlineFriends(int id, CancellationToken token);
+        public Task<List<ListedFriendDto>> GetOfflineFriends(int id, CancellationToken token);
 
         public Task SendFriendRequest(int senderId, int reciverId);
         public Task AcceptFriendRequest(int senderId, int receiverId);
         public Task DeclineFriendRequest(int senderId, int receiverId);
 
-        public Task<List<ListedFriendDto>> GetUserFriends(int userId);
+        public Task<List<ListedFriendDto>> GetUserFriends(int userId, CancellationToken token);
 
         public Task CancelFriendRequest(int senderId,int receiverId);
         public Task Unfriend(int userId,int friendId);
@@ -48,21 +48,23 @@ namespace Foodiefeed_api.services
             AzureBlobStorageService = azureBlobStorageSerivce;
         }
 
-        public async Task<List<ListedFriendDto>> GetOnlineFriends(int id)
+        public async Task<List<ListedFriendDto>> GetOnlineFriends(int id, CancellationToken token)
         {
-            return await GetFriendsByStatus(Status.Online,id, "User for whom trying to acces online freinds list do not exist");
+            return await GetFriendsByStatus(Status.Online,id, "User for whom trying to acces online freinds list do not exist",token);
         }
 
-        public async Task<List<ListedFriendDto>> GetOfflineFriends(int id)
+        public async Task<List<ListedFriendDto>> GetOfflineFriends(int id, CancellationToken token)
         {
-            return await GetFriendsByStatus(Status.Offline, id, "User for whom trying to acces offline freinds list do not exist");
+            return await GetFriendsByStatus(Status.Offline, id, "User for whom trying to acces offline freinds list do not exist",token);
         }
 
-        private async Task<List<ListedFriendDto>> GetFriendsByStatus(bool desiredStatus, int id,string message)
+        private async Task<List<ListedFriendDto>> GetFriendsByStatus(bool desiredStatus, int id,string message,CancellationToken token)
         {
             var user = _userRepository.FindById(id);
 
-            if (user is null) { throw new NotFoundException(message); }// custom error here
+            if (user is null) { throw new NotFoundException(message); }
+
+            token.ThrowIfCancellationRequested();
 
             var friends = await _dbContext.Friends.Where(f => f.UserId == user.Id || f.FriendUserId == user.Id).ToListAsync();
 
@@ -73,24 +75,22 @@ namespace Foodiefeed_api.services
                 User? extractedFriendFromId;
                 if (friend.UserId != id) 
                 {
-                    extractedFriendFromId = _userRepository.FindById(friend.UserId);  //  1 2
+                    extractedFriendFromId = _userRepository.FindById(friend.UserId);
                 }
                 else
                 {
-                    extractedFriendFromId = _userRepository.FindById(friend.FriendUserId); // 3 1
+                    extractedFriendFromId = _userRepository.FindById(friend.FriendUserId);
                 }
 
 
-                if (extractedFriendFromId is null) { break; } // smth do to with this
+                if (extractedFriendFromId is null) { break; } //user deleted his account, so he is non existant, can continue the operation skipping this entity.
 
                 if (extractedFriendFromId.IsOnline == desiredStatus) {
                     var _friend = _mapper.Map<ListedFriendDto>(extractedFriendFromId);
-                    var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(_friend.Id);
-                    _friend.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);
+                    var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(_friend.Id, token);
+                    _friend.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream,token);
                     friendsList.Add(_friend);
-                }
-
-                
+                }               
             }
 
             return friendsList;
@@ -178,17 +178,21 @@ namespace Foodiefeed_api.services
             await Commit();
         }
 
-        public async Task<List<ListedFriendDto>> GetUserFriends(int userId)
+        public async Task<List<ListedFriendDto>> GetUserFriends(int userId, CancellationToken token)
         {
             var user = _dbContext.Users.Include(u => u.Friends).FirstOrDefault(u => u.Id == userId);
 
             if(user is null) { throw new NotFoundException("user do not exist in current context."); }
 
+            token.ThrowIfCancellationRequested();
+
             var friends = user.Friends.ToList();
             friends.AddRange(_dbContext.Friends.Where(f => f.FriendUserId == userId).ToList());
             List<int> FriendsId = new List<int>();
 
-            foreach(var friend in friends)
+            token.ThrowIfCancellationRequested();
+
+            foreach (var friend in friends)
             {
                 if(friend.FriendUserId == userId)
                 {
@@ -204,10 +208,13 @@ namespace Foodiefeed_api.services
 
             var friendsAsUserListDto = _mapper.Map<List<ListedFriendDto>>(friendsAsUserList);
             int i = 0;
+
+            token.ThrowIfCancellationRequested();
+
             foreach (var friend in friendsAsUserList)
             {
-                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(friend.Id);
-                friendsAsUserListDto[i].ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream);
+                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(friend.Id, token);
+                friendsAsUserListDto[i].ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream, token);
 
                 i++;
             }
@@ -219,8 +226,6 @@ namespace Foodiefeed_api.services
         {
             var friend = await _dbContext.Friends.FirstOrDefaultAsync(fr => (fr.UserId == userId && fr.FriendUserId == friendId) 
                                                                          || (fr.UserId == friendId && fr.FriendUserId == userId));
-
-            //var reflectedFriend = await _dbContext.Friends.FirstOrDefaultAsync(fr => fr.UserId == friendId && fr.FriendUserId == userId);
 
             if (friend is null) { throw new NotFoundException("Request already sent"); }
 

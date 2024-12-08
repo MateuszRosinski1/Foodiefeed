@@ -29,16 +29,16 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet("get-liked/{userId}/{lastRecipeId}")]
-    public async Task<IActionResult> GetLikedRecipes([FromRoute] int userId, [FromRoute] int lastRecipeId)
+    public async Task<IActionResult> GetLikedRecipes([FromRoute] int userId, [FromRoute] int lastRecipeId, CancellationToken token)
     {
-        var response  =  await recipeService.GetLikedRecipes(userId,lastRecipeId);
+        var response  =  await recipeService.GetLikedRecipes(userId,lastRecipeId, token);
         return Ok(response);
     }
 
     [HttpGet("get-saved/{userId}/{lastRecipeId}")]
-    public async Task<IActionResult> GetSavedRecipes([FromRoute] int userId,[FromRoute]int lastRecipeId)
+    public async Task<IActionResult> GetSavedRecipes([FromRoute] int userId,[FromRoute]int lastRecipeId, CancellationToken token)
     {
-        var response = await recipeService.GetSavedRecipes(userId,lastRecipeId);
+        var response = await recipeService.GetSavedRecipes(userId,lastRecipeId, token);
         return Ok(response);
     }
 }

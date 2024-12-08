@@ -8,7 +8,7 @@ namespace Foodiefeed_api.services
 {
     public interface IFollowerService
     {
-        public Task<List<ListedFriendDto>> GetFollowerListAsync(int id);
+        public Task<List<ListedFriendDto>> GetFollowerListAsync(int id, CancellationToken token);
         public Task Follow(int userId, int followedUserId);
         public Task Unfollow(int userId, int unfollowedUserId);
     }
@@ -66,13 +66,15 @@ namespace Foodiefeed_api.services
             await Commit();
         }
 
-        public async Task<List<ListedFriendDto>> GetFollowerListAsync(int id)
+        public async Task<List<ListedFriendDto>> GetFollowerListAsync(int id, CancellationToken token)
         {
             var followers = await _dbContext.Followers.
                 Where(f => f.FollowedUserId == id).
                 ToListAsync();
 
             var userModels = new List<User>();
+
+            token.ThrowIfCancellationRequested();
 
             foreach (var follower in followers)
             {
@@ -89,10 +91,12 @@ namespace Foodiefeed_api.services
 
             var userModelDtos = _mapper.Map<List<ListedFriendDto>>(userModels);
 
+            token.ThrowIfCancellationRequested();
+
             foreach (var dto in userModelDtos)
             {
-                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.Id);
-                dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream);
+                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.Id,token);
+                dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream,token);
 
             }
             //reusing ListedFriendDto as ListedFollowerDto

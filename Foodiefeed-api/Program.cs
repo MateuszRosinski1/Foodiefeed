@@ -38,14 +38,16 @@ if (app.Environment.IsDevelopment())
     DatabaseSeeder.SeedData(serviceProvider: app.Services);
 }
 
-app.MapGet("/get-all-tags", async (dbContext context) =>
+app.MapGet("/get-all-tags", async (dbContext context, CancellationToken token) =>
 {
+    token.ThrowIfCancellationRequested();
     var tags = await context.Tags.ToListAsync();
     return Results.Ok(tags);
 });
 
-app.MapGet("/get-all-products", async (dbContext context) =>
+app.MapGet("/get-all-products", async (dbContext context,CancellationToken token) =>
 {
+    token.ThrowIfCancellationRequested();
     var products = await context.Products.ToListAsync();
     return Results.Ok(products);
 });

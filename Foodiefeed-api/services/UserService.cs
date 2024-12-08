@@ -12,13 +12,13 @@ namespace Foodiefeed_api.services
 {
     public interface IUserService
     {
-        public Task CreateUser(CreateUserDto dto,IFormFile file);
-        public Task<int> LogIn(UserLogInDto dto);
+        public Task CreateUser(CreateUserDto dto,IFormFile file, CancellationToken token);
+        public Task<int> LogIn(UserLogInDto dto, CancellationToken token);
         public Task SetOnlineStatus(int id);
         public Task SetOfflineStatus(int id);
-        public Task<List<UserDto>> SearchUsers(string usernameQuery, string userId);
-        public Task<UserDto> GetById(string id);
-        public Task<UserProfileModel> GetUserProfileModelAsync(string id, string askerId);
+        public Task<List<UserDto>> SearchUsers(string usernameQuery, string userId, CancellationToken token);
+        public Task<UserDto> GetById(string id, CancellationToken token);
+        public Task<UserProfileModel> GetUserProfileModelAsync(string id, string askerId, CancellationToken token);
 
         public Task ChangeUsername(int id, string value);
         public Task ChangeEmail(int id, string value);
@@ -26,7 +26,7 @@ namespace Foodiefeed_api.services
         public Task ChangeProfilePicture(int id,IFormFile file);
         public Task RemoveProfilePicture(int userId);
 
-        public Task<string> GetProfilePicture(int userId);
+        public Task<string> GetProfilePicture(int userId, CancellationToken token);
     }
 
     public class UserService : IUserService
@@ -54,31 +54,35 @@ namespace Foodiefeed_api.services
             AzureBlobStorageService = _azureBlobStorageSerivce;
         }
 
-        public async Task<List<UserDto>> SearchUsers(string usernameQuery,string userId)
+        public async Task<List<UserDto>> SearchUsers(string usernameQuery,string userId, CancellationToken token)
         {
            var users = await _context.Users
                 .Where(u => u.Username.Contains(usernameQuery.Substring(0, 1)) && u.Id != Convert.ToInt32(userId))
                 .ToListAsync();
 
+            token.ThrowIfCancellationRequested();
+
             var searchedUsers = users.Where(u =>
                 u.Username.StartsWith(usernameQuery, StringComparison.OrdinalIgnoreCase) 
                 || Fuzz.Ratio(u.Username.ToLower(), usernameQuery.ToLower()) >= 85).Take(20);
+
+            token.ThrowIfCancellationRequested();
 
             var usersDto = _mapper.Map<List<UserDto>>(searchedUsers);
             
             foreach (var userDto in usersDto)
             {
-                userDto.FriendsCount = await GetUserFriendsCount(userDto.Id);
-                userDto.FollowersCount = await GetUserFollowersCount(userDto.Id);              
+                userDto.FriendsCount = await GetUserFriendsCount(userDto.Id,token);
+                userDto.FollowersCount = await GetUserFollowersCount(userDto.Id, token);              
                 userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
-                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id));
+                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id,token),token);
             }
 
 
             return usersDto;
         }
 
-        public async Task CreateUser(CreateUserDto dto, IFormFile file)
+        public async Task CreateUser(CreateUserDto dto, IFormFile file, CancellationToken token)
         {
             var userCheck = _context.Users.FirstOrDefault(u => u.Username == dto.Username); 
 
@@ -94,10 +98,13 @@ namespace Foodiefeed_api.services
 
             List<UserTag> userTags = new List<UserTag>();
 
-            foreach(var tag in _context.Tags.ToList())
+            token.ThrowIfCancellationRequested();
+
+            foreach (var tag in _context.Tags.ToList())
             {
                 userTags.Add(new UserTag() { Score = 50, Tag = tag });
             }
+
             user.UserTags = userTags;
             _context.Users.Add(user);
 
@@ -107,11 +114,13 @@ namespace Foodiefeed_api.services
 
         }
 
-        public async Task<int> LogIn(UserLogInDto dto)
+        public async Task<int> LogIn(UserLogInDto dto, CancellationToken token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
 
             if (user is null) { throw new BadRequestException("User with that username do not exist"); }
+
+            token.ThrowIfCancellationRequested();
 
             var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             
@@ -140,18 +149,20 @@ namespace Foodiefeed_api.services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserProfileModel> GetUserProfileModelAsync(string id,string askerId)
+        public async Task<UserProfileModel> GetUserProfileModelAsync(string id,string askerId, CancellationToken token)
         {
             var user = _entityRepository.FindById(Convert.ToInt32(id));
 
-            if (user is null) { throw new NotFoundException("User with id {id} not found"); }
+            if (user is null) { throw new NotFoundException($"User with id {id} not found"); }
 
             var userProfileModel =  _mapper.Map<UserProfileModel>(user);
 
-            var friendsCount = await GetUserFriendsCount(userProfileModel.Id);
-            var followersCount = await GetUserFollowersCount(userProfileModel.Id);
+            var friendsCount = await GetUserFriendsCount(userProfileModel.Id, token);
+            var followersCount = await GetUserFollowersCount(userProfileModel.Id, token);
 
-            if(id != askerId)
+            token.ThrowIfCancellationRequested();
+
+            if (id != askerId)
             {
                 var asker = await _context.Users.Include(u => u.Followers)
                                                 .FirstOrDefaultAsync(x => x.Id == Convert.ToInt32(askerId));
@@ -175,38 +186,40 @@ namespace Foodiefeed_api.services
             userProfileModel.FriendsCount = friendsCount.ToString();
             userProfileModel.FollowsCount = followersCount.ToString();
 
-            var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(userProfileModel.Id);
-            userProfileModel.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream);
+            var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(userProfileModel.Id,token);
+            userProfileModel.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream, token);
 
             return userProfileModel;
         }
 
-        private async Task<int> GetUserFollowersCount(int id)
+        private async Task<int> GetUserFollowersCount(int id,CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             var followers = _context.Followers.Where(f => f.FollowedUserId == id);
 
             return followers.Count();
         }
 
-        private async Task<int> GetUserFriendsCount(int id)
+        private async Task<int> GetUserFriendsCount(int id, CancellationToken token)
         {
-            var onlineFriends = await _friendService.GetOnlineFriends(id);
-            var offlineFriends = await _friendService.GetOfflineFriends(id);
+            var onlineFriends = await _friendService.GetOnlineFriends(id, token);
+            var offlineFriends = await _friendService.GetOfflineFriends(id, token);
 
             return onlineFriends.Count() + offlineFriends.Count();
         }
 
-        public async Task<UserDto> GetById(string id)
+        public async Task<UserDto> GetById(string id, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             var user =  _entityRepository.FindById(Convert.ToInt32(id));
 
             if(user is null) { throw new NotFoundException("user not found"); }
 
             var userDto = _mapper.Map<UserDto>(user);
-            userDto.FollowersCount = await GetUserFollowersCount(user.Id);
-            userDto.FriendsCount = await GetUserFriendsCount(user.Id);
+            userDto.FollowersCount = await GetUserFollowersCount(user.Id, token);
+            userDto.FriendsCount = await GetUserFriendsCount(user.Id, token);
             userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
-                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id));
+                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id,token),token);
 
 
             return userDto;
@@ -249,13 +262,13 @@ namespace Foodiefeed_api.services
             _context.SaveChanges();
         }
 
-        public async Task<string> GetProfilePicture(int userId)
+        public async Task<string> GetProfilePicture(int userId, CancellationToken token)
         {
-            var stream = await AzureBlobStorageService.FetchProfileImageAsync(userId);
+            var stream = await AzureBlobStorageService.FetchProfileImageAsync(userId,token);
 
             if (stream is null) { throw new NotFoundException("user uses the deafault profile picture."); }
 
-            var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream);
+            var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream, token);
 
             return base64;
         }
