@@ -14,7 +14,7 @@ namespace Foodiefeed_api.services
         public Task<PopupPostDto> GetLikedPostAsync(int id, CancellationToken token);
         public Task CreatePostAsync(CreatePostDto dto,CancellationToken token);
         public Task DeletePostAsync(int postId,int userId);
-        public Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId, CancellationToken token);
+        public Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId, CancellationToken token, int pageSize);
 
         public Task LikePost(int userId,int postId);
         public Task UnlikePost(int userId, int postId);
@@ -263,7 +263,7 @@ namespace Foodiefeed_api.services
             await AzureBlobStorageService.RemvePostImagesRangeAsync(userId, postId);      
         }
 
-        public async Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId, CancellationToken token)
+        public async Task<List<PostDto>> GenerateWallPostsAsync(int userId,List<int> viewedPostsId, CancellationToken token,int pageSize)
         {
                  var userTags = await _dbContext.UserTags
                     .Where(ut => ut.UserId == userId)
@@ -327,48 +327,8 @@ namespace Foodiefeed_api.services
 
                 var dtos = _mapper.Map<List<PostDto>>(sortedPosts);
 
-                foreach(var dto in dtos)
-                {
-                    var imgStreams = await AzureBlobStorageService
-                                    .FetchPostImagesAsync(dto.UserId, dto.PostId,token);
-                    dto.PostImagesBase64 = await AzureBlobStorageService
-                                    .ConvertStreamToBase64Async(imgStreams, token);
-                    var pfpStream = await AzureBlobStorageService
-                                    .FetchProfileImageAsync(dto.UserId,token);
-                    dto.ProfilePictureBase64 = await AzureBlobStorageService
-                                    .ConvertStreamToBase64Async(pfpStream, token);
-
-                    dto.Likes = postEntities.First(p => p.PostId == dto.PostId).PostLikes.Count;
-
-                    dto.IsLiked = await _dbContext.PostLikes
-                        .FirstOrDefaultAsync(pl => pl.PostId == dto.PostId && pl.UserId == userId) 
-                        is null ? false : true;
-
-                    dto.IsSaved = await _dbContext.Recipes
-                        .FirstOrDefaultAsync(r => r.PostId == dto.PostId && r.UserId == userId) 
-                        is null ? false : true;
-
-                    token.ThrowIfCancellationRequested();
-
-                    foreach (var comment in dto.Comments)
-                    {
-                        var entity = await _dbContext.Comments
-                         .Include(u => u.CommentLikes)
-                         .Include(e => e.User)
-                        .FirstAsync(c => c.CommentId == comment.CommentId);
-                        comment.Likes = entity.CommentLikes.ToList().Count;
-                        comment.Username = entity.User.Username;
-
-                        var stream = await AzureBlobStorageService
-                                    .FetchProfileImageAsync(comment.UserId,token);
-                        comment.ImageBase64 = await AzureBlobStorageService
-                                    .ConvertStreamToBase64Async(stream,token);
-                        var cl = await _dbContext.CommentLikes
-                                .FirstOrDefaultAsync
-                                (c => c.UserId == userId && c.CommentId == comment.CommentId);
-                        comment.IsLiked = cl is null ? false : true;
-                    }
-                }
+                await FullfillMissingPostFields(dtos,token,userId);
+                
                 return dtos;
         }
 
@@ -455,6 +415,52 @@ namespace Foodiefeed_api.services
                 }
             }
             await Commit();
+        }
+
+        private async Task FullfillMissingPostFields(List<PostDto> dtos,CancellationToken token,int userId)
+        {
+            foreach (var dto in dtos)
+            {
+                var imgStreams = await AzureBlobStorageService
+                                .FetchPostImagesAsync(dto.UserId, dto.PostId, token);
+                dto.PostImagesBase64 = await AzureBlobStorageService
+                                .ConvertStreamToBase64Async(imgStreams, token);
+                var pfpStream = await AzureBlobStorageService
+                                .FetchProfileImageAsync(dto.UserId, token);
+                dto.ProfilePictureBase64 = await AzureBlobStorageService
+                                .ConvertStreamToBase64Async(pfpStream, token);
+
+                dto.Likes = _dbContext.Posts.First(p => p.PostId == dto.PostId).PostLikes.Count;
+
+                dto.IsLiked = await _dbContext.PostLikes
+                    .FirstOrDefaultAsync(pl => pl.PostId == dto.PostId && pl.UserId == userId)
+                    is null ? false : true;
+
+                dto.IsSaved = await _dbContext.Recipes
+                    .FirstOrDefaultAsync(r => r.PostId == dto.PostId && r.UserId == userId)
+                    is null ? false : true;
+
+                token.ThrowIfCancellationRequested();
+
+                foreach (var comment in dto.Comments)
+                {
+                    var entity = await _dbContext.Comments
+                     .Include(u => u.CommentLikes)
+                     .Include(e => e.User)
+                    .FirstAsync(c => c.CommentId == comment.CommentId);
+                    comment.Likes = entity.CommentLikes.ToList().Count;
+                    comment.Username = entity.User.Username;
+
+                    var stream = await AzureBlobStorageService
+                                .FetchProfileImageAsync(comment.UserId, token);
+                    comment.ImageBase64 = await AzureBlobStorageService
+                                .ConvertStreamToBase64Async(stream, token);
+                    var cl = await _dbContext.CommentLikes
+                            .FirstOrDefaultAsync
+                            (c => c.UserId == userId && c.CommentId == comment.CommentId);
+                    comment.IsLiked = cl is null ? false : true;
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Foodiefeed.services;
 using Newtonsoft.Json;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,10 +10,9 @@ namespace Foodiefeed.viewmodels
     {
         private readonly UserSession _userSession;
 
-        private readonly IFoodiefeedApiService _foodiefeedApiServce;
         private readonly IServiceProvider _serviceProvider;
 
-        public UserViewModel(UserSession userSession,IFoodiefeedApiService foodiefeedApiServce,IServiceProvider serviceProvider)
+        public UserViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
             ValidateFirstname = true;
             ValidateLastname = true;
@@ -23,7 +21,6 @@ namespace Foodiefeed.viewmodels
             ValidatePasswordRepeat = true;
             ValidatePassword = true;
             _userSession = userSession;
-            _foodiefeedApiServce = foodiefeedApiServce;
             _serviceProvider = serviceProvider;
         }
 
@@ -38,63 +35,54 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task LogIn()
         {
-            if (LoginCanProceed())
+            if(!LoginCanProceed())
             {
-                UserCredentials credentials = new UserCredentials();
+                return;
+            }
+
+            UserCredentials credentials = new UserCredentials();
+            {
+                credentials.Username = Username;
+                credentials.Password = Password;
+            };
+
+            var json = JsonConvert.SerializeObject(credentials);
+
+            var endpoint = "api/user/login";
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net");
+                try
                 {
-                    credentials.Username = Username;
-                    credentials.Password = Password;
-                };
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var json = JsonConvert.SerializeObject(credentials);
+                    var response = await client.PostAsync(endpoint, content);
 
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var StringId = await response.Content.ReadAsStringAsync();
+                        var id = Convert.ToInt32(StringId);
+                        _userSession.InitializeSession(id);
+                        await _userSession.SetOnline();
+                        await ToBoardPage();
+                    }
+                    else
+                    {
+                        //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
+                    }
 
-#if WINDOWS
-                            var apiBaseUrl = "http://localhost:5000";
-#endif
-#if ANDROID
-                var apiBaseUrl = "http://10.0.2.2:5000";
-#endif
-
-                var endpoint = "api/user/login";
-
-                using (var client = new HttpClient())
+                }
+                catch (Exception ex)
                 {
-
-                    client.BaseAddress = new Uri(apiBaseUrl);
-
-                    try
-                    {
-                        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                        var response = await client.PostAsync(endpoint, content);
-
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            var StringId = await response.Content.ReadAsStringAsync();
-                            var id = Convert.ToInt32(StringId);
-                            _userSession.InitializeSession(id);
-                            await _userSession.SetOnline();
-                            await ToBoardPage();
-                        }
-                        else
-                        {
-                            //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        //await DisplayAlert("Response", ex.Message, "OK");
-                    }
+                    //await DisplayAlert("Response", ex.Message, "OK");
                 }
             }
+            
             await Task.Delay(2000);
         }
 
         private async Task ToBoardPage()
         {
-
             var boardPage = _serviceProvider.GetRequiredService<BoardPage>();
             App.Current.MainPage = boardPage;
         }
@@ -155,66 +143,62 @@ namespace Foodiefeed.viewmodels
         {
             App.Current.MainPage = new LogInPage(this);
         }
-
-        
-
+     
         [RelayCommand]
         public async void Register()
         {
-            if (CanProceed())
+            if (!CanProceed())
             {
+                return;
+            }
 #if WINDOWS
-                var apiBaseUrl = "http://localhost:5000";
+            var apiBaseUrl = "http://localhost:5000";
 #endif
 #if ANDROID
-                var apiBaseUrl = "http://10.0.2.2:5000";
+            var apiBaseUrl = "http://10.0.2.2:5000";
 #endif
 
-                var endpoint = "api/user/register";
+            var endpoint = "api/user/register";
 
-                using (var client = new HttpClient())
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net");
+                try
                 {
-
-                    client.BaseAddress = new Uri(apiBaseUrl);
-
-                    try
+                    using (var formContent = new MultipartFormDataContent())
                     {
-                        using (var formContent = new MultipartFormDataContent())
+                        formContent.Add(new StringContent(Firstname), "FirstName"); 
+                        formContent.Add(new StringContent(Lastname), "LastName"); 
+                        formContent.Add(new StringContent(Username), "Username"); 
+                        formContent.Add(new StringContent(Email), "Email"); 
+                        formContent.Add(new StringContent(Password), "PasswordHash");
+
+                        string basePath = AppDomain.CurrentDomain.BaseDirectory;
+
+                        var files = Directory.GetFiles(basePath, "avatar*.jpg");
+                        var filePath = files.FirstOrDefault();
+
+                        using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                         {
-                            formContent.Add(new StringContent(Firstname), "FirstName"); 
-                            formContent.Add(new StringContent(Lastname), "LastName"); 
-                            formContent.Add(new StringContent(Username), "Username"); 
-                            formContent.Add(new StringContent(Email), "Email"); 
-                            formContent.Add(new StringContent(Password), "PasswordHash");
+                            var fileContent = new StreamContent(fileStream);
+                            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                            formContent.Add(fileContent, "file", "avatar.jpg");
 
-                            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+                            var response = await client.PostAsync(endpoint, formContent);
 
-                            var files = Directory.GetFiles(basePath, "avatar*.jpg");
-                            var filePath = files.FirstOrDefault();
-
-                            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                            if (!response.IsSuccessStatusCode)
                             {
-                                var fileContent = new StreamContent(fileStream);
-                                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-                                formContent.Add(fileContent, "file", "avatar.jpg");
-
-                                var response = await client.PostAsync(endpoint, formContent);
-
-                                if (!response.IsSuccessStatusCode)
-                                {
-                                    throw new Exception(await response.Content.ReadAsStringAsync());
-                                }
-                                await ToLogInPage();
-                            }                        
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //handle ?
+                                throw new Exception(await response.Content.ReadAsStringAsync());
+                            }
+                            await ToLogInPage();
+                        }                        
                     }
                 }
-            }
-
+                catch (Exception ex)
+                {
+                    //handle ?
+                }
+            }          
         }
 
         #region validators

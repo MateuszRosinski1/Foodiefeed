@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
 using Foodiefeed.viewmodels;
-using Foodiefeed.services;
 
 namespace Foodiefeed
 {
@@ -21,8 +20,7 @@ namespace Foodiefeed
 
             builder.Services.AddSingleton<UserSession>();
             builder.Services.AddScoped<IThemeHandler, ThemeHandler>();
-            builder.Services.AddScoped<IFoodiefeedApiService, FoodiefeedApiService>();
-
+            //builder.Services.AddScoped<IFoodiefeedApiService, FoodiefeedApiService>();
 
             builder.Services.AddSingleton<UserViewModel>();
             builder.Services.AddSingleton<LogInPage>();
@@ -32,12 +30,8 @@ namespace Foodiefeed
             builder.Services.AddTransient<BoardViewModel>();
             builder.Services.AddSingleton<BoardPage>();
 
-
-
-
-
-            #if DEBUG
-                builder.Logging.AddDebug();
+#if DEBUG
+            builder.Logging.AddDebug();
             #endif
             
             return builder.Build();

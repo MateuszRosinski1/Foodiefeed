@@ -77,8 +77,6 @@ namespace Foodiefeed_api.services
                 userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
                     await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id,token),token);
             }
-
-
             return usersDto;
         }
 

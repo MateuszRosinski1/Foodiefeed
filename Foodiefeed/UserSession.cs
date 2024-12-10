@@ -8,6 +8,13 @@ namespace Foodiefeed
 {
     public class UserSession
     {
+        private readonly IServiceProvider _serviceProvider;
+
+        public UserSession(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
         public int? Id { get; set; }
 
         public void InitializeSession(int userId)
@@ -26,21 +33,12 @@ namespace Foodiefeed
             Id = null;
         }
 
-        public async Task SetOnline() {
-
-#if WINDOWS
-            var apiBaseUrl = "http://localhost:5000";
-#endif
-#if ANDROID
-                var apiBaseUrl = "http://10.0.2.2:5000";
-#endif
-
-            var endpoint = "api/user/SetOnline/" + Id.ToString();
+        public async Task SetOnline() {        
+            var endpoint = $"api/user/SetOnline/{Id}";
 
             using(var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
-
+                httpClient.BaseAddress = new Uri("http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net");
                 try
                 {
                     var response = await httpClient.PutAsync(endpoint, null);
@@ -56,18 +54,11 @@ namespace Foodiefeed
 
         public async Task SetOffline() {
 
-#if WINDOWS
-            var apiBaseUrl = "http://localhost:5000";
-#endif
-#if ANDROID
-                var apiBaseUrl = "http://10.0.2.2:5000";
-#endif
-
-            var endpoint = "api/user/SetOffline/" + Id.ToString();
+            var endpoint = $"api/user/SetOffline/{Id}";
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(apiBaseUrl);
+                httpClient.BaseAddress = new Uri("http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net");
 
                 try
                 {

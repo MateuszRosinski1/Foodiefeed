@@ -51,7 +51,6 @@ namespace Foodiefeed
         protected override void OnStart()
         {
            base.OnStart();
-
             _themeHandler.LoadTheme();
         }
 
