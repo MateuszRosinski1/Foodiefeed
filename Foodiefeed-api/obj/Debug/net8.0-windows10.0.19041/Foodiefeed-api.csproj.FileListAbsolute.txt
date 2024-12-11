@@ -436,12 +436,12 @@ D:\PracaInzynierska\releaseAPI\Foodiefeed-api\bin\Foodiefeed-api\Debug\net8.0-wi
 D:\PracaInzynierska\releaseAPI\Foodiefeed-api\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.runtimeconfig.json
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.Development.json
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.json
-D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.Development.json
-D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.json
-D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.deps.json
-D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.runtimeconfig.json
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.exe
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.deps.json
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.runtimeconfig.json
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.dll
 D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.pdb
+D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.Development.json
+D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\appsettings.json
+D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.deps.json
+D:\PracaInzynierska\Foodiefeed\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\bin\Foodiefeed-api\Debug\net8.0-windows10.0.19041\Foodiefeed-api.runtimeconfig.json

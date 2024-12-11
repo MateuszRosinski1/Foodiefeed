@@ -88,14 +88,16 @@ public partial class RecipeView : ContentView
 
         var newValueString = newValue as string;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.image.Source = newValueString;
 
-        view.image.Source = ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.image.Source = ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     private static void OnContentChanged(BindableObject bindable, object oldValue, object newValue)

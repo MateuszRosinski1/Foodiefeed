@@ -53,7 +53,7 @@ app.MapGet("/get-all-products", async (dbContext context,CancellationToken token
 });
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

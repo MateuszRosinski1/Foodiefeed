@@ -6,7 +6,7 @@
         public string Username { get; set; }
         public string Content { get; set; }
         public List<string> Products { get; set; }
-        public string ImageBase64 { get; set; }
+        public Uri ImageBase64 { get; set; }
         public int UserId { get; set; }
     }
 }

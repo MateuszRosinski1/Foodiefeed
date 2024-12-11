@@ -363,14 +363,16 @@ public partial class PostView : ContentView
             return;
         }
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.pfpImage.Source = newValueString;
 
-        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -381,14 +383,17 @@ public partial class PostView : ContentView
 
         var newValueString = newValue as string;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.postImage.Source = newValueString;
 
-        view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)

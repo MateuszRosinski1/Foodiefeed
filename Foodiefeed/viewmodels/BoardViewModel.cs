@@ -9,13 +9,13 @@ using Foodiefeed.models.dto;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using System.Text;
-using Foodiefeed.Resources.Styles;
 using CommunityToolkit.Mvvm.Messaging;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
-using Foodiefeed.services;
+using System.Net.Http;
+using System.Collections.Generic;
 
 
 namespace Foodiefeed.viewmodels
@@ -30,7 +30,7 @@ namespace Foodiefeed.viewmodels
 
         private readonly UserSession _userSession;
         private readonly IThemeHandler _themeHandler;
-        private readonly IFoodiefeedApiService _foodiefeedApiServce;
+        //private readonly IFoodiefeedApiService _foodiefeedApiServce;
         private readonly IServiceProvider _serviceProvider;
         public ObservableCollection<PostView> Posts { get; set; } = new ObservableCollection<PostView>();
 
@@ -55,21 +55,6 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         private string avatarBase64;
         #endregion
-
-
-        //#if WINDOWS
-        //       private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
-        //#endif
-        //#if ANDROID
-        //        private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
-        //#endif
-
-#if WINDOWS
-       private const string API_BASE_URL = "http://localhost:5000";
-#endif
-#if ANDROID
-        private const string API_BASE_URL = "http://10.0.2.2:5000";
-#endif
 
         [ObservableProperty]
         private string searchParam;
@@ -153,25 +138,30 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool noLikedRecipes;
 
-        public async Task SetProfilePictureFromBase64(string base64)
+        [ObservableProperty]
+        bool noProfileFriendsVisible;
+
+        [ObservableProperty]
+        bool noProfileFollowersVisible;
+
+        public async Task SetProfilePictureFromUri(string url)
         {
-            if (string.IsNullOrEmpty(base64))
+            if (string.IsNullOrEmpty(url)) { return; }
 
-            if (base64.Contains("base64,"))
-                base64 = base64.Substring(base64.IndexOf("base64,") + 7);
 
-            try
-            {
-                await Task.Run(() =>
-                {
-                    byte[] imageBytes = Convert.FromBase64String(base64);
-                    ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
-                });
-            }
-            catch (FormatException)
-            {
-                ProfilePictureSource = null;
-            }
+            ProfilePictureSource = url;
+            //try
+            //{
+            //    await Task.Run(() =>
+            //    {
+            //        byte[] imageBytes = Convert.FromBase64String(base64);
+            //        ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+            //    });
+            //}
+            //catch (FormatException)
+            //{
+            //    ProfilePictureSource = null;
+            //}
         }
 
         #endregion
@@ -212,23 +202,29 @@ namespace Foodiefeed.viewmodels
 
         private Timer onlineFriendsTimer;
 
+        private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
+
         public BoardViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
+            NoLikedRecipes = true;
             _serviceProvider = serviceProvider;
             _themeHandler = _serviceProvider.GetService<IThemeHandler>();
-            _foodiefeedApiServce = _serviceProvider.GetService<IFoodiefeedApiService>();
             _userSession = userSession;
+            _userSession.Id = 15;
             try
             {
                 InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
                 Notifications.CollectionChanged += OnNotificationsChanged;
 
+#if WINDOWS
                 FetchNotifications(); // required for RemaningItemThresholdCommand to work.
-
+#endif
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
                 OnlineFriends.CollectionChanged += OnOnlineFriendsChanged;
                 LikedRecipes.CollectionChanged += OnLikedRecipesChanged;
                 SavedRecipes.CollectionChanged += OnSavedRecipesChanged;
+                ProfileFriendsList.CollectionChanged += OnFriendsListChanged;
+                ProfileFollowersList.CollectionChanged += OnFollowersListChanged;
                 this.ProfilePageVisible = false; //on init false
                 this.PostPageVisible = true; //on init true
                 this.SettingsPageVisible = false; //on init false
@@ -262,15 +258,15 @@ namespace Foodiefeed.viewmodels
 
         private void OnSavedRecipesChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoSavedRecipes = SavedRecipes.Count == 0 ? true : false;
 
-
         private void OnLikedRecipesChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoLikedRecipes = LikedRecipes.Count == 0 ? true : false;
 
         private void OnNotificationsChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
 
-
         private void OnOnlineFriendsChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoOnlineFriendsVisible = OnlineFriends.Count == 0 ? true : false;
 
+        private void OnFriendsListChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoProfileFriendsVisible = ProfileFriendsList.Count == 0? true : false;
 
+        private void OnFollowersListChanged(object? sender, NotifyCollectionChangedEventArgs e) => NoProfileFollowersVisible = ProfileFollowersList.Count == 0? true : false;
 
         private Timer notificationTimer;
         bool windowloaded;
@@ -289,14 +285,14 @@ namespace Foodiefeed.viewmodels
                     var base64 = await FetchProfilePictureBase64();
                     if (base64 is null) throw new Exception();
 
-                    await SetProfilePictureFromBase64(base64);
+                    await SetProfilePictureFromUri(base64);
                     await MainWallPostThresholdExceed();
 #endif
 #if WINDOWS
                     var base64 = await FetchProfilePictureBase64();
                     if (base64 is null) throw new Exception();
 
-                    var t1 = SetProfilePictureFromBase64(base64);
+                    var t1 = SetProfilePictureFromUri(base64);
                     var t2 = MainWallPostThresholdExceed();
                     await Task.WhenAll(t1, t2);
 
@@ -378,12 +374,13 @@ namespace Foodiefeed.viewmodels
             using(var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
-                http.Timeout = TimeSpan.FromSeconds(10);
-
-                var endpoint = $"api/user/get-profile-picture-base64/{_userSession.Id}";
-
                 try
                 {
+                    http.Timeout = TimeSpan.FromSeconds(10);
+
+                    var endpoint = $"api/user/get-profile-picture-base64/{_userSession.Id}";
+
+                
                     var response = await http.GetAsync(endpoint);
 
                     if(!response.IsSuccessStatusCode)
@@ -433,7 +430,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Something went wrong...");
+                    await NotifiyFailedAction("Something went wrong...");
                 }
             }
             notificationsPageNumber += 1;
@@ -447,15 +444,21 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task MainWallPostThresholdExceed()
         {
+#if WINDOWS
+const int pageSize = 15;
+#elif ANDROID
+            const int pageSize = 3;
+#endif
             WallPostLoadingActivityIndicatorVisible = true;
             using (var http = new HttpClient())
-            {              
+            {
+                http.BaseAddress = new Uri(API_BASE_URL);
+
                 try
                 {
-                    var endpoint = $"api/posts/generate-wall-posts?userId={_userSession.Id}";
+                    var endpoint = $"api/posts/generate-wall-posts?userId={_userSession.Id}&pageSize={pageSize}";
                     var content = new StringContent(JsonConvert.SerializeObject(seenPostId), Encoding.UTF8, "application/json");
                     http.Timeout = TimeSpan.FromSeconds(180);
-                    http.BaseAddress = new Uri(API_BASE_URL);;
 
                     var response = await http.PostAsync(endpoint,content);
 
@@ -466,9 +469,9 @@ namespace Foodiefeed.viewmodels
                     seenPostId.AddRange(dtos.Select(dtos => dtos.PostId));
                     await DisplayPosts(dtos,Posts);
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
-                    NotifiyFailedAction("Could not load new post at the moment, try again later.");
+                    await NotifiyFailedAction("Could not load new post at the moment, try again later.");
                 }
                 finally
                 {
@@ -594,7 +597,7 @@ namespace Foodiefeed.viewmodels
                 post.Likes.ToString())
                 {
                     Username = post.Username,
-                    TimeStamp = "10 hours ago",
+                    TimeStamp = post.TimeSpan,
                     PostTextContent = post.Description,
                     PostLikeCount = post.Likes.ToString(),
                     ImageSource = post.PostImagesBase64[0],
@@ -648,15 +651,16 @@ namespace Foodiefeed.viewmodels
         {
             using(var http = new HttpClient())
             {
-                var endpoint = $"api/comments/delete-comment-{commentId}";
                 http.BaseAddress = new Uri(API_BASE_URL);
+
+                var endpoint = $"api/comments/delete-comment-{commentId}";
 
                 try
                 {
                     var response = await http.DeleteAsync(endpoint);
                     if (!response.IsSuccessStatusCode)
                     {
-                        NotifiyFailedAction("Could not delete comment at the moment, try again later");
+                        await NotifiyFailedAction("Could not delete comment at the moment, try again later");
                     }
 
                     await Task.Run(() =>
@@ -688,9 +692,9 @@ namespace Foodiefeed.viewmodels
                     });
 
                 }
-                catch
+                catch(Exception)
                 {
-                    NotifiyFailedAction("internal server error, try again later.");
+                    await NotifiyFailedAction("internal server error, try again later.");
                 }
             }
         }
@@ -708,7 +712,7 @@ namespace Foodiefeed.viewmodels
         {
             if(EditedCommentContent == string.Empty)
             {
-                NotifiyFailedAction("Comment content cannot be empty");
+                await NotifiyFailedAction("Comment content cannot be empty");
                 return;
             }
 
@@ -724,7 +728,7 @@ namespace Foodiefeed.viewmodels
                     var response = await http.PutAsync(endpoint, content);
                     if(response.IsSuccessStatusCode)
                     {
-                        NotifiyFailedAction("Comment edited succesfuly");
+                        await NotifiyFailedAction("Comment edited succesfuly");
                         await Task.Run(() =>
                         {
                             if (PostPageVisible)
@@ -755,9 +759,9 @@ namespace Foodiefeed.viewmodels
                         return;
                     }
                 }
-                catch
+                catch(Exception)
                 {
-
+                    await NotifiyFailedAction("Cannot edit your comment at the moment, try again later.");
                 }
 
             }
@@ -774,7 +778,7 @@ namespace Foodiefeed.viewmodels
             
             if (string.IsNullOrEmpty(payload.commentContent))
             {
-                NotifiyFailedAction("Comment conetnt cannot be empty.");
+                await NotifiyFailedAction("Comment conetnt cannot be empty.");
                 return;
             }
 
@@ -812,7 +816,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch(Exception e)
                 {
-                    NotifiyFailedAction(e.Message);
+                    await NotifiyFailedAction(e.Message);
                     return;
                 }
             }
@@ -906,6 +910,7 @@ namespace Foodiefeed.viewmodels
             using (var httpclient = new HttpClient())
             {
                 httpclient.BaseAddress = new Uri(API_BASE_URL);
+
                 var endpoint = $"api/posts/popup-liked-post/{id}";
                 try
                 {
@@ -932,23 +937,22 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         private async Task ClearNotifications()
         {
-            FetchNotificationsCanExecute = false;
-            List<int> NotificationsId = new List<int>();
-            for (int i = 0; i <= Notifications.Count() - 1; i++)
-            {
-                if (Notifications[i] is not FriendRequestNotification)
-                {
-                    await Notifications[i].HideAnimation(300, 150);
-                    NotificationsId.Add(Notifications[i].NotifcationId);
-                    Notifications.Remove(Notifications[i]);
-                    i = i - 1;
-                }
-            }
-
+            FetchNotificationsCanExecute = false;       
             using(var httpclient = new HttpClient())
             {
+                httpclient.BaseAddress = new Uri(API_BASE_URL);
+
                 try
                 {
+                    List<int> NotificationsId = new List<int>();
+                    for (int i = 0; i <= Notifications.Count() - 1; i++)
+                    {
+                        if (Notifications[i] is not FriendRequestNotification)
+                        {
+                            NotificationsId.Add(Notifications[i].NotifcationId);
+                        }
+                    }
+
                     var endpoint = $"/api/notifications/remove-range-notifications/{_userSession.Id}";
 
                     var jsonContent = new StringContent(JsonConvert.SerializeObject(NotificationsId), Encoding.UTF8, "application/json");
@@ -964,13 +968,23 @@ namespace Foodiefeed.viewmodels
 
                     if (!response.IsSuccessStatusCode) throw new Exception();
 
+                    for (int i = 0; i <= Notifications.Count() - 1; i++)
+                    {
+                        if (Notifications[i] is not FriendRequestNotification)
+                        {
+                            await Notifications[i].HideAnimation(300, 150);
+                            Notifications.Remove(Notifications[i]);
+                            i = i - 1;
+                        }
+                    }
+
                     notificationsPageNumber = 0;
                     FetchNotificationsCanExecute = true;
                     await FetchNotifications();
                 }
-                catch(Exception e)
+                catch(Exception)
                 {
-
+                    await NotifiyFailedAction("Could not clear notifications at the moment, try again later.");
                 }
             } 
             
@@ -1073,6 +1087,7 @@ namespace Foodiefeed.viewmodels
         {
             using(var http = new HttpClient())
             {
+                http.BaseAddress = new Uri(API_BASE_URL);
                 var endpoint = $"api/posts/delete?postId={postId}&userId={_userSession.Id}";
                 try
                 {
@@ -1160,6 +1175,7 @@ namespace Foodiefeed.viewmodels
                     using (var http = new HttpClient())
                     {
                         http.BaseAddress = new Uri(API_BASE_URL);
+
                         var endpoint = "api/posts/create";
 
                         try
@@ -1171,7 +1187,7 @@ namespace Foodiefeed.viewmodels
 
                             }
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             //Console.WriteLine($"Error in sending request: {ex.Message}");
                         }
@@ -1184,10 +1200,7 @@ namespace Foodiefeed.viewmodels
                         stream.Dispose();
                     }
                 }
-
-
             }
-
         }
 
         public ObservableCollection<TagView> Tags { get; set; } = new ObservableCollection<TagView>();
@@ -1203,6 +1216,7 @@ namespace Foodiefeed.viewmodels
             using(var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
+
                 var endpoint = "/get-all-tags";
 
                 try
@@ -1227,7 +1241,7 @@ namespace Foodiefeed.viewmodels
                 catch
                 {
                     AddPostFormVisible = false;
-                    NotifiyFailedAction("Could not retrive tags from the server, try again later.");
+                    await NotifiyFailedAction("Could not retrive tags from the server, try again later.");
                 }
                 finally
                 {
@@ -1354,7 +1368,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("internal server error, try again later");
+                    await NotifiyFailedAction("internal server error, try again later");
                 }
                 finally 
                 {
@@ -1696,8 +1710,6 @@ namespace Foodiefeed.viewmodels
         {
             using(var http = new HttpClient())
             {
-                http.BaseAddress = new Uri(API_BASE_URL);
-
                 var endpoint = $"api/user/delete-profile-picture/{_userSession.Id}";
                 try
                 {
@@ -1734,7 +1746,7 @@ namespace Foodiefeed.viewmodels
                     }          
                 }catch(Exception e)
                 {
-                    NotifiyFailedAction(e.Message);
+                    await NotifiyFailedAction(e.Message);
                 }
             }
         }
@@ -1766,17 +1778,17 @@ namespace Foodiefeed.viewmodels
 
                                 var base64 = await FetchProfilePictureBase64();
                                 if (base64 is null) throw new Exception();
-                                await SetProfilePictureFromBase64(base64);
+                                await SetProfilePictureFromUri(base64);
                             }
                         }
                         else
                         {
-                            NotifiyFailedAction("Provied file is not found or it is empty.");
+                            await NotifiyFailedAction("Provied file is not found or it is empty.");
                         }
                     }
                 }catch(Exception e)
                 {
-                    NotifiyFailedAction(e.Message);
+                    await NotifiyFailedAction(e.Message);
                 }
             }
         }
@@ -1798,9 +1810,9 @@ namespace Foodiefeed.viewmodels
                 {
                     var response = await client.PutAsync(endpoint, contnet);
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
-
+                    await NotifiyFailedAction("cannot update personal data at the moment");
                 }
                
             }
@@ -1808,26 +1820,26 @@ namespace Foodiefeed.viewmodels
 
         public bool CanShowSearchPanel { get; set; }
         [RelayCommand]
-        public void ShowSearchPanel()
+        public async Task ShowSearchPanel()
         {
 #if WINDOWS
             if (CanShowSearchPanel)
             {
                 this.SearchPanelVisible = true;
-                DisplaySearchResultHistory();
+                await DisplaySearchResultHistory();
             }
 #endif
 #if ANDROID
             this.SearchPanelVisible = true;
-            DisplaySearchResultHistory();
-#endif 
+            await DisplaySearchResultHistory();
+#endif
 
         }
 
         [RelayCommand]
         public async Task HideSearchPanel()
         {
-            Task.Delay(200).Wait();
+            await Task.Delay(200);
             this.SearchPanelVisible = false;
             CanShowSearchPanel = false;
         }
@@ -1970,7 +1982,7 @@ namespace Foodiefeed.viewmodels
 
         private async Task SetButtonColors(Buttons button)
         {
-            if (CurrentClickedButtonColor is null && CurrentUnclickedButtonColor is null) ReloadProfileButtonColors(themeFlag);
+            if (CurrentClickedButtonColor is null && CurrentUnclickedButtonColor is null) await ReloadProfileButtonColors(themeFlag);
 
             switch (button)
             {
@@ -2087,7 +2099,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception ex)
                 {
-                    NotifiyFailedAction(ex.Message);
+                    await NotifiyFailedAction(ex.Message);
                     return;
                 }
                 
@@ -2136,7 +2148,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception ex)
                 {
-                    NotifiyFailedAction(ex.Message);
+                    await NotifiyFailedAction(ex.Message);
                     return;
                 }
 
@@ -2161,7 +2173,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception e)
                 {
-                    NotifiyFailedAction(e.Message);
+                    await NotifiyFailedAction(e.Message);
                     return;
                 }
 
@@ -2206,7 +2218,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception e)
                 {
-                    NotifiyFailedAction(e.Message);
+                    await NotifiyFailedAction(e.Message);
                     return;
                 }
                 
@@ -2250,17 +2262,10 @@ namespace Foodiefeed.viewmodels
                     if (!response.IsSuccessStatusCode)
                     {
                         var message = await response.Content.ReadAsStringAsync();
-                        NotifiyFailedAction(message);
+                        await NotifiyFailedAction(message);
                         return;
                     }
-                    NotifiyFailedAction("recipe saved succesfuly");
-                }
-                catch
-                {
-                    NotifiyFailedAction("internal server error, try again later");
-                }
-                finally
-                {
+
                     var post = Posts.FirstOrDefault(p => p.PostId == postId);
 
                     if (post is not null)
@@ -2275,16 +2280,19 @@ namespace Foodiefeed.viewmodels
                         post2.IsSaved = true;
                     }
                 }
+                catch
+                {
+                    await NotifiyFailedAction("internal server error, try again later");
+                }
             }
         }
 
         [RelayCommand]
         public async Task Search()
         {
-
             SearchResults.Clear();
 
-            if (SearchParam == string.Empty) { DisplaySearchResultHistory(); return; }
+            if (SearchParam == string.Empty) { await DisplaySearchResultHistory(); return; }
 
             var endpoint = $"api/user/search-users/{SearchParam}/{_userSession.Id}";
 
@@ -2300,15 +2308,15 @@ namespace Foodiefeed.viewmodels
                     {
                         var json = await response.Content.ReadAsStringAsync();
                         var searchResults = await JsonToObject<ObservableCollection<UserSearchResult>>(json);
-                        DisplaySearchResults(searchResults
+                        await DisplaySearchResults(searchResults
                             .Reverse()
                             .ToObservableCollection());
 
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
-                    NotifiyFailedAction("Could not load search results due to service maintance. Try again later");
+                    await NotifiyFailedAction("Could not load search results. Try again later");
                 }
             }
 
@@ -2335,8 +2343,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Cant send friend request");
-                    // code to handle unsuccsesful friend request.
+                    await NotifiyFailedAction("Cant send friend request");
                 }
             }
         }
@@ -2362,8 +2369,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Cant send friend request");
-                    // code to handle unsuccsesful friend request.
+                    await NotifiyFailedAction("Cant send friend request");
                 }
             }
         }
@@ -2388,12 +2394,10 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Cant send friend request");
+                    await NotifiyFailedAction("Cant send friend request");
                     // code to handle unsuccsesful friend request.
                 }
             }
-
-            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -2411,8 +2415,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Something went wrong...");
-                    // code to handle unsuccsesful unfriend action.
+                    await NotifiyFailedAction("Something went wrong...");
                 }
             }
         }
@@ -2420,12 +2423,11 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task FollowUser(string id)
         {
-            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
             var endpoint = $"api/followers/follow/{_userSession.Id}/{id}";
 
             using (var httpClient = new HttpClient())
             {
-                httpClient.BaseAddress = new Uri(API_BASE_URL);   
+                httpClient.BaseAddress = new Uri(API_BASE_URL);
 
                 try
                 {
@@ -2433,7 +2435,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Could not finish following action due to inner issues.");
+                    await NotifiyFailedAction("Could not finish following action due to inner issues.");
                 }
             }
         }
@@ -2453,12 +2455,9 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
-
+                    await NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
                 }
             }
-
-            //WeakReferenceMessenger.Default.Send<string, string>("close", "popup");
         }
 
         [RelayCommand]
@@ -2476,8 +2475,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Request was already canceled by sender.");
-                    // code to handle unsuccsesful request cancel.
+                    await NotifiyFailedAction("Request was already canceled by sender.");
                 }
             }
         }
@@ -2507,7 +2505,7 @@ namespace Foodiefeed.viewmodels
         }
 
 
-    private async Task DisplaySearchResults(ObservableCollection<UserSearchResult> users)
+        private async Task DisplaySearchResults(ObservableCollection<UserSearchResult> users)
         {
             SearchResults.Clear();
 
@@ -2565,6 +2563,7 @@ namespace Foodiefeed.viewmodels
 
                 Directory.CreateDirectory(ApplicationDirectory);
             }
+
             if (!File.Exists(SearchHistoryJsonPath))
             {
                 File.Create(SearchHistoryJsonPath);
@@ -2575,9 +2574,7 @@ namespace Foodiefeed.viewmodels
             if (usr is null) return;
 
             var json = File.ReadAllText(SearchHistoryJsonPath);
-            var SearchHistory = await JsonToObject<ObservableCollection<UserSearchResult>>(json);
-
-            
+            var SearchHistory = await JsonToObject<ObservableCollection<UserSearchResult>>(json);           
 
             var existingUser = SearchHistory.FirstOrDefault(x => x.Id == usr.Id);
 
@@ -2607,6 +2604,7 @@ namespace Foodiefeed.viewmodels
             using (var httpclient = new HttpClient())
             {
                 httpclient.BaseAddress = new Uri(API_BASE_URL);
+
                 var endpoint = $"api/user/{id}";
                 try
                 {
@@ -2618,11 +2616,9 @@ namespace Foodiefeed.viewmodels
                         if(results is null && results == string.Empty) { return null; }
                         return JsonConvert.DeserializeObject<UserSearchResult>(results);
                     }
-                }catch(Exception ex)
+                }catch(Exception)
                 {
-                    NotifiyFailedAction("Something went wrong...");
-
-                    //block of code handling execption
+                    await NotifiyFailedAction("Something went wrong...");
                 }
                 return null;
             }
@@ -2658,9 +2654,9 @@ namespace Foodiefeed.viewmodels
                         await Application.Current.Dispatcher.DispatchAsync(() => { OnlineFriends.Add(view); });
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
-                    NotifiyFailedAction("Something went wrong...");
+                    await NotifiyFailedAction("Something went wrong...");
                 }
 
                 try
@@ -2685,9 +2681,9 @@ namespace Foodiefeed.viewmodels
                         await Application.Current.Dispatcher.DispatchAsync(() => { OnlineFriends.Add(view); });
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    NotifiyFailedAction("Something went wrong...");
+                    await NotifiyFailedAction("Something went wrong...");
                 }
             }
         }
@@ -2726,9 +2722,9 @@ namespace Foodiefeed.viewmodels
                 //var followers = await JsonToObject<List<ListedFriendDto>>(await followersTask);
                 //await DisplayProfileFollowers(followers);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                NotifiyFailedAction("Could not load user profile.");
+                await NotifiyFailedAction("Could not load user profile.");
             }
             finally
             {
@@ -2792,7 +2788,7 @@ namespace Foodiefeed.viewmodels
             using(var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
-                    
+
                 try
                 {
                     var response = await httpClient.GetAsync(endpoint);
@@ -2806,7 +2802,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Something went wrong...");
+                    await NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -2818,101 +2814,163 @@ namespace Foodiefeed.viewmodels
             if (ProfilePageVisible && (posts == null || posts.Count == 0))
             {
                 NoPostOnProfile = true;
-                ProfilePostsVisible = false;
                 return;
             }
 
-
             //if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
-
 
             foreach (var post in posts)
             {
-                var commentList = new List<CommentView>();
-                foreach (var comment in post.Comments)
-                {
-                    var temp = comment.UserId == _userSession.Id ? true : false;
-                    var newcomment = new CommentView()
-                    {
-                        Username = comment.Username,
-                        CommentContent = comment.CommentContent,
-                        CommentId = comment.CommentId.ToString(),
-                        LikeCount = comment.Likes.ToString(),
-                        UserId = comment.UserId.ToString(),
-                        PfpImageBase64 = comment.ImageBase64,
-                        EditButtonVisible = temp,
-                        UnlikeCommentCommand = UnlikeCommentCommand,
-                        LikeCommentCommand = LikeCommentCommand,
-                        IsLiked = comment.IsLiked,
-                    };
-                    commentList.Add(newcomment);
-                }
+                //var commentList = new List<CommentView>();
+                //foreach (var comment in post.Comments)
+                //{
+                //    var temp = comment.UserId == _userSession.Id ? true : false;
+                //    var newcomment = new CommentView()
+                //    {
+                //        Username = comment.Username,
+                //        CommentContent = comment.CommentContent,
+                //        CommentId = comment.CommentId.ToString(),
+                //        LikeCount = comment.Likes.ToString(),
+                //        UserId = comment.UserId.ToString(),
+                //        PfpImageBase64 = comment.ImageBase64,
+                //        EditButtonVisible = temp,
+                //        UnlikeCommentCommand = UnlikeCommentCommand,
+                //        LikeCommentCommand = LikeCommentCommand,
+                //        IsLiked = comment.IsLiked,
+                //    };
+                //    commentList.Add(newcomment);
+                //}
 
-                var imageBase64list = new List<string>();
-                foreach (var image in post.PostImagesBase64)
-                {
-                    imageBase64list.Add(image);
-                }
 
                 try
                 {
-                    if (imageBase64list.Count() == 0)
+                    if (post.PostImagesBase64.Count() == 0)
                     {
-                        var postview = new PostView()
-                        {
-                            Username = post.Username,
-                            TimeStamp = post.TimeSpan,
-                            PostLikeCount = post.Likes.ToString(),
-                            PostTextContent = post.Description,
-                            Comments = new List<CommentView>(commentList),
-                            PfpImageBase64 = post.ProfilePictureBase64,
-                            PostId = post.PostId.ToString(),
-                            PostProducts = post.ProductsName,
-                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = false,
-                            LikePostCommand = LikePostCommand,
-                            UnlikePostCommand = UnlikePostCommand,
-                            SaveRecipeCommand = SaveRecipeCommand,
-                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
-                            IsLiked = post.IsLiked,
-                            IsSaved = post.IsSaved,
-
-                        };
-                        collection.Add(postview);
+                        //var postview = new PostView()
+                        //{
+                        //    Username = post.Username,
+                        //    TimeStamp = post.TimeSpan,
+                        //    PostLikeCount = post.Likes.ToString(),
+                        //    PostTextContent = post.Description,
+                        //    Comments = await CreateCommentList(post.Comments),
+                        //    PfpImageBase64 = post.ProfilePictureBase64,
+                        //    PostId = post.PostId.ToString(),
+                        //    PostProducts = post.ProductsName,
+                        //    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                        //    PostImagesVisible = false,
+                        //    LikePostCommand = LikePostCommand,
+                        //    UnlikePostCommand = UnlikePostCommand,
+                        //    SaveRecipeCommand = SaveRecipeCommand,
+                        //    UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                        //    IsLiked = post.IsLiked,
+                        //    IsSaved = post.IsSaved,
+                        //};
+                        collection.Add(await CreatePostViewWithOutImages(post));
                     }
                     else
                     {
-                        var postview = new PostView()
-                        {
-                            Username = post.Username,
-                            TimeStamp = post.TimeSpan,
-                            PostLikeCount = post.Likes.ToString(),
-                            PostTextContent = post.Description,
-                            ImageSource = post.PostImagesBase64[0],
-                            Comments = new List<CommentView>(commentList),
-                            ImagesBase64 = imageBase64list,
-                            PfpImageBase64 = post.ProfilePictureBase64,
-                            PostId = post.PostId.ToString(),
-                            PostProducts = post.ProductsName,
-                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = true,
-                            LikePostCommand = LikePostCommand,
-                            UnlikePostCommand = UnlikePostCommand,
-                            SaveRecipeCommand = SaveRecipeCommand,
-                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
-                            IsLiked = post.IsLiked,
-                            IsSaved = post.IsSaved,
-                        };
-                        collection.Add(postview);
+                        //var postview = new PostView()
+                        //{
+                        //    Username = post.Username,
+                        //    TimeStamp = post.TimeSpan,
+                        //    PostLikeCount = post.Likes.ToString(),
+                        //    PostTextContent = post.Description,
+                        //    ImageSource = post.PostImagesBase64[0],
+                        //    Comments = await CreateCommentList(post.Comments),
+                        //    ImagesBase64 = imageBase64list,
+                        //    PfpImageBase64 = post.ProfilePictureBase64,
+                        //    PostId = post.PostId.ToString(),
+                        //    PostProducts = post.ProductsName,
+                        //    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                        //    PostImagesVisible = true,
+                        //    LikePostCommand = LikePostCommand,
+                        //    UnlikePostCommand = UnlikePostCommand,
+                        //    SaveRecipeCommand = SaveRecipeCommand,
+                        //    UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                        //    IsLiked = post.IsLiked,
+                        //    IsSaved = post.IsSaved,
+                        //};
+                        collection.Add(await CreatePostViewWithImages(post));
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    int i = 0;
+                    await NotifiyFailedAction("Cannot display post at the moment");
                 }
                 
-                await Task.Delay(100);
+                //await Task.Delay(100);
             }           
+        }
+
+        private async Task<PostView> CreatePostViewWithImages(PostDto post)
+        {          
+            return new PostView()
+            {
+                Username = post.Username,
+                TimeStamp = post.TimeSpan,
+                PostLikeCount = post.Likes.ToString(),
+                PostTextContent = post.Description,
+                ImageSource = post.PostImagesBase64[0],
+                Comments = await CreateCommentList(post.Comments),
+                ImagesBase64 = post.PostImagesBase64,
+                PfpImageBase64 = post.ProfilePictureBase64,
+                PostId = post.PostId.ToString(),
+                PostProducts = post.ProductsName,
+                DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                PostImagesVisible = true,
+                LikePostCommand = LikePostCommand,
+                UnlikePostCommand = UnlikePostCommand,
+                SaveRecipeCommand = SaveRecipeCommand,
+                UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                IsLiked = post.IsLiked,
+                IsSaved = post.IsSaved,
+            };
+        }
+
+        private async Task<PostView> CreatePostViewWithOutImages(PostDto post)
+        {
+            return new PostView()
+            {
+                Username = post.Username,
+                TimeStamp = post.TimeSpan,
+                PostLikeCount = post.Likes.ToString(),
+                PostTextContent = post.Description,
+                Comments = await CreateCommentList(post.Comments),
+                PfpImageBase64 = post.ProfilePictureBase64,
+                PostId = post.PostId.ToString(),
+                PostProducts = post.ProductsName,
+                DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                PostImagesVisible = false,
+                LikePostCommand = LikePostCommand,
+                UnlikePostCommand = UnlikePostCommand,
+                SaveRecipeCommand = SaveRecipeCommand,
+                UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                IsLiked = post.IsLiked,
+                IsSaved = post.IsSaved,
+            };
+        }
+
+        private async Task<List<CommentView>> CreateCommentList(List<CommentDto> comments)
+        {
+            var commentList = new List<CommentView>();
+            foreach (var comment in comments)
+            {
+                var temp = comment.UserId == _userSession.Id ? true : false;
+                var newcomment = new CommentView()
+                {
+                    Username = comment.Username,
+                    CommentContent = comment.CommentContent,
+                    CommentId = comment.CommentId.ToString(),
+                    LikeCount = comment.Likes.ToString(),
+                    UserId = comment.UserId.ToString(),
+                    PfpImageBase64 = comment.ImageBase64,
+                    EditButtonVisible = temp,
+                    UnlikeCommentCommand = UnlikeCommentCommand,
+                    LikeCommentCommand = LikeCommentCommand,
+                    IsLiked = comment.IsLiked,
+                };
+            }
+            return commentList;
         }
 
         private async Task<string> GetUserProfileFollowers(string id)
@@ -2936,7 +2994,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Something went wrong...");
+                    await NotifiyFailedAction("Something went wrong...");
                     //code block to handle exeption 
                 }
             }
@@ -2965,14 +3023,12 @@ namespace Foodiefeed.viewmodels
                     }
                     else if (!response.IsSuccessStatusCode)
                     {
-                        NotifiyFailedAction("Something went wrong...");
-                        //code of block that displays that Friends are currently unavaiable
+                        await NotifiyFailedAction("Something went wrong...");
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    NotifiyFailedAction("Something went wrong...");
-                    //code block that handle exception
+                    await NotifiyFailedAction("Something went wrong...");
                 }
             }
             return string.Empty;
@@ -2997,9 +3053,9 @@ namespace Foodiefeed.viewmodels
                     return json;
 
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
-
+                    await NotifiyFailedAction("Cannot load the profile at the moment, try again later.");
                 }
             }
             return string.Empty;
@@ -3059,13 +3115,13 @@ namespace Foodiefeed.viewmodels
             LikedRecipesButtonBackround = (Color)clickedButtonColor;
             SavedRecipesButtonBackround = (Color)unclickedButtonColor;
 
-            await DisposeRecipesPage(SavedRecipes);
+            //await DisposeRecipesPage(SavedRecipes);
 
             var dtos = await FetchRecipes($"api/recipes/get-liked/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
+            await DisposeRecipesPage(SavedRecipes);
 
             await AppendToRecipeCollection(LikedRecipes, dtos, RecipeType.Liked);
-
             SavedRecipesVisible = false;
             LikedRecipesVisible = true;
         }
@@ -3081,13 +3137,12 @@ namespace Foodiefeed.viewmodels
             LikedRecipesButtonBackround = (Color)unclickedButtonColor;
             SavedRecipesButtonBackround = (Color)clickedButtonColor;
 
-            await DisposeRecipesPage(LikedRecipes);
+            //await DisposeRecipesPage(LikedRecipes);
 
             var dtos = await FetchRecipes($"api/recipes/get-saved/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
-
+            await DisposeRecipesPage(LikedRecipes);
             await AppendToRecipeCollection(SavedRecipes,dtos,RecipeType.Saved);
-
             LikedRecipesVisible = false;
             SavedRecipesVisible = true;
         }
@@ -3109,7 +3164,7 @@ namespace Foodiefeed.viewmodels
 
                     if(!response.IsSuccessStatusCode)
                     {
-                        NotifiyFailedAction(await response.Content.ReadAsStringAsync());
+                        await NotifiyFailedAction(await response.Content.ReadAsStringAsync());
                         return null;
                     }
                     var results = await response.Content.ReadAsStringAsync();
@@ -3118,7 +3173,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch
                 {
-                    NotifiyFailedAction("Cannot retrive recipes, try again later.");
+                    await NotifiyFailedAction("Cannot retrive recipes, try again later.");
                     return null;
                 }
             }
@@ -3130,7 +3185,6 @@ namespace Foodiefeed.viewmodels
         /// 
         /// </summary>
         /// <param name="collection">ObservableCollection to be disposed (cleared)</param>
-        /// <param name="Value">page visibility value</param>
         private async Task DisposeRecipesPage(ObservableCollection<RecipeView> collection)
         {
             collection.Clear();
@@ -3143,6 +3197,7 @@ namespace Foodiefeed.viewmodels
             using (var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
+
                 var endpoint = $"api/recipes/delete-saved/{id}/{_userSession.Id}";
                 try
                 {
@@ -3156,13 +3211,7 @@ namespace Foodiefeed.viewmodels
                     var recipe = SavedRecipes.First(x => x.Id == id);
 
                     SavedRecipes.Remove(recipe);
-                }
-                catch (Exception ex)
-                {
-                    NotifiyFailedAction(ex.Message);
-                }
-                finally
-                {
+
                     var post = Posts.FirstOrDefault(p => p.PostId == id);
 
                     if (post is not null)
@@ -3177,6 +3226,11 @@ namespace Foodiefeed.viewmodels
                         post2.IsSaved = false;
                     }
                 }
+                catch (Exception ex)
+                {
+                    await NotifiyFailedAction(ex.Message);
+                }
+
             }
         }
 
@@ -3186,6 +3240,7 @@ namespace Foodiefeed.viewmodels
             using (var http = new HttpClient())
             {
                 http.BaseAddress = new Uri(API_BASE_URL);
+
                 var endpoint = $"api/posts/unlike-post/{_userSession.Id}?postId={id}";
                 try
                 {
@@ -3202,7 +3257,7 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception ex)
                 {
-                    NotifiyFailedAction(ex.Message);
+                    await NotifiyFailedAction(ex.Message);
                 }
             }          
         }

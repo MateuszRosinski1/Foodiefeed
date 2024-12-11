@@ -54,9 +54,9 @@ namespace Foodiefeed_api.Controllers
         }
 
         [HttpPost("generate-wall-posts")]
-        public async Task<IActionResult> GenerateWallPosts(int userId,[FromBody]List<int> viewedPostsId, CancellationToken token)
+        public async Task<IActionResult> GenerateWallPosts(int userId,[FromBody]List<int> viewedPostsId, CancellationToken token, int pageSize)
         {
-            var response = await _postService.GenerateWallPostsAsync(userId,viewedPostsId, token);
+            var response = await _postService.GenerateWallPostsAsync(userId,viewedPostsId, token,pageSize);
             return Ok(response);
         }
 

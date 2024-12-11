@@ -207,27 +207,29 @@ public partial class CommentedPostPopup : Popup
         if (string.IsNullOrEmpty(postPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
         else
         {
-            var imageBytes = Convert.FromBase64String(postPfpBase64);
+            postPfp.Source = postPfpBase64;
+            //var imageBytes = Convert.FromBase64String(postPfpBase64);
 
-            postPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-            {
-                var stream = new MemoryStream(imageBytes);
-                stream.Position = 0;
-                return stream;
-            });
+            //postPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+            //{
+            //    var stream = new MemoryStream(imageBytes);
+            //    stream.Position = 0;
+            //    return stream;
+            //});
         }
 
         if (string.IsNullOrEmpty(commentPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
         else
-        {
-            var imageBytes = Convert.FromBase64String(commentPfpBase64);
+        { 
+            commentPfp.Source = commentPfpBase64;
+            //var imageBytes = Convert.FromBase64String(commentPfpBase64);
 
-            commentPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-            {
-                var stream = new MemoryStream(imageBytes);
-                stream.Position = 0;
-                return stream;
-            });
+            //commentPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+            //{
+            //    var stream = new MemoryStream(imageBytes);
+            //    stream.Position = 0;
+            //    return stream;
+            //});
         } 
     }
 

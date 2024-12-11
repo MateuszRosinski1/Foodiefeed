@@ -78,19 +78,22 @@ public partial class OnListFriendView : ContentView
 
         var newValueString = newValue as string;
 
-        if (string.IsNullOrEmpty(newValueString))
-        {
-            view.avatarImage.Source = "avatar.jpg";
-            return;
-        }
+        view.avatarImage.Source = newValueString;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
 
-        view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //if (string.IsNullOrEmpty(newValueString))
+        //{
+        //    view.avatarImage.Source = "avatar.jpg";
+        //    return;
+        //}
+
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 }

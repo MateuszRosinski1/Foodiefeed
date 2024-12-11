@@ -87,8 +87,8 @@ namespace Foodiefeed_api.services
 
                 if (extractedFriendFromId.IsOnline == desiredStatus) {
                     var _friend = _mapper.Map<ListedFriendDto>(extractedFriendFromId);
-                    var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(_friend.Id, token);
-                    _friend.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream,token);
+                    //var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(_friend.Id, token);
+                    _friend.ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(_friend.Id, token);
                     friendsList.Add(_friend);
                 }               
             }
@@ -213,8 +213,8 @@ namespace Foodiefeed_api.services
 
             foreach (var friend in friendsAsUserList)
             {
-                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(friend.Id, token);
-                friendsAsUserListDto[i].ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream, token);
+                //var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(friend.Id, token);
+                friendsAsUserListDto[i].ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(friend.Id, token);
 
                 i++;
             }

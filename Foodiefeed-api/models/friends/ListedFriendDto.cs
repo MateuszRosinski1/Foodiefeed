@@ -6,7 +6,7 @@
 
         public string Username { get; set; }
 
-        public string ProfilePictureBase64 { get; set; }
+        public Uri ProfilePictureBase64 { get; set; }
 
     }
 }
