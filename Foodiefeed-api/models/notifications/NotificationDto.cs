@@ -9,7 +9,7 @@ namespace Foodiefeed_api.models.notifications
 
         public int SenderId { get; set; }
 
-        public string Base64 { get; set; }
+        public Uri Base64 { get; set; }
         public string Message { get; set; }
         public int? CommentId { get; set; }
         public int? PostId { get; set; }

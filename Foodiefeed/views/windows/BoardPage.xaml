@@ -221,7 +221,7 @@
                                         Stroke="{DynamicResource TextColor}"
                                         BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                                         StrokeShape="RoundRectangle 100">
-                                    <Image Source="{Binding AvatarBase64,Converter={StaticResource Base64ToImageSourceConverter}}"
+                                    <Image Source="{Binding AvatarBase64}"
                                            Aspect="AspectFill"/>
                                 </Border>
 
@@ -1150,7 +1150,7 @@
                                                      CornerRadius="100"
                                                      HeightRequest="200" 
                                                      WidthRequest="200"  
-                                                     Source="{Binding AvatarBase64,Converter={StaticResource Base64ToImageSourceConverter}}" 
+                                                     Source="{Binding AvatarBase64}" 
                                                      Aspect="AspectFill"
                                                      BorderWidth="1"
                                                      BorderColor="{DynamicResource TextColor}"/>

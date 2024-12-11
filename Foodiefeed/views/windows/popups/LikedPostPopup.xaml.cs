@@ -147,14 +147,16 @@ public partial class LikedPostPopup : Popup
 
         var newValueString = newValue as string;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.postImage.Source = newValueString;
 
-        view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)

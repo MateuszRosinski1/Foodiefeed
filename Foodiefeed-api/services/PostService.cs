@@ -102,12 +102,15 @@ namespace Foodiefeed_api.services
 
             popupPostDto.Likes = post.PostLikes.ToList().Count();
 
-            var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId,token);
-            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream, token);
+            //var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId,token);
+            //popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream, token);
 
-            var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId,token);
+            //var imgStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId,token);
+            //popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams, token);
 
-            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStreams, token);
+            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(popupPostDto.UserId, token);
+
+            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.FetchPostImages(popupPostDto.UserId, popupPostDto.PostId, token);
 
             return popupPostDto;
         }
@@ -145,17 +148,23 @@ namespace Foodiefeed_api.services
             popupPostDto.CommentContent = comment.CommentContent;
             popupPostDto.CommentUserId = commentUser.Id.ToString();
 
-            var pfpstream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId, token);
-            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpstream,token);
+            //var pfpstream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId, token);
+            //popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpstream,token);
 
-            var imgsStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId, token);
-            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgsStreams,token);
+            //var imgsStreams = await AzureBlobStorageService.FetchPostImagesAsync(popupPostDto.UserId, popupPostDto.PostId, token);
+            //popupPostDto.PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgsStreams,token);
 
-            var pfpImgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId, token);
-            var commentImgStream = await AzureBlobStorageService.FetchProfileImageAsync(Convert.ToInt32(popupPostDto.CommentUserId), token);
+            ////var pfpImgStream = await AzureBlobStorageService.FetchProfileImageAsync(popupPostDto.UserId, token);
+            //var commentImgStream = await AzureBlobStorageService.FetchProfileImageAsync(Convert.ToInt32(popupPostDto.CommentUserId), token);
 
-            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpImgStream,token);
-            popupPostDto.CommentProfilePictureImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentImgStream, token);
+            ////popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpImgStream,token);
+            //popupPostDto.CommentProfilePictureImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentImgStream, token);
+
+            popupPostDto.PosterProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(popupPostDto.UserId, token);
+
+            popupPostDto.PostImagesBase64 = await AzureBlobStorageService.FetchPostImages(popupPostDto.UserId, popupPostDto.PostId, token);
+            popupPostDto.CommentProfilePictureImageBase64 = await AzureBlobStorageService.FetchProfileImage(Convert.ToInt32(popupPostDto.CommentUserId), token);
+
 
             return popupPostDto;
         }
@@ -190,8 +199,8 @@ namespace Foodiefeed_api.services
                 postsDtos[i].Username = user.Username;
                 postsDtos[i].Likes = post.PostLikes.Count();
 
-                var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(postsDtos[i].UserId,token);
-                postsDtos[i].ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream, token);
+                //var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(postsDtos[i].UserId,token);
+                postsDtos[i].ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(postsDtos[i].UserId, token);
 
                 var postCommentMembers = post.PostCommentMembers.ToList();
                 postsDtos[i].Comments = new List<CommentDto>();
@@ -214,8 +223,8 @@ namespace Foodiefeed_api.services
                     commentDto.Username = username;
                     commentDto.Likes = comment.CommentLikes.Count();
 
-                    var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId, token);
-                    commentDto.ImageBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(commentPfpStream,token);
+                    //var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId, token);
+                    commentDto.ImageBase64 = await AzureBlobStorageService.FetchProfileImage(comment.UserId, token);
 
                     commentDto.IsLiked = await _dbContext.CommentLikes.FirstOrDefaultAsync(c => c.UserId == userId && c.CommentId == commentDto.CommentId) is null ? false : true;
 
@@ -232,8 +241,8 @@ namespace Foodiefeed_api.services
 
                 postsDtos[i].IsSaved = save is null ? false : true;
 
-                var imgStream = await AzureBlobStorageService.FetchPostImagesAsync(post.UserId, post.PostId, token);
-                postsDtos[i].PostImagesBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream,token);
+                //var imgStream = await AzureBlobStorageService.FetchPostImagesAsync(post.UserId, post.PostId, token);
+                postsDtos[i].PostImagesBase64 = await AzureBlobStorageService.FetchPostImages(post.UserId, post.PostId, token);
 
                 i++;
             }
@@ -421,14 +430,14 @@ namespace Foodiefeed_api.services
         {
             foreach (var dto in dtos)
             {
-                var imgStreams = await AzureBlobStorageService
-                                .FetchPostImagesAsync(dto.UserId, dto.PostId, token);
+                //var imgStreams = await AzureBlobStorageService
+                //                .FetchPostImagesAsync(dto.UserId, dto.PostId, token);
                 dto.PostImagesBase64 = await AzureBlobStorageService
-                                .ConvertStreamToBase64Async(imgStreams, token);
-                var pfpStream = await AzureBlobStorageService
-                                .FetchProfileImageAsync(dto.UserId, token);
+                                .FetchPostImages(dto.UserId, dto.PostId, token);
+                //var pfpStream = await AzureBlobStorageService
+                //                .FetchProfileImageAsync(dto.UserId, token);
                 dto.ProfilePictureBase64 = await AzureBlobStorageService
-                                .ConvertStreamToBase64Async(pfpStream, token);
+                                .FetchProfileImage(dto.UserId, token);
 
                 dto.Likes = _dbContext.Posts.First(p => p.PostId == dto.PostId).PostLikes.Count;
 
@@ -451,10 +460,10 @@ namespace Foodiefeed_api.services
                     comment.Likes = entity.CommentLikes.ToList().Count;
                     comment.Username = entity.User.Username;
 
-                    var stream = await AzureBlobStorageService
-                                .FetchProfileImageAsync(comment.UserId, token);
+                    //var stream = await AzureBlobStorageService
+                    //            .FetchProfileImageAsync(comment.UserId, token);
                     comment.ImageBase64 = await AzureBlobStorageService
-                                .ConvertStreamToBase64Async(stream, token);
+                                .FetchProfileImage(comment.UserId, token);
                     var cl = await _dbContext.CommentLikes
                             .FirstOrDefaultAsync
                             (c => c.UserId == userId && c.CommentId == comment.CommentId);

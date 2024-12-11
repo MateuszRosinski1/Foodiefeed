@@ -74,8 +74,7 @@ namespace Foodiefeed_api.services
             {
                 userDto.FriendsCount = await GetUserFriendsCount(userDto.Id,token);
                 userDto.FollowersCount = await GetUserFollowersCount(userDto.Id, token);              
-                userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
-                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id,token),token);
+                userDto.ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(userDto.Id,token);
             }
             return usersDto;
         }
@@ -184,8 +183,8 @@ namespace Foodiefeed_api.services
             userProfileModel.FriendsCount = friendsCount.ToString();
             userProfileModel.FollowsCount = followersCount.ToString();
 
-            var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(userProfileModel.Id,token);
-            userProfileModel.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(pfpStream, token);
+            //var pfpStream = await AzureBlobStorageService.FetchProfileImageAsync(userProfileModel.Id,token);
+            userProfileModel.ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(userProfileModel.Id, token);
 
             return userProfileModel;
         }
@@ -216,8 +215,7 @@ namespace Foodiefeed_api.services
             var userDto = _mapper.Map<UserDto>(user);
             userDto.FollowersCount = await GetUserFollowersCount(user.Id, token);
             userDto.FriendsCount = await GetUserFriendsCount(user.Id, token);
-            userDto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(
-                    await AzureBlobStorageService.FetchProfileImageAsync(userDto.Id,token),token);
+            userDto.ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(userDto.Id,token);
 
 
             return userDto;
@@ -262,13 +260,13 @@ namespace Foodiefeed_api.services
 
         public async Task<string> GetProfilePicture(int userId, CancellationToken token)
         {
-            var stream = await AzureBlobStorageService.FetchProfileImageAsync(userId,token);
+            var uri = await AzureBlobStorageService.FetchProfileImage(userId,token);
 
-            if (stream is null) { throw new NotFoundException("user uses the deafault profile picture."); }
+            if (uri is null) { throw new NotFoundException("user uses the deafault profile picture."); }
 
-            var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream, token);
+            //var base64 = await AzureBlobStorageService.ConvertStreamToBase64Async(stream, token);
 
-            return base64;
+            return uri.ToString();
         }
 
         public async Task ChangeProfilePicture(int id, IFormFile file)

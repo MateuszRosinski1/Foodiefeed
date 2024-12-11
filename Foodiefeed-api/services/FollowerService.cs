@@ -95,8 +95,8 @@ namespace Foodiefeed_api.services
 
             foreach (var dto in userModelDtos)
             {
-                var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.Id,token);
-                dto.ProfilePictureBase64 = await AzureBlobStorageService.ConvertStreamToBase64Async(imgStream,token);
+                //var imgStream = await AzureBlobStorageService.FetchProfileImageAsync(dto.Id,token);
+                dto.ProfilePictureBase64 = await AzureBlobStorageService.FetchProfileImage(dto.Id, token);
 
             }
             //reusing ListedFriendDto as ListedFollowerDto

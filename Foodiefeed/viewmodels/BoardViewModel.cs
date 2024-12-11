@@ -15,6 +15,7 @@ using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
 using System.Net.Http;
+using System.Collections.Generic;
 
 
 namespace Foodiefeed.viewmodels
@@ -143,25 +144,24 @@ namespace Foodiefeed.viewmodels
         [ObservableProperty]
         bool noProfileFollowersVisible;
 
-        public async Task SetProfilePictureFromBase64(string base64)
+        public async Task SetProfilePictureFromUri(string url)
         {
-            if (string.IsNullOrEmpty(base64))
+            if (string.IsNullOrEmpty(url)) { return; }
 
-            if (base64.Contains("base64,"))
-                base64 = base64.Substring(base64.IndexOf("base64,") + 7);
 
-            try
-            {
-                await Task.Run(() =>
-                {
-                    byte[] imageBytes = Convert.FromBase64String(base64);
-                    ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
-                });
-            }
-            catch (FormatException)
-            {
-                ProfilePictureSource = null;
-            }
+            ProfilePictureSource = url;
+            //try
+            //{
+            //    await Task.Run(() =>
+            //    {
+            //        byte[] imageBytes = Convert.FromBase64String(base64);
+            //        ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+            //    });
+            //}
+            //catch (FormatException)
+            //{
+            //    ProfilePictureSource = null;
+            //}
         }
 
         #endregion
@@ -206,16 +206,19 @@ namespace Foodiefeed.viewmodels
 
         public BoardViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
+            NoLikedRecipes = true;
             _serviceProvider = serviceProvider;
             _themeHandler = _serviceProvider.GetService<IThemeHandler>();
             _userSession = userSession;
+            _userSession.Id = 15;
             try
             {
                 InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
                 Notifications.CollectionChanged += OnNotificationsChanged;
 
+#if WINDOWS
                 FetchNotifications(); // required for RemaningItemThresholdCommand to work.
-
+#endif
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
                 OnlineFriends.CollectionChanged += OnOnlineFriendsChanged;
                 LikedRecipes.CollectionChanged += OnLikedRecipesChanged;
@@ -282,14 +285,14 @@ namespace Foodiefeed.viewmodels
                     var base64 = await FetchProfilePictureBase64();
                     if (base64 is null) throw new Exception();
 
-                    await SetProfilePictureFromBase64(base64);
+                    await SetProfilePictureFromUri(base64);
                     await MainWallPostThresholdExceed();
 #endif
 #if WINDOWS
                     var base64 = await FetchProfilePictureBase64();
                     if (base64 is null) throw new Exception();
 
-                    var t1 = SetProfilePictureFromBase64(base64);
+                    var t1 = SetProfilePictureFromUri(base64);
                     var t2 = MainWallPostThresholdExceed();
                     await Task.WhenAll(t1, t2);
 
@@ -1775,7 +1778,7 @@ const int pageSize = 15;
 
                                 var base64 = await FetchProfilePictureBase64();
                                 if (base64 is null) throw new Exception();
-                                await SetProfilePictureFromBase64(base64);
+                                await SetProfilePictureFromUri(base64);
                             }
                         }
                         else
@@ -2818,82 +2821,76 @@ const int pageSize = 15;
 
             foreach (var post in posts)
             {
-                var commentList = new List<CommentView>();
-                foreach (var comment in post.Comments)
-                {
-                    var temp = comment.UserId == _userSession.Id ? true : false;
-                    var newcomment = new CommentView()
-                    {
-                        Username = comment.Username,
-                        CommentContent = comment.CommentContent,
-                        CommentId = comment.CommentId.ToString(),
-                        LikeCount = comment.Likes.ToString(),
-                        UserId = comment.UserId.ToString(),
-                        PfpImageBase64 = comment.ImageBase64,
-                        EditButtonVisible = temp,
-                        UnlikeCommentCommand = UnlikeCommentCommand,
-                        LikeCommentCommand = LikeCommentCommand,
-                        IsLiked = comment.IsLiked,
-                    };
-                    commentList.Add(newcomment);
-                }
+                //var commentList = new List<CommentView>();
+                //foreach (var comment in post.Comments)
+                //{
+                //    var temp = comment.UserId == _userSession.Id ? true : false;
+                //    var newcomment = new CommentView()
+                //    {
+                //        Username = comment.Username,
+                //        CommentContent = comment.CommentContent,
+                //        CommentId = comment.CommentId.ToString(),
+                //        LikeCount = comment.Likes.ToString(),
+                //        UserId = comment.UserId.ToString(),
+                //        PfpImageBase64 = comment.ImageBase64,
+                //        EditButtonVisible = temp,
+                //        UnlikeCommentCommand = UnlikeCommentCommand,
+                //        LikeCommentCommand = LikeCommentCommand,
+                //        IsLiked = comment.IsLiked,
+                //    };
+                //    commentList.Add(newcomment);
+                //}
 
-                var imageBase64list = new List<string>();
-                foreach (var image in post.PostImagesBase64)
-                {
-                    imageBase64list.Add(image);
-                }
 
                 try
                 {
-                    if (imageBase64list.Count() == 0)
+                    if (post.PostImagesBase64.Count() == 0)
                     {
-                        var postview = new PostView()
-                        {
-                            Username = post.Username,
-                            TimeStamp = post.TimeSpan,
-                            PostLikeCount = post.Likes.ToString(),
-                            PostTextContent = post.Description,
-                            Comments = new List<CommentView>(commentList),
-                            PfpImageBase64 = post.ProfilePictureBase64,
-                            PostId = post.PostId.ToString(),
-                            PostProducts = post.ProductsName,
-                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = false,
-                            LikePostCommand = LikePostCommand,
-                            UnlikePostCommand = UnlikePostCommand,
-                            SaveRecipeCommand = SaveRecipeCommand,
-                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
-                            IsLiked = post.IsLiked,
-                            IsSaved = post.IsSaved,
-
-                        };
-                        collection.Add(postview);
+                        //var postview = new PostView()
+                        //{
+                        //    Username = post.Username,
+                        //    TimeStamp = post.TimeSpan,
+                        //    PostLikeCount = post.Likes.ToString(),
+                        //    PostTextContent = post.Description,
+                        //    Comments = await CreateCommentList(post.Comments),
+                        //    PfpImageBase64 = post.ProfilePictureBase64,
+                        //    PostId = post.PostId.ToString(),
+                        //    PostProducts = post.ProductsName,
+                        //    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                        //    PostImagesVisible = false,
+                        //    LikePostCommand = LikePostCommand,
+                        //    UnlikePostCommand = UnlikePostCommand,
+                        //    SaveRecipeCommand = SaveRecipeCommand,
+                        //    UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                        //    IsLiked = post.IsLiked,
+                        //    IsSaved = post.IsSaved,
+                        //};
+                        collection.Add(await CreatePostViewWithOutImages(post));
                     }
                     else
                     {
-                        var postview = new PostView()
-                        {
-                            Username = post.Username,
-                            TimeStamp = post.TimeSpan,
-                            PostLikeCount = post.Likes.ToString(),
-                            PostTextContent = post.Description,
-                            ImageSource = post.PostImagesBase64[0],
-                            Comments = new List<CommentView>(commentList),
-                            ImagesBase64 = imageBase64list,
-                            PfpImageBase64 = post.ProfilePictureBase64,
-                            PostId = post.PostId.ToString(),
-                            PostProducts = post.ProductsName,
-                            DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
-                            PostImagesVisible = true,
-                            LikePostCommand = LikePostCommand,
-                            UnlikePostCommand = UnlikePostCommand,
-                            SaveRecipeCommand = SaveRecipeCommand,
-                            UnsaveRecipeCommand = DeleteSavedRecipeCommand,
-                            IsLiked = post.IsLiked,
-                            IsSaved = post.IsSaved,
-                        };
-                        collection.Add(postview);
+                        //var postview = new PostView()
+                        //{
+                        //    Username = post.Username,
+                        //    TimeStamp = post.TimeSpan,
+                        //    PostLikeCount = post.Likes.ToString(),
+                        //    PostTextContent = post.Description,
+                        //    ImageSource = post.PostImagesBase64[0],
+                        //    Comments = await CreateCommentList(post.Comments),
+                        //    ImagesBase64 = imageBase64list,
+                        //    PfpImageBase64 = post.ProfilePictureBase64,
+                        //    PostId = post.PostId.ToString(),
+                        //    PostProducts = post.ProductsName,
+                        //    DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                        //    PostImagesVisible = true,
+                        //    LikePostCommand = LikePostCommand,
+                        //    UnlikePostCommand = UnlikePostCommand,
+                        //    SaveRecipeCommand = SaveRecipeCommand,
+                        //    UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                        //    IsLiked = post.IsLiked,
+                        //    IsSaved = post.IsSaved,
+                        //};
+                        collection.Add(await CreatePostViewWithImages(post));
                     }
                 }
                 catch (Exception)
@@ -2901,8 +2898,79 @@ const int pageSize = 15;
                     await NotifiyFailedAction("Cannot display post at the moment");
                 }
                 
-                await Task.Delay(100);
+                //await Task.Delay(100);
             }           
+        }
+
+        private async Task<PostView> CreatePostViewWithImages(PostDto post)
+        {          
+            return new PostView()
+            {
+                Username = post.Username,
+                TimeStamp = post.TimeSpan,
+                PostLikeCount = post.Likes.ToString(),
+                PostTextContent = post.Description,
+                ImageSource = post.PostImagesBase64[0],
+                Comments = await CreateCommentList(post.Comments),
+                ImagesBase64 = post.PostImagesBase64,
+                PfpImageBase64 = post.ProfilePictureBase64,
+                PostId = post.PostId.ToString(),
+                PostProducts = post.ProductsName,
+                DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                PostImagesVisible = true,
+                LikePostCommand = LikePostCommand,
+                UnlikePostCommand = UnlikePostCommand,
+                SaveRecipeCommand = SaveRecipeCommand,
+                UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                IsLiked = post.IsLiked,
+                IsSaved = post.IsSaved,
+            };
+        }
+
+        private async Task<PostView> CreatePostViewWithOutImages(PostDto post)
+        {
+            return new PostView()
+            {
+                Username = post.Username,
+                TimeStamp = post.TimeSpan,
+                PostLikeCount = post.Likes.ToString(),
+                PostTextContent = post.Description,
+                Comments = await CreateCommentList(post.Comments),
+                PfpImageBase64 = post.ProfilePictureBase64,
+                PostId = post.PostId.ToString(),
+                PostProducts = post.ProductsName,
+                DeleteButtonVisible = post.UserId == _userSession.Id ? true : false,
+                PostImagesVisible = false,
+                LikePostCommand = LikePostCommand,
+                UnlikePostCommand = UnlikePostCommand,
+                SaveRecipeCommand = SaveRecipeCommand,
+                UnsaveRecipeCommand = DeleteSavedRecipeCommand,
+                IsLiked = post.IsLiked,
+                IsSaved = post.IsSaved,
+            };
+        }
+
+        private async Task<List<CommentView>> CreateCommentList(List<CommentDto> comments)
+        {
+            var commentList = new List<CommentView>();
+            foreach (var comment in comments)
+            {
+                var temp = comment.UserId == _userSession.Id ? true : false;
+                var newcomment = new CommentView()
+                {
+                    Username = comment.Username,
+                    CommentContent = comment.CommentContent,
+                    CommentId = comment.CommentId.ToString(),
+                    LikeCount = comment.Likes.ToString(),
+                    UserId = comment.UserId.ToString(),
+                    PfpImageBase64 = comment.ImageBase64,
+                    EditButtonVisible = temp,
+                    UnlikeCommentCommand = UnlikeCommentCommand,
+                    LikeCommentCommand = LikeCommentCommand,
+                    IsLiked = comment.IsLiked,
+                };
+            }
+            return commentList;
         }
 
         private async Task<string> GetUserProfileFollowers(string id)
@@ -3047,13 +3115,13 @@ const int pageSize = 15;
             LikedRecipesButtonBackround = (Color)clickedButtonColor;
             SavedRecipesButtonBackround = (Color)unclickedButtonColor;
 
-            await DisposeRecipesPage(SavedRecipes);
+            //await DisposeRecipesPage(SavedRecipes);
 
             var dtos = await FetchRecipes($"api/recipes/get-liked/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
+            await DisposeRecipesPage(SavedRecipes);
 
             await AppendToRecipeCollection(LikedRecipes, dtos, RecipeType.Liked);
-
             SavedRecipesVisible = false;
             LikedRecipesVisible = true;
         }
@@ -3069,13 +3137,12 @@ const int pageSize = 15;
             LikedRecipesButtonBackround = (Color)unclickedButtonColor;
             SavedRecipesButtonBackround = (Color)clickedButtonColor;
 
-            await DisposeRecipesPage(LikedRecipes);
+            //await DisposeRecipesPage(LikedRecipes);
 
             var dtos = await FetchRecipes($"api/recipes/get-saved/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
-
+            await DisposeRecipesPage(LikedRecipes);
             await AppendToRecipeCollection(SavedRecipes,dtos,RecipeType.Saved);
-
             LikedRecipesVisible = false;
             SavedRecipesVisible = true;
         }

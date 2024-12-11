@@ -88,8 +88,8 @@ public class RecipeService : IRecipeService
 
         foreach(var recipe in recipes)
         {
-            var stream = await AzureBloBStorageService.FetchRecipeImage(recipe.Id,recipe.UserId,token);
-            recipe.ImageBase64 = await AzureBloBStorageService.ConvertStreamToBase64Async(stream, token);
+            //var stream = await AzureBloBStorageService.FetchRecipeImage(recipe.Id,recipe.UserId,token);
+            recipe.ImageBase64 = await AzureBloBStorageService.FetchRecipeImageAsync(recipe.Id, recipe.UserId, token);
         }
 
         return recipes;

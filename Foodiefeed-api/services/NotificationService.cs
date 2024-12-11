@@ -56,8 +56,8 @@ namespace Foodiefeed_api.services
 
             foreach (var dto in notificationsDtos)
             {
-                var imgStream = await AzureBlobStorageSerivce.FetchProfileImageAsync(dto.SenderId,token);
-                dto.Base64 = await AzureBlobStorageSerivce.ConvertStreamToBase64Async(imgStream, token);
+                //var imgStream = await AzureBlobStorageSerivce.FetchProfileImageAsync(dto.SenderId,token);
+                dto.Base64 = await AzureBlobStorageSerivce.FetchProfileImage(dto.SenderId, token);
             }
 
             return notificationsDtos;

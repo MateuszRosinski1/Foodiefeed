@@ -110,14 +110,15 @@ public partial class UserOptionPopup : Popup
 
         var newValueString = newValue as string;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.avatarImage.Source = newValueString;
+        //var imageBytes = Convert.FromBase64String(newValueString);
 
-        view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     private void Button_Clicked(object sender, EventArgs e)

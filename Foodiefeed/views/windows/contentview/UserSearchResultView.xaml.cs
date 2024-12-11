@@ -32,14 +32,16 @@ public partial class UserSearchResultView : ContentView
             return;
         }
 
-        var imageBytes = Convert.FromBase64String(newValueString);
+        view.pfpImage.Source = newValueString;
 
-        view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        //var imageBytes = Convert.FromBase64String(newValueString);
+
+        //view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
+        //{
+        //    var stream = new MemoryStream(imageBytes);
+        //    stream.Position = 0;
+        //    return stream;
+        //});
     }
 
     public UserSearchResultView()
