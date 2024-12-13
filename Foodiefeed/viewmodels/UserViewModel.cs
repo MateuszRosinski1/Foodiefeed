@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using System.Text;
@@ -68,7 +69,8 @@ namespace Foodiefeed.viewmodels
                     }
                     else
                     {
-                        //await DisplayAlert("Response", response.Result.StatusCode.ToString(), "OK");
+                        var snackbar = Toast.Make("Invalind Credentials.",CommunityToolkit.Maui.Core.ToastDuration.Short,15);
+                        snackbar.Show();
                     }
 
                 }

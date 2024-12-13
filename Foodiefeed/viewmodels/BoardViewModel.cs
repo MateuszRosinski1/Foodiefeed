@@ -179,8 +179,8 @@ namespace Foodiefeed.viewmodels
 
         private Timer onlineFriendsTimer;
 
-        //private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
-        private const string API_BASE_URL = "http://localhost:5000";
+        private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
+        //private const string API_BASE_URL = "http://localhost:5000";
         public BoardViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
             NoLikedRecipes = true;
