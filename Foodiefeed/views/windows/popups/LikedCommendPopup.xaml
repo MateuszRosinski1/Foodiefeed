@@ -6,16 +6,16 @@
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              xmlns:popup="clr-namespace:Foodiefeed.views.windows.popups"
              Color="Transparent">
-    <Frame CornerRadius="10" BorderColor="Black" BackgroundColor="{DynamicResource CommentViewBackground}" HeightRequest="300" WidthRequest="700">
+    <Frame CornerRadius="10" BorderColor="Black" BackgroundColor="{DynamicResource CommentViewBackground}" HeightRequest="{OnPlatform Android=300,WinUI=350}" WidthRequest="700">
         <Grid  BackgroundColor="Transparent" x:Name="CommentContainer">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" BackgroundColor="Transparent">
                 <HorizontalStackLayout Spacing="5">
-                    <Image Source="avatar.jpg" HeightRequest="40" WidthRequest="40" />
+                    <Image HeightRequest="40" WidthRequest="40" x:Name="avatarImage"/>
                     <Label Margin="0,0,0,0" FontAttributes="Bold" VerticalOptions="Center" TextColor="{DynamicResource TextColor}" x:Name="UsernameLabel"
                            Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Username}"/>
                 </HorizontalStackLayout>
@@ -46,16 +46,35 @@
                 </VerticalStackLayout>
             </Grid>
 
-            <Grid  Grid.Row="1" Margin="0,5" BackgroundColor="Transparent">
-                <Label TextColor="{DynamicResource TextColor}" x:Name="CommentText" LineBreakMode="WordWrap" 
+            <Grid  Grid.Row="1" 
+                   Margin="0,5" 
+                   BackgroundColor="Transparent">
+                <Label TextColor="{DynamicResource TextColor}" 
+                       x:Name="CommentText" 
+                       LineBreakMode="WordWrap" 
                        Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=CommentContent}"/>
             </Grid>
 
-            <HorizontalStackLayout  Grid.Row="2" BackgroundColor="Transparent">
-                <Label BackgroundColor="{DynamicResource MainBackgroundColorContrast}"  Padding="0" FontSize="15" WidthRequest="100" HeightRequest="30" Text="Likes: "/>
+            <Border Grid.Row="2" 
+                    StrokeShape="RoundRectangle 10" 
+                    HorizontalOptions="Start" 
+                    VerticalOptions="Center" 
+                    Stroke="Transparent" StrokeThickness="0">
+                <HorizontalStackLayout   BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
+                                         Padding="{OnPlatform Android=10,WinUI=20}">
+                    <Label TextColor="{DynamicResource TextColor}" 
+                           Padding="0" 
+                           FontSize="15"  
+                           Text="Likes: "/>
 
-                <Label VerticalOptions="Center" Margin="5,0,0,0" TextColor="{DynamicResource TextColor}" FontSize="15" x:Name="LikeCountLabel" Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Likes}"/>
-            </HorizontalStackLayout>
+                    <Label
+                           Margin="5,0,0,0" 
+                           TextColor="{DynamicResource TextColor}" 
+                           FontSize="15" 
+                           x:Name="LikeCountLabel" 
+                           Text="{Binding Source={RelativeSource AncestorType={x:Type popup:LikedCommendPopup}},Path=Likes}"/>
+                </HorizontalStackLayout>
+            </Border>
         </Grid>
     </Frame>
 </toolkit:Popup>

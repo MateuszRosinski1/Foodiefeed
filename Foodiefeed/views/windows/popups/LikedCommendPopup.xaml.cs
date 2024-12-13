@@ -4,17 +4,16 @@ namespace Foodiefeed.views.windows.popups;
 
 public partial class LikedCommendPopup : Popup
 {
-	public LikedCommendPopup(string _UserId,string base64,string username,string content,string likes)
+	public LikedCommendPopup(string _UserId,string imageUrl,string username,string content,string likes)
 	{
         UserId = _UserId;
         Username = username;
-        ProfilePictureImageBase64 = base64;
         CommentContent = content;
         Likes = likes;
 		InitializeComponent();
+        avatarImage.Source = imageUrl;
 	}
 
-    public string ProfilePictureImageBase64 { get; set; }
     public string Username { get; set; }
     public string CommentContent { get; set; }
     public string UserId { get; set; }

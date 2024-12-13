@@ -14,8 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Maui.Core.Extensions;
 using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Core;
-using System.Net.Http;
-using System.Collections.Generic;
 
 
 namespace Foodiefeed.viewmodels
@@ -30,7 +28,6 @@ namespace Foodiefeed.viewmodels
 
         private readonly UserSession _userSession;
         private readonly IThemeHandler _themeHandler;
-        //private readonly IFoodiefeedApiService _foodiefeedApiServce;
         private readonly IServiceProvider _serviceProvider;
         public ObservableCollection<PostView> Posts { get; set; } = new ObservableCollection<PostView>();
 
@@ -142,27 +139,7 @@ namespace Foodiefeed.viewmodels
         bool noProfileFriendsVisible;
 
         [ObservableProperty]
-        bool noProfileFollowersVisible;
-
-        public async Task SetProfilePictureFromUri(string url)
-        {
-            if (string.IsNullOrEmpty(url)) { return; }
-
-
-            ProfilePictureSource = url;
-            //try
-            //{
-            //    await Task.Run(() =>
-            //    {
-            //        byte[] imageBytes = Convert.FromBase64String(base64);
-            //        ProfilePictureSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
-            //    });
-            //}
-            //catch (FormatException)
-            //{
-            //    ProfilePictureSource = null;
-            //}
-        }
+        bool noProfileFollowersVisible;    
 
         #endregion
 
@@ -202,8 +179,8 @@ namespace Foodiefeed.viewmodels
 
         private Timer onlineFriendsTimer;
 
-        private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
-
+        //private const string API_BASE_URL = "http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net";
+        private const string API_BASE_URL = "http://localhost:5000";
         public BoardViewModel(UserSession userSession,IServiceProvider serviceProvider)
         {
             NoLikedRecipes = true;
@@ -270,6 +247,14 @@ namespace Foodiefeed.viewmodels
 
         private Timer notificationTimer;
         bool windowloaded;
+
+        public async Task SetProfilePictureFromUri(string url)
+        {
+            if (string.IsNullOrEmpty(url)) { return; }
+
+
+            ProfilePictureSource = url;
+        }
 
         [RelayCommand]
         public async Task Appearing()
@@ -2626,7 +2611,8 @@ const int pageSize = 15;
 
         public async Task UpdateFriendList() 
         {
-            OnlineFriends.Clear();
+            await Application.Current.Dispatcher.DispatchAsync(() => OnlineFriends.Clear());
+
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(API_BASE_URL);
@@ -2956,7 +2942,7 @@ const int pageSize = 15;
             foreach (var comment in comments)
             {
                 var temp = comment.UserId == _userSession.Id ? true : false;
-                var newcomment = new CommentView()
+                commentList.Add(new CommentView()
                 {
                     Username = comment.Username,
                     CommentContent = comment.CommentContent,
@@ -2968,7 +2954,7 @@ const int pageSize = 15;
                     UnlikeCommentCommand = UnlikeCommentCommand,
                     LikeCommentCommand = LikeCommentCommand,
                     IsLiked = comment.IsLiked,
-                };
+                });
             }
             return commentList;
         }
@@ -3116,7 +3102,7 @@ const int pageSize = 15;
             SavedRecipesButtonBackround = (Color)unclickedButtonColor;
 
             //await DisposeRecipesPage(SavedRecipes);
-
+            lastRecipeId = 0;
             var dtos = await FetchRecipes($"api/recipes/get-liked/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
             await DisposeRecipesPage(SavedRecipes);
@@ -3138,7 +3124,7 @@ const int pageSize = 15;
             SavedRecipesButtonBackround = (Color)clickedButtonColor;
 
             //await DisposeRecipesPage(LikedRecipes);
-
+            lastRecipeId = 0;
             var dtos = await FetchRecipes($"api/recipes/get-saved/{_userSession.Id}/{lastRecipeId}");
             if (dtos is null) return;
             await DisposeRecipesPage(LikedRecipes);
@@ -3188,7 +3174,6 @@ const int pageSize = 15;
         private async Task DisposeRecipesPage(ObservableCollection<RecipeView> collection)
         {
             collection.Clear();
-            lastRecipeId = 0;
         }
 
         [RelayCommand]

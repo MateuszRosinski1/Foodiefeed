@@ -537,6 +537,7 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\assets\zh-Hans\M
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\assets\zh-Hant\Microsoft.Maui.Controls.resources.dll
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\assets\zh-HK\Microsoft.Maui.Controls.resources.dll
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\assets\_Microsoft.Android.Resource.Designer.dll
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\typemaps.x86_64.ll
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\AndroidManifest.xml
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\AndroidManifest.xml
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\mono\MonoRuntimeProvider.java
@@ -546,6 +547,7 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\bin\mono.android
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\static.flag
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\__environment__.txt
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\buildid.txt
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\environment.x86_64.ll
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\androidx\activity\ktx\R.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\androidx\activity\R.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\androidx\annotation\experimental\R.java
@@ -1050,6 +1052,13 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\mono\com\goo
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\mono\MonoPackageManager_Resources.java
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\bin\packaged_resources
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\src\com\companyname\foodiefeed\R.java
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\compressed_assemblies.x86_64.ll
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\typemaps.x86_64.o
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\environment.x86_64.o
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\compressed_assemblies.x86_64.o
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\marshal_methods.x86_64.o
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\jni_remap.x86_64.o
+D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\app_shared_libraries\x86_64\libxamarin-app.so
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\bin\classes.dex
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\bin\classes2.dex
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_CleanIntermediateIfNeeded.stamp
@@ -1061,12 +1070,3 @@ D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GenerateJavaStubs
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_GeneratePackageManagerJava.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\stamp\_ResolveLibraryProjectImports.stamp
 D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\assets\System.Private.CoreLib.dll
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\typemaps.x86_64.ll
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\environment.x86_64.ll
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\compressed_assemblies.x86_64.ll
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\typemaps.x86_64.o
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\environment.x86_64.o
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\compressed_assemblies.x86_64.o
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\marshal_methods.x86_64.o
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\android\jni_remap.x86_64.o
-D:\PracaInzynierska\Foodiefeed\obj\Debug\net8.0-android\app_shared_libraries\x86_64\libxamarin-app.so

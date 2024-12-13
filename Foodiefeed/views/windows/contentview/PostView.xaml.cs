@@ -151,7 +151,11 @@ public partial class PostView : ContentView
     public List<string> ImagesBase64
     {
         get => (List<string>)GetValue(ImagesBase64Property);
-        set => SetValue(ImagesBase64Property, value);
+        set 
+        {
+            SetValue(ImagesBase64Property, value);
+            if (value.Count == 1) swipeRightButton.IsVisible = false;
+        }
     }
 
     public string ImageSource
@@ -364,15 +368,6 @@ public partial class PostView : ContentView
         }
 
         view.pfpImage.Source = newValueString;
-
-        //var imageBytes = Convert.FromBase64String(newValueString);
-
-        //view.pfpImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        //{
-        //    var stream = new MemoryStream(imageBytes);
-        //    stream.Position = 0;
-        //    return stream;
-        //});
     }
 
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -383,17 +378,7 @@ public partial class PostView : ContentView
 
         var newValueString = newValue as string;
 
-        view.postImage.Source = newValueString;
-
-
-        //var imageBytes = Convert.FromBase64String(newValueString);
-
-        //view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        //{
-        //    var stream = new MemoryStream(imageBytes);
-        //    stream.Position = 0;
-        //    return stream;
-        //});
+        view.postImage.Source = newValueString;;
     }
 
     private static void OnContentVisiblityChanged(BindableObject bindable, object oldValue, object newValue)
@@ -425,6 +410,8 @@ public partial class PostView : ContentView
         currentImageIndex = 0;
         swipeLeftButton.IsVisible = false;
         PostContentVisible = true;
+
+        
 #if ANDROID
 ExpandOrCollapseLabel.IsVisible = false;
 #endif
@@ -443,21 +430,34 @@ ExpandOrCollapseLabel.IsVisible = false;
     {
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            var animation = new Animation(v => CommentSectionScroll.MaximumHeightRequest = v, 300, 600);
+            var animation = new Animation(v =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    CommentSectionScroll.HeightRequest = v;
+                });
+            }, 300, 600);
             animation.Commit(this, "1", 16, 500, Easing.CubicIn);
         });
 
         Button b = (Button)sender;
         b.Clicked -= ExpandCommentSection;
         b.Clicked += CondenseCommentSection;
+        CommentSectionScroll.MaximumHeightRequest = 600;
     }
 
     private async void CondenseCommentSection(object sender, EventArgs e)
     {
         await MainThread.InvokeOnMainThreadAsync(() =>
         {
-            var animation = new Animation(v => CommentSectionScroll.MaximumHeightRequest = v, 600, 300);
-            animation.Commit(this, "TrackListSideBarAnimation", 16, 500, Easing.CubicIn);
+            var animation = new Animation(v =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    CommentSectionScroll.HeightRequest = v;
+                });
+            }, 600, 300);
+            animation.Commit(this, "2", 16, 500, Easing.CubicIn);
         });
 
         Button b = (Button)sender;
@@ -465,6 +465,7 @@ ExpandOrCollapseLabel.IsVisible = false;
         b.Clicked -= CondenseCommentSection;
 
         b.Clicked += ExpandCommentSection;
+        CommentSectionScroll.HeightRequest = 300;
     }
 
     private void ExpandPostContentText(object sender, TappedEventArgs e)
@@ -523,7 +524,7 @@ ExpandOrCollapseLabel.IsVisible = false;
     {
         var index = Clamp(currentImageIndex - 1, 0, ImagesBase64.Count - 1);
         currentImageIndex = index;
-        if (currentImageIndex >= 0)
+        if (currentImageIndex <= 0)
         {
             swipeLeftButton.IsVisible = false;
         }

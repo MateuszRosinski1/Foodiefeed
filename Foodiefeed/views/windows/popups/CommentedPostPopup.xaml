@@ -67,7 +67,7 @@
                     </Grid>
 
                     <Grid Padding="30,0,30,15" Grid.Row="2" x:Name="ImagesGrid">
-                        <Image HeightRequest="300"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
+                        <Image HeightRequest="200"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFill"/>
                         <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
@@ -78,7 +78,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                        <HorizontalStackLayout  Grid.Column="0" Spacing="5" Scale="0.6">
                             <Button  ImageSource="likeicon.png" 
                                   BackgroundColor="Transparent" 
                                   FontSize="20"
@@ -102,7 +102,7 @@
                              HeightRequest="50"
                              Padding="0,0,0,0" 
                              Text="Comment"
-                             TextColor="{DynamicResource TextColor}"/>
+                             TextColor="{DynamicResource TextColor}" Scale="0.6"/>
 
                         <Button Grid.Column="2" 
                              ImageSource="shareicon.png" 
@@ -113,7 +113,7 @@
                              HeightRequest="50" 
                              Padding="0,0,0,0" 
                              Text="Share"
-                             TextColor="{DynamicResource TextColor}"/>
+                             TextColor="{DynamicResource TextColor}" Scale="0.6"/>
 
                     </Grid>
                 </Grid>
