@@ -22,13 +22,6 @@ public partial class UserOptionPopup : Popup
     public static readonly BindableProperty UsernameProperty =
         BindableProperty.Create(nameof(Username), typeof(string), typeof(UserOptionPopup), default(string), propertyChanged: OnUsernameChanged);
 
-    //public static readonly BindableProperty IsFollowedProperty = 
-    //    BindableProperty.Create(nameof(IsFollowed),typeof(bool),typeof(UserOptionPopup),default(bool));
-
-    //public static readonly BindableProperty IsFriendProperty =
-    //    BindableProperty.Create(nameof(IsFriend), typeof(bool), typeof(UserOptionPopup), default(bool));
-
-
     public UserOptionPopup(bool isFollowed,bool isFriend,bool HasPendingFriendRequest)
     {
         InitializeComponent();
@@ -111,14 +104,6 @@ public partial class UserOptionPopup : Popup
         var newValueString = newValue as string;
 
         view.avatarImage.Source = newValueString;
-        //var imageBytes = Convert.FromBase64String(newValueString);
-
-        //view.avatarImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        //{
-        //    var stream = new MemoryStream(imageBytes);
-        //    stream.Position = 0;
-        //    return stream;
-        //});
     }
 
     private void Button_Clicked(object sender, EventArgs e)

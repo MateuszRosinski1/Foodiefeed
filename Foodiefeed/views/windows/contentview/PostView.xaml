@@ -113,7 +113,7 @@
                                      Command="{Binding LikingCommand}"
                                      TextColor="{DynamicResource TextColor}"
                                      CommandParameter="{Binding PostId}"/>
-                            
+
                             <Label x:Name="PostLikeCountLabel" 
                                    TextColor="{DynamicResource TextColor}" 
                                    FontSize="{OnPlatform Android=15,WinUI=20}" 
@@ -160,7 +160,7 @@
                 </Grid>
             </Border>
         </Grid>
-        
+
         <Grid ZIndex="0" IsVisible="{OnIdiom Desktop=True,Phone=False}">
             <Border BackgroundColor="{DynamicResource MainBackgroundColorContrast}"
                     StrokeShape="RoundRectangle 0,0,20,20"
@@ -237,21 +237,19 @@
                     </ScrollView>
                 </Grid>
             </Border>
-            
+
         </Grid>
-        
+
         <Grid Margin="0,-20,0,0" 
               ZIndex="1"  IsVisible="{OnIdiom Desktop=True,Phone=False}">
-                <Button WidthRequest="100" 
-                        BackgroundColor="White" 
+            <Button WidthRequest="100" 
+                        BackgroundColor="{DynamicResource MainBackgroundColorContrast}" 
                         Clicked="ExpandCommentSection">
-                    <Button.Shadow>
-                        <Shadow Opacity="0.3" 
+                <Button.Shadow>
+                    <Shadow Opacity="0.3" 
                                 Brush="Black"/>
-                    </Button.Shadow>
-                </Button>
+                </Button.Shadow>
+            </Button>
         </Grid>
     </VerticalStackLayout>
-    
-
 </ContentView>

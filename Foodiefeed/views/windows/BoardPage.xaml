@@ -23,7 +23,6 @@
         <x:Double x:Key="PostWidthValueAdjustment">750</x:Double>
         <x:Double x:Key="RecipeCollectionViewHeightAdjustValue">235</x:Double>
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        <local:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
 
         <DataTemplate x:Key="FriendRequestNotificationTemplate">
             <views:FriendRequestNotification Message="{Binding Message}" UserId="{Binding UserId}" ImageBase64="{Binding ImageBase64}"/>
@@ -2262,17 +2261,19 @@
                                     Margin="5,0,5,0" 
                                     FontSize="{OnPlatform Android=9}"/>
                         </Grid>
-                        <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AddPostImages}" 
-                                               BackgroundColor="Transparent" 
-                                               WidthRequest="650" 
-                                               HeightRequest="60"
-                                               VerticalOptions="Center">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <views:PostImageView ImageSource="{Binding ImageSource}"/>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </HorizontalStackLayout>
+                        <ScrollView Orientation="Horizontal" VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never">
+                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding AddPostImages}" 
+                                                   BackgroundColor="Transparent" 
+                                                   WidthRequest="{OnPlatform WinUI=650}" 
+                                                   HeightRequest="60"
+                                                   VerticalOptions="Center">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:PostImageView ImageSource="{Binding ImageSource}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </HorizontalStackLayout>
+                        </ScrollView>
 
                     </VerticalStackLayout>
 

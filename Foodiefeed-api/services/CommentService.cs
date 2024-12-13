@@ -78,7 +78,6 @@ namespace Foodiefeed_api.services
             var commentDto = _mapper.Map<CommentDto>(comment);
             commentDto.Likes = comment.CommentLikes.ToList().Count();
             commentDto.Username = user.Username;
-            //var commentPfpStream = await AzureBlobStorageService.FetchProfileImageAsync(comment.UserId,token);
             commentDto.ImageBase64 = await AzureBlobStorageService.FetchProfileImage(comment.UserId, token);
             return commentDto; 
         }

@@ -156,14 +156,7 @@ public partial class CommentedPostPopup : Popup
 
         var newValueString = newValue as string;
 
-        var imageBytes = Convert.FromBase64String(newValueString);
-
-        view.postImage.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-        {
-            var stream = new MemoryStream(imageBytes);
-            stream.Position = 0;
-            return stream;
-        });
+        view.postImage.Source = newValueString;
     }
 
     private static void OnProductsChanged(BindableObject bindable, object oldValue, object newValue)
@@ -208,28 +201,12 @@ public partial class CommentedPostPopup : Popup
         else
         {
             postPfp.Source = postPfpBase64;
-            //var imageBytes = Convert.FromBase64String(postPfpBase64);
-
-            //postPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-            //{
-            //    var stream = new MemoryStream(imageBytes);
-            //    stream.Position = 0;
-            //    return stream;
-            //});
         }
 
         if (string.IsNullOrEmpty(commentPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
         else
         { 
             commentPfp.Source = commentPfpBase64;
-            //var imageBytes = Convert.FromBase64String(commentPfpBase64);
-
-            //commentPfp.Source = Microsoft.Maui.Controls.ImageSource.FromStream(() =>
-            //{
-            //    var stream = new MemoryStream(imageBytes);
-            //    stream.Position = 0;
-            //    return stream;
-            //});
         } 
     }
 

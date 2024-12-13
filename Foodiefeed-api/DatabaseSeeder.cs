@@ -35,67 +35,6 @@ namespace Foodiefeed_api
                     context.SaveChanges();
                 }
 
-
-                //var blobSerivceClient = new BlobServiceClient("");
-                //var containerClient = blobSerivceClient.GetBlobContainerClient("images-storage");
-
-                //var selfiesPathLocal = "D:/ImageDataset/Selfie-dataset/Selfie-dataset/images";
-                //var random = new Random();
-                //var selfies = Directory.GetFiles(selfiesPathLocal, "*.jpg");
-
-                //foreach (var user in context.Users.ToList())
-                //{
-                //    var dir = $"{user.Id}/";
-
-                //    var profilePicturePath = dir + "pfp.jpg";
-
-                //    var randomProfilePicture = selfies[random.Next(selfies.Length)];
-
-                //    var blobClient = containerClient.GetBlobClient(profilePicturePath);
-
-                //    using (var stream = File.OpenRead(randomProfilePicture))
-                //    {
-                //        await blobClient.UploadAsync(stream, true);
-                //    }
-                //}
-
-                //var imageDatasetPath = "D:/ImageDataset/train/train_set/";
-
-                //var imagesPath = Directory.GetFiles(imageDatasetPath, "*.jpg");
-
-                //foreach (var post in context.Posts.ToList())
-                //{
-                //    var dir = $"{post.UserId}/posts/{post.PostId}/";
-                //    var random = new Random();
-                //    var imageCount = random.Next(1, 10);
-
-                //    for(int  i =1 ; i <= imageCount; i++)
-                //    {
-                //        var imgPath = dir + i.ToString() + ".jpg";
-
-                //        var blobClient = containerClient.GetBlobClient(imgPath);
-
-                //        var randomImage = imagesPath[random.Next(imagesPath.Length)];
-
-                //        using (var stream = File.OpenRead(randomImage))
-                //        {
-                //            await blobClient.UploadAsync(stream,true);
-                //        }
-
-
-                //    }
-                //}
-
-                //foreach(var user in context.Users.ToList())
-                //{
-                //    var userFolder = $"{user.Id}/posts/";
-
-                //    var blobClient = containerClient.GetBlobClient($"{userFolder}placeholder.txt");
-                //    
-                //    var placeholderContent = new BinaryData("Folder placeholder");
-                //    blobClient.Upload(placeholderContent, overwrite: true);
-                //}
-
                 if (!context.Posts.Any())
                 {
                     var postFaker = new Faker<Post>()
@@ -194,17 +133,6 @@ namespace Foodiefeed_api
                         context.SaveChanges();
                     }
                 }
-
-                //if (!context.PostImages.Any())
-                //{
-                //    var postImageFaker = new Faker<PostImage>()
-                //        .RuleFor(pi => pi.PostId, f => f.PickRandom(context.Posts.ToList()).PostId)
-                //        .RuleFor(pi => pi.ImagePath, f => $"images/posts/{f.Random.Int(1, 1000)}.jpg");
-
-                //    var postImages = postImageFaker.Generate(8000);
-                //    context.PostImages.AddRange(postImages);
-                //    context.SaveChanges();
-                //}
 
                 if (!context.Products.Any())
                 {
@@ -436,6 +364,10 @@ namespace Foodiefeed_api
                     context.SaveChanges();
                 }
 
+                //var not = context.Notifications.ToList();
+                //context.Notifications.RemoveRange(not);
+                //context.SaveChanges();
+
                 if (!context.Notifications.Any())
                 {
 
@@ -463,13 +395,14 @@ namespace Foodiefeed_api
                         }
                     }
 
-                    foreach (var comment in context.CommentLikes.ToList())
+                    foreach (var comment in context.CommentLikes.Include(cl => cl.Comment).ToList())
                     {
                         var user = context.Users.FirstOrDefault(u => u.Id == comment.UserId);
                         var userComment = context.Comments.FirstOrDefault(c => c.CommentId == comment.CommentId);
                         if (user is not null && userComment is not null)
                         {
-                            notifications.Add(new Notification(NotificationType.CommentLike, user.Username) { SenderId = comment.UserId, ReceiverId = userComment.UserId, CommentId = comment.CommentId });
+                            notifications.Add(new Notification(NotificationType.CommentLike, user.Username)
+                            { SenderId = comment.UserId, ReceiverId = userComment.UserId, CommentId = comment.CommentId });
                         }
                     }
 
