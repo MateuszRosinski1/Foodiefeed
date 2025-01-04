@@ -11,17 +11,15 @@ namespace Foodiefeed_api.entities
         public int ReceiverId { get; set; }
         public int? CommentId { get; set; }
         public int? PostId { get; set; }
-
         public string Message { get; set; }
-
         public DateTime CreatedAt { get; set; }
+        public NotificationType Type { get; set; }
 
         [ForeignKey("SenderId")]
         public virtual User Sender { get; set; }
         [ForeignKey("ReceiverId")]
         public virtual User Receiver { get; set; }
 
-        public NotificationType Type { get; set; }
 
         public Notification()
         {

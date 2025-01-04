@@ -197,7 +197,7 @@ public partial class CommentedPostPopup : Popup
         CommentContent = content;
         CommentLikes = likes;
 
-        if (string.IsNullOrEmpty(postPfpBase64)) { commentPfp.Source = "avatar.jpg"; }
+        if (string.IsNullOrEmpty(postPfpBase64)) { postPfp.Source = "avatar.jpg"; }
         else
         {
             postPfp.Source = postPfpBase64;

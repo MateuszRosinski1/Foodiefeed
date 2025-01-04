@@ -40,10 +40,28 @@ public partial class LikedPostPopup : Popup
         propertyChanged: OnImagesBase64Changed
     );
 
+    public static readonly BindableProperty ProfilePictreSourceProperty =
+        BindableProperty.Create(nameof(ProfilePictreSource), typeof(string), typeof(LikedPostPopup), default(string), propertyChanged: ProfilePictreSourceChanged);
+
+    private static void ProfilePictreSourceChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var view = (LikedPostPopup)bindable;
+        string sourceURL = newValue as string;
+        if (string.IsNullOrEmpty(sourceURL)) { view.postPfp.Source = "avatar.jpg"; return; }
+
+        view.postPfp.Source = sourceURL;
+    }
+
     #endregion
 
 
     #region Properties
+
+    public string ProfilePictreSource
+    {
+        get => (string)GetValue(ProfilePictreSourceProperty);
+        set => SetValue(ProfilePictreSourceProperty, value);
+    }
 
     public void SetImagesVisiblity(bool visiblity)
     {

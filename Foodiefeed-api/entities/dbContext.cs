@@ -13,15 +13,15 @@ namespace Foodiefeed_api.entities
             _configuration = configuration;
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Friend> Friends { get; set; }
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<PostCommentMember> PostCommentMembers { get; set; }
-        public DbSet<PostProduct> PostProducts { get; set; }
-        public DbSet<PostTag> PostTags { get; set; }
-        public DbSet<UserTag> UserTags { get; set; }
-        public DbSet<FriendRequest> FriendRequests { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Friend> Friends { get; set; }
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<PostCommentMember> PostCommentMembers { get; set; }
+        public virtual DbSet<PostProduct> PostProducts { get; set; }
+        public virtual DbSet<PostTag> PostTags { get; set; }
+        public virtual DbSet<UserTag> UserTags { get; set; }
+        public virtual DbSet<FriendRequest> FriendRequests { get; set; }
         public virtual DbSet<Follower> Followers { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
@@ -54,7 +54,6 @@ namespace Foodiefeed_api.entities
 
             modelBuilder.Entity<PostCommentMember>()
                 .HasNoKey();
-
 
             modelBuilder.Entity<PostCommentMember>()
                 .HasKey(pcm => new { pcm.PostId, pcm.CommentId });
@@ -149,7 +148,7 @@ namespace Foodiefeed_api.entities
                 .HasForeignKey(ut => ut.TagId);
 
             modelBuilder.Entity<CommentLike>()
-        .HasKey(cl => new { cl.CommentId, cl.UserId });
+                .HasKey(cl => new { cl.CommentId, cl.UserId });
 
             modelBuilder.Entity<CommentLike>()
                 .HasOne(cl => cl.Comment)

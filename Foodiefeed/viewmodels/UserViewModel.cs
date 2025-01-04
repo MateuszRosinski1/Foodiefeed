@@ -65,6 +65,7 @@ namespace Foodiefeed.viewmodels
                         var id = Convert.ToInt32(StringId);
                         _userSession.InitializeSession(id);
                         await _userSession.SetOnline();
+
                         await ToBoardPage();
                     }
                     else
@@ -76,7 +77,8 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception ex)
                 {
-                    //await DisplayAlert("Response", ex.Message, "OK");
+                    var snackbar = Toast.Make("Internal server error.", CommunityToolkit.Maui.Core.ToastDuration.Short, 15);
+                    snackbar.Show();
                 }
             }
             
@@ -198,7 +200,8 @@ namespace Foodiefeed.viewmodels
                 }
                 catch (Exception ex)
                 {
-                    //handle ?
+                    var snackbar = Toast.Make("Invalind Credentials.", CommunityToolkit.Maui.Core.ToastDuration.Short, 15);
+                    snackbar.Show();
                 }
             }          
         }

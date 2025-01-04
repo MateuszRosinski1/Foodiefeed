@@ -227,6 +227,7 @@ namespace Foodiefeed.viewmodels
 
                 ReloadProfileButtonColors(_themeHandler.ThemeFlag);
                 ReloadRecipesButtons(_themeHandler.ThemeFlag);
+                ReloadThemeSwitchDescription(_themeHandler.ThemeFlag);
             }
             catch {
                 ErrorScreenVisible = true;
@@ -346,7 +347,7 @@ namespace Foodiefeed.viewmodels
         [RelayCommand]
         public async Task Logout()
         {
-            _userSession.SetOnline();
+            await _userSession.SetOffline();
             Dispose();
             var loginPage = _serviceProvider.GetRequiredService<LogInPage>();
             await _themeHandler.SaveThemeState();
@@ -885,7 +886,9 @@ const int pageSize = 15;
                     ImageSource = post.PostImagesBase64[0],
                     ImagesBase64 = post.PostImagesBase64,
                     PostProducts = post.ProductsName,
-                    PostContentVisible = true
+                    PostContentVisible = true,
+                    ProfilePictreSource = post.PosterProfilePictureBase64
+                    
                 });
             }
         }
@@ -2475,18 +2478,23 @@ const int pageSize = 15;
         {
             _themeHandler.ThemeFlag = !_themeHandler.ThemeFlag;
 
+            ReloadThemeSwitchDescription(_themeHandler.ThemeFlag);
+
+            await _themeHandler.ChangeTheme();
+            await ReloadProfileButtonColors(_themeHandler.ThemeFlag);
+            ReloadRecipesButtons(_themeHandler.ThemeFlag);
+        }
+
+        private void ReloadThemeSwitchDescription(bool flag)
+        {
             if (_themeHandler.ThemeFlag)
-            {             
+            {
                 SwitchThemeMode = "Dark Theme";
             }
             else
             {
                 SwitchThemeMode = "Light Theme";
             }
-
-            await _themeHandler.ChangeTheme();
-            await ReloadProfileButtonColors(_themeHandler.ThemeFlag);
-            ReloadRecipesButtons(_themeHandler.ThemeFlag);
         }
 
 
@@ -2674,6 +2682,10 @@ const int pageSize = 15;
             }
         }
 
+        [ObservableProperty]
+        bool isCurrentProfileInFriends;
+        [ObservableProperty]
+        bool isCurrentProfileFollowed;
         private async Task OpenUserProfile(string id)
         {
             try
@@ -2685,9 +2697,11 @@ const int pageSize = 15;
 
                 if (profile is null) { throw new Exception("Profile not found."); }
 
+                IsCurrentProfileFollowed = profile.IsFollowed;
+                IsCurrentProfileInFriends = profile.IsFriend;
                 SetUserProfileModel(profile.Id,
-                                    profile.FriendsCount + " friends",
-                                    profile.FollowsCount + " follows",
+                                    profile.FriendsCount,
+                                    profile.FollowsCount,
                                     profile.LastName,
                                     profile.FirstName,
                                     profile.Username,

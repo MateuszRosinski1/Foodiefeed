@@ -35,6 +35,7 @@
 
                     <Grid  Padding="30" Grid.Row="0">
                         <HorizontalStackLayout Spacing="10">
+                            <ImageButton CornerRadius="100" x:Name="postPfp" HeightRequest="60" WidthRequest="60"/>
                             <VerticalStackLayout>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="15" FontAttributes="Bold" x:Name="UsernameLabel"/>
                                 <Label TextColor="{DynamicResource TextColor}" FontSize="10" x:Name="PostTimeStampLabel" Text="10 hours ago"/>
