@@ -22,12 +22,6 @@ namespace Foodiefeed
             Id = userId;
         }
 
-        public void Logout()
-        {
-            SetOffline();
-            UnbindId();
-        }
-
         public void UnbindId()
         {
             Id = null;
@@ -39,16 +33,10 @@ namespace Foodiefeed
             using(var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri("http://foodiefeedapi-daethrcqgpgnaehs.polandcentral-01.azurewebsites.net");
-                try
-                {
-                    var response = await httpClient.PutAsync(endpoint, null);
 
-                    if (!response.IsSuccessStatusCode) { throw new Exception(); }
+                var response = await httpClient.PutAsync(endpoint, null);
 
-                }catch (Exception ex)
-                {
-                    //set session to offline
-                }
+                if (!response.IsSuccessStatusCode) { throw new Exception(); }          
             }
         }
 

@@ -1179,33 +1179,66 @@
                                                                VerticalOptions="Center"
                                                                Padding="10" 
                                                                Grid.Column="2">
-                                                <Button FontAttributes="Bold" 
-                                                    Text="Send friend request" 
-                                                    BackgroundColor="#e0e0e0" 
-                                                    Margin="0,0,10,0">
-                                                    <Button.Shadow>
-                                                        <Shadow Opacity="0.4"
-                                                            Radius="10"/>
-                                                    </Button.Shadow>
-                                                    <Button.GestureRecognizers>
-                                                        <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
-                                                                              PointerExited="CondenseButtonSizeAnimation"/>
-                                                    </Button.GestureRecognizers>
-                                                </Button>
+                                                <Grid>
+                                                    <Button FontAttributes="Bold" 
+                                                            Text="Send friend request" 
+                                                            BackgroundColor="#e0e0e0" 
+                                                            Margin="0,0,10,0"
+                                                            IsVisible="{Binding IsCurrentProfileInFriends,Converter={StaticResource InverseBooleanConverter}}">
+                                                        <Button.Shadow>
+                                                            <Shadow Opacity="0.4"
+                                                                    Radius="10"/>
+                                                        </Button.Shadow>
+                                                        <Button.GestureRecognizers>
+                                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                                      PointerExited="CondenseButtonSizeAnimation"/>
+                                                        </Button.GestureRecognizers>
+                                                    </Button>
+                                                    <Button FontAttributes="Bold" 
+                                                            Text="Unfriend" 
+                                                            BackgroundColor="#e0e0e0" 
+                                                            Margin="0,0,10,0" 
+                                                            IsVisible="{Binding IsCurrentProfileInFriends}">
+                                                        <Button.Shadow>
+                                                            <Shadow Opacity="0.4"
+                                                                    Radius="10"/>
+                                                        </Button.Shadow>
+                                                        <Button.GestureRecognizers>
+                                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                                      PointerExited="CondenseButtonSizeAnimation"/>
+                                                        </Button.GestureRecognizers>
+                                                    </Button>
+                                                </Grid>
 
-                                                <Button FontAttributes="Bold" 
-                                                    Text="Follow" 
-                                                    BackgroundColor="#e32441" 
-                                                    Margin="0,0,10,0">
-                                                    <Button.Shadow>
-                                                        <Shadow Opacity="0.4"
-                                                            Radius="10"/>
-                                                    </Button.Shadow>
-                                                    <Button.GestureRecognizers>
-                                                        <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
-                                                                              PointerExited="CondenseButtonSizeAnimation"/>
-                                                    </Button.GestureRecognizers>
-                                                </Button>
+                                                <Grid>
+                                                    <Button FontAttributes="Bold" 
+                                                            Text="Follow" 
+                                                            BackgroundColor="#e32441" 
+                                                            Margin="0,0,10,0"
+                                                            IsVisible="{Binding IsCurrentProfileFollowed,Converter={StaticResource InverseBooleanConverter}}">
+                                                        <Button.Shadow>
+                                                            <Shadow Opacity="0.4"
+                                                                    Radius="10"/>
+                                                        </Button.Shadow>
+                                                        <Button.GestureRecognizers>
+                                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                                      PointerExited="CondenseButtonSizeAnimation"/>
+                                                        </Button.GestureRecognizers>
+                                                    </Button>
+                                                    <Button FontAttributes="Bold" 
+                                                            Text="Unfollow" 
+                                                            BackgroundColor="#e32441" 
+                                                            Margin="0,0,10,0" IsVisible="{Binding IsCurrentProfileFollowed}">
+                                                        <Button.Shadow>
+                                                            <Shadow Opacity="0.4"
+                                                                    Radius="10"/>
+                                                        </Button.Shadow>
+                                                        <Button.GestureRecognizers>
+                                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
+                                                                                      PointerExited="CondenseButtonSizeAnimation"/>
+                                                        </Button.GestureRecognizers>
+                                                    </Button>
+                                                </Grid>
 
                                             </HorizontalStackLayout>
                                         </Grid>

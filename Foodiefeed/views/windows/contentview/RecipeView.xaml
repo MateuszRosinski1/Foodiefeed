@@ -18,7 +18,7 @@
                 <Border Stroke="Transparent" 
                         StrokeShape="RoundRectangle 10">
                     <Image  Grid.Column="0"
-                            HeightRequest="{OnPlatform WinUI=170,Android=130}" 
+                            HeightRequest="{OnPlatform WinUI=160,Android=130}" 
                             WidthRequest="{OnPlatform WinUI=200,Android=120}" 
                             BackgroundColor="Black" 
                             x:Name="image" 
@@ -29,7 +29,7 @@
                            TextColor="{DynamicResource TextColor}" 
                            FontSize="{OnPlatform WinUI=20,Android=10}"
                            FontAttributes="Bold" />
-                    <ScrollView HeightRequest="180" 
+                    <ScrollView HeightRequest="120" 
                                 VerticalScrollBarVisibility="{OnPlatform WinUI=Always,Android=Never}">
                         <Label x:Name="contentLabel"
                                LineBreakMode="WordWrap"

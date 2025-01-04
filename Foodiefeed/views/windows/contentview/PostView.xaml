@@ -95,13 +95,13 @@
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
-                    <Grid Padding="0,0,0,0" Grid.Row="3" Scale="{OnPlatform Android=1.1}">
+                    <Grid Padding="0,0,0,0" Grid.Row="3"  Scale="{OnPlatform Android=1.1}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
+                            <ColumnDefinition />
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout  Grid.Column="0" HorizontalOptions="End" Spacing="5" Scale="{OnPlatform Android=0.7}">
+                        <HorizontalStackLayout  Grid.Column="0"  HorizontalOptions="CenterAndExpand" Spacing="5" Scale="{OnPlatform Android=0.7}">
                             <Button  ImageSource="likeicon.png" 
                                      BackgroundColor="Transparent" 
                                      FontSize="15"
@@ -112,7 +112,8 @@
                                      Text="{Binding LikeText}"
                                      Command="{Binding LikingCommand}"
                                      TextColor="{DynamicResource TextColor}"
-                                     CommandParameter="{Binding PostId}"/>
+                                     CommandParameter="{Binding PostId}"
+                                     />
 
                             <Label x:Name="PostLikeCountLabel" 
                                    TextColor="{DynamicResource TextColor}" 

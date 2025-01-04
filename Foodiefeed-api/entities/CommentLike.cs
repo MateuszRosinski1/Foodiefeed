@@ -7,13 +7,11 @@ namespace Foodiefeed_api.entities
     {
         [Key]
         public int CommentId { get; set; }
-
         [Key]
         public int UserId { get; set; }
 
         [ForeignKey("CommentId")]
         public virtual Comment Comment{ get; set; }
-
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
     }

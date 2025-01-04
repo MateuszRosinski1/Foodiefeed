@@ -24,7 +24,7 @@
             <Entry Text="{Binding Username,Mode=TwoWay}" 
                        TextColor="{DynamicResource TextColor}" 
                        FontSize="18"
-                       Placeholder="Username" 
+                       Placeholder="Login" 
                        Margin="0" 
                        x:Name="usernameEntry" 
                        HeightRequest="50" 
