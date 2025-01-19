@@ -2363,6 +2363,13 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
+        public async Task OnProfileAddToFriends(string id)
+        {
+            await AddToFriends(id);
+            IsCurrentProfileHasFriendRequestPending = true;
+        }
+
+        [RelayCommand]
         public async Task AddToFriends(string id)
         {
             var endpoint = $"api/friends/add/{_userSession.Id}/{id}";
@@ -2389,6 +2396,13 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
+        public async Task OnProfileUnfriendUser(string id)
+        {
+            await UnfriendUser(id);
+            IsCurrentProfileInFriends = false;
+        }
+
+        [RelayCommand]
         public async Task UnfriendUser(string id)
         {
             var endpoint = $"api/friends/unfriend/{id}/{_userSession.Id}";
@@ -2406,6 +2420,13 @@ const int pageSize = 15;
                     await NotifiyFailedAction("Something went wrong...");
                 }
             }
+        }
+
+        [RelayCommand]
+        public async Task OnProfileFollowUser(string id)
+        {
+            await FollowUser(id);
+            IsCurrentProfileFollowed = true;
         }
 
         [RelayCommand]
@@ -2429,6 +2450,13 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
+        public async Task OnProfileUnfollowUser(string id)
+        {
+            await UnfollowUser(id);
+            IsCurrentProfileFollowed = false;
+        }
+
+        [RelayCommand]
         public async Task UnfollowUser(string id)
         {
             var endpoint = $"api/followers/unfollow/{_userSession.Id}/{id}";
@@ -2446,6 +2474,13 @@ const int pageSize = 15;
                     await NotifiyFailedAction("Could not finish unfollowing action due to inner issues.");
                 }
             }
+        }
+
+        [RelayCommand]
+        public async Task OnProfileCancelFriendRequest(string id)
+        {
+            await CancelFriendRequest(id);
+            IsCurrentProfileHasFriendRequestPending = false;
         }
 
         [RelayCommand]
@@ -2686,6 +2721,9 @@ const int pageSize = 15;
         bool isCurrentProfileInFriends;
         [ObservableProperty]
         bool isCurrentProfileFollowed;
+        [ObservableProperty]
+        bool isCurrentProfileHasFriendRequestPending;
+
         private async Task OpenUserProfile(string id)
         {
             try
