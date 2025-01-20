@@ -195,7 +195,9 @@ namespace Foodiefeed.viewmodels
 
 #if WINDOWS
                 FetchNotifications(); // required for RemaningItemThresholdCommand to work.
+                
 #endif
+                SearchResults.Add(new UserSearchResultView());
                 NoNotificationNotifierVisible = Notifications.Count == 0 ? true : false;
                 OnlineFriends.CollectionChanged += OnOnlineFriendsChanged;
                 LikedRecipes.CollectionChanged += OnLikedRecipesChanged;
@@ -1904,6 +1906,7 @@ const int pageSize = 15;
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
             this.ProfileFriendsVisible = false;
+            this.NotificationsPageVisible = false;
             await SetButtonColors(Buttons.PostButton);
             try
             {
@@ -2363,9 +2366,9 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public async Task OnProfileAddToFriends(string id)
+        public async Task OnProfileAddToFriends()
         {
-            await AddToFriends(id);
+            await AddToFriends(ProfileId.ToString());
             IsCurrentProfileHasFriendRequestPending = true;
         }
 
@@ -2396,9 +2399,9 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public async Task OnProfileUnfriendUser(string id)
+        public async Task OnProfileUnfriendUser()
         {
-            await UnfriendUser(id);
+            await UnfriendUser(ProfileId.ToString());
             IsCurrentProfileInFriends = false;
         }
 
@@ -2423,9 +2426,9 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public async Task OnProfileFollowUser(string id)
+        public async Task OnProfileFollowUser()
         {
-            await FollowUser(id);
+            await FollowUser(ProfileId.ToString());
             IsCurrentProfileFollowed = true;
         }
 
@@ -2450,9 +2453,9 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public async Task OnProfileUnfollowUser(string id)
+        public async Task OnProfileUnfollowUser()
         {
-            await UnfollowUser(id);
+            await UnfollowUser(ProfileId.ToString());
             IsCurrentProfileFollowed = false;
         }
 
@@ -2477,9 +2480,9 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public async Task OnProfileCancelFriendRequest(string id)
+        public async Task OnProfileCancelFriendRequest()
         {
-            await CancelFriendRequest(id);
+            await CancelFriendRequest(ProfileId.ToString());
             IsCurrentProfileHasFriendRequestPending = false;
         }
 
@@ -2602,24 +2605,31 @@ const int pageSize = 15;
             if (usr is null) return;
 
             var json = File.ReadAllText(SearchHistoryJsonPath);
-            var SearchHistory = await JsonToObject<ObservableCollection<UserSearchResult>>(json);           
+            var SearchHistory = await JsonToObject<ObservableCollection<UserSearchResult>>(json);
 
-            var existingUser = SearchHistory.FirstOrDefault(x => x.Id == usr.Id);
-
-            if (existingUser != null)
+            if (SearchHistory is not null)
             {
-                SearchHistory.Remove(existingUser);
+                var existingUser = SearchHistory.FirstOrDefault(x => x.Id == usr.Id);
 
-                SearchHistory.Insert(0, existingUser);
-                
+                if (existingUser != null)
+                {
+                    SearchHistory.Remove(existingUser);
+
+                    SearchHistory.Insert(0, existingUser);
+                }
+                else
+                {
+                    if (SearchHistory.Count >= MAX_HISTORY_SIZE)
+                    {
+                        SearchHistory.RemoveAt(SearchHistory.Count - 1);
+                    }
+                    SearchHistory.Insert(0, usr);
+                }
             }
             else
             {
-                if (SearchHistory.Count >= MAX_HISTORY_SIZE)
-                {
-                    SearchHistory.RemoveAt(SearchHistory.Count - 1);
-                }
-                SearchHistory.Insert(0, usr);
+                SearchHistory = new ObservableCollection<UserSearchResult>();
+                SearchHistory.Add(usr);
             }
 
             var saveJson = JsonConvert.SerializeObject(SearchHistory);

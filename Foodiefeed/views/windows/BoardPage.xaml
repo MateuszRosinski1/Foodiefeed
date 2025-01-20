@@ -244,46 +244,85 @@
                                            FontSize="10" 
                                            Margin="4,0,0,0"/>
                                 </VerticalStackLayout>
-
+                               
                                 <VerticalStackLayout IsVisible="{Binding ProfileAddFriendAndFollowButtonsVisible}"
-                                                      BackgroundColor="Transparent"
-                                                      Scale="0.8"
-                                                      HorizontalOptions="End" 
-                                                      VerticalOptions="Center"
-                                                      Padding="10" 
-                                                      Grid.Column="2" Spacing="5">
-                                    <Button FontAttributes="Bold" 
-                                            Text="Send friend request"
-                                            FontSize="10"
-                                            Padding="4"
-                                            TextColor="Black"
-                                            BackgroundColor="#e0e0e0" 
-                                            Margin="0,0,0,0">
-                                        <Button.Shadow>
-                                            <Shadow Opacity="0.4"
-                                                    Radius="10"/>
-                                        </Button.Shadow>
-                                        <Button.GestureRecognizers>
-                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
-                                                                      PointerExited="CondenseButtonSizeAnimation"/>
-                                        </Button.GestureRecognizers>
-                                    </Button>
+                                                     HorizontalOptions="End" 
+                                                     VerticalOptions="Center"
+                                                     Padding="10" 
+                                                     Grid.Column="2" Spacing="5">
+                                    <Grid>
+                                        <Grid IsVisible="{Binding IsCurrentProfileInFriends,Converter={StaticResource InverseBooleanConverter}}">
+                                            <Button FontAttributes="Bold" 
+                                                    Text="Send friend request"
+                                                    TextColor="Black"
+                                                    LineBreakMode="WordWrap"
+                                                    FontSize="10"
+                                                    BackgroundColor="#e0e0e0" 
+                                                    Margin="0,0,10,0"
+                                                    IsVisible="{Binding IsCurrentProfileHasFriendRequestPending,Converter={StaticResource InverseBooleanConverter}}"
+                                                    Clicked="AddToFriendsCommand"
+                                                    ZIndex="999">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+                                            
+                                            <Button FontAttributes="Bold" 
+                                                    Text="Cancel firend request" 
+                                                    BackgroundColor="#e0e0e0" 
+                                                    TextColor="Black"
+                                                    LineBreakMode="WordWrap"
+                                                    FontSize="10"
+                                                    Margin="0,0,10,0" 
+                                                    IsVisible="{Binding IsCurrentProfileHasFriendRequestPending}"
+                                                    Clicked="CancelFriendRequestCommand"
+                                                    ZIndex="999">
+                                                <Button.Shadow>
+                                                    <Shadow Opacity="0.4"
+                                                            Radius="10"/>
+                                                </Button.Shadow>
+                                            </Button>
+                                        </Grid>
+                                        <Button FontAttributes="Bold" 
+                                                Text="Unfriend" 
+                                                BackgroundColor="#e0e0e0"
+                                                TextColor="Black"
+                                                LineBreakMode="WordWrap"
+                                                FontSize="10"
+                                                Margin="0,0,10,0" 
+                                                IsVisible="{Binding IsCurrentProfileInFriends}"
+                                                Clicked="UnfriendCommand">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
 
-                                    <Button FontAttributes="Bold" 
-                                            Text="Follow" 
-                                            BackgroundColor="#e32441" 
-                                            Margin="0,0,0,0"
-                                            FontSize="15"
-                                            Padding="4">
-                                        <Button.Shadow>
-                                            <Shadow Opacity="0.4"
-                                                    Radius="10"/>
-                                        </Button.Shadow>
-                                        <Button.GestureRecognizers>
-                                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" 
-                                                   PointerExited="CondenseButtonSizeAnimation"/>
-                                        </Button.GestureRecognizers>
-                                    </Button>
+                                    <Grid>
+                                        <Button FontAttributes="Bold" 
+                                                Text="Follow" 
+                                                BackgroundColor="#e32441" 
+                                                Margin="0,0,10,0"
+                                                IsVisible="{Binding IsCurrentProfileFollowed,Converter={StaticResource InverseBooleanConverter}}"
+                                                Clicked="FollowCommand">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                        <Button FontAttributes="Bold" 
+                                                Text="Unfollow" 
+                                                BackgroundColor="#e32441" 
+                                                Margin="0,0,10,0" IsVisible="{Binding IsCurrentProfileFollowed}"
+                                                Clicked="UnfollowCommand">
+                                            <Button.Shadow>
+                                                <Shadow Opacity="0.4"
+                                                        Radius="10"/>
+                                            </Button.Shadow>
+                                        </Button>
+                                    </Grid>
 
                                 </VerticalStackLayout>
                             </Grid>
@@ -951,7 +990,8 @@
                                     <views:UserSearchResultView Username="{Binding Username}"
                                                  Follows="{Binding Follows}"
                                                  Friends="{Binding Friends}"
-                                                 PfpImageBase64="{Binding PfpImageBase64}"/>
+                                                 PfpImageBase64="{Binding PfpImageBase64}"
+                                                 ZIndex="999"/>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
                         </VerticalStackLayout>
@@ -1187,7 +1227,7 @@
                                                                 Margin="0,0,10,0"
                                                                 IsVisible="{Binding IsCurrentProfileHasFriendRequestPending,Converter={StaticResource InverseBooleanConverter}}"
                                                                 Command="{Binding OnProfileAddToFriendsCommand}"
-                                                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                                                                >
                                                             <Button.Shadow>
                                                                 <Shadow Opacity="0.4"
                                                                         Radius="10"/>
@@ -1203,7 +1243,7 @@
                                                                 Margin="0,0,10,0" 
                                                                 IsVisible="{Binding IsCurrentProfileHasFriendRequestPending}"
                                                                 Command="{Binding OnProfileCancelFriendRequestCommand}"
-                                                                CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                                                                >
                                                             <Button.Shadow>
                                                                 <Shadow Opacity="0.4"
                                                                         Radius="10"/>
@@ -1220,7 +1260,7 @@
                                                             Margin="0,0,10,0" 
                                                             IsVisible="{Binding IsCurrentProfileInFriends}"
                                                             Command="{Binding OnProfileUnfriendUserCommand}"
-                                                            CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                                                            >
                                                         <Button.Shadow>
                                                             <Shadow Opacity="0.4"
                                                                     Radius="10"/>
@@ -1239,7 +1279,7 @@
                                                             Margin="0,0,10,0"
                                                             IsVisible="{Binding IsCurrentProfileFollowed,Converter={StaticResource InverseBooleanConverter}}"
                                                             Command="{Binding OnProfileFollowUserCommand}"
-                                                            CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                                                            >
                                                         <Button.Shadow>
                                                             <Shadow Opacity="0.4"
                                                                     Radius="10"/>
@@ -1254,7 +1294,7 @@
                                                             BackgroundColor="#e32441" 
                                                             Margin="0,0,10,0" IsVisible="{Binding IsCurrentProfileFollowed}"
                                                             Command="{Binding OnProfileUnfollowUserCommand}"
-                                                            CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                                                            >
                                                         <Button.Shadow>
                                                             <Shadow Opacity="0.4"
                                                                     Radius="10"/>

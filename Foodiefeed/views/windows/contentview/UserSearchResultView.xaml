@@ -31,9 +31,7 @@
                         CommandParameter="{Binding UserId}"
                         BorderWidth="0.5"
                         BorderColor="DimGray">
-                    <Button.GestureRecognizers>
-                            <PointerGestureRecognizer PointerEntered="ScaleButtonSizeAnimation" PointerExited="CondenseButtonSizeAnimation"></PointerGestureRecognizer>
-                        </Button.GestureRecognizers>
+                    
                     </Button>
             </HorizontalStackLayout>
         </Grid>

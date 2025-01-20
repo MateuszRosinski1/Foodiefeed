@@ -118,5 +118,38 @@ namespace Foodiefeed
             }
 #endif
         }
+
+
+        //All of 5 functions below are there due to maui bug, dont know why button dont want to fire those commands vie Command="{Binding CommandName}"
+        // treat this as workaround
+        private void AddToFriendsCommand(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.OnProfileAddToFriends();
+        }
+
+        private void CancelFriendRequestCommand(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.OnProfileCancelFriendRequest();
+        }
+
+        private void UnfriendCommand(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.OnProfileUnfriendUser();
+        }
+
+        private void FollowCommand(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.OnProfileFollowUser();
+        }
+
+        private void UnfollowCommand(object sender, EventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            vm.OnProfileUnfollowUser();
+        }
     }
 }
