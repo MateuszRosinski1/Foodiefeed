@@ -154,7 +154,7 @@ public partial class LikedPostPopup : Popup
     private static void OnPostLikeCountChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var view = (LikedPostPopup)bindable;
-        view.PostLikeCountLabel.Text = newValue as string;
+        //view.PostLikeCountLabel.Text = newValue as string;
     }
 
     private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -211,7 +211,7 @@ public partial class LikedPostPopup : Popup
     {
         var index = Clamp(currentImageIndex - 1, 0, ImagesBase64.Count - 1);
         currentImageIndex = index;
-        if (currentImageIndex >= 0)
+        if (currentImageIndex <= 0)
         {
             swipeLeftButton.IsVisible = false;
         }

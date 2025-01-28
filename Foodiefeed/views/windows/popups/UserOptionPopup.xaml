@@ -34,7 +34,8 @@
                         FontSize="20" 
                         Margin="10"
                         Command="{Binding AddToFriendsCommand}"
-                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}"
+                        Clicked="Button_Clicked">
                     <Button.Shadow>
                         <Shadow Opacity="0.4"
                             Radius="10"/>
@@ -50,7 +51,8 @@
                         FontSize="20" 
                         Margin="10"
                         Command="{Binding CancelFriendRequestCommand}"
-                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}"
+                        Clicked="Button_Clicked">
                     <Button.Shadow>
                         <Shadow Opacity="0.4"
                                 Radius="10"/>
@@ -66,7 +68,8 @@
                         FontSize="20" 
                         Margin="10"
                         Command="{Binding UnfriendUserCommand}"
-                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}"
+                        Clicked="Button_Clicked">
                     <Button.Shadow>
                         <Shadow Opacity="0.4"
                                 Radius="10"/>
@@ -82,7 +85,8 @@
                         FontSize="20" 
                         Margin="10"
                         Command="{Binding FollowUserCommand}"
-                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">                
+                        CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}"
+                        Clicked="Button_Clicked">                
                 <Button.Shadow>
                     <Shadow Opacity="0.4"
                             Radius="10"/>
@@ -98,7 +102,8 @@
                     FontSize="20" 
                     Margin="10"
                     Command="{Binding UnfollowUserCommand}"
-                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}">
+                    CommandParameter="{Binding Source={RelativeSource AncestorType={x:Type local:UserOptionPopup}}, Path=UserId}"
+                    Clicked="Button_Clicked">
                     <Button.Shadow>
                         <Shadow Opacity="0.4"
                                 Radius="10"/>

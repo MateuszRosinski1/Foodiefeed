@@ -151,5 +151,28 @@ namespace Foodiefeed
             var vm = BindingContext as BoardViewModel;
             vm.OnProfileUnfollowUser();
         }
+
+        private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
+        {
+            var vm = BindingContext as BoardViewModel;
+            if (vm == null || (DeviceInfo.Current.Platform != DevicePlatform.WinUI && vm.ProfilePageVisible == false))
+            {
+                return;
+            }
+
+            var scrollView = sender as ScrollView;
+            if (scrollView == null || scrollView.ContentSize.Height <= 0)
+            {
+                return;
+            }
+
+            double scrollPercentage = (e.ScrollY + scrollView.Height) / scrollView.ContentSize.Height;
+
+            // If scrolled to 70% or more, execute the command
+            if (scrollPercentage >= 0.7 && vm.ProfilePostThresholdReachedCommand.CanExecute(null))
+            {
+                vm.ProfilePostThresholdReachedCommand.Execute(null);
+            }
+        }
     }
 }

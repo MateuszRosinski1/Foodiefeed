@@ -7,7 +7,7 @@
              xmlns:viewmodel="clr-namespace:Foodiefeed.viewmodels"
              Color="Transparent">
 
-    <VerticalStackLayout WidthRequest="800">
+    <VerticalStackLayout WidthRequest="{OnPlatform Android=800,WinUI=950}">
 
         <Grid ZIndex="1">
             <Border
@@ -67,12 +67,12 @@
                     </Grid>
 
                     <Grid Padding="30,0,30,15" Grid.Row="2" x:Name="ImagesGrid">
-                        <Image HeightRequest="200"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFill"/>
+                        <Image HeightRequest="{OnPlatform Android=200,WinUI=350}"  BackgroundColor="Black"  x:Name="postImage" Aspect="AspectFit"/>
                         <ImageButton Clicked="SwipeLeft"  x:Name="swipeLeftButton"  HorizontalOptions="Start" BackgroundColor="Transparent" HeightRequest="40" Source="doubleleft.png"/>
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
-                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                    <!--<Grid Padding="0,0,0,10" Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
@@ -115,7 +115,7 @@
                              Text="Share"
                              TextColor="{DynamicResource TextColor}" Scale="0.6"/>
 
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </Border>
         </Grid>

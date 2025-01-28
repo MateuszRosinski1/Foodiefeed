@@ -187,7 +187,7 @@ namespace Foodiefeed.viewmodels
             _serviceProvider = serviceProvider;
             _themeHandler = _serviceProvider.GetService<IThemeHandler>();
             _userSession = userSession;
-            _userSession.Id = 15;
+            _userSession.Id = 16;
             try
             {
                 InternetAcces = !(Connectivity.NetworkAccess == NetworkAccess.Internet);
@@ -555,7 +555,7 @@ const int pageSize = 15;
         {
             var post = await GetPopupPost(id.post,id.comment);
 
-            if(post.PostImagesBase64 is null)
+            if(post.PostImagesBase64 is null || post.PostImagesBase64.Count == 0)
             {
                 var popup = new CommentedPostPopup(post.CommentUserId, 
                 post.PosterProfilePictureBase64,
@@ -970,7 +970,7 @@ const int pageSize = 15;
 
                     notificationsPageNumber = 0;
                     FetchNotificationsCanExecute = true;
-                    await FetchNotifications();
+                    //await FetchNotifications();
                 }
                 catch(Exception)
                 {
@@ -1096,7 +1096,7 @@ const int pageSize = 15;
             if(post is not null) Posts.Remove(post);
 
             var postProfile = ProfilePosts.FirstOrDefault(p => p.PostId == postId);
-            if (postProfile is not null) Posts.Remove(postProfile);
+            if (postProfile is not null) ProfilePosts.Remove(postProfile);
         }
 
         [RelayCommand]
@@ -1500,7 +1500,7 @@ const int pageSize = 15;
         }
 
         [RelayCommand]
-        public void ToMainView()
+        public async void ToMainView()
         {
             this.PostPageVisible = true;
             this.ProfilePageVisible = false;
@@ -1510,6 +1510,9 @@ const int pageSize = 15;
             NotificationsPageVisible = false;
             OnlineFriendsVisible = false;
 #endif
+            seenPostId.Clear();
+            Posts.Clear();
+            await MainWallPostThresholdExceed();
         }
 
         [RelayCommand]
@@ -1902,6 +1905,7 @@ const int pageSize = 15;
             this.ProfilePageVisible = true;
             this.SettingsPageVisible = false;
             this.RecipePageVisible = false;
+            this.OnlineFriendsVisible = false;
 
             this.ProfileFollowersVisible = false;
             this.ProfilePostsVisible = true;
@@ -2012,6 +2016,12 @@ const int pageSize = 15;
             var posts = await GetUserProfilePosts(ProfileId.ToString());
 
             var postsDto = await JsonToObject<List<PostDto>>(posts);
+            if (ProfilePageVisible && (posts == null || posts.Count() == 0))
+            {
+                NoPostOnProfile = true;
+                return;
+            }
+            NoPostOnProfile = false;
             await DisplayPosts(postsDto, ProfilePosts);
         }
 
@@ -2859,12 +2869,7 @@ const int pageSize = 15;
 
         private async Task DisplayPosts(List<PostDto> posts,ObservableCollection<PostView> collection)
         {
-            if (ProfilePageVisible && (posts == null || posts.Count == 0))
-            {
-                NoPostOnProfile = true;
-                return;
-            }
-
+            
             //if(ProfilePageVisible) await Dispatcher.GetForCurrentThread().DispatchAsync(() => { collection.Clear(); });
 
             foreach (var post in posts)
@@ -3255,9 +3260,12 @@ const int pageSize = 15;
                         throw new Exception("Recipe could not be deleted at the moment");
                     }
 
-                    var recipe = SavedRecipes.First(x => x.Id == id);
+                    var recipe = SavedRecipes.FirstOrDefault(x => x.Id == id);
 
-                    SavedRecipes.Remove(recipe);
+                    if(recipe is not null)
+                    {
+                        SavedRecipes.Remove(recipe);
+                    }
 
                     var post = Posts.FirstOrDefault(p => p.PostId == id);
 
@@ -3277,7 +3285,6 @@ const int pageSize = 15;
                 {
                     await NotifiyFailedAction(ex.Message);
                 }
-
             }
         }
 

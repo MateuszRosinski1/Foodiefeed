@@ -136,11 +136,6 @@
                                 TextColor="{DynamicResource TextColor}"
                                 Clicked="FocusEditor" Scale="{OnPlatform Android=0.5}"
                                 x:Name="CommentButton">
-                            <!--<Button.GestureRecognizers>
-                                <PointerGestureRecognizer PointerEntered="{OnPlatform WinUI=ScaleButton}" 
-                                                          PointerExited="{OnPlatform WinUI=UnscaleButton}"/>
-      
-                            </Button.GestureRecognizers>-->
                         </Button>
 
 

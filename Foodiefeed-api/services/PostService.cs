@@ -267,6 +267,11 @@ namespace Foodiefeed_api.services
             _dbContext.PostCommentMembers.RemoveRange(commentmembers);
             _dbContext.Comments.RemoveRange(comments);
             _dbContext.Posts.Remove(post);
+
+            var notifications = _dbContext.Notifications.Where(n => n.PostId == postId);
+
+            _dbContext.Notifications.RemoveRange(notifications);
+
             await _dbContext.SaveChangesAsync();
 
             await AzureBlobStorageService.RemvePostImagesRangeAsync(userId, postId);      

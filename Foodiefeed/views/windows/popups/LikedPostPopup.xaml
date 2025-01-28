@@ -70,13 +70,13 @@
                         <ImageButton Clicked="SwipeRight" x:Name="swipeRightButton" HorizontalOptions="End"   BackgroundColor="Transparent" HeightRequest="40" Source="doubleright.png"/>
                     </Grid>
 
-                    <Grid Padding="0,0,0,10" Grid.Row="3">
+                    <!--<Grid Padding="0,0,0,10" Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <HorizontalStackLayout  Grid.Column="0" Spacing="5">
+                        <HorizontalStackLayout Scale="{OnPlatform Android=0.5}"  Grid.Column="0" Spacing="5" >
                             <Button  ImageSource="likeicon.png" 
                               BackgroundColor="Transparent" 
                               FontSize="20"
@@ -100,7 +100,8 @@
                          HeightRequest="50"
                          Padding="0,0,0,0" 
                          Text="Comment"
-                         TextColor="{DynamicResource TextColor}"/>
+                         TextColor="{DynamicResource TextColor}"
+                         Scale="{OnPlatform Android=0.5}"/>
 
                         <Button Grid.Column="2" 
                          ImageSource="shareicon.png" 
@@ -111,9 +112,11 @@
                          HeightRequest="50" 
                          Padding="0,0,0,0" 
                          Text="Share"
-                         TextColor="{DynamicResource TextColor}"/>
+                         Margin="0,0,-15,0"
+                         TextColor="{DynamicResource TextColor}"
+                         Scale="{OnPlatform Android=0.5}"/>
 
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </Border>
         </Grid>
