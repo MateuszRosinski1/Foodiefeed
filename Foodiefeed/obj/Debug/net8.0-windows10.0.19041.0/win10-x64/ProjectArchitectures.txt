@@ -1,1 +1,0 @@
-D:\PracaInzynierska\Foodiefeed\Foodiefeed.csproj;x64
